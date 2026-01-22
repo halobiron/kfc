@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { Link } from 'react-router-dom'
@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 const Register = () => {
 
 
-    const {handleSubmit, handleChange, handleReset, handleBlur, values, touched, errors} = useFormik({
+    const {handleSubmit, handleChange, handleBlur, values, touched, errors} = useFormik({
         initialValues:{
             firstName:'',
             lastName:'',

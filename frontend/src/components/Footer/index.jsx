@@ -11,33 +11,33 @@ const Footer = () => {
         <div className="row footer-inner">
             <div className="col-md-2">
                 <ul>
-                    <li><a href="">Lorem, ipsum.</a></li>
-                    <li><a href="">Eveniet, quam?</a></li>
-                    <li><a href="">Illo, quisquam.</a></li>
-                    <li><a href="">Repellendus, perspiciatis?</a></li>
-                    <li><a href="">Iste, culpa.</a></li>
+                    <li><a href="/">Lorem, ipsum.</a></li>
+                    <li><a href="/">Eveniet, quam?</a></li>
+                    <li><a href="/">Illo, quisquam.</a></li>
+                    <li><a href="/">Repellendus, perspiciatis?</a></li>
+                    <li><a href="/">Iste, culpa.</a></li>
                 </ul>
             </div>
             <div className="col-md-2">
             <ul>
-                    <li><a href="">Lorem, ipsum.</a></li>
+                    <li><a href="/">Lorem, ipsum.</a></li>
                 </ul>
             </div>
             <div className="col-md-2">
                 <ul>
-                    <li><a href="">Lorem, ipsum.</a></li>
+                    <li><a href="/">Lorem, ipsum.</a></li>
                 </ul>
             </div>
             <div className="col-md-2">
                 <ul>
-                    <li><a href="">Lorem, ipsum.</a></li>
-                    <li><a href="">Eveniet, quam?</a></li>
+                    <li><a href="/">Lorem, ipsum.</a></li>
+                    <li><a href="/">Eveniet, quam?</a></li>
                 </ul>
             </div>
             <div className="col-md-4">
                 <ul className='store-img-wrapper'>
-                    <li><a href=""><img src={playStore} alt="" /></a></li>
-                    <li><a href=""><img src={appStore} alt="" /></a></li>
+                    <li><a href="/"><img src={playStore} alt="" /></a></li>
+                    <li><a href="/"><img src={appStore} alt="" /></a></li>
                 </ul>
             </div>
         </div>
