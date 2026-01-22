@@ -1,0 +1,111 @@
+@startuml
+!theme plain
+autonumber
+title Quy Trình Hệ Thống KFC (Nâng Cấp Xử Lý Lỗi & Luồng Redux)
+
+actor "Khách hàng" as khachHang
+participant "Frontend App" as frontend
+participant "Redux (Thunk/Saga)" as redux
+participant "Backend API" as backend
+database "Database" as db
+participant "Payment Gateway" as payment
+participant "Cloudinary" as cloudinary
+actor "Quản trị viên" as admin
+
+== 1. Xem Danh Sách Sản Phẩm ==
+khachHang -> frontend: Truy cập trang Products
+activate frontend
+frontend -> redux: Dispatch getProducts()
+activate redux
+redux -> backend: GET /api/v1/products
+activate backend
+backend -> db: Find all products
+activate db
+db -->> backend: Danh sách sản phẩm
+deactivate db
+
+alt #LightBlue Thành công
+    backend -->> redux: 200 OK (Products JSON)
+    redux -->> frontend: Update Store (products)
+    frontend -->> khachHang: Hiển thị danh sách sản phẩm
+else #Pink Lỗi hệ thống
+    backend -->> redux: 500 Internal Error
+    redux -->> frontend: Set Error State
+    frontend -->> khachHang: Thông báo "Không tải được dữ liệu"
+end
+deactivate backend
+deactivate redux
+deactivate frontend
+
+== 2. Đặt Hàng & Thanh Toán (Checkout) ==
+khachHang -> frontend: Nhấn nút Checkout
+activate frontend
+frontend -> redux: Dispatch createOrder(cartData)
+activate redux
+redux -> backend: POST /api/v1/order/create
+activate backend
+
+group Xử lý thanh toán
+    backend -> payment: Yêu cầu thanh toán
+    activate payment
+    payment -->> backend: Xác nhận thanh toán thành công
+    deactivate payment
+end
+
+backend -> db: Lưu đơn hàng & Cập nhật kho
+activate db
+db -->> backend: Order ID
+deactivate db
+
+backend -->> redux: 201 Created (Order Data)
+deactivate backend
+redux -->> frontend: Clear Cart & Update Order State
+deactivate redux
+frontend -->> khachHang: Hiển thị xác nhận đơn hàng thành công
+deactivate frontend
+
+== 3. Thêm Sản Phẩm Mới (Admin) ==
+admin -> frontend: Đăng nhập Admin
+activate frontend
+frontend -> redux: Dispatch login(credentials)
+activate redux
+redux -> backend: POST /api/v1/login
+activate backend
+backend -> db: Verify credentials
+activate db
+db -->> backend: Admin Data / Hash
+deactivate db
+
+alt #LightBlue Đăng nhập đúng
+    backend -->> redux: 200 OK (JWT Token)
+    redux -->> admin: Chuyển hướng vào Admin Panel
+else #Pink Sai thông tin
+    backend -->> redux: 401 Unauthorized
+    redux -->> admin: Thông báo "Sai tài khoản/mật khẩu"
+end
+deactivate backend
+deactivate redux
+
+admin -> admin: Nhập thông tin & Chọn ảnh
+admin -> cloudinary: Upload ảnh sản phẩm
+activate cloudinary
+cloudinary -->> admin: Secure Image URL
+deactivate cloudinary
+
+admin -> frontend: Nhấn "Lưu sản phẩm"
+activate frontend
+frontend -> redux: Dispatch createProduct(data)
+activate redux
+redux -> backend: POST /api/v1/product/new
+activate backend
+backend -> db: Lưu Product + Image URL
+activate db
+db -->> backend: Success
+deactivate db
+backend -->> redux: Updated Product List
+deactivate backend
+redux -->> admin: Thông báo "Thêm thành công"
+deactivate redux
+deactivate frontend
+
+@enduml

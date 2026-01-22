@@ -1,0 +1,67 @@
+@startuml
+!theme plain
+title Activity Diagram: Quy Trình Xử Lý Đơn Hàng KFC
+
+|Khách Hàng|
+start
+:Đăng nhập (UC12);
+:Xem Menu & Chọn món (UC01);
+:Thêm vào giỏ hàng;
+:Đặt hàng (UC01);
+
+if (Chọn phương thức thanh toán) then (Online)
+  :Thanh toán Online (UC02);
+  |Cổng Thanh Toán|
+  :Xử lý giao dịch;
+  if (Thành công?) then (Yes)
+    |Hệ Thống|
+    :Cập nhật trạng thái: \n"Đã Xác Nhận";
+  else (No)
+    |Khách Hàng|
+    :Báo lỗi thanh toán;
+    stop
+  endif
+else (Tiền mặt (COD))
+  |Hệ Thống|
+  :Ghi nhận đơn hàng (UC04);
+  :Cập nhật trạng thái: \n"Chờ Thanh Toán";
+endif
+
+|Nhân Viên|
+:Nhận thông báo đơn mới;
+:Kiểm tra đơn hàng (UC05);
+if (Đơn hợp lệ?) then (Yes)
+  :Gửi đơn xuống bếp (UC03);
+  |Hệ Thống|
+  :Cập nhật trạng thái: \n"Đang Chuẩn Bị";
+else (No)
+  :Hủy đơn hàng (UC06);
+  |Hệ Thống|
+  :Cập nhật trạng thái: \n"Đã Hủy";
+  stop
+endif
+
+|Đầu Bếp|
+:Nhận yêu cầu chế biến;
+:Thực hiện món ăn;
+:Báo hoàn tất;
+
+|Nhân Viên/Đầu Bếp|
+:Cập nhật trạng thái: \n"Đang Giao" (UC08);
+
+|Nhân Viên|
+:Giao hàng cho khách (Shipper);
+
+|Khách Hàng|
+:Nhận món ăn;
+if (Thanh toán COD?) then (Yes)
+  :Thanh toán tiền mặt (UC04);
+endif
+
+|Nhân Viên|
+:Xác nhận hoàn thành (UC08);
+|Hệ Thống|
+:Cập nhật trạng thái: \n"Hoàn Thành";
+
+stop
+@enduml
