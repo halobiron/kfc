@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
 import Modal from '../Modal'
+import { useSelector } from 'react-redux'
 
 const Menu = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const cartQuantity = useSelector(state => state.cart.totalQuantity);
 
     const openModal = ()=>{
         setIsModalOpen(true);
@@ -44,7 +46,7 @@ const Menu = () => {
                                     <a className="nav-link disabled" href="/" tabIndex="-1" aria-disabled="true">Khách</a>
                                 </li>
                             </ul>
-                                <button className="btn btn-danger btn-cart-counter" type="submit" onClick={openModal}>0</button>
+                                <button className="btn btn-danger btn-cart-counter" type="submit" onClick={openModal}>{cartQuantity}</button>
                         </div>
                     </div>
                 </nav>
