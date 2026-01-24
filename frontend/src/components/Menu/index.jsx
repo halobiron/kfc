@@ -7,13 +7,6 @@ const Menu = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const cartQuantity = useSelector(state => state.cart.totalQuantity);
 
-    const openModal = ()=>{
-        setIsModalOpen(true);
-    }
-    const closeModal = ()=>{
-        setIsModalOpen(false);
-    }
-
     return (
         <>
             <div className='menu-wrapper'>
@@ -46,12 +39,12 @@ const Menu = () => {
                                     <a className="nav-link disabled" href="/" tabIndex="-1" aria-disabled="true">Khách</a>
                                 </li>
                             </ul>
-                                <button className="btn btn-danger btn-cart-counter" type="submit" onClick={openModal}>{cartQuantity}</button>
+                                <button className="btn btn-danger btn-cart-counter" type="submit" onClick={() => setIsModalOpen(true)}>{cartQuantity}</button>
                         </div>
                     </div>
                 </nav>
             </div>
-            {isModalOpen ? <Modal closeModal={closeModal}/> : null}
+            {isModalOpen && <Modal closeModal={() => setIsModalOpen(false)}/>}
         </>
     )
 }
