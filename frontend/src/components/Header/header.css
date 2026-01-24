@@ -1,18 +1,20 @@
-.headerWrapper{
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+.navbar-brand img {
+    height: 40px;
+    /* Adjust based on logo aspect ratio */
+    width: auto;
 }
-.auth-link ul{
-    display: flex;
-    list-style-type: none;
+
+.nav-link {
+    font-size: 1.1rem;
+    transition: color 0.2s ease;
 }
-.auth-link ul li{
-    margin: 0 8px;
+
+.nav-link:hover {
+    color: #e4002b !important;
+    /* KFC Red */
 }
-.auth-link ul li a{
+
+/* Remove default link styles for cleaner integration */
+a {
     text-decoration: none;
-    text-transform: uppercase;
-    font-weight: bold;
-    color: #000;
 }
