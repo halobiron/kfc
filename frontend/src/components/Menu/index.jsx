@@ -36,7 +36,7 @@ const Menu = () => {
                                     </ul>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link disabled" href="/" tabIndex="-1" aria-disabled="true">Khách</a>
+                                    <a className="nav-link" href="/">Khách</a>
                                 </li>
                             </ul>
                                 <button className="btn btn-danger btn-cart-counter" type="submit" onClick={() => setIsModalOpen(true)}>{cartQuantity}</button>
