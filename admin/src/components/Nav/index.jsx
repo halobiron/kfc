@@ -9,43 +9,37 @@ const Nav = () => {
           <li class="nav-item">
             <Link class="nav-link active" aria-current="page" to="/home">
               <span data-feather="home"></span>
-              Dashboard
+              Tổng quan
             </Link>
           </li>
           <li class="nav-item">
             <Link class="nav-link" to="/orders">
               <span data-feather="file"></span>
-              Orders
+              Đơn hàng
             </Link>
           </li>
           <li class="nav-item">
             <Link class="nav-link" to="/products">
               <span data-feather="shopping-cart"></span>
-              Products
+              Sản phẩm
             </Link>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">
               <span data-feather="users"></span>
-              Customers
+              Khách hàng
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">
               <span data-feather="bar-chart-2"></span>
-              Reports
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="layers"></span>
-              Integrations
+              Báo cáo
             </a>
           </li>
         </ul>
 
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>Saved reports</span>
+          <span>Báo cáo đã lưu</span>
           <a class="link-secondary" href="#" aria-label="Add a new report">
             <span data-feather="plus-circle"></span>
           </a>
@@ -54,25 +48,13 @@ const Nav = () => {
           <li class="nav-item">
             <a class="nav-link" href="#">
               <span data-feather="file-text"></span>
-              Current month
+              Tháng này
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">
               <span data-feather="file-text"></span>
-              Last quarter
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Social engagement
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Year-end sale
+              Quý trước
             </a>
           </li>
         </ul>
