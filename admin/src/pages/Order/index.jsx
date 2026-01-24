@@ -17,91 +17,54 @@ const Order = () => {
         </div>
       </div>
 
-      <h2>Section title</h2>
+      <h2>Đơn hàng gần đây</h2>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
+              <th scope="col">Mã đơn hàng</th>
+              <th scope="col">Khách hàng</th>
+              <th scope="col">Sản phẩm</th>
+              <th scope="col">Tổng tiền</th>
+              <th scope="col">Trạng thái</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
+              <td>#1001</td>
+              <td>Nguyen Van A</td>
+              <td>Combo Gà Rán Truyền Thống (x2), Pepsi (L)</td>
+              <td>189.000 đ</td>
+              <td><span className="badge bg-success">Completed</span></td>
             </tr>
             <tr>
-              <td>1,002</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
+              <td>#1002</td>
+              <td>Tran Thi B</td>
+              <td>Burger Tôm, Khoai tây chiên (M)</td>
+              <td>75.000 đ</td>
+              <td><span className="badge bg-warning text-dark">Processing</span></td>
             </tr>
             <tr>
-              <td>1,003</td>
-              <td>data</td>
-              <td>rich</td>
-              <td>dashboard</td>
-              <td>tabular</td>
+              <td>#1003</td>
+              <td>Le Van C</td>
+              <td>Cơm Gà Giòn Cay, 7Up (M)</td>
+              <td>55.000 đ</td>
+              <td><span className="badge bg-secondary">Pending</span></td>
             </tr>
             <tr>
-              <td>1,003</td>
-              <td>information</td>
-              <td>placeholder</td>
-              <td>illustrative</td>
-              <td>data</td>
+              <td>#1004</td>
+              <td>Pham Thi D</td>
+              <td>Gà Rán (3 miếng), Salad Bắp Cải</td>
+              <td>120.000 đ</td>
+              <td><span className="badge bg-success">Completed</span></td>
             </tr>
             <tr>
-              <td>1,004</td>
-              <td>text</td>
-              <td>random</td>
-              <td>layout</td>
-              <td>dashboard</td>
+              <td>#1005</td>
+              <td>Hoang Van E</td>
+              <td>Combo Nhóm (4 người)</td>
+              <td>350.000 đ</td>
+              <td><span className="badge bg-danger">Cancelled</span></td>
             </tr>
-            <tr>
-              <td>1,005</td>
-              <td>dashboard</td>
-              <td>irrelevant</td>
-              <td>text</td>
-              <td>placeholder</td>
-            </tr>
-            <tr>
-              <td>1,006</td>
-              <td>dashboard</td>
-              <td>illustrative</td>
-              <td>rich</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,007</td>
-              <td>placeholder</td>
-              <td>tabular</td>
-              <td>information</td>
-              <td>irrelevant</td>
-            </tr>
-            <tr>
-              <td>1,008</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,009</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            
-           
           </tbody>
         </table>
       </div>

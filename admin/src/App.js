@@ -15,17 +15,26 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Header/>
-        <div class="container-fluid">
-          <div class="row">
-            <Routes>
-              <Route path="/" element={<Login />}/>
-              <Route path='/home' element={<Home />} />
-              <Route path='/products' element={<Product />} />
-              <Route path='/orders' element={<Order />} />
-            </Routes>
-          </div>
-        </div>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route
+            path="*"
+            element={
+              <>
+                <Header />
+                <div class="container-fluid">
+                  <div class="row">
+                    <Routes>
+                      <Route path="/home" element={<Home />} />
+                      <Route path="/products" element={<Product />} />
+                      <Route path="/orders" element={<Order />} />
+                    </Routes>
+                  </div>
+                </div>
+              </>
+            }
+          />
+        </Routes>
       </BrowserRouter>
     </>
   );
