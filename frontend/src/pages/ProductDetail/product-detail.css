@@ -1,0 +1,124 @@
+.product-detail-wrapper {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.p-detail-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.product-breadcrumb {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.product-breadcrumb span {
+    margin: 0 5px;
+}
+
+.product-image-container {
+    text-align: center;
+}
+
+.product-image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.product-info-container {
+    padding: 0 20px;
+}
+
+.product-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #000;
+    text-transform: uppercase;
+}
+
+.product-description {
+    font-size: 16px;
+    color: #495057;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.product-price-section {
+    padding: 20px 0;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 25px;
+}
+
+.product-price {
+    font-size: 28px;
+    font-weight: 700;
+    color: #e4002b; /* KFC Red */
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.quantity-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ced4da;
+    background: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quantity-btn:hover {
+    background: #f8f9fa;
+}
+
+.quantity-input {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    border-top: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
+    border-left: none;
+    border-right: none;
+    font-weight: 600;
+}
+
+.add-to-cart-btn {
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    background-color: #e4002b;
+    border: none;
+    color: white;
+    width: 100%;
+    transition: background-color 0.2s;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #c40022;
+}
+
+@media (max-width: 768px) {
+    .product-info-container {
+        margin-top: 30px;
+        padding: 0;
+    }
+    
+    .product-title {
+        font-size: 24px;
+    }
+}
