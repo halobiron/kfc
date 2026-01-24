@@ -1,34 +1,89 @@
-.footer-wrapper{
-    margin-top: 98px;
-    border-top: 1px solid #ddd;
+.footer-wrapper {
+    background-color: #202124;
+    color: #b0b0b0;
+    font-size: 0.9rem;
+    padding-top: 4rem;
+    margin-top: auto;
+    /* Push to bottom if flex container */
+    width: 100%;
 }
-.footer-wrapper .footer-logo{
-    display: block;
-    margin: 0 auto;
-    margin-top: 48px;
-    margin-bottom: 48px;
+
+.footer-top {
+    padding-bottom: 3rem;
+    border-bottom: 1px solid #3c4043;
 }
-.footer-inner ul{
-    margin: 0;
+
+.footer-logo {
+    height: 50px;
+    width: auto;
+    margin-bottom: 1.5rem;
+}
+
+.footer-heading {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.footer-links {
+    list-style: none;
     padding: 0;
+    margin: 0;
 }
-.footer-inner ul li{
-    list-style-type: none;
+
+.footer-links li {
+    margin-bottom: 0.8rem;
 }
-.footer-inner ul li a{
+
+.footer-links a {
+    color: #b0b0b0;
     text-decoration: none;
-    color: #222;
+    transition: all 0.3s ease;
+    display: inline-block;
 }
-.footer-inner ul li a img{
-    width: 200px;
+
+.footer-links a:hover {
+    color: #e4002b;
+    /* KFC Red */
+    padding-left: 5px;
 }
-.store-img-wrapper li{
+
+.social-links {
     display: flex;
+    gap: 15px;
+    margin-top: 1.5rem;
 }
-.store-img-wrapper li a{
-    justify-content: flex-end;
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    background: #3c4043;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.3s;
 }
-.copywrite{
-    padding: 16px 0;
-    text-align: center;
+
+.social-icon:hover {
+    background: #e4002b;
+    color: white;
+}
+
+.footer-bottom {
+    padding: 1.5rem 0;
+    background-color: #171717;
+}
+
+.app-downloads img {
+    height: 40px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #3c4043;
 }
