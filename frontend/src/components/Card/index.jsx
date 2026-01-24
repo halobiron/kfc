@@ -7,11 +7,11 @@ const Card = () => {
             <div className="card">
                 <img src={product1} className="card-img-top" alt="..." />
                 <div className="card-body">
-                    <h5 className="card-title">Card title</h5>
-                    <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <h5 className="card-title">Gà rán giòn KFC</h5>
+                    <p className="card-text">Gà rán giòn bên ngoài, mềm bên trong với gia vị bí mật đặc biệt của KFC. Hoàn hảo cho bất kỳ bữa ăn nào.</p>
                     <div className="btn-wrapper d-flex">
-                        <button type="button" className="btn btn-outline-danger btn-wrapper">PKR 520</button>
-                        <button type="button" className="btn btn-danger  btn-wrapper">Add to Bucket</button>
+                        <button type="button" className="btn btn-outline-danger btn-wrapper">₫520,000</button>
+                        <button type="button" className="btn btn-danger  btn-wrapper">Thêm vào giỏ</button>
                     </div>
                 </div>
             </div>

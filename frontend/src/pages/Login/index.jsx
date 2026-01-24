@@ -37,12 +37,12 @@ const Login = () => {
                         <form className="row g-3" onSubmit={handleSubmit}>
                             <div className="col-md-12">
                                 <label htmlFor="email" className="form-label">Email</label>
-                                <input type="email" onChange={handleChange} values={values.email} onBlur={handleBlur} name="email" className="form-control" id="email" />
+                                <input type="email" onChange={handleChange} value={values.email} onBlur={handleBlur} name="email" className="form-control" id="email" />
                                 <p className='error'>{touched.email && errors.email ? errors.email:null}</p>
                             </div>
                             <div className="col-md-12">
                                 <label htmlFor="password" className="form-label">Password</label>
-                                <input type="password" onChange={handleChange} values={values.password} onBlur={handleBlur} name='password' className="form-control" id="password" />
+                                <input type="password" onChange={handleChange} value={values.password} onBlur={handleBlur} name='password' className="form-control" id="password" />
                                 <p className='error'>{touched.password && errors.password ? errors.password:null}</p>
                             </div>
                             

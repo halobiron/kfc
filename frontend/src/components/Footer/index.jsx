@@ -11,27 +11,27 @@ const Footer = () => {
         <div className="row footer-inner">
             <div className="col-md-2">
                 <ul>
-                    <li><a href="/">Lorem, ipsum.</a></li>
-                    <li><a href="/">Eveniet, quam?</a></li>
-                    <li><a href="/">Illo, quisquam.</a></li>
-                    <li><a href="/">Repellendus, perspiciatis?</a></li>
-                    <li><a href="/">Iste, culpa.</a></li>
+                    <li><a href="/">Về KFC</a></li>
+                    <li><a href="/">Công ty</a></li>
+                    <li><a href="/">Nghề nghiệp</a></li>
+                    <li><a href="/">Liên hệ chúng tôi</a></li>
+                    <li><a href="/">Báo chí</a></li>
                 </ul>
             </div>
             <div className="col-md-2">
             <ul>
-                    <li><a href="/">Lorem, ipsum.</a></li>
+                    <li><a href="/">Chính sách bảo mật</a></li>
                 </ul>
             </div>
             <div className="col-md-2">
                 <ul>
-                    <li><a href="/">Lorem, ipsum.</a></li>
+                    <li><a href="/">Điều khoản dịch vụ</a></li>
                 </ul>
             </div>
             <div className="col-md-2">
                 <ul>
-                    <li><a href="/">Lorem, ipsum.</a></li>
-                    <li><a href="/">Eveniet, quam?</a></li>
+                    <li><a href="/">Liên hệ hỗ trợ</a></li>
+                    <li><a href="/">FAQ</a></li>
                 </ul>
             </div>
             <div className="col-md-4">

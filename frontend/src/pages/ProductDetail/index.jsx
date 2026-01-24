@@ -13,7 +13,7 @@ const ProductDetail = () => {
                 <img src={product1} alt="" />
             </div>
             <div className="col-md-7">
-                <h3>Product Tilte</h3>
+                <h3>Product Title</h3>
                 <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem, incidunt aliquid ut sunt harum culpa magni exercitationem itaque quam similique repudiandae sint, atque tempore esse id odio quisquam rem illum.</p>
             </div>
         </div>

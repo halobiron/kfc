@@ -13,10 +13,10 @@ const Header = () => {
       </div>
       <div className="auth-link">
         <ul>
-          <li><Link to=""><i className="bi bi-geo-alt-fill"></i> Store Locator</Link></li>
-          <li><Link to="/login"><i className="bi bi-person-fill"></i> Signin/Register</Link></li>
-          <li><Link to=""> My Account</Link></li>
-          <li><Link to=""> Logout</Link></li>
+          <li><Link to=""><i className="bi bi-geo-alt-fill"></i> Tìm chi nhánh</Link></li>
+          <li><Link to="/login"><i className="bi bi-person-fill"></i> Đăng nhập/Đăng ký</Link></li>
+          <li><Link to=""> Tài khoản của tôi</Link></li>
+          <li><Link to=""> Đăng xuất</Link></li>
         </ul>
       </div>
     </div>
