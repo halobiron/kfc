@@ -22,8 +22,8 @@ function App() {
             element={
               <>
                 <Header />
-                <div class="container-fluid">
-                  <div class="row">
+                <div className="container-fluid">
+                  <div className="row">
                     <Routes>
                       <Route path="/home" element={<Home />} />
                       <Route path="/products" element={<Product />} />

@@ -1,15 +1,40 @@
-.modal-overlay-wrapper{
+.modal-overlay-wrapper {
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.modal-overlay-inner{
+
+.modal-overlay-inner {
     width: 800px;
-    padding: 24px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
+    max-width: 90%;
+    padding: 30px;
+    background-color: var(--kfc-white);
+    border-radius: 0;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-overlay-inner h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--kfc-black);
+    margin-bottom: 20px;
+}
+
+.modal-overlay-inner .btn {
+    margin-top: 15px;
+}
+
+.modal-overlay-inner .form-control {
+    border: 1px solid var(--kfc-border-grey);
+    border-radius: 0;
+}
+
+.modal-overlay-inner .form-control:focus {
+    border-color: var(--kfc-red);
+    box-shadow: none;
 }
