@@ -93,13 +93,9 @@ const Reports = () => {
             {/* Revenue Chart Placeholder */}
             <div className="row mb-4">
                 <div className="col-12">
-                    <div className="card border-0 shadow-sm">
-                        <div className="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center">
-                            <h5 className="mb-0 fw-bold">Biểu đồ doanh thu</h5>
-                            <select className="form-select form-control" style={{ width: 'auto' }}>
-                                <option>Tháng này</option>
-                                <option>Quý trước</option>
-                            </select>
+                    <div className="card border">
+                        <div className="card-header">
+                            <h5 className="mb-0 fw-bold">Biểu đồ doanh thu <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
                         </div>
                         <div className="card-body">
                             <div className="bg-light d-flex align-items-center justify-content-center text-muted rounded" style={{ height: '300px' }}>
@@ -118,7 +114,9 @@ const Reports = () => {
             <div className="row g-4">
                 <div className="col-lg-6">
                     <div className="card h-100">
-                        <div className="card-header">Sản phẩm bán chạy</div>
+                        <div className="card-header">
+                            <h5 className="mb-0 fw-bold">Sản phẩm bán chạy <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
+                        </div>
                         <div className="table-responsive">
                             <table className="table">
                                 <thead>
@@ -148,9 +146,9 @@ const Reports = () => {
                     </div>
                 </div>
                 <div className="col-lg-6">
-                    <div className="card border-0 shadow-sm h-100">
-                        <div className="card-header bg-white border-bottom-0">
-                            <h5 className="mb-0 fw-bold">Tổng quan theo danh mục</h5>
+                    <div className="card border shadow-sm h-100">
+                        <div className="card-header">
+                            <h5 className="mb-0 fw-bold">Tổng quan theo danh mục <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
                         </div>
                         <div className="card-body">
                             <div className="bg-light d-flex align-items-center justify-content-center text-muted rounded h-100" style={{ minHeight: '200px' }}>
