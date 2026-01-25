@@ -44,35 +44,33 @@ const Customers = () => {
             </div>
 
             {/* Filters */}
-            <div className="card mb-4">
-                <div className="card-body">
-                    <div className="row g-3">
-                        <div className="col-md-6">
-                            <label className="form-label">Tìm kiếm</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Tìm theo tên hoặc email..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
-                        <div className="col-md-4">
-                            <label className="form-label">Lọc theo vai trò</label>
-                            <select
-                                className="form-control"
-                                value={selectedRole}
-                                onChange={(e) => setSelectedRole(e.target.value)}
-                            >
-                                <option value="All">Tất cả vai trò</option>
-                                <option value="Khách hàng">Khách hàng</option>
-                                <option value="Nhân viên">Nhân viên</option>
-                                <option value="Quản lý">Quản lý</option>
-                                <option value="Đầu bếp">Đầu bếp</option>
-                                <option value="Thủ kho">Thủ kho</option>
-                            </select>
-                        </div>
+            {/* Filters */}
+            <div className="row g-3 mb-4">
+                <div className="col-md-8">
+                    <div className="input-group-search">
+                        <FiSearch className="search-icon" />
+                        <input
+                            type="text"
+                            className="form-control form-control-search"
+                            placeholder="Tìm kiếm khách hàng theo tên, email..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                     </div>
+                </div>
+                <div className="col-md-4">
+                    <select
+                        className="form-control form-select-custom"
+                        value={selectedRole}
+                        onChange={(e) => setSelectedRole(e.target.value)}
+                    >
+                        <option value="All">Tất cả vai trò</option>
+                        <option value="Khách hàng">Khách hàng</option>
+                        <option value="Nhân viên">Nhân viên</option>
+                        <option value="Quản lý">Quản lý</option>
+                        <option value="Đầu bếp">Đầu bếp</option>
+                        <option value="Thủ kho">Thủ kho</option>
+                    </select>
                 </div>
             </div>
 
