@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { getProductById, updateProduct } from '../../redux/actions/productActions';
-import { FiArrowLeft, FiSave, FiX, FiImage } from 'react-icons/fi';
+import { getAllIngredients } from '../../redux/actions/ingredientActions';
+import { FiArrowLeft, FiSave, FiX, FiImage, FiBox, FiPlus, FiTrash2, FiActivity } from 'react-icons/fi';
 import './productDetails.css';
 
 const ProductDetails = () => {
@@ -14,14 +15,19 @@ const ProductDetails = () => {
     const { currentProduct } = useSelector(state => state.products);
     const [preview, setPreview] = useState('');
     const [loading, setLoading] = useState(true);
+    const [recipe, setRecipe] = useState([]);
+    const { ingredients: allIngredients } = useSelector(state => state.ingredients);
+    const [selectedIngredientId, setSelectedIngredientId] = useState('');
+    const [ingredientQty, setIngredientQty] = useState('');
 
     useEffect(() => {
-        const fetchProduct = async () => {
+        const fetchData = async () => {
             setLoading(true);
+            await dispatch(getAllIngredients());
             await dispatch(getProductById(id));
             setLoading(false);
         };
-        fetchProduct();
+        fetchData();
     }, [id, dispatch]);
 
     const { handleChange, handleSubmit, handleBlur, values, touched, errors, setFieldValue, setValues } = useFormik({
@@ -41,7 +47,11 @@ const ProductDetails = () => {
             category: Yup.string().required('Danh mục là bắt buộc'),
         }),
         onSubmit: async (values) => {
-            await dispatch(updateProduct(id, values));
+            const productData = {
+                ...values,
+                recipe
+            };
+            await dispatch(updateProduct(id, productData));
             alert('Cập nhật sản phẩm thành công!');
             navigate('/products');
         }
@@ -58,8 +68,35 @@ const ProductDetails = () => {
                 image: currentProduct.image || ''
             });
             setPreview(currentProduct.image || '');
+            setRecipe(currentProduct.recipe || []);
         }
     }, [currentProduct, setValues]);
+
+    const addIngredientToRecipe = () => {
+        if (!selectedIngredientId || !ingredientQty) return;
+
+        const ingredient = allIngredients.find(i => i._id === selectedIngredientId);
+        if (ingredient) {
+            const exists = recipe.find(r => r.ingredientId === selectedIngredientId);
+            if (exists) {
+                alert('Nguyên liệu này đã có trong công thức!');
+                return;
+            }
+
+            setRecipe([...recipe, {
+                ingredientId: ingredient._id,
+                name: ingredient.name,
+                quantity: parseFloat(ingredientQty),
+                unit: ingredient.unit
+            }]);
+            setSelectedIngredientId('');
+            setIngredientQty('');
+        }
+    };
+
+    const removeIngredientFromRecipe = (id) => {
+        setRecipe(recipe.filter(r => r.ingredientId !== id));
+    };
 
     if (loading) {
         return (
@@ -104,10 +141,11 @@ const ProductDetails = () => {
                 </div>
             </div>
 
-            {/* Form */}
+            {/* Form & Recipe Layout */}
             <div className="row g-4">
                 <div className="col-lg-8">
-                    <div className="card">
+                    {/* Info Card */}
+                    <div className="card mb-4">
                         <div className="card-header">Thông tin món ăn</div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>
@@ -242,34 +280,129 @@ const ProductDetails = () => {
                             </form>
                         </div>
                     </div>
+
+                    {/* Recipe Card */}
+                    <div className="card shadow-sm border-0">
+                        <div className="card-header py-3">
+                            <h5 className="mb-0 fw-bold d-flex align-items-center gap-2">
+                                <FiActivity className="text-primary" /> Công thức chế biến (Định mức)
+                            </h5>
+                        </div>
+                        <div className="card-body">
+                            {/* Add Ingredient Row - Enhanced Aesthetics */}
+                            <div className="row g-2 mb-4 align-items-end p-3 rounded recipe-add-row">
+                                <div className="col-md-6">
+                                    <label className="form-label">Chọn nguyên liệu từ kho</label>
+                                    <select
+                                        className="form-select"
+                                        value={selectedIngredientId}
+                                        onChange={(e) => setSelectedIngredientId(e.target.value)}
+                                    >
+                                        <option value="">-- Chọn nguyên liệu --</option>
+                                        {allIngredients?.map(ing => (
+                                            <option key={ing._id} value={ing._id}>
+                                                {ing.name} ({ing.unit})
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="col-md-4">
+                                    <label className="form-label">Số lượng tiêu hao</label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        placeholder="Ví dụ: 0.5"
+                                        value={ingredientQty}
+                                        onChange={(e) => setIngredientQty(e.target.value)}
+                                    />
+                                </div>
+                                <div className="col-md-2">
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary w-100"
+                                        onClick={addIngredientToRecipe}
+                                    >
+                                        <FiPlus size={20} className="me-1" /> Thêm
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Ingredients Table - Enhanced Styling */}
+                            <div className="table-responsive">
+                                <table className="table table-hover align-middle mb-0 table-recipe">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên nguyên liệu</th>
+                                            <th className="text-center">Số lượng</th>
+                                            <th className="text-center">Đơn vị</th>
+                                            <th className="text-end pe-3">Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {recipe.length > 0 ? recipe.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td className="fw-medium">{item.name}</td>
+                                                <td className="text-center fw-bold text-danger">{item.quantity}</td>
+                                                <td className="text-center text-muted small">{item.unit}</td>
+                                                <td className="text-end pe-3">
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-sm btn-outline-danger"
+                                                        onClick={() => removeIngredientFromRecipe(item.ingredientId)}
+                                                        style={{ borderRadius: '4px', padding: '4px 8px' }}
+                                                    >
+                                                        <FiTrash2 size={14} />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )) : (
+                                            <tr>
+                                                <td colSpan="4" className="text-center py-4 text-muted">
+                                                    Chưa có nguyên liệu nào trong công thức.
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Right Column - Preview */}
+                {/* Right Column - Preview (Stays at the top right) */}
                 <div className="col-lg-4">
-                    <div className="card">
-                        <div className="card-header">Xem trước</div>
+                    <div className="card sticky-top" style={{ top: '80px', zIndex: 10 }}>
+                        <div className="card-header">Xem trước món ăn</div>
                         <div className="card-body">
                             {preview ? (
-                                <img src={preview} alt="Preview" className="img-fluid rounded mb-3" />
+                                <img src={preview} alt="Preview" className="img-fluid rounded mb-3 shadow-sm" style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
                             ) : (
-                                <div className="text-center p-4 bg-light rounded mb-3">
-                                    <FiImage size={48} className="text-muted" />
-                                    <p className="text-muted mt-2 mb-0">Chưa có hình ảnh</p>
+                                <div className="text-center p-4 bg-light rounded mb-3 border">
+                                    <FiImage size={48} className="text-muted mb-2" />
+                                    <p className="text-muted small mb-0">Chưa có hình ảnh</p>
                                 </div>
                             )}
-                            <h5 className="fw-bold">{values.title || 'Tên món ăn'}</h5>
-                            <p className="text-muted small">{values.description || 'Mô tả món ăn'}</p>
-                            <div className="d-flex justify-content-between align-items-center">
+                            <h5 className="fw-bold mb-2 Oswald-font text-uppercase">{values.title || 'Tên món ăn'}</h5>
+                            <p className="text-muted small mb-3">{values.description || 'Mô tả món ăn'}</p>
+                            <div className="d-flex justify-content-between align-items-center mb-3">
                                 <span className="badge badge-primary">{values.category || 'Danh mục'}</span>
-                                <span className="fw-bold text-danger">
+                                <span className="fw-bold text-danger fs-5">
                                     {values.price ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(values.price) : '0 đ'}
                                 </span>
                             </div>
-                            <div className="mt-2">
-                                <small className="text-muted">Tồn kho: </small>
-                                <span className={`badge ${values.stock > 10 ? 'badge-success' : 'badge-warning'}`}>
-                                    {values.stock > 0 ? 'Còn hàng' : 'Hết hàng'} ({values.stock || 0})
-                                </span>
+                            <div className="preview-stats-grid">
+                                <div className="stat-item">
+                                    <span className="stat-label">Tồn kho</span>
+                                    <div className={`stat-value ${values.stock > 10 ? 'text-success' : 'text-danger'}`}>
+                                        <FiBox size={14} /> {values.stock || 0}
+                                    </div>
+                                </div>
+                                <div className="stat-item">
+                                    <span className="stat-label">Nguyên liệu</span>
+                                    <div className="stat-value text-dark">
+                                        <FiActivity size={14} className="text-primary" /> {recipe.length}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

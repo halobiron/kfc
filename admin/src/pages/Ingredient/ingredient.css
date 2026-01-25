@@ -1,0 +1,32 @@
+/* Ingredient Management Styles */
+
+.row-alert {
+    background-color: rgba(220, 53, 69, 0.03) !important;
+}
+
+.row-alert td {
+    border-left: 3px solid #dc3545;
+}
+
+.stats-card {
+    transition: transform 0.2s;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+}
+
+.badge-light {
+    background-color: #f1f1f1;
+}
+
+/* Modal adjustments */
+.modal-overlay-wrapper {
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+}
+
+.modal-overlay-inner {
+    border-radius: 12px !important;
+    padding: 24px !important;
+}

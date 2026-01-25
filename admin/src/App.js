@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Product from './pages/Product'
 import ProductDetails from './pages/ProductDetails'
+import Ingredient from './pages/Ingredient'
 import Order from './pages/Order'
 import Customers from './pages/Customers';
 import Reports from './pages/Reports';
@@ -32,6 +33,7 @@ function App() {
                       <Route path="/home" element={<Home />} />
                       <Route path="/products" element={<Product />} />
                       <Route path="/products/:id" element={<ProductDetails />} />
+                      <Route path="/ingredients" element={<Ingredient />} />
                       <Route path="/orders" element={<Order />} />
                       <Route path="/orders/:id" element={<OrderDetails />} />
                       <Route path="/customers" element={<Customers />} />

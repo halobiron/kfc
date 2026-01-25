@@ -14,7 +14,11 @@ const mockProducts = {
             price: 45000,
             stock: 25,
             category: 'Gà Rán',
-            image: product1
+            image: product1,
+            recipe: [
+                { ingredientId: 'ing_001', name: 'Thịt Gà tươi', quantity: 0.5, unit: 'Kg' },
+                { ingredientId: 'ing_002', name: 'Bột chiên xù', quantity: 0.1, unit: 'Bao (10kg)' }
+            ]
         },
         {
             _id: 'mock_002',
@@ -23,7 +27,11 @@ const mockProducts = {
             price: 42000,
             stock: 30,
             category: 'Gà Rán',
-            image: product2
+            image: product2,
+            recipe: [
+                { ingredientId: 'ing_001', name: 'Thịt Gà tươi', quantity: 0.5, unit: 'Kg' },
+                { ingredientId: 'ing_002', name: 'Bột chiên xù', quantity: 0.08, unit: 'Bao (10kg)' }
+            ]
         },
         {
             _id: 'mock_003',
@@ -32,7 +40,12 @@ const mockProducts = {
             price: 52000,
             stock: 18,
             category: 'Burger',
-            image: product3
+            image: product3,
+            recipe: [
+                { ingredientId: 'ing_001', name: 'Thịt Gà tươi', quantity: 0.2, unit: 'Kg' },
+                { ingredientId: 'ing_005', name: 'Xà lách tươi', quantity: 0.05, unit: 'Kg' },
+                { ingredientId: 'ing_006', name: 'Sốt Mayonnaise', quantity: 0.02, unit: 'Thùng (4 can)' }
+            ]
         },
         {
             _id: 'mock_004',
