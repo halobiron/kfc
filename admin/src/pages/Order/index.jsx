@@ -1,5 +1,6 @@
 import React from 'react'
 import { FiEye } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 const Order = () => {
   return (
@@ -30,10 +31,10 @@ const Order = () => {
                 <td>189.000 đ</td>
                 <td><span className="badge badge-success">Hoàn thành</span></td>
                 <td>
-                  <button className="btn-action btn-edit">
+                  <Link to="/orders/1001" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
                     <FiEye style={{ marginRight: '4px' }} />
                     Xem
-                  </button>
+                  </Link>
                 </td>
               </tr>
               <tr>
@@ -43,10 +44,10 @@ const Order = () => {
                 <td>75.000 đ</td>
                 <td><span className="badge badge-warning">Đang xử lý</span></td>
                 <td>
-                  <button className="btn-action btn-edit">
+                  <Link to="/orders/1002" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
                     <FiEye style={{ marginRight: '4px' }} />
                     Xem
-                  </button>
+                  </Link>
                 </td>
               </tr>
               <tr>
@@ -56,10 +57,10 @@ const Order = () => {
                 <td>55.000 đ</td>
                 <td><span className="badge badge-warning">Chờ xác nhận</span></td>
                 <td>
-                  <button className="btn-action btn-edit">
+                  <Link to="/orders/1003" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
                     <FiEye style={{ marginRight: '4px' }} />
                     Xem
-                  </button>
+                  </Link>
                 </td>
               </tr>
               <tr>
@@ -69,10 +70,10 @@ const Order = () => {
                 <td>120.000 đ</td>
                 <td><span className="badge badge-success">Hoàn thành</span></td>
                 <td>
-                  <button className="btn-action btn-edit">
+                  <Link to="/orders/1004" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
                     <FiEye style={{ marginRight: '4px' }} />
                     Xem
-                  </button>
+                  </Link>
                 </td>
               </tr>
               <tr>
@@ -82,10 +83,10 @@ const Order = () => {
                 <td>350.000 đ</td>
                 <td><span className="badge badge-danger">Đã hủy</span></td>
                 <td>
-                  <button className="btn-action btn-edit">
+                  <Link to="/orders/1005" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
                     <FiEye style={{ marginRight: '4px' }} />
                     Xem
-                  </button>
+                  </Link>
                 </td>
               </tr>
             </tbody>

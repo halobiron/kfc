@@ -4,6 +4,9 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Product from './pages/Product'
 import Order from './pages/Order'
+import Customers from './pages/Customers';
+import Reports from './pages/Reports';
+import OrderDetails from './pages/OrderDetails';
 
 import {
   BrowserRouter,
@@ -28,6 +31,9 @@ function App() {
                       <Route path="/home" element={<Home />} />
                       <Route path="/products" element={<Product />} />
                       <Route path="/orders" element={<Order />} />
+                      <Route path="/orders/:id" element={<OrderDetails />} />
+                      <Route path="/customers" element={<Customers />} />
+                      <Route path="/reports" element={<Reports />} />
                     </Routes>
                   </div>
                 </div>

@@ -26,16 +26,16 @@ const Nav = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#">
+            <Link className="nav-link" to="/customers">
               <FiUsers style={{ marginRight: '8px' }} />
               Khách hàng
-            </a>
+            </Link>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#">
+            <Link className="nav-link" to="/reports">
               <FiBarChart2 style={{ marginRight: '8px' }} />
               Báo cáo
-            </a>
+            </Link>
           </li>
         </ul>
 

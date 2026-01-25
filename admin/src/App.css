@@ -94,8 +94,8 @@ body {
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
-  background-color: var(--kfc-red);
-  color: var(--kfc-white) !important;
+  background-color: var(--kfc-white);
+  color: var(--kfc-red) !important;
   box-shadow: none;
 }
 
@@ -353,18 +353,18 @@ body {
 }
 
 .badge-success {
-  background-color: var(--kfc-success);
-  color: var(--kfc-white);
+  background-color: #28a745;
+  color: #fff;
 }
 
 .badge-warning {
-  background-color: var(--kfc-warning);
-  color: var(--kfc-black);
+  background-color: #ffc107;
+  color: #212529;
 }
 
 .badge-danger {
-  background-color: var(--kfc-danger);
-  color: var(--kfc-white);
+  background-color: #dc3545;
+  color: #fff;
 }
 
 /* Alert Components */
@@ -395,9 +395,9 @@ body {
 }
 
 .alert-info {
-  background-color: #d1ecf1;
-  border-color: var(--kfc-info);
-  color: #0c5460;
+  background-color: #fbeaea;
+  border-color: var(--kfc-red);
+  color: var(--kfc-red);
 }
 
 /* Loading Spinner */
@@ -448,17 +448,18 @@ body {
 }
 
 .btn-action:hover {
-  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .btn-edit {
-  background-color: #17a2b8;
+  background-color: var(--kfc-black);
   color: white;
   border: none;
 }
 
 .btn-edit:hover {
-  background-color: #138496;
+  background-color: var(--kfc-red);
+  color: var(--kfc-white) !important;
 }
 
 .btn-delete {
@@ -468,7 +469,8 @@ body {
 }
 
 .btn-delete:hover {
-  background-color: var(--kfc-red-dark);
+  background-color: #c40024;
+  color: var(--kfc-white) !important;
 }
 
 /* Form Enhancements */
@@ -555,6 +557,32 @@ body {
   .col-4,
   .col-3 {
     flex: 0 0 100%;
-    max-width: 100%;
   }
+}
+
+/* Global Red Overrides for KFC Brand */
+.bg-primary {
+  background-color: var(--kfc-red) !important;
+}
+
+.text-primary {
+  color: var(--kfc-red) !important;
+}
+
+.border-primary {
+  border-color: var(--kfc-red) !important;
+}
+
+.bg-info {
+  background-color: var(--kfc-red) !important;
+  color: var(--kfc-white) !important;
+}
+
+.text-info {
+  color: var(--kfc-red) !important;
+}
+
+.badge-info {
+  background-color: var(--kfc-red) !important;
+  color: var(--kfc-white) !important;
 }
