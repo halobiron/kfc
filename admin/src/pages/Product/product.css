@@ -38,3 +38,21 @@
     border-color: var(--kfc-red);
     box-shadow: none;
 }
+
+.product-img-wrapper {
+    width: 60px;
+    height: 60px;
+    background-color: #f8f9fa;
+    border: 1px solid var(--kfc-border-grey);
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-thumbnail {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}

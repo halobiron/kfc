@@ -1,0 +1,46 @@
+/* ProductDetails Page Styling */
+
+.product-details-form .form-control,
+.product-details-form .form-select {
+    border: 1px solid var(--kfc-border-grey);
+    border-radius: 0;
+}
+
+.product-details-form .form-control:focus,
+.product-details-form .form-select:focus {
+    border-color: var(--kfc-red);
+    box-shadow: none;
+}
+
+.product-details-form .is-invalid {
+    border-color: #dc3545;
+}
+
+.product-details-form .invalid-feedback {
+    display: block;
+    font-size: 0.875rem;
+    color: #dc3545;
+}
+
+/* Preview Card */
+.product-preview-card img {
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.product-preview-card .badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+}
+
+/* Buttons */
+.btn-link:hover {
+    text-decoration: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    .product-preview-card {
+        margin-top: 1rem;
+    }
+}

@@ -2,7 +2,8 @@ import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllProducts } from '../../redux/actions/productActions'
+import { useNavigate } from 'react-router-dom'
+import { getAllProducts, getAllProductsMock } from '../../redux/actions/productActions'
 import AddModal from './AddModal';
 import './product.css';
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
@@ -10,12 +11,13 @@ import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
 const Product = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { products } = useSelector(state => state.products)
 
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    dispatch(getAllProducts());
+    dispatch(getAllProductsMock());
   }, [])
 
   return (
@@ -53,8 +55,19 @@ const Product = () => {
                       <tr key={product._id}>
                         <td className="ps-4 fw-bold">P{1000 + i + 1}</td>
                         <td>
-                          <div className="fw-bold">{product.title}</div>
-                          {/* Optional: Add image thumbnail here if available */}
+                          <div className="d-flex align-items-center gap-3">
+                            <div className="product-img-wrapper">
+                              <img
+                                src={product.image}
+                                alt={product.title}
+                                className="product-thumbnail"
+                                onError={(e) => {
+                                  e.target.src = 'https://via.placeholder.com/50x50?text=KFC';
+                                }}
+                              />
+                            </div>
+                            <div className="fw-bold">{product.title}</div>
+                          </div>
                         </td>
                         <td className="text-muted small" style={{ maxWidth: '300px' }}>{product.description}</td>
                         <td className="text-end fw-bold text-danger">
@@ -66,7 +79,10 @@ const Product = () => {
                           </span>
                         </td>
                         <td className="text-end pe-4">
-                          <button className="btn-action btn-edit border-0 d-inline-flex align-items-center">
+                          <button
+                            className="btn-action btn-edit border-0 d-inline-flex align-items-center"
+                            onClick={() => navigate(`/products/${product._id}`)}
+                          >
                             <FiEdit2 style={{ marginRight: '4px' }} />
                             Sửa
                           </button>
