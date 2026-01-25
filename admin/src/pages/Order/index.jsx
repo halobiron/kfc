@@ -1,4 +1,5 @@
 import React from 'react'
+import { FiEye } from 'react-icons/fi';
 
 const Order = () => {
   return (
@@ -29,7 +30,10 @@ const Order = () => {
                 <td>189.000 đ</td>
                 <td><span className="badge badge-success">Hoàn thành</span></td>
                 <td>
-                  <button className="btn-action btn-edit">Xem</button>
+                  <button className="btn-action btn-edit">
+                    <FiEye style={{ marginRight: '4px' }} />
+                    Xem
+                  </button>
                 </td>
               </tr>
               <tr>
@@ -39,7 +43,10 @@ const Order = () => {
                 <td>75.000 đ</td>
                 <td><span className="badge badge-warning">Đang xử lý</span></td>
                 <td>
-                  <button className="btn-action btn-edit">Xem</button>
+                  <button className="btn-action btn-edit">
+                    <FiEye style={{ marginRight: '4px' }} />
+                    Xem
+                  </button>
                 </td>
               </tr>
               <tr>
@@ -49,7 +56,10 @@ const Order = () => {
                 <td>55.000 đ</td>
                 <td><span className="badge badge-warning">Chờ xác nhận</span></td>
                 <td>
-                  <button className="btn-action btn-edit">Xem</button>
+                  <button className="btn-action btn-edit">
+                    <FiEye style={{ marginRight: '4px' }} />
+                    Xem
+                  </button>
                 </td>
               </tr>
               <tr>
@@ -59,7 +69,10 @@ const Order = () => {
                 <td>120.000 đ</td>
                 <td><span className="badge badge-success">Hoàn thành</span></td>
                 <td>
-                  <button className="btn-action btn-edit">Xem</button>
+                  <button className="btn-action btn-edit">
+                    <FiEye style={{ marginRight: '4px' }} />
+                    Xem
+                  </button>
                 </td>
               </tr>
               <tr>
@@ -69,7 +82,10 @@ const Order = () => {
                 <td>350.000 đ</td>
                 <td><span className="badge badge-danger">Đã hủy</span></td>
                 <td>
-                  <button className="btn-action btn-edit">Xem</button>
+                  <button className="btn-action btn-edit">
+                    <FiEye style={{ marginRight: '4px' }} />
+                    Xem
+                  </button>
                 </td>
               </tr>
             </tbody>

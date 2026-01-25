@@ -2,6 +2,7 @@ import React from 'react'
 import './login.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import kfcLogo from '@shared-assets/img/KFC-Logo.png';
 
 const Login = () => {
 
@@ -22,6 +23,7 @@ const Login = () => {
         <div className="login-wrapper">
             <main className="form-signin">
                 <form onSubmit={handleSubmit}>
+                    <img src={kfcLogo} alt="KFC Logo" style={{ width: '120px', margin: '0 auto 20px', display: 'block' }} />
                     <h1 className="h3 mb-3 fw-normal">Đăng nhập vào hệ thống</h1>
                     <div className="form-floating">
                         <input type="email" onChange={handleChange} onBlur={handleBlur} value={values.email} name="email" className="form-control" id="floatingInput" placeholder="name@example.com" />
@@ -35,7 +37,7 @@ const Login = () => {
                     </div>
 
                     <button className="w-100 btn btn-lg btn-primary" type="submit">Đăng nhập</button>
-                    <p className="mt-5 mb-3 text-muted">&copy; 2022 - KFC Admin</p>
+                    <p className="mt-5 mb-3 text-muted">&copy; 2026 - KFC Admin</p>
                 </form>
             </main>
         </div>

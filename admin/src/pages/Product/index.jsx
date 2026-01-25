@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getAllProducts } from '../../redux/actions/productActions'
 import AddModal from './AddModal';
 import './product.css';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 const Product = () => {
 
@@ -61,8 +62,14 @@ const Product = () => {
                           </span>
                         </td>
                         <td>
-                          <button className="btn-action btn-edit">Sửa</button>
-                          <button className="btn-action btn-delete">Xóa</button>
+                          <button className="btn-action btn-edit">
+                            <FiEdit2 style={{ marginRight: '4px' }} />
+                            Sửa
+                          </button>
+                          <button className="btn-action btn-delete">
+                            <FiTrash2 style={{ marginRight: '4px' }} />
+                            Xóa
+                          </button>
                         </td>
                       </tr>
                     )
