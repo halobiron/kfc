@@ -37,10 +37,33 @@ const Header = () => {
 
               {/* Right Action Buttons */}
               <div className="d-flex align-items-center gap-3">
-                {/* User/Login */}
-                <Link to="/login" className="text-decoration-none text-dark fw-bold d-flex align-items-center">
-                  <i className="bi bi-person-circle fs-4 me-2"></i>
-                </Link>
+                {/* User/Login - Dropdown */}
+                <div className="dropdown">
+                  <button
+                    className="btn text-dark fw-bold d-flex align-items-center p-0 border-0"
+                    type="button"
+                    id="userDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <i className="bi bi-person-circle fs-4 me-2"></i>
+                  </button>
+                  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li>
+                      <Link className="dropdown-item" to="/my-orders">
+                        <i className="bi bi-clock-history me-2"></i>
+                        Đơn hàng của tôi
+                      </Link>
+                    </li>
+                    <li><hr className="dropdown-divider" /></li>
+                    <li>
+                      <Link className="dropdown-item" to="/login">
+                        <i className="bi bi-box-arrow-in-right me-2"></i>
+                        Đăng nhập
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
 
                 {/* Cart */}
                 <div className="position-relative cursor-pointer" onClick={() => setIsModalOpen(true)} style={{ cursor: 'pointer' }}>

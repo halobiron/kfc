@@ -1,0 +1,411 @@
+.my-orders-wrapper {
+    min-height: 100vh;
+    background-color: #f8f8f8;
+}
+
+.my-orders-container {
+    min-height: calc(100vh - 200px);
+}
+
+.orders-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    margin-top: 2rem;
+}
+
+.orders-header h2 {
+    color: #202124;
+    font-weight: 900;
+    font-size: 2.2rem;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.title-underline {
+    width: 40px;
+    height: 3px;
+    background-color: #e4002b;
+    margin: 0 auto;
+}
+
+/* Order Card - Flatter Design */
+.order-card {
+    background: white;
+    border-radius: 8px;
+    /* Reduced from 20px */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    /* Lighter shadow */
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+    border: 1px solid #efefef;
+    margin-bottom: 1.5rem;
+}
+
+.order-card:hover {
+    transform: none;
+    /* Removed movement */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background-color: #fff;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.order-id {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #202124;
+}
+
+.order-date {
+    font-size: 0.85rem;
+    color: #70757a;
+    display: flex;
+    align-items: center;
+}
+
+/* Status Badge - Simpler */
+.order-status {
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    /* Reduced radius */
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-preparing {
+    background: #fff9e6;
+    color: #fbc02d;
+}
+
+.status-shipping {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.status-completed {
+    background: #e8f5e9;
+    color: #388e3c;
+}
+
+.status-cancelled {
+    background: #f5f5f5;
+    color: #999;
+}
+
+/* Order Body */
+.order-body {
+    padding: 1.5rem;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.item-name {
+    font-weight: 700;
+    color: #202124;
+    font-size: 1rem;
+}
+
+.item-quantity {
+    color: #70757a;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+
+.item-price {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.order-total-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.total-label {
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #202124;
+    font-size: 0.9rem;
+}
+
+.total-value {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #e4002b;
+}
+
+/* Order Actions */
+.order-actions {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* KFC Button Styles */
+.order-actions .btn {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 0.8rem;
+    border-radius: 99px;
+    /* Pill shape kept for buttons */
+    padding: 0.5rem 1.5rem;
+    box-shadow: none !important;
+    /* Remove button shadows */
+}
+
+/* Empty State */
+.empty-orders {
+    background: white;
+    border-radius: 8px;
+    padding: 4rem 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Modals - Simplified */
+.order-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    /* No blur, just dim */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.order-modal-content {
+    background: white;
+    border-radius: 8px;
+    /* Standard KFC card radius */
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.order-modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #efefef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-modal-header h5 {
+    margin: 0;
+    font-weight: 900;
+    color: #202124;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+}
+
+.btn-close-custom {
+    border: none;
+    background: transparent;
+    font-size: 1.2rem;
+    color: #999;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.btn-close-custom:hover {
+    color: #e4002b;
+}
+
+.order-modal-body {
+    padding: 1.5rem;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.detail-card {
+    background: #f8f8f8;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.detail-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #70757a;
+}
+
+.section-title {
+    font-weight: 900;
+    font-size: 0.9rem;
+    color: #202124;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.items-list-custom {
+    background: #fff;
+    border: 1px solid #efefef;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.detail-item-custom {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed #eee;
+}
+
+.detail-item-custom:last-child {
+    border-bottom: none;
+}
+
+.modal-total-section {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #f8f8f8;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-amount-large {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #e4002b;
+}
+
+.order-modal-footer {
+    padding: 0 1.5rem 1.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+/* Cancel Modal - Simplified */
+.cancel-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: #fff1f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    margin-bottom: 1rem;
+}
+
+.cancel-icon-wrapper i {
+    font-size: 3rem;
+    color: #e4002b;
+}
+
+.reasons-list {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.reason-item {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 0.5rem;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.reason-item:hover {
+    border-color: #ccc;
+}
+
+.reason-label {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    flex-grow: 1;
+    color: #202124;
+}
+
+.form-check-input:checked {
+    background-color: #e4002b;
+    border-color: #e4002b;
+}
+
+/* Secondary Button (KFC Style) */
+.btn-kfc-light {
+    background: white;
+    border: 1px solid #ddd;
+    color: #202124;
+    border-radius: 99px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.btn-kfc-light:hover {
+    border-color: #e4002b;
+    color: #e4002b;
+    background: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .orders-header h2 {
+        font-size: 2rem;
+    }
+
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .order-actions {
+        flex-direction: column;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+}

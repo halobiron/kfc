@@ -46,7 +46,7 @@ const Footer = () => {
             {/* Bottom Bar */}
             <div className="footer-bottom">
                 <div className="container text-center">
-                    <p className="mb-0">© 2026 KFC Vietnam Project. Built for Educational Purpose.</p>
+                    <p className="mb-0">© 2026 KFC Vietnam Project.</p>
                 </div>
             </div>
         </footer>

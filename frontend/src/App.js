@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Product from './pages/Product';
 import ProductDetail from './pages/ProductDetail';
 import Register from './pages/Register';
+import MyOrders from './pages/MyOrders';
 import {
   BrowserRouter,
   Routes,
@@ -21,7 +22,8 @@ function App() {
           <Route path="/product-detail/:id" element={<ProductDetail />} />
           <Route path="/product-detail" element={<ProductDetail />} />
           <Route path="/register" element={<Register />} />
-          <Route path="login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/my-orders" element={<MyOrders />} />
         </Routes>
       </BrowserRouter>
     </div>
