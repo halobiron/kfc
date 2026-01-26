@@ -98,21 +98,18 @@ const Ingredient = () => {
                         <tbody>
                             {ingredients && ingredients.map((ing, i) => {
                                 const status = getStockStatus(ing);
+                                const isLow = ing.stock <= ing.minStock;
+
                                 return (
-                                    <tr key={ing._id} className={ing.stock <= ing.minStock ? 'row-alert' : ''}>
+                                    <tr key={ing._id} className={isLow ? 'row-alert' : ''}>
                                         <td className="ps-4 text-muted small">{ing._id}</td>
                                         <td>
                                             <div className="fw-bold">{ing.name}</div>
-                                            {ing.stock <= ing.minStock && (
-                                                <small className="text-danger d-flex align-items-center gap-1">
-                                                    <FiAlertTriangle size={12} /> Cảnh báo: Dưới mức tối thiểu ({ing.minStock})
-                                                </small>
-                                            )}
                                         </td>
                                         <td><span className="badge badge-light text-dark">{ing.category}</span></td>
                                         <td className="text-center">{ing.unit}</td>
                                         <td className="text-end fw-bold">
-                                            <span className={ing.stock <= ing.minStock ? 'text-danger' : ''}>
+                                            <span className={isLow ? 'text-danger' : ''}>
                                                 {ing.stock}
                                             </span>
                                         </td>
@@ -129,7 +126,7 @@ const Ingredient = () => {
                                                     setShowRestockModal(true);
                                                 }}
                                             >
-                                                <FiPlus /> Nhập kho
+                                                <FiPlus /> Nhập
                                             </button>
                                         </td>
                                     </tr>
