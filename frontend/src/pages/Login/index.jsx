@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import './login.css'
+import signinImg from '../../assets/img/signin.jpg'
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -28,19 +29,7 @@ const Login = () => {
                 <div className="login-container">
                     {/* Left promotional banner */}
                     <div className="login-banner">
-                        <div className="banner-content">
-                            <h1 className="banner-title">
-                                ĐẶT MÓN<br />
-                                DỄ DÀNG<br />
-                                GIAO HÀNG<br />
-                                NHANH CHÓNG
-                            </h1>
-                            <div className="banner-logo">
-                                <svg viewBox="0 0 100 100" fill="#E4002B">
-                                    <text x="50" y="50" fontSize="40" fontWeight="bold" textAnchor="middle" dominantBaseline="middle">KFC</text>
-                                </svg>
-                            </div>
-                        </div>
+                        <img src={signinImg} alt="KFC Promotion" className="banner-image" />
                     </div>
 
                     {/* Right login form */}
@@ -110,6 +99,11 @@ const Login = () => {
 
                         <div className="register-link">
                             Bạn chưa có tài khoản? <Link to="/register">Đăng ký</Link>
+                        </div>
+
+                        <div className="auth-footer-policies mt-3 text-center" style={{ fontSize: '0.8rem', color: '#6c757d' }}>
+                            Bằng cách đăng nhập, bạn đồng ý với <br />
+                            <Link to="/terms-of-use" target="_blank" style={{ color: '#6c757d', textDecoration: 'underline' }}>Chính Sách Hoạt Động</Link> và <Link to="/privacy-policy" target="_blank" style={{ color: '#6c757d', textDecoration: 'underline' }}>Chính Sách Bảo Mật</Link> của KFC.
                         </div>
                     </div>
                 </div>

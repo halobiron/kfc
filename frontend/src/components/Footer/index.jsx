@@ -29,8 +29,17 @@ const Footer = () => {
                         </ul>
                     </div>
 
+                    {/* Policies */}
+                    <div className="col-lg-2 col-md-6 mb-4">
+                        <h5 className="footer-heading">Chính Sách</h5>
+                        <ul className="footer-links">
+                            <li><Link to="/privacy-policy">Bảo Mật Thông Tin</Link></li>
+                            <li><Link to="/terms-of-use">Hoạt Động</Link></li>
+                        </ul>
+                    </div>
+
                     {/* Contact Info (Static but realistic) */}
-                    <div className="col-lg-4 col-md-6 mb-4">
+                    <div className="col-lg-3 col-md-6 mb-4">
                         <h5 className="footer-heading">Liên Hệ</h5>
                         <ul className="footer-links">
                             <li className="d-flex"><i className="bi bi-geo-alt me-2"></i> <span>Học Viện Công Nghệ Bưu Chính Viễn Thông</span></li>

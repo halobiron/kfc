@@ -43,15 +43,16 @@ const Header = () => {
                   {/* User/Login - Dropdown */}
                   <div className="dropdown">
                     <button
-                      className="btn text-dark fw-bold d-flex align-items-center p-0 border-0"
+                      className="btn text-dark fw-bold d-flex align-items-center justify-content-center p-0 border-0"
                       type="button"
                       id="userDropdown"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
+                      style={{ width: '36px', height: '36px', display: 'flex' }}
                     >
-                      <i className="bi bi-person-circle fs-4"></i>
+                      <i className="bi bi-person-circle" style={{ fontSize: '28px', lineHeight: '1' }}></i>
                     </button>
-                    <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <ul className="dropdown-menu dropdown-menu-lg-end" aria-labelledby="userDropdown">
                       <li>
                         <Link className="dropdown-item" to="/my-orders">
                           <i className="bi bi-clock-history me-2"></i>
@@ -68,11 +69,34 @@ const Header = () => {
                     </ul>
                   </div>
 
-                  <div className="position-relative" onClick={() => navigate('/cart')} style={{ cursor: 'pointer' }}>
-                    <i className="bi bi-basket fs-4 text-dark"></i>
-                    {cartQuantity > 0 && (
-                      <span className="cart-badge">{cartQuantity}</span>
-                    )}
+                  <div className="position-relative d-flex align-items-center justify-content-center" onClick={() => navigate('/cart')} style={{ cursor: 'pointer', width: '36px', height: '36px', overflow: 'visible' }}>
+                    <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="kfc-cart-icon" style={{ overflow: 'visible' }}>
+                      <defs>
+                        <linearGradient id="popcornGradient" x1="32" y1="7" x2="32" y2="24" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="#FFC72C" />
+                          <stop offset="1" stopColor="#FFB300" />
+                        </linearGradient>
+                      </defs>
+                      <g className="popcorn-kernels" style={{ transformBox: 'fill-box' }}>
+                        <circle cx="18" cy="14" r="7" fill="url(#popcornGradient)" stroke="#E4002B" strokeWidth="1.5" />
+                        <circle cx="32" cy="7" r="8" fill="url(#popcornGradient)" stroke="#E4002B" strokeWidth="1.5" />
+                        <circle cx="46" cy="14" r="7" fill="url(#popcornGradient)" stroke="#E4002B" strokeWidth="1.5" />
+                      </g>
+                      {/* Scaled bucket for better height match - tapered trapezoid */}
+                      <path d="M14 18 L19 57 H45 L50 18 H14Z" fill="white" stroke="#E4002B" strokeWidth="2" strokeLinejoin="round" />
+                    </svg>
+
+                    <span className="position-absolute fw-bold" style={{
+                      top: '58%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      color: 'var(--kfc-red)',
+                      fontSize: '0.9rem',
+                      zIndex: 2,
+                      userSelect: 'none'
+                    }}>
+                      {cartQuantity}
+                    </span>
                   </div>
                 </div>
               </div>

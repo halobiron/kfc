@@ -1,102 +1,175 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from '../../components/Layout'
 import { Link } from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import './register.css'
+import signinImg from '../../assets/img/signin.jpg'
 
 const Register = () => {
-
+    const [showPassword, setShowPassword] = useState(false);
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
 
     const { handleSubmit, handleChange, handleBlur, values, touched, errors, isValid, dirty } = useFormik({
         initialValues: {
             firstName: '',
             lastName: '',
+            phone: '',
             email: '',
-            password: '',
-            address: '',
-            city: '',
-            state: '',
-            zip: ''
+            password: ''
         },
         validationSchema: Yup.object({
-            firstName: Yup.string().max(15, 'Tối đa 15 ký tự').required('Vui lòng nhập tên'),
-            lastName: Yup.string().max(15, 'Tối đa 15 ký tự').required('Vui lòng nhập họ'),
+            firstName: Yup.string().max(50, 'Tối đa 50 ký tự').required('Vui lòng nhập tên'),
+            lastName: Yup.string().max(50, 'Tối đa 50 ký tự').required('Vui lòng nhập họ'),
+            phone: Yup.string()
+                .matches(/^[0-9]{10}$/, 'Số điện thoại phải có 10 chữ số')
+                .required('Vui lòng nhập số điện thoại'),
             email: Yup.string().email('Email không hợp lệ').required('Vui lòng nhập email'),
-            password: Yup.string().min(6, 'Mật khẩu tối thiểu 6 ký tự').required('Vui lòng nhập mật khẩu'),
-            address: Yup.string().required('Vui lòng nhập địa chỉ'),
-            city: Yup.string().required('Vui lòng nhập thành phố'),
-            state: Yup.string().required('Vui lòng chọn tỉnh/thành phố'),
-            zip: Yup.string().required('Vui lòng nhập mã bưu chính')
+            password: Yup.string().min(6, 'Mật khẩu tối thiểu 6 ký tự').required('Vui lòng nhập mật khẩu')
         }),
         onSubmit: (values) => {
+            if (!agreedToTerms) {
+                alert('Vui lòng đồng ý với Chính Sách Hoạt Động và Chính Sách Bảo Mật');
+                return;
+            }
             console.log('Form submitted:', values)
             alert('Đăng ký thành công!')
         }
     })
+
     return (
         <Layout>
-            <div className='register-wrapper py-5'>
-                <div className="container">
-                    <div className="lead-text mt-0">
-                        <h3>KHÁCH HÀNG MỚI</h3>
+            <div className='register-wrapper'>
+                <div className="register-container">
+                    {/* Left promotional banner */}
+                    <div className="register-banner">
+                        <img src={signinImg} alt="KFC Promotion" className="banner-image" />
                     </div>
-                    <p>Đã có tài khoản? <Link to="/login">Đăng nhập</Link></p>
-                    <hr />
-                    <button className='btn btn-danger d-block w-100 mb-2'>Đăng nhập bằng Google</button>
-                    <button className='btn btn-primary d-block w-100'>Đăng nhập bằng Facebook</button>
-                    <hr />
-                    <form className="row g-3" onSubmit={handleSubmit}>
-                        <div className="col-md-6">
-                            <label htmlFor="firstName" className="form-label">Tên</label>
-                            <input type="text" onChange={handleChange} value={values.firstName} onBlur={handleBlur} name="firstName" className={`form-control ${touched.firstName && errors.firstName ? 'is-invalid' : ''}`} id="firstName" />
-                            <p className='error'>{touched.firstName && errors.firstName ? errors.firstName : null}</p>
+
+                    {/* Right register form */}
+                    <div className="register-form-section">
+                        <h2 className="register-title">TẠO TÀI KHOẢN</h2>
+
+                        <form className="register-form" onSubmit={handleSubmit}>
+                            <div className="form-group">
+                                <label htmlFor="lastName">Họ của bạn *</label>
+                                <input
+                                    type="text"
+                                    onChange={handleChange}
+                                    value={values.lastName}
+                                    onBlur={handleBlur}
+                                    name="lastName"
+                                    className="form-input"
+                                    id="lastName"
+                                />
+                                <p className='error'>{touched.lastName && errors.lastName ? errors.lastName : ''}</p>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="firstName">Tên của bạn *</label>
+                                <input
+                                    type="text"
+                                    onChange={handleChange}
+                                    value={values.firstName}
+                                    onBlur={handleBlur}
+                                    name="firstName"
+                                    className="form-input"
+                                    id="firstName"
+                                />
+                                <p className='error'>{touched.firstName && errors.firstName ? errors.firstName : ''}</p>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="phone">Số điện thoại *</label>
+                                <input
+                                    type="tel"
+                                    onChange={handleChange}
+                                    value={values.phone}
+                                    onBlur={handleBlur}
+                                    name="phone"
+                                    className="form-input"
+                                    id="phone"
+                                    placeholder="0123456789"
+                                />
+                                <p className='error'>{touched.phone && errors.phone ? errors.phone : ''}</p>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="email">Địa chỉ email của bạn *</label>
+                                <input
+                                    type="email"
+                                    onChange={handleChange}
+                                    value={values.email}
+                                    onBlur={handleBlur}
+                                    name="email"
+                                    className="form-input"
+                                    id="email"
+                                    placeholder="example@email.com"
+                                />
+                                <p className='error'>{touched.email && errors.email ? errors.email : ''}</p>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="password">Mật khẩu *</label>
+                                <div className="password-wrapper">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        onChange={handleChange}
+                                        value={values.password}
+                                        onBlur={handleBlur}
+                                        name='password'
+                                        className="form-input"
+                                        id="password"
+                                        placeholder="••••••••"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="password-toggle"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                        {showPassword ? '👁️' : '👁️‍🗨️'}
+                                    </button>
+                                </div>
+                                <p className='error'>{touched.password && errors.password ? errors.password : ''}</p>
+                            </div>
+
+                            <div className="terms-group">
+                                <label className="terms-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        checked={agreedToTerms}
+                                        onChange={(e) => setAgreedToTerms(e.target.checked)}
+                                    />
+                                    <span className="checkmark"></span>
+                                    <span className="terms-text">
+                                        Tôi đồng ý với <Link to="/terms-of-use" target="_blank">Chính Sách Hoạt Động</Link> và <Link to="/privacy-policy" target="_blank">Chính Sách Bảo Mật</Link>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <button type="submit" className="btn-register" disabled={!isValid || !dirty || !agreedToTerms}>
+                                Tạo tài khoản
+                            </button>
+                        </form>
+
+                        <div className="social-divider">Hoặc tiếp tục với</div>
+
+                        <div className="social-login">
+                            <button className="btn-social btn-google">
+                                <svg width="18" height="18" viewBox="0 0 18 18">
+                                    <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" />
+                                    <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" />
+                                    <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" />
+                                    <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" />
+                                </svg>
+                                Đăng ký bằng Google
+                            </button>
                         </div>
-                        <div className="col-md-6">
-                            <label htmlFor="lastName" className="form-label">Họ</label>
-                            <input type="text" onChange={handleChange} value={values.lastName} onBlur={handleBlur} name='lastName' className={`form-control ${touched.lastName && errors.lastName ? 'is-invalid' : ''}`} id="lastName" />
-                            <p className='error'>{touched.lastName && errors.lastName ? errors.lastName : null}</p>
+
+                        <div className="login-link">
+                            Bạn đã có tài khoản? <Link to="/login">Đăng nhập</Link>
                         </div>
-                        <div className="col-md-6">
-                            <label htmlFor="email" className="form-label">Email</label>
-                            <input type="email" onChange={handleChange} value={values.email} onBlur={handleBlur} name="email" className={`form-control ${touched.email && errors.email ? 'is-invalid' : ''}`} id="email" />
-                            <p className='error'>{touched.email && errors.email ? errors.email : null}</p>
-                        </div>
-                        <div className="col-md-6">
-                            <label htmlFor="password" className="form-label">Mật khẩu</label>
-                            <input type="password" onChange={handleChange} value={values.password} onBlur={handleBlur} name='password' className={`form-control ${touched.password && errors.password ? 'is-invalid' : ''}`} id="password" />
-                            <p className='error'>{touched.password && errors.password ? errors.password : null}</p>
-                        </div>
-                        <div className="col-12">
-                            <label htmlFor="address" className="form-label">Địa chỉ</label>
-                            <input type="text" name='address' onChange={handleChange} value={values.address} onBlur={handleBlur} className={`form-control ${touched.address && errors.address ? 'is-invalid' : ''}`} id="address" placeholder="Ví dụ: 123 Đường Lê Lợi" />
-                            <p className='error'>{touched.address && errors.address ? errors.address : null}</p>
-                        </div>
-                        <div className="col-md-6">
-                            <label htmlFor="city" className="form-label">Thành phố</label>
-                            <input type="text" onChange={handleChange} value={values.city} onBlur={handleBlur} name='city' className={`form-control ${touched.city && errors.city ? 'is-invalid' : ''}`} id="city" />
-                            <p className='error'>{touched.city && errors.city ? errors.city : null}</p>
-                        </div>
-                        <div className="col-md-4">
-                            <label htmlFor="state" className="form-label">Tỉnh/Thành phố</label>
-                            <select id="state" onChange={handleChange} value={values.state} onBlur={handleBlur} name="state" className={`form-select ${touched.state && errors.state ? 'is-invalid' : ''}`}>
-                                <option>Chọn...</option>
-                                <option>Hà Nội</option>
-                                <option>Thành phố Hồ Chí Minh</option>
-                                <option>Đà Nẵng</option>
-                                <option>Hải Phòng</option>
-                                <option>Cần Thơ</option>
-                            </select>
-                            <p className='error'>{touched.state && errors.state ? errors.state : null}</p>
-                        </div>
-                        <div className="col-md-2">
-                            <label htmlFor="zip" className="form-label">Mã bưu chính</label>
-                            <input type="text" onChange={handleChange} value={values.zip} onBlur={handleBlur} name='zip' className={`form-control ${touched.zip && errors.zip ? 'is-invalid' : ''}`} id="zip" />
-                            <p className='error'>{touched.zip && errors.zip ? errors.zip : null}</p>
-                        </div>
-                        <div className="col-12">
-                            <button type="submit" className="btn btn-primary" disabled={!isValid || !dirty}>Đăng ký</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </Layout>

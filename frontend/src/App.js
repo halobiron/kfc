@@ -7,6 +7,8 @@ import Register from './pages/Register';
 import MyOrders from './pages/MyOrders';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfUse from './pages/TermsOfUse';
 import {
   BrowserRouter,
   Routes,
@@ -27,6 +29,8 @@ function App() {
         <Route path="/my-orders" element={<MyOrders />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-of-use" element={<TermsOfUse />} />
       </Routes>
     </BrowserRouter>
   );

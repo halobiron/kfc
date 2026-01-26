@@ -14,74 +14,21 @@
 /* Left promotional banner */
 .login-banner {
     flex: 1;
-    background: linear-gradient(135deg, #E4002B 0%, #C8102E 100%);
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 40px;
-    color: white;
-    position: relative;
     overflow: hidden;
-}
-
-.login-banner::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-    animation: pulse 15s ease-in-out infinite;
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-        opacity: 0.5;
-    }
-
-    50% {
-        transform: scale(1.1);
-        opacity: 0.3;
-    }
-}
-
-.banner-content {
     position: relative;
-    z-index: 1;
-    text-align: center;
+    background-color: #f8f8f8;
 }
 
-.banner-title {
-    font-size: 3rem;
-    font-weight: 900;
-    line-height: 1.2;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+.banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.banner-subtitle {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 30px;
-    text-transform: uppercase;
-}
 
-.banner-logo {
-    width: 120px;
-    height: 120px;
-    background: white;
-    border-radius: 12px;
-    padding: 15px;
-    margin-top: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
+
+
 
 /* Right login form */
 .login-form-section {
@@ -297,16 +244,7 @@
     }
 
     .login-banner {
-        min-height: 300px;
-        padding: 40px 30px;
-    }
-
-    .banner-title {
-        font-size: 2rem;
-    }
-
-    .banner-subtitle {
-        font-size: 1.2rem;
+        min-height: 250px;
     }
 
     .login-form-section {
@@ -323,16 +261,5 @@
         font-size: 1.5rem;
     }
 
-    .banner-title {
-        font-size: 1.5rem;
-    }
 
-    .banner-subtitle {
-        font-size: 1rem;
-    }
-
-    .banner-logo {
-        width: 80px;
-        height: 80px;
-    }
 }
