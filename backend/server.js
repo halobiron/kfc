@@ -9,8 +9,8 @@ const cors = require('cors')
 
 connectDatabase();
 app.use(cors())
-app.use(bodyParser({limit: '50mb'}));
-app.use(express.urlencoded({ extended: true}))
+app.use(bodyParser({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true }))
 app.use('/api/v1', products);
 
 cloudinary.config({

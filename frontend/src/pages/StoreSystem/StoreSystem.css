@@ -243,3 +243,31 @@
         height: 400px;
     }
 }
+
+/* New Styles for Location Feature */
+.location-btn-wrapper .btn-danger {
+    background-color: #e4002b;
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+.location-btn-wrapper .btn-danger:hover {
+    background-color: #c40025;
+}
+
+.location-btn-wrapper .btn-danger:disabled {
+    background-color: #eebdc5;
+    cursor: not-allowed;
+}
+
+.store-distance {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    align-self: flex-start;
+}

@@ -13,6 +13,7 @@ import Categories from './pages/Categories';
 import Staff from './pages/Staff';
 import Promotions from './pages/Promotions';
 import Kitchen from './pages/Kitchen';
+import Stores from './pages/Stores';
 
 import {
   BrowserRouter,
@@ -45,6 +46,7 @@ function App() {
                       <Route path="/customers" element={<Customers />} />
                       <Route path="/staff" element={<Staff />} />
                       <Route path="/promotions" element={<Promotions />} />
+                      <Route path="/stores" element={<Stores />} />
                       <Route path="/reports" element={<Reports />} />
                     </Routes>
                   </div>

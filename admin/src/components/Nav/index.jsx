@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiPlusCircle, FiBox, FiTag, FiUserCheck, FiPackage } from 'react-icons/fi';
+import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiPlusCircle, FiBox, FiTag, FiUserCheck, FiPackage, FiMapPin } from 'react-icons/fi';
 
 const Nav = () => {
   return (
@@ -59,6 +59,12 @@ const Nav = () => {
             <Link className="nav-link" to="/reports">
               <FiBarChart2 style={{ marginRight: '8px' }} />
               Báo cáo
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/stores">
+              <FiMapPin style={{ marginRight: '8px' }} />
+              Cửa hàng
             </Link>
           </li>
         </ul>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import './StoreSystem.css';
 
@@ -6,6 +6,11 @@ const StoreSystem = () => {
     const [selectedCity, setSelectedCity] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [expandedStore, setExpandedStore] = useState(null);
+    const [userLocation, setUserLocation] = useState(null);
+    const [sortedStores, setSortedStores] = useState([]);
+    const [loadingLocation, setLoadingLocation] = useState(false);
+    const [locationError, setLocationError] = useState(null);
+    const [isSearching, setIsSearching] = useState(false);
 
     const stores = [
         {
@@ -79,12 +84,114 @@ const StoreSystem = () => {
         { id: 'ct', name: 'Cần Thơ' },
     ];
 
-    const filteredStores = stores.filter(store => {
-        const matchesCity = selectedCity === 'all' || store.city === selectedCity;
-        const matchesSearch = store.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            store.address.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesCity && matchesSearch;
-    });
+    // Haversine formula to calculate distance (in km)
+    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+        const R = 6371; // Radius of the earth in km
+        const dLat = deg2rad(lat2 - lat1);
+        const dLon = deg2rad(lon2 - lon1);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const d = R * c; // Distance in km
+        return d;
+    };
+
+    const deg2rad = (deg) => {
+        return deg * (Math.PI / 180);
+    };
+
+    const handleFindNearest = () => {
+        setLoadingLocation(true);
+        setLocationError(null);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setUserLocation({ lat: latitude, lng: longitude });
+                    setLoadingLocation(false);
+                    // Reset filters when searching by nearest
+                    setSelectedCity('all');
+                    setSearchTerm(''); // Clear text search if using GPS
+                },
+                (error) => {
+                    console.error("Error getting location:", error);
+                    setLocationError("Không thể lấy vị trí của bạn.");
+                    setLoadingLocation(false);
+                }
+            );
+        } else {
+            setLocationError("Trình duyệt không hỗ trợ Geolocation.");
+            setLoadingLocation(false);
+        }
+    };
+
+    const handleSearch = async (e) => {
+        if (e.key === 'Enter' || e.type === 'click') {
+            if (!searchTerm.trim()) return;
+
+            setIsSearching(true);
+            setLocationError(null);
+
+            try {
+                // Using OpenStreetMap Nominatim API (Free)
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchTerm)}&countrycodes=vn&limit=1`);
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    const { lat, lon } = data[0];
+                    setUserLocation({ lat: parseFloat(lat), lng: parseFloat(lon) });
+                    setSelectedCity('all'); // Show all cities to find true nearest
+                } else {
+                    setLocationError("Không tìm thấy địa chỉ này.");
+                    setUserLocation(null); // Reset location if not found so text filter works if wanted, but here we want to prioritize address search
+                }
+            } catch (error) {
+                console.error("Search error:", error);
+                setLocationError("Lỗi kết nối tìm kiếm.");
+            } finally {
+                setIsSearching(false);
+            }
+        }
+    };
+
+    useEffect(() => {
+        let processedStores = stores.map(store => {
+            let distance = null;
+            if (userLocation) {
+                distance = calculateDistance(
+                    userLocation.lat,
+                    userLocation.lng,
+                    store.location.lat,
+                    store.location.lng
+                );
+            }
+            return { ...store, distance };
+        });
+
+        // Filter by City
+        if (selectedCity !== 'all') {
+            processedStores = processedStores.filter(store => store.city === selectedCity);
+        }
+
+        // If userLocation is NOT set, use searchTerm for local text filtering (fallback behavior)
+        if (!userLocation && searchTerm) {
+            const term = searchTerm.toLowerCase();
+            processedStores = processedStores.filter(store =>
+                store.name.toLowerCase().includes(term) ||
+                store.address.toLowerCase().includes(term)
+            );
+        }
+
+        // Sort: If userLocation exists, sort by distance.
+        if (userLocation) {
+            processedStores.sort((a, b) => a.distance - b.distance);
+        }
+
+        setSortedStores(processedStores);
+    }, [userLocation, selectedCity, searchTerm]);
+
 
     const toggleStore = (id) => {
         if (expandedStore === id) {
@@ -101,16 +208,39 @@ const StoreSystem = () => {
                 <div className="store-sidebar">
                     <div className="sidebar-header">
                         <h2 className="sidebar-title">HỆ THỐNG NHÀ HÀNG</h2>
+
+                        <div className="location-btn-wrapper mb-3">
+                            <button
+                                className="btn btn-danger w-100 d-flex align-items-center justify-content-center gap-2"
+                                onClick={handleFindNearest}
+                                disabled={loadingLocation}
+                            >
+                                {loadingLocation ? (
+                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                ) : (
+                                    <i className="bi bi-geo-alt-fill"></i>
+                                )}
+                                Dùng vị trí hiện tại của bạn
+                            </button>
+                        </div>
+
                         <div className="search-wrapper">
-                            <i className="bi bi-search search-icon"></i>
+                            {isSearching ? (
+                                <span className="spinner-border spinner-border-sm search-icon text-danger" role="status" aria-hidden="true"></span>
+                            ) : (
+                                <i className="bi bi-search search-icon" onClick={handleSearch} style={{ cursor: 'pointer' }}></i>
+                            )}
                             <input
                                 type="text"
-                                placeholder="Tìm theo tên hoặc địa chỉ..."
+                                placeholder="Nhập địa chỉ (VD: 97 Tô Ngọc Vân)..."
                                 className="store-search-input"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyDown={handleSearch}
                             />
                         </div>
+                        {locationError && <p className="text-danger small px-1 mb-2">{locationError}</p>}
+
                         <div className="city-select-wrapper">
                             <select
                                 className="form-select city-dropdown"
@@ -126,11 +256,11 @@ const StoreSystem = () => {
 
                     <div className="store-list-container">
                         <div className="results-count">
-                            Có <strong>{filteredStores.length}</strong> cửa hàng phù hợp
+                            Có <strong>{sortedStores.length}</strong> cửa hàng phù hợp
                         </div>
 
                         <div className="store-items">
-                            {filteredStores.map(store => (
+                            {sortedStores.map(store => (
                                 <div
                                     key={store.id}
                                     className={`store-item-card ${expandedStore === store.id ? 'expanded' : ''}`}
@@ -141,7 +271,14 @@ const StoreSystem = () => {
                                             <i className="bi bi-geo-alt-fill"></i>
                                         </div>
                                         <div className="store-item-info">
-                                            <h3 className="store-item-name">{store.name}</h3>
+                                            <div className="d-flex justify-content-between align-items-start">
+                                                <h3 className="store-item-name">{store.name}</h3>
+                                                {store.distance !== null && (
+                                                    <span className="store-distance badge bg-light text-dark border">
+                                                        {store.distance.toFixed(1)} km
+                                                    </span>
+                                                )}
+                                            </div>
                                             <p className="store-item-address">{store.address}</p>
                                         </div>
                                         <div className="expand-icon">
@@ -175,7 +312,7 @@ const StoreSystem = () => {
                                 </div>
                             ))}
 
-                            {filteredStores.length === 0 && (
+                            {sortedStores.length === 0 && (
                                 <div className="no-results">
                                     <i className="bi bi-search" style={{ fontSize: '2rem', opacity: 0.3 }}></i>
                                     <p>Không tìm thấy cửa hàng nào</p>
@@ -205,3 +342,4 @@ const StoreSystem = () => {
 
 
 export default StoreSystem;
+
