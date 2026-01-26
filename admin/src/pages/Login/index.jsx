@@ -12,8 +12,8 @@ const Login = () => {
             password: ''
         },
         validationSchema: Yup.object({
-            email: Yup.string().email('Invalid email address').required('Required'),
-            password: Yup.string().required('Required')
+            email: Yup.string().email('Địa chỉ email không hợp lệ').required('Bắt buộc'),
+            password: Yup.string().required('Bắt buộc')
         }),
         onSubmit: (values) => {
             console.log(values)

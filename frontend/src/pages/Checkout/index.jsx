@@ -21,8 +21,22 @@ const Checkout = () => {
         note: ''
     });
 
+    const [deliveryType, setDeliveryType] = useState('delivery'); // 'delivery' or 'pickup'
+    const [selectedStore, setSelectedStore] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('cod');
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Danh sách cửa hàng KFC
+    const stores = [
+        { id: 1, name: 'KFC Vincom Bà Triệu', address: '191 Bà Triệu, Hai Bà Trưng, Hà Nội' },
+        { id: 2, name: 'KFC Royal City', address: '72A Nguyễn Trãi, Thanh Xuân, Hà Nội' },
+        { id: 3, name: 'KFC Times City', address: '458 Minh Khai, Hai Bà Trưng, Hà Nội' },
+        { id: 4, name: 'KFC Thái Hà', address: '90 Thái Hà, Đống Đa, Hà Nội' },
+        { id: 5, name: 'KFC Aeon Mall Long Biên', address: '27 Cổ Linh, Long Biên, Hà Nội' },
+        { id: 6, name: 'KFC Nguyễn Chí Thanh', address: '54 Nguyễn Chí Thanh, Đống Đa, Hà Nội' },
+        { id: 7, name: 'KFC Vincom Nguyễn Chí Thanh', address: '54A Nguyễn Chí Thanh, Đống Đa, Hà Nội' },
+        { id: 8, name: 'KFC Lotte Center', address: '54 Liễu Giai, Ba Đình, Hà Nội' }
+    ];
 
     // Promotion State
     const [couponCode, setCouponCode] = useState('');
@@ -30,7 +44,7 @@ const Checkout = () => {
     const [couponError, setCouponError] = useState('');
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const deliveryFee = subtotal > 200000 ? 0 : 15000;
+    const deliveryFee = deliveryType === 'pickup' ? 0 : (subtotal > 200000 ? 0 : 15000);
 
     const calculateDiscount = () => {
         if (!appliedCoupon) return 0;
@@ -89,8 +103,18 @@ const Checkout = () => {
 
     const handlePlaceOrder = () => {
         // Basic Validation
-        if (!formData.fullName || !formData.phone || !formData.address) {
-            alert("Vui lòng điền đầy đủ thông tin giao hàng!");
+        if (!formData.fullName || !formData.phone) {
+            alert("Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        if (deliveryType === 'delivery' && !formData.address) {
+            alert("Vui lòng nhập địa chỉ giao hàng!");
+            return;
+        }
+
+        if (deliveryType === 'pickup' && !selectedStore) {
+            alert("Vui lòng chọn cửa hàng để lấy món!");
             return;
         }
 
@@ -101,7 +125,11 @@ const Checkout = () => {
             setIsSubmitting(false);
 
             // Success Mock
-            alert(`Đặt hàng thành công! Mã đơn: KFC${Date.now().toString().slice(-6)}\nPhương thức: ${paymentMethod === 'cod' ? 'Thanh toán tiền mặt' : 'Thanh toán Online'}\nGiảm giá: ${formatCurrency(discountAmount)}\nTổng thanh toán: ${formatCurrency(total)}`);
+            const deliveryInfo = deliveryType === 'pickup' 
+                ? `Lấy tại: ${stores.find(s => s.id === parseInt(selectedStore))?.name}`
+                : `Giao đến: ${formData.address}`;
+            
+            alert(`Đặt hàng thành công! Mã đơn: KFC${Date.now().toString().slice(-6)}\n${deliveryInfo}\nPhương thức: ${paymentMethod === 'cod' ? 'Thanh toán tiền mặt' : 'Thanh toán Online'}\nGiảm giá: ${formatCurrency(discountAmount)}\nTổng thanh toán: ${formatCurrency(total)}`);
 
             // Redirect to My Orders
             navigate('/my-orders');
@@ -120,11 +148,75 @@ const Checkout = () => {
                     <div className="checkout-layout">
                         {/* Left Column: Information & Payment */}
                         <div className="checkout-form-section">
-                            {/* Delivery Info */}
+                            {/* Delivery Type Selection */}
+                            <div className="form-card">
+                                <h3 className="form-title">
+                                    <i className="bi bi-truck"></i>
+                                    Hình Thức Nhận Hàng
+                                </h3>
+                                <div className="delivery-type-options" style={{ display: 'flex', gap: '15px' }}>
+                                    <div
+                                        className={`delivery-type-option ${deliveryType === 'delivery' ? 'selected' : ''}`}
+                                        onClick={() => setDeliveryType('delivery')}
+                                        style={{
+                                            flex: 1,
+                                            padding: '20px 15px',
+                                            border: `2px solid ${deliveryType === 'delivery' ? '#e4002b' : '#ddd'}`,
+                                            borderRadius: '8px',
+                                            cursor: 'pointer',
+                                            textAlign: 'center',
+                                            transition: 'all 0.3s',
+                                            backgroundColor: deliveryType === 'delivery' ? '#fff5f5' : '#fff',
+                                            position: 'relative'
+                                        }}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="deliveryType"
+                                            checked={deliveryType === 'delivery'}
+                                            onChange={() => setDeliveryType('delivery')}
+                                            style={{ position: 'absolute', top: '10px', left: '10px' }}
+                                        />
+                                        <i className="bi bi-house-door-fill" style={{ fontSize: '2rem', color: '#e4002b', display: 'block', marginBottom: '10px' }}></i>
+                                        <div style={{ fontWeight: '600', fontSize: '1rem', marginBottom: '5px' }}>Giao hàng tận nơi</div>
+                                        <div style={{ fontSize: '0.85rem', color: '#666' }}>Nhận hàng tại địa chỉ của bạn</div>
+                                    </div>
+
+                                    <div
+                                        className={`delivery-type-option ${deliveryType === 'pickup' ? 'selected' : ''}`}
+                                        onClick={() => setDeliveryType('pickup')}
+                                        style={{
+                                            flex: 1,
+                                            padding: '20px 15px',
+                                            border: `2px solid ${deliveryType === 'pickup' ? '#e4002b' : '#ddd'}`,
+                                            borderRadius: '8px',
+                                            cursor: 'pointer',
+                                            textAlign: 'center',
+                                            transition: 'all 0.3s',
+                                            backgroundColor: deliveryType === 'pickup' ? '#fff5f5' : '#fff',
+                                            position: 'relative'
+                                        }}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="deliveryType"
+                                            checked={deliveryType === 'pickup'}
+                                            onChange={() => setDeliveryType('pickup')}
+                                            style={{ position: 'absolute', top: '10px', left: '10px' }}
+                                        />
+                                        <i className="bi bi-shop" style={{ fontSize: '2rem', color: '#e4002b', display: 'block', marginBottom: '10px' }}></i>
+                                        <div style={{ fontWeight: '600', fontSize: '1rem', marginBottom: '5px' }}>Lấy tại quầy</div>
+                                        <div style={{ fontSize: '0.85rem', color: '#666', marginBottom: '5px' }}>Tự đến cửa hàng lấy món</div>
+                                        <div style={{ fontSize: '0.85rem', color: '#28a745', fontWeight: 'bold' }}>Miễn phí ship</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Delivery/Pickup Info */}
                             <div className="form-card">
                                 <h3 className="form-title">
                                     <i className="bi bi-geo-alt-fill"></i>
-                                    Thông Tin Giao Hàng
+                                    {deliveryType === 'delivery' ? 'Thông Tin Giao Hàng' : 'Thông Tin Nhận Hàng'}
                                 </h3>
                                 <div className="row">
                                     <div className="col-md-6 form-group">
@@ -151,29 +243,68 @@ const Checkout = () => {
                                             required
                                         />
                                     </div>
-                                    <div className="col-12 form-group">
-                                        <label className="form-label">Địa chỉ nhận hàng *</label>
-                                        <input
-                                            type="text"
-                                            className="form-control-custom"
-                                            name="address"
-                                            placeholder="Số nhà, tên đường, phường/xã..."
-                                            value={formData.address}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
-                                    </div>
-                                    <div className="col-12 form-group">
-                                        <label className="form-label">Ghi chú cho tài xế</label>
-                                        <textarea
-                                            className="form-control-custom"
-                                            name="note"
-                                            rows="2"
-                                            placeholder="Ví dụ: Gọi trước khi giao, để ở quầy lễ tân..."
-                                            value={formData.note}
-                                            onChange={handleInputChange}
-                                        ></textarea>
-                                    </div>
+
+                                    {deliveryType === 'delivery' ? (
+                                        <>
+                                            <div className="col-12 form-group">
+                                                <label className="form-label">Địa chỉ nhận hàng *</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control-custom"
+                                                    name="address"
+                                                    placeholder="Số nhà, tên đường, phường/xã..."
+                                                    value={formData.address}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="col-12 form-group">
+                                                <label className="form-label">Ghi chú cho tài xế</label>
+                                                <textarea
+                                                    className="form-control-custom"
+                                                    name="note"
+                                                    rows="2"
+                                                    placeholder="Ví dụ: Gọi trước khi giao, để ở quầy lễ tân..."
+                                                    value={formData.note}
+                                                    onChange={handleInputChange}
+                                                ></textarea>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="col-12 form-group">
+                                                <label className="form-label">Chọn cửa hàng KFC *</label>
+                                                <select
+                                                    className="form-control-custom"
+                                                    value={selectedStore}
+                                                    onChange={(e) => setSelectedStore(e.target.value)}
+                                                    required
+                                                    style={{ padding: '12px' }}
+                                                >
+                                                    <option value="">-- Chọn cửa hàng gần bạn --</option>
+                                                    {stores.map(store => (
+                                                        <option key={store.id} value={store.id}>
+                                                            {store.name} - {store.address}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <small className="text-muted" style={{ display: 'block', marginTop: '8px' }}>
+                                                    <i className="bi bi-info-circle"></i> Vui lòng đến cửa hàng trong vòng 30 phút sau khi đặt
+                                                </small>
+                                            </div>
+                                            <div className="col-12 form-group">
+                                                <label className="form-label">Ghi chú cho cửa hàng</label>
+                                                <textarea
+                                                    className="form-control-custom"
+                                                    name="note"
+                                                    rows="2"
+                                                    placeholder="Ví dụ: Tôi sẽ đến lấy lúc 18h..."
+                                                    value={formData.note}
+                                                    onChange={handleInputChange}
+                                                ></textarea>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
 
@@ -275,8 +406,14 @@ const Checkout = () => {
                                 <div className="d-flex justify-content-between mb-2">
                                     <span className="text-muted">Phí giao hàng</span>
                                     <div className="text-end">
-                                        {deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}
-                                        {appliedCoupon?.type === 'shipping' && <div className="text-success small fst-italic">(Đã giảm phí ship)</div>}
+                                        {deliveryType === 'pickup' ? (
+                                            <span className="text-success fw-bold">Miễn phí <i className="bi bi-check-circle-fill"></i></span>
+                                        ) : (
+                                            <>
+                                                {deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}
+                                                {appliedCoupon?.type === 'shipping' && <div className="text-success small fst-italic">(Đã giảm phí ship)</div>}
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                                 {discountAmount > 0 && (
