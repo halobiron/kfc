@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
+
 /* Cart.css */
 .cart-page-wrapper {
     background-color: #f8f9fa;
@@ -14,8 +16,9 @@
 }
 
 .cart-title {
+    font-family: 'Oswald', sans-serif;
     font-size: 2rem;
-    font-weight: 800;
+    font-weight: 700;
     color: #202124;
     letter-spacing: 1px;
 }
@@ -29,33 +32,93 @@
 }
 
 /* Empty Cart */
-.empty-cart-container {
+.empty-bucket {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 4rem 1rem;
-    background: white;
+    padding: 45px 55px;
+    background-color: #f8f7f5;
+    background-image: url("https://static.kfcvietnam.com.vn/images/web/empty-cart.png?v=5.0");
+    background-size: auto;
+    background-position: calc(100% - 20px) center;
+    background-repeat: no-repeat;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    min-height: 450px;
+    max-width: 1170px;
+    margin: 20px auto;
+}
+
+.empty-bucket>div {
+    max-width: 500px;
+    text-align: left;
+    z-index: 1;
+}
+
+.empty-cart-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #202124;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.empty-bucket h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #202124;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    line-height: 1.1;
 }
 
 .start-order-btn {
+    display: inline-block;
     background-color: #e4002b;
     color: white;
     font-weight: 700;
-    padding: 12px 30px;
+    padding: 12px 40px;
     border-radius: 99px;
     text-decoration: none;
     transition: all 0.3s ease;
-    text-transform: uppercase;
+    text-transform: initial;
+    /* Sentence case */
+    font-size: 1.1rem;
 }
 
 .start-order-btn:hover {
     background-color: #b00020;
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(228, 0, 43, 0.3);
+    box-shadow: 0 6px 12px rgba(228, 0, 43, 0.25);
+}
+
+@media (max-width: 992px) {
+    .empty-bucket {
+        background-size: 50%;
+        background-position: right center;
+    }
+}
+
+@media (max-width: 768px) {
+    .empty-bucket {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        background-position: center bottom;
+        background-size: 60%;
+        padding: 3rem 1rem 15rem;
+        min-height: 600px;
+    }
+
+    .empty-bucket>div {
+        text-align: center;
+    }
+
+    .empty-bucket h2 {
+        font-size: 2rem;
+    }
 }
 
 /* Cart Layout */

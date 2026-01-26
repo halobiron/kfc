@@ -84,12 +84,13 @@ const Cart = () => {
                     </div>
 
                     {cartItems.length === 0 ? (
-                        <div className="empty-cart-container">
-                            <i className="bi bi-cart-x" style={{ fontSize: '4rem', color: '#e0e0e0', marginBottom: '1rem' }}></i>
-                            <h4 className="text-muted mb-4">Giỏ hàng đang trống</h4>
-                            <a href="/products" className="start-order-btn">
-                                Bắt đầu đặt hàng
-                            </a>
+                        <div className="empty-bucket">
+                            <div>
+                                <h2>Giỏ hàng của bạn đang trống. Hãy đặt món ngay!</h2>
+                                <a href="/products" className="start-order-btn">
+                                    Bắt đầu đặt hàng
+                                </a>
+                            </div>
                         </div>
                     ) : (
                         <div className="cart-layout">
