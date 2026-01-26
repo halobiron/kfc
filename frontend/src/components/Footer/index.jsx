@@ -24,7 +24,7 @@ const Footer = () => {
                         <ul className="footer-links">
                             <li><Link to="/">Trang Chủ</Link></li>
                             <li><Link to="/products">Thực Đơn</Link></li>
-                            <li><Link to="/promotions">Khuyến Mãi</Link></li>
+
                             <li><Link to="/login">Đăng Nhập / Đăng Ký</Link></li>
                         </ul>
                     </div>

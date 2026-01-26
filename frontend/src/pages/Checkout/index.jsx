@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout';
+import { AVAILABLE_COUPONS } from '../../data/coupons';
 import './Checkout.css';
 
 const Checkout = () => {
@@ -13,10 +14,6 @@ const Checkout = () => {
         { id: 3, name: "Gà Popcorn (Vừa)", price: 38000, quantity: 1 }
     ];
 
-    const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const deliveryFee = subtotal > 200000 ? 0 : 15000;
-    const total = subtotal + deliveryFee;
-
     const [formData, setFormData] = useState({
         fullName: '',
         phone: '',
@@ -26,6 +23,61 @@ const Checkout = () => {
 
     const [paymentMethod, setPaymentMethod] = useState('cod');
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Promotion State
+    const [couponCode, setCouponCode] = useState('');
+    const [appliedCoupon, setAppliedCoupon] = useState(null);
+    const [couponError, setCouponError] = useState('');
+
+    const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const deliveryFee = subtotal > 200000 ? 0 : 15000;
+
+    const calculateDiscount = () => {
+        if (!appliedCoupon) return 0;
+
+        if (appliedCoupon.type === 'fixed') {
+            return appliedCoupon.discount;
+        } else if (appliedCoupon.type === 'percent') {
+            return (subtotal * appliedCoupon.discount) / 100;
+        } else if (appliedCoupon.type === 'shipping') {
+            return deliveryFee; // Discount equals the shipping fee
+        }
+        return 0;
+    };
+
+    const discountAmount = calculateDiscount();
+    const total = Math.max(0, subtotal + deliveryFee - discountAmount);
+
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    };
+
+    const handleApplyCoupon = () => {
+        if (!couponCode) return;
+
+        const coupon = AVAILABLE_COUPONS.find(c => c.code === couponCode.toUpperCase());
+
+        if (!coupon) {
+            setCouponError('Mã khuyến mãi không hợp lệ!');
+            setAppliedCoupon(null);
+            return;
+        }
+
+        if (subtotal < coupon.minOrder) {
+            setCouponError(`Đơn tối thiểu để áp dụng là ${formatCurrency(coupon.minOrder)}`);
+            setAppliedCoupon(null);
+            return;
+        }
+
+        setAppliedCoupon(coupon);
+        setCouponError('');
+    };
+
+    const removeCoupon = () => {
+        setAppliedCoupon(null);
+        setCouponCode('');
+        setCouponError('');
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -49,15 +101,11 @@ const Checkout = () => {
             setIsSubmitting(false);
 
             // Success Mock
-            alert(`Đặt hàng thành công! Mã đơn: KFC${Date.now().toString().slice(-6)}\nPhương thức: ${paymentMethod === 'cod' ? 'Thanh toán tiền mặt' : 'Thanh toán Online'}`);
+            alert(`Đặt hàng thành công! Mã đơn: KFC${Date.now().toString().slice(-6)}\nPhương thức: ${paymentMethod === 'cod' ? 'Thanh toán tiền mặt' : 'Thanh toán Online'}\nGiảm giá: ${formatCurrency(discountAmount)}\nTổng thanh toán: ${formatCurrency(total)}`);
 
             // Redirect to My Orders
             navigate('/my-orders');
         }, 1500);
-    };
-
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     };
 
     return (
@@ -190,14 +238,53 @@ const Checkout = () => {
 
                                 <div className="summary-divider" style={{ margin: '15px 0', borderTop: '1px solid #eee' }}></div>
 
+                                {/* Promotion Section */}
+                                <div className="promotion-section mb-3">
+                                    <label className="form-label d-flex justify-content-between align-items-center">
+                                        <span className="fw-bold"><i className="bi bi-ticket-perforated-fill me-1 text-danger"></i>Mã khuyến mãi</span>
+                                    </label>
+                                    <div className="input-group">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Nhập mã voucher"
+                                            value={couponCode}
+                                            onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                                        />
+                                        <button
+                                            className="btn btn-dark"
+                                            type="button"
+                                            onClick={handleApplyCoupon}
+                                        >
+                                            Áp dụng
+                                        </button>
+                                    </div>
+                                    {couponError && <div className="text-danger small mt-1"><i className="bi bi-exclamation-circle me-1"></i>{couponError}</div>}
+                                    {appliedCoupon && (
+                                        <div className="alert alert-success mt-2 d-flex justify-content-between align-items-center p-2 mb-0">
+                                            <small><i className="bi bi-check-circle-fill me-1"></i> Đã áp dụng: <strong>{appliedCoupon.code}</strong></small>
+                                            <button className="btn-close btn-close-white p-2 small" onClick={removeCoupon} aria-label="Remove"></button>
+                                        </div>
+                                    )}
+                                </div>
+
                                 <div className="d-flex justify-content-between mb-2">
                                     <span className="text-muted">Tạm tính</span>
                                     <span className="fw-bold">{formatCurrency(subtotal)}</span>
                                 </div>
-                                <div className="d-flex justify-content-between mb-3">
+                                <div className="d-flex justify-content-between mb-2">
                                     <span className="text-muted">Phí giao hàng</span>
-                                    <span className="fw-bold">{deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}</span>
+                                    <div className="text-end">
+                                        {deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}
+                                        {appliedCoupon?.type === 'shipping' && <div className="text-success small fst-italic">(Đã giảm phí ship)</div>}
+                                    </div>
                                 </div>
+                                {discountAmount > 0 && (
+                                    <div className="d-flex justify-content-between mb-2 text-danger">
+                                        <span><i className="bi bi-tag-fill me-1"></i>Giảm tiền</span>
+                                        <span className="fw-bold">-{formatCurrency(discountAmount)}</span>
+                                    </div>
+                                )}
 
                                 <div className="summary-divider" style={{ margin: '15px 0', borderTop: '2px solid #eee' }}></div>
 

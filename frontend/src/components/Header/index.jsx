@@ -33,9 +33,7 @@ const Header = () => {
                   <li className="nav-item">
                     <Link className="nav-link text-dark mx-2" to="/products">Thực Đơn</Link>
                   </li>
-                  <li className="nav-item">
-                    <Link className="nav-link text-dark mx-2" to="/promotions">Khuyến Mãi</Link>
-                  </li>
+
                 </ul>
 
                 {/* Right Action Buttons */}
