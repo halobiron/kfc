@@ -37,7 +37,7 @@ const ProductDetail = () => {
                         <span>Trang chủ</span> <span className="separator">/</span> <span>Thực đơn</span> <span className="separator">/</span> <span>{product.category}</span> <span className="separator">/</span> <span className="current">{product.name}</span>
                     </div>
 
-                    <div className="row g-4">
+                    <div className="row g-4 justify-content-center">
                         <div className="col-lg-7 col-md-6">
                             <div className="product-image-container">
                                 <img src={product.image} alt={product.name} className="img-fluid" />
@@ -45,6 +45,7 @@ const ProductDetail = () => {
                         </div>
                         <div className="col-lg-5 col-md-6">
                             <div className="product-info-card">
+                                <div className="product-category-badge">{product.category}</div>
                                 <h1 className="product-title">{product.name}</h1>
                                 <p className="product-description">{product.description}</p>
 
@@ -53,6 +54,7 @@ const ProductDetail = () => {
                                 </div>
 
                                 <div className="quantity-section">
+                                    <span className="section-label">Số lượng</span>
                                     <div className="quantity-selector">
                                         <button className="quantity-btn" onClick={handleDecrease}>-</button>
                                         <input
@@ -66,8 +68,19 @@ const ProductDetail = () => {
                                 </div>
 
                                 <button className="add-to-cart-btn" onClick={handleAddToCart}>
-                                    Thêm
+                                    Thêm vào giỏ hàng
                                 </button>
+
+                                <div className="product-features">
+                                    <div className="feature-item">
+                                        <span className="feature-icon">✓</span>
+                                        <span>Giao hàng nhanh</span>
+                                    </div>
+                                    <div className="feature-item">
+                                        <span className="feature-icon">✓</span>
+                                        <span>Đảm bảo chất lượng</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
