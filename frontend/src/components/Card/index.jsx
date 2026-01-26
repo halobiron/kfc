@@ -8,25 +8,37 @@ import { useNavigate } from 'react-router-dom';
 const Card = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
+
     const product = {
         id: 1,
         name: 'Gà rán giòn KFC',
         price: 520000,
         image: product1,
+        description: 'Gà rán giòn bên ngoài, mềm bên trong với gia vị bí mật đặc biệt của KFC.'
     };
 
     return (
         <div className='card-wrapper'>
-            <div className="card" onClick={() => navigate(`/product-detail/${product.id}`)} style={{ cursor: 'pointer' }}>
-                <img src={product1} className="card-img-top" alt="..." />
+            <div className="kfc-product-card" onClick={() => navigate(`/product-detail/${product.id}`)} style={{ cursor: 'pointer' }}>
+                <img src={product1} className="product-image" alt={product.name} />
                 <div className="card-body">
-                    <h5 className="card-title">{product.name}</h5>
-                    <p className="card-text">Gà rán giòn bên ngoài, mềm bên trong với gia vị bí mật đặc biệt của KFC. Hoàn hảo cho bất kỳ bữa ăn nào.</p>
-                    <div className="btn-wrapper d-flex" onClick={(e) => e.stopPropagation()}>
-                        <button type="button" className="btn btn-outline-danger btn-wrapper">₫{product.price.toLocaleString('vi-VN')}</button>
-                        <button type="button" className="btn btn-danger btn-wrapper" onClick={() => dispatch(addToCart(product))}>Thêm vào giỏ</button>
+                    {/* Title and Price on same row */}
+                    <div className="title-price-row">
+                        <h5 className="product-title">{product.name}</h5>
+                        <span className="product-price">{product.price.toLocaleString('vi-VN')}₫</span>
                     </div>
+                    <p className="product-description">{product.description}</p>
+                    {/* Single Add button */}
+                    <button
+                        type="button"
+                        className="btn-add"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(addToCart(product));
+                        }}
+                    >
+                        Thêm
+                    </button>
                 </div>
             </div>
         </div>

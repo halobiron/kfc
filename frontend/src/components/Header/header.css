@@ -1,20 +1,141 @@
+/* Header Wrapper */
+.kfc-header {
+    background: white;
+}
+
+/* Main Navigation */
+.main-nav {
+    border-bottom: 1px solid #f0f0f0;
+}
+
 .navbar-brand img {
     height: 40px;
-    /* Adjust based on logo aspect ratio */
     width: auto;
 }
 
 .nav-link {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    font-weight: 700;
     transition: color 0.2s ease;
+    letter-spacing: 0.5px;
 }
 
 .nav-link:hover {
-    color: #e4002b !important;
-    /* KFC Red */
+    color: var(--kfc-red) !important;
 }
 
-/* Remove default link styles for cleaner integration */
+/* Cart Badge - Improved */
+.cart-wrapper {
+    position: relative;
+    display: inline-block;
+    padding: 0.25rem;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: var(--kfc-red);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 2px solid white;
+}
+
+/* Hamburger Menu */
+.hamburger-menu {
+    background: none;
+    border: none;
+    color: var(--kfc-black);
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.hamburger-menu:hover {
+    color: var(--kfc-red);
+}
+
+/* Secondary Bar */
+.secondary-bar {
+    background-color: var(--kfc-dark);
+    color: white;
+}
+
+/* Order Type Toggle */
+.order-type-toggle {
+    display: flex;
+    gap: 1rem;
+}
+
+.order-type-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.order-type-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.order-type-btn.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    font-weight: 700;
+}
+
+/* CTA Button */
+.cta-button {
+    background-color: var(--kfc-red);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cta-button:hover {
+    background-color: #c41230;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(228, 0, 43, 0.3);
+}
+
+/* Remove default link styles */
 a {
     text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .secondary-bar {
+        display: none;
+    }
+
+    .hamburger-menu {
+        display: block;
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar-toggler {
+        display: none;
+    }
 }

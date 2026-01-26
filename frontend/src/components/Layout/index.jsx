@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../Header';
 import Footer from '../Footer';
+import FloatingChat from '../FloatingChat';
 
 const Layout = ({ children }) => {
     return (
@@ -10,6 +11,7 @@ const Layout = ({ children }) => {
                 {children}
             </main>
             <Footer />
+            <FloatingChat />
         </div>
     );
 };

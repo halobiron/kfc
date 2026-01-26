@@ -1,0 +1,63 @@
+/* Floating Chat Container */
+.floating-chat {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+}
+
+/* Chat Bubble Base */
+.chat-bubble {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.chat-bubble:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Zalo Bubble */
+.chat-bubble.zalo {
+    background: linear-gradient(135deg, #0068ff 0%, #0180ff 100%);
+}
+
+.chat-bubble.zalo:hover {
+    background: linear-gradient(135deg, #0058e6 0%, #0170e6 100%);
+}
+
+/* Messenger Bubble */
+.chat-bubble.messenger {
+    background: linear-gradient(135deg, #00b2ff 0%, #006aff 100%);
+}
+
+.chat-bubble.messenger:hover {
+    background: linear-gradient(135deg, #00a2e6 0%, #005ae6 100%);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .floating-chat {
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .chat-bubble {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+}
