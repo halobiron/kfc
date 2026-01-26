@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './MyOrders.css';
 
 const MyOrders = () => {
-    // Mock data - trong thực tế sẽ fetch từ API dựa trên user đã login
-    const [orders] = useState([
+    // Mock data
+    const mockOrders = [
         {
             id: 'KFC2026012401',
             date: '24/01/2026 14:30',
@@ -53,21 +53,54 @@ const MyOrders = () => {
             ],
             canCancel: false
         }
-    ]);
+    ];
+
+    const [orders, setOrders] = useState(mockOrders);
+    const [filteredOrders, setFilteredOrders] = useState(mockOrders);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterStatus, setFilterStatus] = useState('All');
 
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [orderToCancel, setOrderToCancel] = useState(null);
     const [cancelReason, setCancelReason] = useState('');
+
+    useEffect(() => {
+        let result = orders;
+
+        // Filter by Status
+        if (filterStatus !== 'All') {
+            result = result.filter(order => order.status === filterStatus);
+        }
+
+        // Filter by Search Term
+        if (searchTerm) {
+            const lowerTerm = searchTerm.toLowerCase();
+            result = result.filter(order =>
+                order.id.toLowerCase().includes(lowerTerm) ||
+                order.items.some(item => item.name.toLowerCase().includes(lowerTerm))
+            );
+        }
+
+        setFilteredOrders(result);
+    }, [searchTerm, filterStatus, orders]);
 
     const handleCancelOrder = (order) => {
         setOrderToCancel(order);
     };
 
     const confirmCancelOrder = () => {
-        alert(`Đơn hàng #${orderToCancel.id} đã được hủy thành công. Lý do: ${cancelReason || 'Không có'}. Tiền sẽ được hoàn lại trong 3-5 ngày làm việc.`);
+        alert(`Đơn hàng #${orderToCancel.id} đã được hủy thành công. Lý do: ${cancelReason || 'Không có'}.`);
+
+        // Update local state to reflect cancellation
+        const updatedOrders = orders.map(o =>
+            o.id === orderToCancel.id
+                ? { ...o, status: 'Đã hủy', statusClass: 'cancelled', canCancel: false }
+                : o
+        );
+
+        setOrders(updatedOrders);
         setOrderToCancel(null);
         setCancelReason('');
-        // Trong thực tế: gọi API để hủy đơn
     };
 
     const formatCurrency = (amount) => {
@@ -82,29 +115,72 @@ const MyOrders = () => {
         "Tôi không muốn đặt nữa"
     ];
 
+    const statusOptions = ['All', 'Đang chuẩn bị', 'Đang giao', 'Hoàn thành', 'Đã hủy'];
+
     return (
         <div className="my-orders-wrapper">
             <Header />
 
             <div className="my-orders-container">
                 <div className="container py-5">
-                    <div className="orders-header">
-                        <h2 className="mb-4 text-uppercase">
-                            Lịch Sử Đơn Hàng
-                        </h2>
-                        <div className="title-underline"></div>
+                    <div className="orders-header text-center">
+                        <h2 className="mb-4 text-uppercase">Lịch Sử Đơn Hàng</h2>
+                        <div className="title-underline mx-auto"></div>
                         <p className="text-muted mt-3">Quản lý và theo dõi các đơn hàng của bạn</p>
                     </div>
 
-                    {orders.length === 0 ? (
+                    {/* Search and Filter Section */}
+                    <div className="row mb-4 justify-content-center">
+                        <div className="col-md-8">
+                            <div className="search-filter-box p-3 bg-white rounded shadow-sm">
+                                <div className="row g-3">
+                                    <div className="col-md-7">
+                                        <div className="input-group">
+                                            <span className="input-group-text bg-white border-end-0">
+                                                <i className="bi bi-search text-muted"></i>
+                                            </span>
+                                            <input
+                                                type="text"
+                                                className="form-control border-start-0 ps-0"
+                                                placeholder="Tìm theo Mã đơn hàng hoặc Tên món..."
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-5">
+                                        <select
+                                            className="form-select"
+                                            value={filterStatus}
+                                            onChange={(e) => setFilterStatus(e.target.value)}
+                                        >
+                                            {statusOptions.map(status => (
+                                                <option key={status} value={status}>
+                                                    {status === 'All' ? 'Tất cả trạng thái' : status}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {filteredOrders.length === 0 ? (
                         <div className="empty-orders text-center py-5">
-                            <i className="bi bi-cart-x display-1 text-muted"></i>
-                            <h4 className="mt-3">Bạn chưa có đơn hàng nào</h4>
-                            <a href="/products" className="btn btn-danger mt-3 px-5 py-2 rounded-pill">Đặt hàng ngay</a>
+                            <i className="bi bi-search display-1 text-muted"></i>
+                            <h4 className="mt-3">Không tìm thấy đơn hàng nào</h4>
+                            <p className="text-muted">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+                            <button
+                                className="btn btn-outline-danger mt-2"
+                                onClick={() => { setSearchTerm(''); setFilterStatus('All'); }}
+                            >
+                                Xóa bộ lọc
+                            </button>
                         </div>
                     ) : (
                         <div className="orders-list">
-                            {orders.map((order) => (
+                            {filteredOrders.map((order) => (
                                 <div key={order.id} className="order-card mb-4">
                                     <div className="order-header">
                                         <div className="order-info">
@@ -158,13 +234,6 @@ const MyOrders = () => {
                                                 Hủy đơn
                                             </button>
                                         )}
-
-                                        {order.status === 'Hoàn thành' && (
-                                            <button className="btn btn-danger btn-sm rounded-pill px-4">
-                                                <i className="bi bi-arrow-repeat me-1"></i>
-                                                Đặt lại
-                                            </button>
-                                        )}
                                     </div>
                                 </div>
                             ))}
@@ -173,6 +242,7 @@ const MyOrders = () => {
                 </div>
             </div>
 
+            {/* Modal & Overlay code remains similar to previous version, just ensuring full view is rendered */}
             {/* Modal chi tiết đơn hàng */}
             {selectedOrder && (
                 <div className="order-modal-overlay" onClick={() => setSelectedOrder(null)}>
@@ -226,7 +296,7 @@ const MyOrders = () => {
                 </div>
             )}
 
-            {/* Modal Hủy Đơn Hàng - Redesigned to match KFC style */}
+            {/* Modal Hủy Đơn Hàng */}
             {orderToCancel && (
                 <div className="order-modal-overlay" onClick={() => setOrderToCancel(null)}>
                     <div className="order-modal-content cancel-modal" onClick={(e) => e.stopPropagation()}>
@@ -250,6 +320,7 @@ const MyOrders = () => {
                                         <div key={index} className="reason-item">
                                             <input
                                                 type="radio"
+
                                                 name="cancelReason"
                                                 id={`reason-${index}`}
                                                 value={reason}

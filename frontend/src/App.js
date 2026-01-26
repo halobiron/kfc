@@ -5,6 +5,8 @@ import Product from './pages/Product';
 import ProductDetail from './pages/ProductDetail';
 import Register from './pages/Register';
 import MyOrders from './pages/MyOrders';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 import {
   BrowserRouter,
   Routes,
@@ -24,6 +26,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/my-orders" element={<MyOrders />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </BrowserRouter>
     </div>

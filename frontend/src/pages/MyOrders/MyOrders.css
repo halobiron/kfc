@@ -29,6 +29,32 @@
     margin: 0 auto;
 }
 
+/* Search and Filter Box */
+.search-filter-box {
+    border: 1px solid #efefef;
+    background: #fff;
+    transition: box-shadow 0.2s;
+}
+
+.search-filter-box:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.input-group-text {
+    border-right: none;
+    color: #999;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #ced4da;
+}
+
+.form-select:focus {
+    box-shadow: 0 0 0 0.25rem rgba(228, 0, 43, 0.1);
+    border-color: #e4002b;
+}
+
 /* Order Card - Flatter Design */
 .order-card {
     background: white;
