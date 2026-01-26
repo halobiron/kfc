@@ -10,6 +10,7 @@ import Customers from './pages/Customers';
 import Reports from './pages/Reports';
 import OrderDetails from './pages/OrderDetails';
 import Categories from './pages/Categories';
+import Staff from './pages/Staff';
 
 import {
   BrowserRouter,
@@ -39,6 +40,7 @@ function App() {
                       <Route path="/orders" element={<Order />} />
                       <Route path="/orders/:id" element={<OrderDetails />} />
                       <Route path="/customers" element={<Customers />} />
+                      <Route path="/staff" element={<Staff />} />
                       <Route path="/reports" element={<Reports />} />
                     </Routes>
                   </div>

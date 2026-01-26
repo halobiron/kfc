@@ -4,7 +4,7 @@ import StatCard from '../../components/StatCard';
 import './categories.css';
 
 const Categories = () => {
-  // Mock data - sẽ thay bằng Redux sau
+  // Mock data
   const [categories, setCategories] = useState([
     { _id: '1', name: 'Gà rán', description: 'Các món gà rán giòn tan', slug: 'ga-ran', productCount: 15, isActive: true },
     { _id: '2', name: 'Burger', description: 'Burger nhiều loại với nhân thịt gà, bò', slug: 'burger', productCount: 12, isActive: true },

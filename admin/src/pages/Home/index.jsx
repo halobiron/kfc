@@ -24,31 +24,31 @@ const Home = () => {
       </div>
 
       {/* Stats Cards Row */}
-      <div className="row mb-3 g-1">
-        <div className="col-4">
+      <div className="row mb-4 g-3">
+        <div className="col-md-4 col-sm-6">
           <StatCard
             label="Tổng đơn hàng"
             value="1,250"
-            trend="+5% "
-            icon={<FiShoppingBag size={24} />}
+            trend="+5%"
+            icon={<FiShoppingBag size={20} />}
             color="primary"
           />
         </div>
-        <div className="col-4">
+        <div className="col-md-4 col-sm-6">
           <StatCard
             label="Doanh thu"
             value="245M"
             trend="+12%"
-            icon={<FiDollarSign size={24} />}
+            icon={<FiDollarSign size={20} />}
             color="success"
           />
         </div>
-        <div className="col-4">
+        <div className="col-md-4 col-sm-12">
           <StatCard
             label="Khách hàng mới"
             value="85"
             trend="+2%"
-            icon={<FiUsers size={24} />}
+            icon={<FiUsers size={20} />}
             color="warning"
           />
         </div>

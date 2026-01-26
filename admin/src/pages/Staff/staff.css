@@ -1,0 +1,58 @@
+.stats-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--kfc-red);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.role-badge {
+  padding: 0.4rem 0.6rem;
+  font-weight: 500;
+  font-size: 0.75rem;
+  border-radius: 4px;
+}
+
+.badge-danger {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  color: #dc3545 !important;
+}
+
+.badge-primary {
+  background-color: rgba(13, 110, 253, 0.1) !important;
+  color: #0d6efd !important;
+}
+
+.badge-warning {
+  background-color: rgba(255, 193, 7, 0.2) !important;
+  color: #856404 !important;
+}
+
+.form-check-input:checked {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.btn-action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.modal-body small {
+  display: block;
+  margin-top: 0.25rem;
+}
