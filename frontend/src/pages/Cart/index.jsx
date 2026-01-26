@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import Layout from '../../components/Layout';
 import './Cart.css';
 import product1 from '../../assets/img/product1.png';
 import product2 from '../../assets/img/product2.png';
@@ -76,119 +75,117 @@ const Cart = () => {
     };
 
     return (
-        <div className="cart-wrapper">
-            <Header />
-
-            <div className="container cart-container py-5">
-                <div className="cart-title-section">
-                    <h2 className="cart-title text-uppercase">Giỏ Hàng Của Bạn</h2>
-                    <div className="cart-title-underline"></div>
-                </div>
-
-                {cartItems.length === 0 ? (
-                    <div className="empty-cart-container">
-                        <i className="bi bi-cart-x" style={{ fontSize: '4rem', color: '#e0e0e0', marginBottom: '1rem' }}></i>
-                        <h4 className="text-muted mb-4">Giỏ hàng đang trống</h4>
-                        <a href="/products" className="start-order-btn">
-                            Bắt đầu đặt hàng
-                        </a>
+        <Layout>
+            <div className="cart-wrapper">
+                <div className="container cart-container py-5">
+                    <div className="cart-title-section">
+                        <h2 className="cart-title text-uppercase">Giỏ Hàng Của Bạn</h2>
+                        <div className="cart-title-underline"></div>
                     </div>
-                ) : (
-                    <div className="cart-layout">
-                        {/* Cart Items List */}
-                        <div className="cart-items-section">
-                            {cartItems.map((item) => (
-                                <div key={item.id} className="cart-item-card">
-                                    <button
-                                        className="remove-item-btn"
-                                        onClick={() => handleRemoveItem(item.id)}
-                                        title="Xóa món"
-                                    >
-                                        <i className="bi bi-trash"></i>
+
+                    {cartItems.length === 0 ? (
+                        <div className="empty-cart-container">
+                            <i className="bi bi-cart-x" style={{ fontSize: '4rem', color: '#e0e0e0', marginBottom: '1rem' }}></i>
+                            <h4 className="text-muted mb-4">Giỏ hàng đang trống</h4>
+                            <a href="/products" className="start-order-btn">
+                                Bắt đầu đặt hàng
+                            </a>
+                        </div>
+                    ) : (
+                        <div className="cart-layout">
+                            {/* Cart Items List */}
+                            <div className="cart-items-section">
+                                {cartItems.map((item) => (
+                                    <div key={item.id} className="cart-item-card">
+                                        <button
+                                            className="remove-item-btn"
+                                            onClick={() => handleRemoveItem(item.id)}
+                                            title="Xóa món"
+                                        >
+                                            <i className="bi bi-trash"></i>
+                                        </button>
+
+                                        <div className="cart-item-image">
+                                            <img
+                                                src={item.image || PLACEHOLDER_IMG}
+                                                alt={item.name}
+                                                onError={(e) => { e.target.src = PLACEHOLDER_IMG }}
+                                            />
+                                        </div>
+
+                                        <div className="cart-item-details">
+                                            <div>
+                                                <h3 className="cart-item-name">{item.name}</h3>
+                                                <p className="cart-item-desc">{item.description}</p>
+                                            </div>
+
+                                            <div className="cart-item-actions">
+                                                <div className="quantity-control">
+                                                    <button
+                                                        className="qty-btn"
+                                                        onClick={() => handleQuantityChange(item.id, -1)}
+                                                        disabled={item.quantity <= 1}
+                                                    >
+                                                        <i className="bi bi-dash"></i>
+                                                    </button>
+                                                    <span className="qty-display">{item.quantity}</span>
+                                                    <button
+                                                        className="qty-btn"
+                                                        onClick={() => handleQuantityChange(item.id, 1)}
+                                                    >
+                                                        <i className="bi bi-plus"></i>
+                                                    </button>
+                                                </div>
+                                                <div className="cart-item-price">
+                                                    {formatCurrency(item.price * item.quantity)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Order Summary */}
+                            <div className="cart-summary-section">
+                                <div className="summary-card">
+                                    <h3 className="summary-title">Tóm Tắt Đơn Hàng</h3>
+
+                                    <div className="summary-row">
+                                        <span>Tạm tính</span>
+                                        <span>{formatCurrency(subtotal)}</span>
+                                    </div>
+                                    <div className="summary-row">
+                                        <span>Phí giao hàng</span>
+                                        <span>{deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}</span>
+                                    </div>
+                                    {deliveryFee === 0 && (
+                                        <div className="text-success small mb-2">
+                                            <i className="bi bi-check-circle-fill me-1"></i>
+                                            Đơn hàng trên 200k được miễn phí giao hàng!
+                                        </div>
+                                    )}
+
+                                    <div className="summary-divider"></div>
+
+                                    <div className="total-row">
+                                        <span className="total-label">TỔNG CỘNG</span>
+                                        <span className="total-amount">{formatCurrency(total)}</span>
+                                    </div>
+
+                                    <button className="checkout-btn" onClick={handleCheckout}>
+                                        Thanh Toán
                                     </button>
 
-                                    <div className="cart-item-image">
-                                        <img
-                                            src={item.image || PLACEHOLDER_IMG}
-                                            alt={item.name}
-                                            onError={(e) => { e.target.src = PLACEHOLDER_IMG }}
-                                        />
-                                    </div>
-
-                                    <div className="cart-item-details">
-                                        <div>
-                                            <h3 className="cart-item-name">{item.name}</h3>
-                                            <p className="cart-item-desc">{item.description}</p>
-                                        </div>
-
-                                        <div className="cart-item-actions">
-                                            <div className="quantity-control">
-                                                <button
-                                                    className="qty-btn"
-                                                    onClick={() => handleQuantityChange(item.id, -1)}
-                                                    disabled={item.quantity <= 1}
-                                                >
-                                                    <i className="bi bi-dash"></i>
-                                                </button>
-                                                <span className="qty-display">{item.quantity}</span>
-                                                <button
-                                                    className="qty-btn"
-                                                    onClick={() => handleQuantityChange(item.id, 1)}
-                                                >
-                                                    <i className="bi bi-plus"></i>
-                                                </button>
-                                            </div>
-                                            <div className="cart-item-price">
-                                                {formatCurrency(item.price * item.quantity)}
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <a href="/products" className="continue-shopping-link">
+                                        Tiếp tục mua hàng
+                                    </a>
                                 </div>
-                            ))}
-                        </div>
-
-                        {/* Order Summary */}
-                        <div className="cart-summary-section">
-                            <div className="summary-card">
-                                <h3 className="summary-title">Tóm Tắt Đơn Hàng</h3>
-
-                                <div className="summary-row">
-                                    <span>Tạm tính</span>
-                                    <span>{formatCurrency(subtotal)}</span>
-                                </div>
-                                <div className="summary-row">
-                                    <span>Phí giao hàng</span>
-                                    <span>{deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}</span>
-                                </div>
-                                {deliveryFee === 0 && (
-                                    <div className="text-success small mb-2">
-                                        <i className="bi bi-check-circle-fill me-1"></i>
-                                        Đơn hàng trên 200k được miễn phí giao hàng!
-                                    </div>
-                                )}
-
-                                <div className="summary-divider"></div>
-
-                                <div className="total-row">
-                                    <span className="total-label">TỔNG CỘNG</span>
-                                    <span className="total-amount">{formatCurrency(total)}</span>
-                                </div>
-
-                                <button className="checkout-btn" onClick={handleCheckout}>
-                                    Thanh Toán
-                                </button>
-
-                                <a href="/products" className="continue-shopping-link">
-                                    Tiếp tục mua hàng
-                                </a>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-
-            <Footer />
-        </div>
+        </Layout>
     );
 };
 

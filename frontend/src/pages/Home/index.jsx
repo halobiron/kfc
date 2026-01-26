@@ -1,7 +1,6 @@
 import React from 'react'
 import Card from '../../components/Card'
-import Footer from '../../components/Footer'
-import Header from '../../components/Header'
+import Layout from '../../components/Layout'
 import Slider from '../../components/Slider'
 import './Home.css'
 
@@ -18,8 +17,7 @@ const Home = () => {
   ];
 
   return (
-    <div className='home-wrapper'>
-      <Header />
+    <Layout>
       <Slider />
 
       {/* Category Grid Section */}
@@ -64,9 +62,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </Layout>
   )
 }
 
