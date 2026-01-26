@@ -74,10 +74,6 @@ const Header = () => {
                       <span className="cart-badge">{cartQuantity}</span>
                     )}
                   </div>
-
-                  <button className="hamburger-menu" type="button">
-                    <i className="bi bi-list fs-3"></i>
-                  </button>
                 </div>
               </div>
             </nav>
