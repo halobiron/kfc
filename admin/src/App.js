@@ -9,6 +9,7 @@ import Order from './pages/Order'
 import Customers from './pages/Customers';
 import Reports from './pages/Reports';
 import OrderDetails from './pages/OrderDetails';
+import Categories from './pages/Categories';
 
 import {
   BrowserRouter,
@@ -33,6 +34,7 @@ function App() {
                       <Route path="/home" element={<Home />} />
                       <Route path="/products" element={<Product />} />
                       <Route path="/products/:id" element={<ProductDetails />} />
+                      <Route path="/categories" element={<Categories />} />
                       <Route path="/ingredients" element={<Ingredient />} />
                       <Route path="/orders" element={<Order />} />
                       <Route path="/orders/:id" element={<OrderDetails />} />

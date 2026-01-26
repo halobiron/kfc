@@ -1,0 +1,23 @@
+.stats-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stats-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    transition: all 0.3s ease;
+}
+
+.stats-card:hover .stats-icon-wrapper {
+    transform: scale(1.1);
+}
+
+.stats-card-value {
+    margin-top: auto;
+}

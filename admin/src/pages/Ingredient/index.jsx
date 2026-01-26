@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllIngredients, updateIngredientStock } from '../../redux/actions/ingredientActions';
 import { FiBox, FiPlus, FiAlertTriangle, FiRefreshCw, FiArrowDown } from 'react-icons/fi';
+import StatCard from '../../components/StatCard';
 import './ingredient.css';
 
 const Ingredient = () => {
@@ -51,32 +52,20 @@ const Ingredient = () => {
             {/* Overview Stats */}
             <div className="row mb-4 g-3">
                 <div className="col-md-4">
-                    <div className="card stats-card border-0 shadow-sm p-3">
-                        <div className="d-flex align-items-center gap-3">
-                            <div className="p-3 rounded bg-primary bg-opacity-10 text-primary">
-                                <FiBox size={24} />
-                            </div>
-                            <div>
-                                <h4 className="mb-0 fw-bold">{ingredients?.length || 0}</h4>
-                                <p className="text-muted small mb-0">Tổng nguyên liệu</p>
-                            </div>
-                        </div>
-                    </div>
+                    <StatCard
+                        label="Tổng nguyên liệu"
+                        value={ingredients?.length || 0}
+                        icon={<FiBox size={24} />}
+                        color="primary"
+                    />
                 </div>
                 <div className="col-md-4">
-                    <div className="card stats-card border-0 shadow-sm p-3">
-                        <div className="d-flex align-items-center gap-3">
-                            <div className="p-3 rounded bg-danger bg-opacity-10 text-danger">
-                                <FiAlertTriangle size={24} />
-                            </div>
-                            <div>
-                                <h4 className="mb-0 fw-bold">
-                                    {ingredients?.filter(i => i.stock <= i.minStock).length || 0}
-                                </h4>
-                                <p className="text-muted small mb-0">Cần nhập thêm</p>
-                            </div>
-                        </div>
-                    </div>
+                    <StatCard
+                        label="Cần nhập thêm"
+                        value={ingredients?.filter(i => i.stock <= i.minStock).length || 0}
+                        icon={<FiAlertTriangle size={24} />}
+                        color="danger"
+                    />
                 </div>
             </div>
 

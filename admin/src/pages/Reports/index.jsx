@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { FiCalendar, FiDownload, FiTrendingUp, FiShoppingBag, FiUsers, FiDollarSign } from 'react-icons/fi';
+import StatCard from '../../components/StatCard';
 
 const Reports = () => {
     const [dateRange, setDateRange] = useState('month');
@@ -72,24 +73,16 @@ const Reports = () => {
             <div className="row mb-4 g-4">
                 {stats.map((stat, index) => (
                     <div className="col-12 col-sm-6 col-xl-3" key={index}>
-                        <div className="card border-0 shadow-sm h-100 stats-card">
-                            <div className="card-body">
-                                <div className="d-flex justify-content-between align-items-start mb-3">
-                                    <div className={`p-2 rounded bg-${stat.color} bg-opacity-10 text-${stat.color}`}>
-                                        {stat.icon}
-                                    </div>
-                                    <span className={`badge ${stat.trend.startsWith('+') ? 'badge-success' : 'badge-danger'}`}>
-                                        {stat.trend}
-                                    </span>
-                                </div>
-                                <h3 className="stats-card-value mb-1">{stat.value}</h3>
-                                <p className="text-muted mb-0 font-weight-bold text-uppercase" style={{ fontSize: '12px', letterSpacing: '1px' }}>{stat.label}</p>
-                            </div>
-                        </div>
+                        <StatCard
+                            label={stat.label}
+                            value={stat.value}
+                            icon={stat.icon}
+                            trend={stat.trend}
+                            color={stat.color}
+                        />
                     </div>
                 ))}
             </div>
-
             {/* Revenue Chart Placeholder */}
             <div className="row mb-4">
                 <div className="col-12">
