@@ -1,8 +1,8 @@
 /* Floating Chat Container */
 .floating-chat {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 30px;
+    right: 30px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -11,8 +11,8 @@
 
 /* Chat Bubble Base */
 .chat-bubble {
-    width: 56px;
-    height: 56px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -20,44 +20,37 @@
     color: white;
     font-size: 24px;
     text-decoration: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
+    background-color: #e4002b;
+    /* KFC Red */
+    box-shadow: 0 4px 12px rgba(228, 0, 43, 0.2);
+    transition: all 0.2s ease;
     cursor: pointer;
 }
 
 .chat-bubble:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transform: translateY(-3px);
+    background-color: #cc0026;
+    box-shadow: 0 6px 15px rgba(228, 0, 43, 0.3);
+    color: white;
 }
 
-/* Zalo Bubble */
-.chat-bubble.zalo {
-    background: linear-gradient(135deg, #0068ff 0%, #0180ff 100%);
-}
-
-.chat-bubble.zalo:hover {
-    background: linear-gradient(135deg, #0058e6 0%, #0170e6 100%);
-}
-
-/* Messenger Bubble */
+/* Specific colors - now all red as requested */
+.chat-bubble.zalo,
 .chat-bubble.messenger {
-    background: linear-gradient(135deg, #00b2ff 0%, #006aff 100%);
-}
-
-.chat-bubble.messenger:hover {
-    background: linear-gradient(135deg, #00a2e6 0%, #005ae6 100%);
+    background-color: #e4002b;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .floating-chat {
-        bottom: 15px;
-        right: 15px;
+        bottom: 20px;
+        right: 20px;
+        gap: 10px;
     }
 
     .chat-bubble {
-        width: 48px;
-        height: 48px;
+        width: 46px;
+        height: 46px;
         font-size: 20px;
     }
 }
