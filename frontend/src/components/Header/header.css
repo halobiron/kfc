@@ -24,13 +24,6 @@
     color: var(--kfc-red) !important;
 }
 
-/* Cart Badge - Improved */
-.cart-wrapper {
-    position: relative;
-    display: inline-block;
-    padding: 0.25rem;
-}
-
 .cart-badge {
     position: absolute;
     top: -5px;
@@ -71,30 +64,26 @@
 /* Order Type Toggle */
 .order-type-toggle {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
-.order-type-btn {
+.order-type-item {
     background: transparent;
-    border: none;
     color: white;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.85rem;
+    font-weight: 600;
     padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    border-radius: 4px;
     display: flex;
     align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    user-select: none;
+    cursor: default;
 }
 
-.order-type-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.order-type-btn.active {
-    background-color: rgba(255, 255, 255, 0.15);
-    font-weight: 700;
+.order-type-item i {
+    color: var(--kfc-red);
+    font-size: 1.1rem;
 }
 
 /* CTA Button */

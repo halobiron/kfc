@@ -76,7 +76,7 @@ const Cart = () => {
 
     return (
         <Layout>
-            <div className="cart-wrapper">
+            <div className="cart-page-wrapper">
                 <div className="container cart-container py-5">
                     <div className="cart-title-section">
                         <h2 className="cart-title text-uppercase">Giỏ Hàng Của Bạn</h2>

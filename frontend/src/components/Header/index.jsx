@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/img/KFC-Logo.png';
-import Modal from '../Modal';
+
 import './header.css';
 
 const Header = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [orderType, setOrderType] = useState('delivery'); // 'delivery', 'pickup', 'dine-in'
+
   const cartQuantity = useSelector(state => state.cart.totalQuantity);
   const navigate = useNavigate();
 
@@ -69,15 +68,13 @@ const Header = () => {
                     </ul>
                   </div>
 
-                  {/* Cart with improved badge */}
-                  <div className="cart-wrapper position-relative" onClick={() => setIsModalOpen(true)} style={{ cursor: 'pointer' }}>
+                  <div className="position-relative" onClick={() => navigate('/cart')} style={{ cursor: 'pointer' }}>
                     <i className="bi bi-basket fs-4 text-dark"></i>
                     {cartQuantity > 0 && (
                       <span className="cart-badge">{cartQuantity}</span>
                     )}
                   </div>
 
-                  {/* Hamburger Menu */}
                   <button className="hamburger-menu" type="button">
                     <i className="bi bi-list fs-3"></i>
                   </button>
@@ -93,27 +90,18 @@ const Header = () => {
             <div className="d-flex align-items-center justify-content-between py-2">
               {/* Order Type Toggle */}
               <div className="order-type-toggle d-flex gap-3">
-                <button
-                  className={`order-type-btn ${orderType === 'dine-in' ? 'active' : ''}`}
-                  onClick={() => setOrderType('dine-in')}
-                >
+                <div className="order-type-item">
                   <i className="bi bi-shop me-1"></i>
                   Đặt Ngay
-                </button>
-                <button
-                  className={`order-type-btn ${orderType === 'delivery' ? 'active' : ''}`}
-                  onClick={() => setOrderType('delivery')}
-                >
+                </div>
+                <div className="order-type-item">
                   <i className="bi bi-truck me-1"></i>
                   Giao Hàng
-                </button>
-                <button
-                  className={`order-type-btn ${orderType === 'pickup' ? 'active' : ''}`}
-                  onClick={() => setOrderType('pickup')}
-                >
+                </div>
+                <div className="order-type-item">
                   <i className="bi bi-bag me-1"></i>
                   Mang đi
-                </button>
+                </div>
               </div>
 
               {/* CTA Button */}
@@ -126,7 +114,7 @@ const Header = () => {
       </header>
 
       {/* Cart Modal */}
-      {isModalOpen && <Modal closeModal={() => setIsModalOpen(false)} />}
+
     </>
   );
 };
