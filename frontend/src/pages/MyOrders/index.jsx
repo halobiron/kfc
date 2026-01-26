@@ -3,7 +3,7 @@ import Layout from '../../components/Layout';
 import './MyOrders.css';
 
 const MyOrders = () => {
-    // Mock data
+    // Mock data with detailed status tracking
     const mockOrders = [
         {
             id: 'KFC2026012401',
@@ -15,7 +15,13 @@ const MyOrders = () => {
                 { name: 'Combo Gà Rán 1 Người', quantity: 1, price: 99000 },
                 { name: 'Pepsi Lon', quantity: 2, price: 20000 }
             ],
-            canCancel: false
+            canCancel: false,
+            timeline: [
+                { status: 'Chờ xác nhận', time: '24/01/2026 14:30', completed: true },
+                { status: 'Đang chuẩn bị', time: '24/01/2026 14:35', completed: true },
+                { status: 'Đang giao', time: '24/01/2026 15:10', completed: true },
+                { status: 'Hoàn thành', time: null, completed: false }
+            ]
         },
         {
             id: 'KFC2026012301',
@@ -27,7 +33,13 @@ const MyOrders = () => {
                 { name: 'Combo Nhóm 4-6 Người', quantity: 1, price: 399000 },
                 { name: 'Coca Cola 1.5L', quantity: 1, price: 25000 }
             ],
-            canCancel: false
+            canCancel: false,
+            timeline: [
+                { status: 'Chờ xác nhận', time: '23/01/2026 19:15', completed: true },
+                { status: 'Đang chuẩn bị', time: '23/01/2026 19:20', completed: true },
+                { status: 'Đang giao', time: '23/01/2026 19:55', completed: true },
+                { status: 'Hoàn thành', time: '23/01/2026 20:30', completed: true }
+            ]
         },
         {
             id: 'KFC2026012402',
@@ -39,7 +51,13 @@ const MyOrders = () => {
                 { name: 'Burger Zinger', quantity: 2, price: 69000 },
                 { name: 'Khoai Tây Chiên (L)', quantity: 1, price: 25000 }
             ],
-            canCancel: true
+            canCancel: true,
+            timeline: [
+                { status: 'Chờ xác nhận', time: '24/01/2026 20:00', completed: true },
+                { status: 'Đang chuẩn bị', time: '24/01/2026 20:05', completed: true },
+                { status: 'Đang giao', time: null, completed: false },
+                { status: 'Hoàn thành', time: null, completed: false }
+            ]
         },
         {
             id: 'KFC2026012202',
@@ -50,7 +68,11 @@ const MyOrders = () => {
             items: [
                 { name: 'Gà Rán Giòn Cay (3 miếng)', quantity: 1, price: 89000 }
             ],
-            canCancel: false
+            canCancel: false,
+            timeline: [
+                { status: 'Chờ xác nhận', time: '22/01/2026 12:45', completed: true },
+                { status: 'Đã hủy', time: '22/01/2026 12:50', completed: true, cancelled: true }
+            ]
         }
     ];
 
@@ -262,6 +284,35 @@ const MyOrders = () => {
                                     <div className="detail-card">
                                         <span className="detail-label">Thời gian đặt</span>
                                         <p className="mb-0 fw-bold">{selectedOrder.date}</p>
+                                    </div>
+                                </div>
+
+                                {/* Order Timeline */}
+                                <div className="order-timeline-section mt-4">
+                                    <h6 className="section-title text-uppercase mb-3">Tiến độ đơn hàng</h6>
+                                    <div className="timeline-wrapper">
+                                        {selectedOrder.timeline.map((step, index) => (
+                                            <div key={index} className={`timeline-step ${step.completed ? 'completed' : 'pending'} ${step.cancelled ? 'cancelled' : ''}`}>
+                                                <div className="timeline-icon">
+                                                    {step.completed ? (
+                                                        step.cancelled ? (
+                                                            <i className="bi bi-x-circle-fill"></i>
+                                                        ) : (
+                                                            <i className="bi bi-check-circle-fill"></i>
+                                                        )
+                                                    ) : (
+                                                        <i className="bi bi-circle"></i>
+                                                    )}
+                                                </div>
+                                                <div className="timeline-content">
+                                                    <div className="timeline-status">{step.status}</div>
+                                                    <div className="timeline-time">{step.time || 'Đang chờ...'}</div>
+                                                </div>
+                                                {index < selectedOrder.timeline.length - 1 && !step.cancelled && (
+                                                    <div className={`timeline-line ${step.completed ? 'completed' : ''}`}></div>
+                                                )}
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
 

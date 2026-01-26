@@ -33,7 +33,9 @@ const Header = () => {
                   <li className="nav-item">
                     <Link className="nav-link text-dark mx-2" to="/products">Thực Đơn</Link>
                   </li>
-
+                  <li className="nav-item">
+                    <Link className="nav-link text-dark mx-2" to="/stores">Cửa hàng</Link>
+                  </li>
                 </ul>
 
                 {/* Right Action Buttons */}

@@ -10,6 +10,7 @@ import Checkout from './pages/Checkout';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfUse from './pages/TermsOfUse';
 import Profile from './pages/Profile';
+import StoreSystem from './pages/StoreSystem';
 import {
   BrowserRouter,
   Routes,
@@ -31,6 +32,7 @@ function App() {
         <Route path="/my-orders" element={<MyOrders />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/stores" element={<StoreSystem />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-use" element={<TermsOfUse />} />
       </Routes>
