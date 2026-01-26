@@ -1,8 +1,6 @@
 import React from 'react';
 import './footer.css';
 import footerLogo from '../../assets/img/footer-logo.png';
-import playStore from '../../assets/img/google-play.png';
-import appStore from '../../assets/img/app-store.png';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
