@@ -1,124 +1,246 @@
+/* Product Detail Wrapper */
 .product-detail-wrapper {
-    background-color: #f8f9fa;
+    background-color: #FAFAFA;
     min-height: 100vh;
+    padding-bottom: 60px;
 }
 
-.p-detail-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
+/* Breadcrumb */
 .product-breadcrumb {
-    font-size: 14px;
-    color: #6c757d;
-    margin-bottom: 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 24px;
+    font-weight: 400;
 }
 
 .product-breadcrumb span {
-    margin: 0 5px;
+    color: #999;
 }
 
+.product-breadcrumb .separator {
+    margin: 0 8px;
+    color: #ccc;
+}
+
+.product-breadcrumb .current {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Product Image Container */
 .product-image-container {
-    text-align: center;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    min-height: 500px;
 }
 
 .product-image-container img {
     max-width: 100%;
-    height: auto;
+    max-height: 450px;
+    object-fit: contain;
     border-radius: 8px;
 }
 
-.product-info-container {
-    padding: 0 20px;
+/* Product Info Card */
+.product-info-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 55px 35px 35px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
+/* Three Red Decorative Bars */
+.product-info-card::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 35px;
+    width: 12px;
+    height: 30px;
+    background-color: transparent;
+    box-shadow: rgb(228, 0, 43) 0px 0px 0px 32px inset,
+        rgb(228, 0, 43) -22px 0px 0px 0px,
+        rgb(228, 0, 43) 22px 0px 0px 0px;
+}
+
+/* Product Title */
 .product-title {
-    font-size: 32px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 16px;
     color: #000;
     text-transform: uppercase;
+    line-height: 1.3;
+    letter-spacing: 0.5px;
 }
 
+/* Product Description */
 .product-description {
-    font-size: 16px;
-    color: #495057;
-    line-height: 1.6;
-    margin-bottom: 25px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 24px;
 }
 
+/* Product Price Section */
 .product-price-section {
     padding: 20px 0;
-    border-top: 1px solid #dee2e6;
-    border-bottom: 1px solid #dee2e6;
-    margin-bottom: 25px;
+    border-top: 1px solid #E8E8E8;
+    border-bottom: 1px solid #E8E8E8;
+    margin-bottom: 28px;
 }
 
 .product-price {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 700;
-    color: #e4002b; /* KFC Red */
+    color: #E4002B;
+}
+
+/* Quantity Section */
+.quantity-section {
+    margin-bottom: 24px;
 }
 
 .quantity-selector {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    margin-bottom: 25px;
+    border: 1px solid #D1D1D1;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #fff;
 }
 
 .quantity-btn {
-    width: 40px;
-    height: 40px;
-    border: 1px solid #ced4da;
-    background: white;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: #fff;
     font-size: 20px;
+    font-weight: 600;
+    color: #333;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .quantity-btn:hover {
-    background: #f8f9fa;
+    background-color: #F5F5F5;
+}
+
+.quantity-btn:active {
+    background-color: #E8E8E8;
 }
 
 .quantity-input {
-    width: 60px;
-    height: 40px;
+    width: 50px;
+    height: 44px;
     text-align: center;
-    border-top: 1px solid #ced4da;
-    border-bottom: 1px solid #ced4da;
-    border-left: none;
-    border-right: none;
+    border: none;
+    border-left: 1px solid #D1D1D1;
+    border-right: 1px solid #D1D1D1;
     font-weight: 600;
+    font-size: 16px;
+    color: #333;
+    background-color: #fff;
+    outline: none;
 }
 
+/* Add to Cart Button - Rounded Pill Style */
 .add-to-cart-btn {
-    padding: 12px 30px;
-    font-size: 18px;
+    padding: 14px 32px;
+    font-size: 16px;
     font-weight: 600;
     text-transform: uppercase;
-    border-radius: 4px;
-    background-color: #e4002b;
+    border-radius: 50px;
+    background-color: #E4002B;
     border: none;
     color: white;
     width: 100%;
-    transition: background-color 0.2s;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(228, 0, 43, 0.2);
+    letter-spacing: 0.5px;
 }
 
 .add-to-cart-btn:hover {
-    background-color: #c40022;
+    background-color: #C40022;
+    box-shadow: 0 4px 12px rgba(228, 0, 43, 0.3);
+    transform: translateY(-1px);
+}
+
+.add-to-cart-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(228, 0, 43, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+    .product-image-container {
+        min-height: 400px;
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+
+    .product-info-card {
+        padding: 28px;
+    }
+
+    .product-title {
+        font-size: 24px;
+    }
+
+    .product-price {
+        font-size: 28px;
+    }
 }
 
 @media (max-width: 768px) {
-    .product-info-container {
-        margin-top: 30px;
-        padding: 0;
+    .product-detail-wrapper {
+        padding-bottom: 40px;
     }
-    
+
+    .product-image-container {
+        min-height: 300px;
+        padding: 20px;
+    }
+
+    .product-image-container img {
+        max-height: 300px;
+    }
+
+    .product-info-card {
+        padding: 24px;
+    }
+
     .product-title {
-        font-size: 24px;
+        font-size: 22px;
+    }
+
+    .product-description {
+        font-size: 14px;
+    }
+
+    .product-price {
+        font-size: 26px;
+    }
+
+    .add-to-cart-btn {
+        padding: 12px 28px;
+        font-size: 15px;
     }
 }
