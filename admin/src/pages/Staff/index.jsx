@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { FiPlus, FiEdit2, FiTrash2, FiUser, FiShield, FiMail, FiPhone, FiLock } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiUser, FiShield, FiMail, FiPhone, FiLock, FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell } from 'react-icons/fi';
+import { MdRestaurant } from 'react-icons/md';
 import StatCard from '../../components/StatCard';
 import './staff.css';
 
 const Staff = () => {
   // Mock data - sẽ thay bằng Redux sau
-  const [staffList, setStaffList] = useState([
+  const [usersList, setUsersList] = useState([
     { 
       _id: '1', 
       name: 'Nguyễn Văn An', 
@@ -20,7 +21,7 @@ const Staff = () => {
       name: 'Trần Thị Bình', 
       email: 'binh.tran@kfc.vn', 
       phone: '0912345678',
-      role: 'staff', 
+      role: 'receptionist', 
       isActive: true,
       createdAt: '2024-02-20'
     },
@@ -38,7 +39,7 @@ const Staff = () => {
       name: 'Phạm Thị Dung', 
       email: 'dung.pham@kfc.vn', 
       phone: '0934567890',
-      role: 'staff', 
+      role: 'receptionist', 
       isActive: true,
       createdAt: '2024-04-05'
     },
@@ -51,32 +52,71 @@ const Staff = () => {
       isActive: false,
       createdAt: '2024-05-12'
     },
+    { 
+      _id: '6', 
+      name: 'Đặng Tuấn Tú', 
+      email: 'tuantu@gmail.com', 
+      phone: '0956781234',
+      role: 'customer', 
+      isActive: true,
+      createdAt: '2024-06-01'
+    },
+    { 
+      _id: '7', 
+      name: 'Lê Thị Hoa', 
+      email: 'hoale@gmail.com', 
+      phone: '0967892345',
+      role: 'customer', 
+      isActive: true,
+      createdAt: '2024-06-05'
+    },
+    { 
+      _id: '8', 
+      name: 'Trần Văn Hùng', 
+      email: 'hung.tran@kfc.vn', 
+      phone: '0967890123',
+      role: 'cashier', 
+      isActive: true,
+      createdAt: '2024-07-20'
+    },
+     { 
+      _id: '9', 
+      name: 'Lê Văn Giang', 
+      email: 'giang.le@kfc.vn', 
+      phone: '0956789012',
+      role: 'warehouse', 
+      isActive: true,
+      createdAt: '2024-06-15'
+    }
   ]);
 
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentStaff, setCurrentStaff] = useState({
+  const [currentUser, setCurrentUser] = useState({
     name: '',
     email: '',
     phone: '',
-    role: 'staff',
+    role: 'customer',
     password: '',
     isActive: true
   });
 
   const roleLabels = {
-    admin: { label: 'Quản trị viên', color: 'danger', icon: <FiShield size={14} /> },
-    staff: { label: 'Nhân viên', color: 'primary', icon: <FiUser size={14} /> },
-    chef: { label: 'Đầu bếp', color: 'warning', icon: <FiUser size={14} /> }
+    admin: { label: 'Quản trị viên', color: 'primary', icon: <FiUserCheck size={20} /> },
+    cashier: { label: 'Thu ngân', color: 'success', icon: <FiDollarSign size={20} /> },
+    receptionist: { label: 'Lễ tân', color: 'warning', icon: <FiBell size={20} /> },
+    chef: { label: 'Đầu bếp', color: 'danger', icon: <MdRestaurant size={20} /> },
+    warehouse: { label: 'Thủ kho', color: 'secondary', icon: <FiPackage size={20} /> },
+    customer: { label: 'Khách hàng', color: 'info', icon: <FiUsers size={20} /> }
   };
 
-  const handleOpenModal = (staff = null) => {
-    if (staff) {
+  const handleOpenModal = (user = null) => {
+    if (user) {
       setEditMode(true);
-      setCurrentStaff({ ...staff, password: '' });
+      setCurrentUser({ ...user, password: '' });
     } else {
       setEditMode(false);
-      setCurrentStaff({ name: '', email: '', phone: '', role: 'staff', password: '', isActive: true });
+      setCurrentUser({ name: '', email: '', phone: '', role: 'customer', password: '', isActive: true });
     }
     setShowModal(true);
   };
@@ -84,99 +124,120 @@ const Staff = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setEditMode(false);
-    setCurrentStaff({ name: '', email: '', phone: '', role: 'staff', password: '', isActive: true });
+    setCurrentUser({ name: '', email: '', phone: '', role: 'customer', password: '', isActive: true });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editMode) {
-      setStaffList(staffList.map(staff => 
-        staff._id === currentStaff._id ? { ...currentStaff, password: undefined } : staff
+      setUsersList(usersList.map(user => 
+        user._id === currentUser._id ? { ...currentUser, password: undefined } : user
       ));
-      alert('Cập nhật nhân viên thành công!');
+      alert('Cập nhật người dùng thành công!');
     } else {
-      const newStaff = {
-        ...currentStaff,
-        _id: String(staffList.length + 1),
+      const newUser = {
+        ...currentUser,
+        _id: String(usersList.length + 1),
         createdAt: new Date().toISOString().split('T')[0],
         password: undefined
       };
-      setStaffList([...staffList, newStaff]);
-      alert('Thêm nhân viên thành công!');
+      setUsersList([...usersList, newUser]);
+      alert('Thêm người dùng thành công!');
     }
     handleCloseModal();
   };
 
   const handleDelete = (id) => {
-    if (window.confirm('Bạn có chắc muốn xóa nhân viên này?')) {
-      setStaffList(staffList.filter(staff => staff._id !== id));
-      alert('Xóa nhân viên thành công!');
+    if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
+      setUsersList(usersList.filter(user => user._id !== id));
+      alert('Xóa người dùng thành công!');
     }
   };
 
   const handleToggleActive = (id) => {
-    setStaffList(staffList.map(staff => 
-      staff._id === id ? { ...staff, isActive: !staff.isActive } : staff
+    const userToToggle = usersList.find(u => u._id === id);
+    if (userToToggle && userToToggle.role === 'admin') {
+      alert("Không thể vô hiệu hóa tài khoản Quản trị viên!");
+      return;
+    }
+    setUsersList(usersList.map(user => 
+      user._id === id ? { ...user, isActive: !user.isActive } : user
     ));
   };
 
-  const getStaffCountByRole = (role) => {
-    return staffList.filter(staff => staff.role === role && staff.isActive).length;
+  const getUserCountByRole = (role) => {
+    return usersList.filter(user => user.role === role && user.isActive).length;
   };
 
   return (
     <>
       <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
         <div className="page-header d-flex justify-content-between align-items-center">
-          <h1 className="page-title">Quản lý Nhân viên & Phân quyền</h1>
+          <h1 className="page-title">Quản lý người dùng</h1>
           <button
             type="button"
             className="btn btn-primary d-flex align-items-center gap-2 shadow-sm"
             onClick={() => handleOpenModal()}
           >
-            <FiPlus size={20} /> Thêm nhân viên
+            <FiPlus size={20} /> Thêm người dùng
           </button>
         </div>
 
         {/* Stats Overview */}
         <div className="row mb-4 g-3">
-          <div className="col-md-3">
+          <div className="col-md-2">
             <StatCard
-              label="Tổng nhân viên"
-              value={staffList.filter(s => s.isActive).length}
-              icon={<FiUser size={24} />}
-              color="primary"
+              label="Quản trị"
+              value={getUserCountByRole('admin')}
+              icon={roleLabels.admin.icon}
+              color={roleLabels.admin.color}
             />
           </div>
-          <div className="col-md-3">
+          <div className="col-md-2">
             <StatCard
-              label="Quản trị viên"
-              value={getStaffCountByRole('admin')}
-              icon={<FiShield size={24} />}
-              color="danger"
+              label="Thu ngân"
+              value={getUserCountByRole('cashier')}
+              icon={roleLabels.cashier.icon}
+              color={roleLabels.cashier.color}
             />
           </div>
-          <div className="col-md-3">
+          <div className="col-md-2">
             <StatCard
-              label="Nhân viên"
-              value={getStaffCountByRole('staff')}
-              icon={<FiUser size={24} />}
-              color="primary"
+              label="Lễ tân"
+              value={getUserCountByRole('receptionist')}
+              icon={roleLabels.receptionist.icon}
+              color={roleLabels.receptionist.color}
             />
           </div>
-          <div className="col-md-3">
+          <div className="col-md-2">
             <StatCard
               label="Đầu bếp"
-              value={getStaffCountByRole('chef')}
-              icon={<FiUser size={24} />}
-              color="warning"
+              value={getUserCountByRole('chef')}
+              icon={roleLabels.chef.icon}
+              color={roleLabels.chef.color}
+            />
+          </div>
+          <div className="col-md-2">
+            <StatCard
+              label="Thủ kho"
+              value={getUserCountByRole('warehouse')}
+              icon={roleLabels.warehouse.icon}
+              color={roleLabels.warehouse.color}
+            />
+          </div>
+          <div className="col-md-2">
+            <StatCard
+              label="Khách hàng"
+              value={getUserCountByRole('customer')}
+              icon={roleLabels.customer.icon}
+              color={roleLabels.customer.color}
             />
           </div>
         </div>
 
-        {/* Staff Table */}
+        {/* Users Table */}
         <div className="card">
-          <div className="card-header">Danh sách nhân viên</div>
+          <div className="card-header">Danh sách người dùng</div>
           <div className="table-responsive">
             <table className="table align-middle">
               <thead>
@@ -191,36 +252,36 @@ const Staff = () => {
                 </tr>
               </thead>
               <tbody>
-                {staffList.map((staff, index) => (
-                  <tr key={staff._id}>
-                    <td className="ps-4 fw-bold">S{1000 + index + 1}</td>
+                {usersList.map((user, index) => (
+                  <tr key={user._id}>
+                    <td className="ps-4 fw-bold">U{1000 + index + 1}</td>
                     <td>
                       <div className="d-flex align-items-center gap-2">
                         <div className="avatar-circle">
-                          {staff.name.charAt(0).toUpperCase()}
+                          {user.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <div className="fw-bold">{staff.name}</div>
-                          <small className="text-muted">Tham gia: {staff.createdAt}</small>
+                          <div className="fw-bold">{user.name}</div>
+                          <small className="text-muted">Tham gia: {user.createdAt}</small>
                         </div>
                       </div>
                     </td>
                     <td>
                       <div className="d-flex align-items-center gap-2 text-muted">
                         <FiMail size={14} />
-                        {staff.email}
+                        {user.email}
                       </div>
                     </td>
                     <td>
                       <div className="d-flex align-items-center gap-2 text-muted">
                         <FiPhone size={14} />
-                        {staff.phone}
+                        {user.phone}
                       </div>
                     </td>
                     <td className="text-center">
-                      <span className={`badge badge-${roleLabels[staff.role].color} role-badge`}>
-                        <span className="me-1">{roleLabels[staff.role].icon}</span>
-                        {roleLabels[staff.role].label}
+                      <span className={`badge badge-${roleLabels[user.role].color} role-badge`}>
+                        <span className="me-1">{roleLabels[user.role].icon}</span>
+                        {roleLabels[user.role].label}
                       </span>
                     </td>
                     <td className="text-center">
@@ -228,23 +289,25 @@ const Staff = () => {
                         <input
                           className="form-check-input"
                           type="checkbox"
-                          checked={staff.isActive}
-                          onChange={() => handleToggleActive(staff._id)}
+                          checked={user.isActive}
+                          onChange={() => handleToggleActive(user._id)}
+                          disabled={user.role === 'admin'}
+                          title={user.role === 'admin' ? "Không thể vô hiệu hóa Quản trị viên" : ""}
                         />
                       </div>
                     </td>
                     <td className="text-end pe-4">
                       <button
                         className="btn-action btn-edit border-0 d-inline-flex align-items-center"
-                        onClick={() => handleOpenModal(staff)}
+                        onClick={() => handleOpenModal(user)}
                       >
                         <FiEdit2 style={{ marginRight: '4px' }} />
                         Sửa
                       </button>
                       <button
                         className="btn-action btn-delete border-0 d-inline-flex align-items-center"
-                        onClick={() => handleDelete(staff._id)}
-                        disabled={staff.role === 'admin'}
+                        onClick={() => handleDelete(user._id)}
+                        disabled={user.role === 'admin'}
                       >
                         <FiTrash2 style={{ marginRight: '4px' }} />
                         Xóa
@@ -265,7 +328,7 @@ const Staff = () => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">
-                  {editMode ? 'Chỉnh sửa nhân viên' : 'Thêm nhân viên mới'}
+                  {editMode ? 'Chỉnh sửa người dùng' : 'Thêm người dùng mới'}
                 </h5>
                 <button type="button" className="btn-close" onClick={handleCloseModal}></button>
               </div>
@@ -276,8 +339,8 @@ const Staff = () => {
                     <input
                       type="text"
                       className="form-control"
-                      value={currentStaff.name}
-                      onChange={(e) => setCurrentStaff({ ...currentStaff, name: e.target.value })}
+                      value={currentUser.name}
+                      onChange={(e) => setCurrentUser({ ...currentUser, name: e.target.value })}
                       required
                       placeholder="VD: Nguyễn Văn A"
                     />
@@ -287,10 +350,10 @@ const Staff = () => {
                     <input
                       type="email"
                       className="form-control"
-                      value={currentStaff.email}
-                      onChange={(e) => setCurrentStaff({ ...currentStaff, email: e.target.value })}
+                      value={currentUser.email}
+                      onChange={(e) => setCurrentUser({ ...currentUser, email: e.target.value })}
                       required
-                      placeholder="email@kfc.vn"
+                      placeholder="email@example.com"
                     />
                   </div>
                   <div className="mb-3">
@@ -298,8 +361,8 @@ const Staff = () => {
                     <input
                       type="tel"
                       className="form-control"
-                      value={currentStaff.phone}
-                      onChange={(e) => setCurrentStaff({ ...currentStaff, phone: e.target.value })}
+                      value={currentUser.phone}
+                      onChange={(e) => setCurrentUser({ ...currentUser, phone: e.target.value })}
                       required
                       placeholder="0901234567"
                     />
@@ -308,18 +371,24 @@ const Staff = () => {
                     <label className="form-label">Vai trò <span className="text-danger">*</span></label>
                     <select
                       className="form-select"
-                      value={currentStaff.role}
-                      onChange={(e) => setCurrentStaff({ ...currentStaff, role: e.target.value })}
+                      value={currentUser.role}
+                      onChange={(e) => setCurrentUser({ ...currentUser, role: e.target.value })}
                       required
                     >
-                      <option value="staff">Nhân viên</option>
+                      <option value="customer">Khách hàng</option>
+                      <option value="receptionist">Lễ tân</option>
                       <option value="chef">Đầu bếp</option>
+                      <option value="cashier">Thu ngân</option>
+                      <option value="warehouse">Thủ kho</option>
                       <option value="admin">Quản trị viên</option>
                     </select>
                     <small className="text-muted d-block mt-1">
-                      {currentStaff.role === 'admin' && '• Toàn quyền quản lý hệ thống'}
-                      {currentStaff.role === 'staff' && '• Xử lý đơn hàng, quản lý khách hàng'}
-                      {currentStaff.role === 'chef' && '• Xem đơn hàng và cập nhật trạng thái chế biến'}
+                      {currentUser.role === 'customer' && '• Người dùng mua hàng'}
+                      {currentUser.role === 'admin' && '• Toàn quyền quản lý hệ thống'}
+                      {currentUser.role === 'cashier' && '• Xử lý thanh toán và báo cáo doanh thu'}
+                      {currentUser.role === 'receptionist' && '• Đón khách và hỗ trợ đặt món'}
+                      {currentUser.role === 'chef' && '• Xem đơn hàng và cập nhật trạng thái chế biến'}
+                      {currentUser.role === 'warehouse' && '• Quản lý nhập/xuất nguyên liệu'}
                     </small>
                   </div>
                   {!editMode && (
@@ -328,8 +397,8 @@ const Staff = () => {
                       <input
                         type="password"
                         className="form-control"
-                        value={currentStaff.password}
-                        onChange={(e) => setCurrentStaff({ ...currentStaff, password: e.target.value })}
+                        value={currentUser.password}
+                        onChange={(e) => setCurrentUser({ ...currentUser, password: e.target.value })}
                         required={!editMode}
                         placeholder="Tối thiểu 6 ký tự"
                         minLength="6"
@@ -342,8 +411,8 @@ const Staff = () => {
                       <input
                         type="password"
                         className="form-control"
-                        value={currentStaff.password}
-                        onChange={(e) => setCurrentStaff({ ...currentStaff, password: e.target.value })}
+                        value={currentUser.password}
+                        onChange={(e) => setCurrentUser({ ...currentUser, password: e.target.value })}
                         placeholder="Để trống nếu không đổi"
                         minLength="6"
                       />
@@ -354,12 +423,13 @@ const Staff = () => {
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      checked={currentStaff.isActive}
-                      onChange={(e) => setCurrentStaff({ ...currentStaff, isActive: e.target.checked })}
+                      checked={currentUser.isActive}
+                      onChange={(e) => setCurrentUser({ ...currentUser, isActive: e.target.checked })}
                       id="isActiveCheck"
+                      disabled={currentUser.role === 'admin'}
                     />
                     <label className="form-check-label" htmlFor="isActiveCheck">
-                      Kích hoạt tài khoản này
+                      {currentUser.role === 'admin' ? 'Tài khoản Quản trị viên luôn hoạt động' : 'Kích hoạt tài khoản này'}
                     </label>
                   </div>
                 </div>

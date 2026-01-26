@@ -42,6 +42,21 @@
   color: #856404 !important;
 }
 
+.badge-info {
+  background-color: rgba(13, 202, 240, 0.1) !important;
+  color: #0dcaf0 !important;
+}
+
+.badge-success {
+  background-color: rgba(25, 135, 84, 0.1) !important;
+  color: #198754 !important;
+}
+
+.badge-secondary {
+  background-color: rgba(108, 117, 125, 0.1) !important;
+  color: #6c757d !important;
+}
+
 .form-check-input:checked {
   background-color: #198754;
   border-color: #198754;

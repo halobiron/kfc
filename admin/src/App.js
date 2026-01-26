@@ -11,6 +11,8 @@ import Reports from './pages/Reports';
 import OrderDetails from './pages/OrderDetails';
 import Categories from './pages/Categories';
 import Staff from './pages/Staff';
+import Promotions from './pages/Promotions';
+import Kitchen from './pages/Kitchen';
 
 import {
   BrowserRouter,
@@ -39,8 +41,10 @@ function App() {
                       <Route path="/ingredients" element={<Ingredient />} />
                       <Route path="/orders" element={<Order />} />
                       <Route path="/orders/:id" element={<OrderDetails />} />
+                      <Route path="/kitchen" element={<Kitchen />} />
                       <Route path="/customers" element={<Customers />} />
                       <Route path="/staff" element={<Staff />} />
+                      <Route path="/promotions" element={<Promotions />} />
                       <Route path="/reports" element={<Reports />} />
                     </Routes>
                   </div>
