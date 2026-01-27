@@ -2,6 +2,87 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import './StoreSystem.css';
 
+const stores = [
+    {
+        id: 1,
+        name: 'KFC Nguyễn Trãi',
+        address: '123 Nguyễn Trãi, Quận 1, TP.HCM',
+        city: 'hcm',
+        phone: '1900 1166',
+        openTime: '08:00 - 22:00',
+        services: ['Giao hàng', 'Tại chỗ', 'Mang đi', 'Wifi'],
+        location: { lat: 10.7686, lng: 106.6832 }
+    },
+    {
+        id: 2,
+        name: 'KFC Hoàn Kiếm',
+        address: '456 Hoàng Diệu, Quận Hoàn Kiếm, Hà Nội',
+        city: 'hn',
+        phone: '1900 1166',
+        openTime: '08:00 - 22:00',
+        services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
+        location: { lat: 21.0285, lng: 105.8542 }
+    },
+    {
+        id: 3,
+        name: 'KFC Lê Lợi',
+        address: '789 Lê Lợi, Quận 1, TP.HCM',
+        city: 'hcm',
+        phone: '1900 1166',
+        openTime: '08:00 - 23:00',
+        services: ['Giao hàng', 'Tại chỗ', 'Mang đi', 'Trẻ em'],
+        location: { lat: 10.7712, lng: 106.7001 }
+    },
+    {
+        id: 4,
+        name: 'KFC Hải Phòng Center',
+        address: '321 Lê Thánh Tông, Quận Ngô Quyền, Hải Phòng',
+        city: 'hp',
+        phone: '1900 1166',
+        openTime: '08:00 - 22:00',
+        services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
+        location: { lat: 20.8449, lng: 106.6881 }
+    },
+    {
+        id: 5,
+        name: 'KFC Đà Nẵng',
+        address: '555 Trần Phú, Quận Hải Châu, Đà Nẵng',
+        city: 'dn',
+        phone: '1900 1166',
+        openTime: '08:00 - 22:00',
+        services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
+        location: { lat: 16.0544, lng: 108.2022 }
+    },
+    {
+        id: 6,
+        name: 'KFC Cần Thơ',
+        address: '999 Mậu Thân, Quận Ninh Kiều, Cần Thơ',
+        city: 'ct',
+        phone: '1900 1166',
+        openTime: '08:00 - 22:00',
+        services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
+        location: { lat: 10.0333, lng: 105.7833 }
+    },
+];
+
+const deg2rad = (deg) => {
+    return deg * (Math.PI / 180);
+};
+
+// Haversine formula to calculate distance (in km)
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return d;
+};
+
 const StoreSystem = () => {
     const [selectedCity, setSelectedCity] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
@@ -12,69 +93,6 @@ const StoreSystem = () => {
     const [locationError, setLocationError] = useState(null);
     const [isSearching, setIsSearching] = useState(false);
 
-    const stores = [
-        {
-            id: 1,
-            name: 'KFC Nguyễn Trãi',
-            address: '123 Nguyễn Trãi, Quận 1, TP.HCM',
-            city: 'hcm',
-            phone: '1900 1166',
-            openTime: '08:00 - 22:00',
-            services: ['Giao hàng', 'Tại chỗ', 'Mang đi', 'Wifi'],
-            location: { lat: 10.7686, lng: 106.6832 }
-        },
-        {
-            id: 2,
-            name: 'KFC Hoàn Kiếm',
-            address: '456 Hoàng Diệu, Quận Hoàn Kiếm, Hà Nội',
-            city: 'hn',
-            phone: '1900 1166',
-            openTime: '08:00 - 22:00',
-            services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
-            location: { lat: 21.0285, lng: 105.8542 }
-        },
-        {
-            id: 3,
-            name: 'KFC Lê Lợi',
-            address: '789 Lê Lợi, Quận 1, TP.HCM',
-            city: 'hcm',
-            phone: '1900 1166',
-            openTime: '08:00 - 23:00',
-            services: ['Giao hàng', 'Tại chỗ', 'Mang đi', 'Trẻ em'],
-            location: { lat: 10.7712, lng: 106.7001 }
-        },
-        {
-            id: 4,
-            name: 'KFC Hải Phòng Center',
-            address: '321 Lê Thánh Tông, Quận Ngô Quyền, Hải Phòng',
-            city: 'hp',
-            phone: '1900 1166',
-            openTime: '08:00 - 22:00',
-            services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
-            location: { lat: 20.8449, lng: 106.6881 }
-        },
-        {
-            id: 5,
-            name: 'KFC Đà Nẵng',
-            address: '555 Trần Phú, Quận Hải Châu, Đà Nẵng',
-            city: 'dn',
-            phone: '1900 1166',
-            openTime: '08:00 - 22:00',
-            services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
-            location: { lat: 16.0544, lng: 108.2022 }
-        },
-        {
-            id: 6,
-            name: 'KFC Cần Thơ',
-            address: '999 Mậu Thân, Quận Ninh Kiều, Cần Thơ',
-            city: 'ct',
-            phone: '1900 1166',
-            openTime: '08:00 - 22:00',
-            services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
-            location: { lat: 10.0333, lng: 105.7833 }
-        },
-    ];
-
     const cities = [
         { id: 'all', name: 'Tất cả thành phố' },
         { id: 'hcm', name: 'TP. Hồ Chí Minh' },
@@ -83,25 +101,6 @@ const StoreSystem = () => {
         { id: 'hp', name: 'Hải Phòng' },
         { id: 'ct', name: 'Cần Thơ' },
     ];
-
-    // Haversine formula to calculate distance (in km)
-    const calculateDistance = (lat1, lon1, lat2, lon2) => {
-        const R = 6371; // Radius of the earth in km
-        const dLat = deg2rad(lat2 - lat1);
-        const dLon = deg2rad(lon2 - lon1);
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const d = R * c; // Distance in km
-        return d;
-    };
-
-    const deg2rad = (deg) => {
-        return deg * (Math.PI / 180);
-    };
-
     const handleFindNearest = () => {
         setLoadingLocation(true);
         setLocationError(null);
