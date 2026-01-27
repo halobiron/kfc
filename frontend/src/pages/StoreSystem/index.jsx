@@ -129,6 +129,8 @@ const StoreSystem = () => {
 
     const handleSearch = async (e) => {
         if (e.key === 'Enter' || e.type === 'click') {
+            e.preventDefault(); // Prevent accidental form submit or page reload
+
             if (!searchTerm.trim()) return;
 
             setIsSearching(true);
@@ -145,7 +147,9 @@ const StoreSystem = () => {
                     setSelectedCity('all'); // Show all cities to find true nearest
                 } else {
                     setLocationError("Không tìm thấy địa chỉ này.");
-                    setUserLocation(null); // Reset location if not found so text filter works if wanted, but here we want to prioritize address search
+                    // Keep userLocation if it exists? Or reset? Logic says reset if searching new addy.
+                    // But if fallback to text search is desired, we might want to keep it null.
+                    setUserLocation(null);
                 }
             } catch (error) {
                 console.error("Search error:", error);
@@ -209,24 +213,9 @@ const StoreSystem = () => {
                     <div className="sidebar-header">
                         <h2 className="sidebar-title">HỆ THỐNG NHÀ HÀNG</h2>
 
-                        <div className="location-btn-wrapper mb-3">
-                            <button
-                                className="btn btn-danger w-100 d-flex align-items-center justify-content-center gap-2"
-                                onClick={handleFindNearest}
-                                disabled={loadingLocation}
-                            >
-                                {loadingLocation ? (
-                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                ) : (
-                                    <i className="bi bi-geo-alt-fill"></i>
-                                )}
-                                Dùng vị trí hiện tại của bạn
-                            </button>
-                        </div>
-
                         <div className="search-wrapper">
                             {isSearching ? (
-                                <span className="spinner-border spinner-border-sm search-icon text-danger" role="status" aria-hidden="true"></span>
+                                <div className="search-loading-spinner"></div>
                             ) : (
                                 <i className="bi bi-search search-icon" onClick={handleSearch} style={{ cursor: 'pointer' }}></i>
                             )}
@@ -239,19 +228,34 @@ const StoreSystem = () => {
                                 onKeyDown={handleSearch}
                             />
                         </div>
-                        {locationError && <p className="text-danger small px-1 mb-2">{locationError}</p>}
 
-                        <div className="city-select-wrapper">
-                            <select
-                                className="form-select city-dropdown"
-                                value={selectedCity}
-                                onChange={(e) => setSelectedCity(e.target.value)}
+                        <div className="d-flex align-items-center gap-2 mb-3">
+                            <div className="flex-grow-1">
+                                <select
+                                    className="form-select city-dropdown"
+                                    value={selectedCity}
+                                    onChange={(e) => setSelectedCity(e.target.value)}
+                                >
+                                    {cities.map(city => (
+                                        <option key={city.id} value={city.id}>{city.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <button
+                                className="btn-location-neat"
+                                onClick={handleFindNearest}
+                                disabled={loadingLocation}
+                                title="Tìm cửa hàng gần vị trí của bạn"
                             >
-                                {cities.map(city => (
-                                    <option key={city.id} value={city.id}>{city.name}</option>
-                                ))}
-                            </select>
+                                {loadingLocation ? (
+                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                ) : (
+                                    <i className="bi bi-crosshair me-1" style={{ fontSize: '1.2rem' }}></i>
+                                )}
+                                <span className="d-none d-sm-inline">Gần tôi</span>
+                            </button>
                         </div>
+                        {locationError && <div className="text-danger small mb-2 text-end">{locationError}</div>}
                     </div>
 
                     <div className="store-list-container">
@@ -260,15 +264,15 @@ const StoreSystem = () => {
                         </div>
 
                         <div className="store-items">
-                            {sortedStores.map(store => (
+                            {sortedStores.map((store, index) => (
                                 <div
                                     key={store.id}
                                     className={`store-item-card ${expandedStore === store.id ? 'expanded' : ''}`}
                                     onClick={() => toggleStore(store.id)}
                                 >
                                     <div className="store-item-main">
-                                        <div className="store-marker-icon">
-                                            <i className="bi bi-geo-alt-fill"></i>
+                                        <div className="store-index-popcorn">
+                                            {index + 1}
                                         </div>
                                         <div className="store-item-info">
                                             <div className="d-flex justify-content-between align-items-start">
