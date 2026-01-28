@@ -131,7 +131,7 @@ const Categories = () => {
               <tbody>
                 {categories.map((category, index) => (
                   <tr key={category._id}>
-                    <td className="ps-4 fw-bold">C{1000 + index + 1}</td>
+                    <td className="ps-4 fw-bold">CAT{1000 + index + 1}</td>
                     <td>
                       <div className="d-flex align-items-center gap-2">
                         <FiTag className="text-primary" />

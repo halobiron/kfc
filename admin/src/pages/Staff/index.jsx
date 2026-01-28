@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiPlus, FiEdit2, FiTrash2, FiUser, FiShield, FiMail, FiPhone, FiLock, FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiMail, FiPhone, FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell } from 'react-icons/fi';
 import { MdRestaurant } from 'react-icons/md';
 import StatCard from '../../components/StatCard';
 import './staff.css';
@@ -254,7 +254,7 @@ const Staff = () => {
               <tbody>
                 {usersList.map((user, index) => (
                   <tr key={user._id}>
-                    <td className="ps-4 fw-bold">U{1000 + index + 1}</td>
+                    <td className="ps-4 fw-bold">USR{1000 + index + 1}</td>
                     <td>
                       <div className="d-flex align-items-center gap-2">
                         <div className="avatar-circle">

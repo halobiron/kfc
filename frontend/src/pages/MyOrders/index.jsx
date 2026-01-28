@@ -6,7 +6,7 @@ const MyOrders = () => {
     // Mock data with detailed status tracking
     const mockOrders = [
         {
-            id: 'KFC2026012401',
+            id: 'ORD1001',
             date: '24/01/2026 14:30',
             status: 'Đang giao',
             statusClass: 'shipping',
@@ -24,7 +24,7 @@ const MyOrders = () => {
             ]
         },
         {
-            id: 'KFC2026012301',
+            id: 'ORD1002',
             date: '23/01/2026 19:15',
             status: 'Hoàn thành',
             statusClass: 'completed',
@@ -42,7 +42,7 @@ const MyOrders = () => {
             ]
         },
         {
-            id: 'KFC2026012402',
+            id: 'ORD1003',
             date: '24/01/2026 20:00',
             status: 'Đang chuẩn bị',
             statusClass: 'preparing',
@@ -60,7 +60,7 @@ const MyOrders = () => {
             ]
         },
         {
-            id: 'KFC2026012202',
+            id: 'ORD1004',
             date: '22/01/2026 12:45',
             status: 'Đã hủy',
             statusClass: 'cancelled',
@@ -204,7 +204,7 @@ const MyOrders = () => {
                                     <div key={order.id} className="order-card mb-4">
                                         <div className="order-header">
                                             <div className="order-info">
-                                                <h5 className="order-id">Đơn hàng #{order.id}</h5>
+                                                <h5 className="order-id">Đơn hàng {order.id}</h5>
                                                 <span className="order-date">
                                                     <i className="bi bi-calendar3 me-2"></i>
                                                     {order.date}

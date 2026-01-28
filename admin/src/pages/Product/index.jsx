@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { getAllProducts, getAllProductsMock } from '../../redux/actions/productActions'
+import { getAllProductsMock } from '../../redux/actions/productActions'
 import AddModal from './AddModal';
 import './product.css';
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
@@ -18,7 +18,7 @@ const Product = () => {
 
   useEffect(() => {
     dispatch(getAllProductsMock());
-  }, [])
+  }, [dispatch])
 
   return (
     <>
@@ -53,7 +53,7 @@ const Product = () => {
                   products.data && products.data.map((product, i) => {
                     return (
                       <tr key={product._id}>
-                        <td className="ps-4 fw-bold">P{1000 + i + 1}</td>
+                        <td className="ps-4 fw-bold">PRD{1000 + i + 1}</td>
                         <td>
                           <div className="d-flex align-items-center gap-3">
                             <div className="product-img-wrapper">

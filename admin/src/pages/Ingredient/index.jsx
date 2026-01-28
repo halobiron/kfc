@@ -125,7 +125,7 @@ const Ingredient = () => {
 
                                 return (
                                     <tr key={ing._id} className={isLow ? 'row-alert' : ''}>
-                                        <td className="ps-4 text-muted small">{ing._id}</td>
+                                        <td className="ps-4 fw-bold">ING{1000 + i + 1}</td>
                                         <td>
                                             <div className="fw-bold">{ing.name}</div>
                                         </td>

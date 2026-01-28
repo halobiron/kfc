@@ -1,16 +1,14 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import AddStoreModal from './AddStoreModal';
 import './stores.css';
 import { FiEdit2, FiTrash2, FiPlus, FiMapPin, FiPhone, FiClock } from 'react-icons/fi';
 
 const Stores = () => {
     //   const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false)
 
     // Mock data for display purposes until backend is ready
-    const [stores, setStores] = useState([
+    const [stores] = useState([
         {
             _id: '1',
             name: 'KFC Nguyễn Trãi',
@@ -71,7 +69,7 @@ const Stores = () => {
                                     stores.map((store, i) => {
                                         return (
                                             <tr key={store._id}>
-                                                <td className="ps-4 fw-bold">{i + 1}</td>
+                                                <td className="ps-4 fw-bold">STR{1000 + i + 1}</td>
                                                 <td>
                                                     <div className="d-flex align-items-center gap-3">
                                                         <div className="store-img-wrapper">

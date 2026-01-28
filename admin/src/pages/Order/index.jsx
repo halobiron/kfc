@@ -25,7 +25,7 @@ const Order = () => {
             </thead>
             <tbody>
               <tr>
-                <td>#1001</td>
+                <td className="fw-bold">ORD1001</td>
                 <td>Nguyen Van A</td>
                 <td>Combo Gà Rán Truyền Thống (x2), Pepsi (L)</td>
                 <td>189.000 đ</td>
@@ -38,7 +38,7 @@ const Order = () => {
                 </td>
               </tr>
               <tr>
-                <td>#1002</td>
+                <td className="fw-bold">ORD1002</td>
                 <td>Tran Thi B</td>
                 <td>Burger Tôm, Khoai tây chiên (M)</td>
                 <td>75.000 đ</td>
@@ -51,7 +51,7 @@ const Order = () => {
                 </td>
               </tr>
               <tr>
-                <td>#1003</td>
+                <td className="fw-bold">ORD1003</td>
                 <td>Le Van C</td>
                 <td>Cơm Gà Giòn Cay, 7Up (M)</td>
                 <td>55.000 đ</td>
@@ -64,7 +64,7 @@ const Order = () => {
                 </td>
               </tr>
               <tr>
-                <td>#1004</td>
+                <td className="fw-bold">ORD1004</td>
                 <td>Pham Thi D</td>
                 <td>Gà Rán (3 miếng), Salad Bắp Cải</td>
                 <td>120.000 đ</td>
@@ -77,7 +77,7 @@ const Order = () => {
                 </td>
               </tr>
               <tr>
-                <td>#1005</td>
+                <td className="fw-bold">ORD1005</td>
                 <td>Hoang Van E</td>
                 <td>Combo Nhóm (4 người)</td>
                 <td>350.000 đ</td>

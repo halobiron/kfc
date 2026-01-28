@@ -66,7 +66,7 @@ const Customers = () => {
                             {filteredCustomers.length > 0 ? (
                                 filteredCustomers.map((customer) => (
                                     <tr key={customer.id}>
-                                        <td>#{customer.id}</td>
+                                        <td className="fw-bold">CUS{1000 + customer.id}</td>
                                         <td>
                                             {customer.name}
                                             <div className="small text-muted">{customer.email}</div>

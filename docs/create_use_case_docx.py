@@ -91,6 +91,7 @@ def create_use_case_document():
         {
             'id': 'UC01',
             'name': 'Cất Hàng Trực Tuyến',
+            'description': 'Cung cấp giao diện cho khách hàng lựa chọn các món ăn, combo từ thực đơn của KFC và thêm vào giỏ hàng để tiến hành đặt hàng trực tuyến.',
             'actor': 'Khách hàng',
             'precondition': 'Khách hàng đã đăng nhập, có sản phẩm trong giỏ hàng',
             'postcondition': 'Đơn hàng được tạo, đợi thanh toán',
@@ -112,6 +113,7 @@ def create_use_case_document():
         {
             'id': 'UC02',
             'name': 'Thanh Toán Online',
+            'description': 'Cho phép khách hàng thực hiện thanh toán đơn hàng thông qua các cổng thanh toán điện tử tích hợp để hoàn tất quá trình mua hàng.',
             'actor': 'Khách hàng',
             'precondition': 'Đơn hàng tồn tại, trạng thái "Chờ thanh toán"',
             'postcondition': 'Thanh toán thành công, đơn hàng chuyển trạng thái "Đã xác nhận"',
@@ -132,6 +134,7 @@ def create_use_case_document():
         {
             'id': 'UC03',
             'name': 'Gửi Đơn Xuống Bếp',
+            'description': 'Hệ thống tự động hoặc nhân viên xác nhận chuyển thông tin đơn hàng đã thanh toán đến bộ phận bếp để bắt đầu quy trình chế biến món ăn.',
             'actor': 'Nhân viên',
             'precondition': 'Đơn hàng được thanh toán thành công',
             'postcondition': 'Đơn hàng được gửi đến bếp, trạng thái "Đang chuẩn bị"',
@@ -150,6 +153,7 @@ def create_use_case_document():
         {
             'id': 'UC05',
             'name': 'Quản Lý Đơn Hàng',
+            'description': 'Cho phép nhân viên quản lý theo dõi, lọc và cập nhật thông tin các đơn hàng trong hệ thống để đảm bảo quy trình phục vụ diễn ra suôn sẻ.',
             'actor': 'Nhân viên',
             'precondition': 'Nhân viên đã đăng nhập',
             'postcondition': 'Đơn hàng được cập nhật trạng thái',
@@ -169,6 +173,7 @@ def create_use_case_document():
         {
             'id': 'UC09',
             'name': 'Quản Lý Sản Phẩm',
+            'description': 'Cung cấp công cụ cho Quản lý để thực hiện các thao tác thêm mới, chỉnh sửa hoặc xóa bỏ các thông tin về món ăn, combo và giá cả trên hệ thống.',
             'actor': 'Quản lý',
             'precondition': 'Quản lý đã đăng nhập vào phần admin',
             'postcondition': 'Sản phẩm được thêm/sửa/xóa thành công',
@@ -188,6 +193,7 @@ def create_use_case_document():
         {
             'id': 'UC12',
             'name': 'Đăng Nhập',
+            'description': 'Xác thực danh tính người dùng vào hệ thống dựa trên thông tin tài khoản đã đăng ký để cấp quyền truy cập tương ứng với vai trò.',
             'actor': 'Tất cả người dùng',
             'precondition': 'Người dùng có tài khoản',
             'postcondition': 'Người dùng được cấp quyền truy cập',
@@ -210,6 +216,7 @@ def create_use_case_document():
         {
             'id': 'UC14',
             'name': 'Phân Quyền Người Dùng',
+            'description': 'Cho phép Quản lý thiết lập và điều chỉnh các quyền hạn, vai trò cho từng thành viên trong hệ thống để bảo mật và tối ưu quy trình làm việc.',
             'actor': 'Quản lý',
             'precondition': 'Quản lý đã đăng nhập, có danh sách người dùng',
             'postcondition': 'Quyền của người dùng được cập nhật thành công',
@@ -232,6 +239,7 @@ def create_use_case_document():
         {
             'id': 'UC15',
             'name': 'Xem Báo Cáo',
+            'description': 'Tổng hợp dữ liệu từ hệ thống để tạo ra các báo cáo trực quan về doanh thu, sản phẩm và hiệu suất bán hàng cho Quản lý.',
             'actor': 'Quản lý',
             'precondition': 'Quản lý đã đăng nhập',
             'postcondition': 'Báo cáo được hiển thị cho quản lý',
@@ -263,6 +271,7 @@ def create_use_case_document():
         rows = [
             ('ID', detail['id']),
             ('Tên Use Case', detail['name']),
+            ('Mô Tả', detail['description']),
             ('Actor Chính', detail['actor']),
             ('Tiền Điều Kiện', detail['precondition']),
             ('Hậu Điều Kiện', detail['postcondition']),

@@ -8,7 +8,7 @@ const Kitchen = () => {
   const [orders, setOrders] = useState([
     {
       _id: '1',
-      orderNumber: '#1001',
+      orderNumber: 'ORD1001',
       customerName: 'Nguyễn Văn A',
       items: [
         { name: 'Combo Gà Rán Truyền Thống', quantity: 2 },
@@ -20,7 +20,7 @@ const Kitchen = () => {
     },
     {
       _id: '2',
-      orderNumber: '#1002',
+      orderNumber: 'ORD1002',
       customerName: 'Trần Thị B',
       items: [
         { name: 'Burger Tôm', quantity: 1 },
@@ -32,7 +32,7 @@ const Kitchen = () => {
     },
     {
       _id: '3',
-      orderNumber: '#1003',
+      orderNumber: 'ORD1003',
       customerName: 'Lê Văn C',
       items: [
         { name: 'Cơm Gà Giòn Cay', quantity: 1 },
@@ -44,7 +44,7 @@ const Kitchen = () => {
     },
     {
       _id: '4',
-      orderNumber: '#1004',
+      orderNumber: 'ORD1004',
       customerName: 'Phạm Thị D',
       items: [
         { name: 'Gà Rán (3 miếng)', quantity: 1 },
@@ -56,7 +56,7 @@ const Kitchen = () => {
     },
     {
       _id: '5',
-      orderNumber: '#1005',
+      orderNumber: 'ORD1005',
       customerName: 'Hoàng Văn E',
       items: [
         { name: 'Combo Nhóm (4 người)', quantity: 1 }

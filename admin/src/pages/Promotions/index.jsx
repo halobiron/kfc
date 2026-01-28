@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiPlus, FiEdit2, FiTrash2, FiGift, FiPercent, FiCalendar } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiGift, FiPercent } from 'react-icons/fi';
 import StatCard from '../../components/StatCard';
 import './promotions.css';
 
@@ -211,7 +211,7 @@ const Promotions = () => {
                   const usagePercent = getUsagePercentage(promotion.usedCount, promotion.maxUsage);
                   return (
                     <tr key={promotion._id}>
-                      <td className="ps-4 fw-bold">P{1000 + index + 1}</td>
+                      <td className="ps-4 fw-bold">PRO{1000 + index + 1}</td>
                       <td>
                         <div className="d-flex align-items-center gap-2">
                           <FiGift className="text-primary" />
