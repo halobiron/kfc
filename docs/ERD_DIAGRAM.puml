@@ -1,0 +1,249 @@
+@startuml ERD_KFC_System
+skinparam linetype ortho
+
+' Định nghĩa màu sắc
+skinparam class {
+    BackgroundColor<<core>> LightYellow
+    BackgroundColor<<auth>> LightCyan
+    BackgroundColor<<transaction>> LightGreen
+    BackgroundColor<<config>> LavenderBlush
+}
+
+title Entity Relationship Diagram - Hệ Thống Quản Lý KFC
+
+' ================== ENTITIES ==================
+
+entity "User (Người dùng)" as User <<auth>> {
+    * _id : ObjectId <<PK>>
+    --
+    * name : String
+    * email : String <<unique>>
+    * password : String (hashed)
+    * phone : String
+    * role : Enum
+      - admin
+      - cashier (thu ngân)
+      - receptionist (lễ tân)
+      - chef (đầu bếp)
+      - warehouse (kho)
+      - customer (khách hàng)
+    * isActive : Boolean
+    * createdAt : DateTime
+    * updatedAt : DateTime
+}
+
+entity "Product (Sản phẩm)" as Product <<core>> {
+    * _id : ObjectId <<PK>>
+    --
+    * title : String
+    description : String
+    * price : Number
+    * stock : Number
+    productImage : String (URL)
+    # categoryId : ObjectId <<FK>>
+    * createdAt : DateTime
+    * updatedAt : DateTime
+}
+
+entity "Category (Danh mục)" as Category <<config>> {
+    * _id : ObjectId <<PK>>
+    --
+    * name : String
+    description : String
+    slug : String <<unique>>
+    * isActive : Boolean
+    productCount : Number
+    * createdAt : DateTime
+    * updatedAt : DateTime
+}
+
+entity "Ingredient (Nguyên liệu)" as Ingredient <<core>> {
+    * _id : ObjectId <<PK>>
+    --
+    * name : String
+    * category : String
+      - Thực phẩm tươi
+      - Gia vị
+      - Nguyên liệu khô
+      - Đồ uống
+    * unit : String (Kg, L, Gói...)
+    * stock : Number
+    * minStock : Number
+    supplier : String
+    supplierContact : String
+    * createdAt : DateTime
+    * updatedAt : DateTime
+}
+
+entity "ProductIngredient (Công thức)" as ProductIngredient {
+    * _id : ObjectId <<PK>>
+    --
+    # productId : ObjectId <<FK>>
+    # ingredientId : ObjectId <<FK>>
+    * quantity : Number
+    * unit : String
+}
+
+entity "Order (Đơn hàng)" as Order <<transaction>> {
+    * _id : ObjectId <<PK>>
+    --
+    * orderNumber : String <<unique>>
+    # customerId : ObjectId <<FK>>
+    # storeId : ObjectId <<FK>>
+    * items : Array[OrderItem]
+    * totalAmount : Number
+    * status : Enum
+      - pending (chờ xác nhận)
+      - confirmed (đã xác nhận)
+      - preparing (đang chuẩn bị)
+      - ready (sẵn sàng)
+      - delivering (đang giao)
+      - completed (hoàn thành)
+      - cancelled (đã hủy)
+    * orderType : Enum
+      - delivery (giao hàng)
+      - pickup (lấy tại cửa hàng)
+    shippingAddress : String
+    customerName : String
+    customerPhone : String
+    note : String
+    # promotionId : ObjectId <<FK>>
+    discountAmount : Number
+    paymentMethod : String
+    paymentStatus : String
+    * createdAt : DateTime
+    * updatedAt : DateTime
+}
+
+entity "OrderItem (Chi tiết đơn hàng)" as OrderItem {
+    --
+    # productId : ObjectId <<FK>>
+    productName : String
+    * quantity : Number
+    * price : Number
+    subtotal : Number
+}
+
+entity "Promotion (Khuyến mãi)" as Promotion <<config>> {
+    * _id : ObjectId <<PK>>
+    --
+    * code : String <<unique>>
+    * description : String
+    * discountType : Enum
+      - fixed (giảm cố định)
+      - percentage (giảm %)
+    * discountValue : Number
+    minOrderValue : Number
+    maxUsage : Number
+    usedCount : Number
+    * startDate : Date
+    * endDate : Date
+    * isActive : Boolean
+    * createdAt : DateTime
+    * updatedAt : DateTime
+}
+
+entity "Store (Cửa hàng)" as Store <<config>> {
+    * _id : ObjectId <<PK>>
+    --
+    * name : String
+    * address : String
+    * city : Enum
+      - hcm (TP. Hồ Chí Minh)
+      - hn (Hà Nội)
+      - dn (Đà Nẵng)
+    * phone : String
+    * openTime : String
+    * isActive : Boolean
+    * createdAt : DateTime
+    * updatedAt : DateTime
+}
+
+entity "Cart (Giỏ hàng)" as Cart <<transaction>> {
+    * _id : ObjectId <<PK>>
+    --
+    # userId : ObjectId <<FK>>
+    * items : Array[CartItem]
+    * totalQuantity : Number
+    * totalAmount : Number
+    * updatedAt : DateTime
+}
+
+entity "CartItem (Sản phẩm trong giỏ)" as CartItem {
+    --
+    # productId : ObjectId <<FK>>
+    * quantity : Number
+    * price : Number
+}
+
+entity "Address (Địa chỉ giao hàng)" as Address <<auth>> {
+    * _id : ObjectId <<PK>>
+    --
+    # userId : ObjectId <<FK>>
+    * label : String
+    * fullAddress : String
+    city : String
+    district : String
+    ward : String
+    * isDefault : Boolean
+    * createdAt : DateTime
+}
+
+' ================== RELATIONSHIPS ==================
+
+' User relationships
+User ||--o{ Order : "đặt hàng"
+User ||--o{ Cart : "sở hữu"
+User ||--o{ Address : "có nhiều"
+
+' Product relationships
+Category ||--o{ Product : "chứa"
+Product ||--o{ ProductIngredient : "có công thức"
+Product ||--o{ OrderItem : "được đặt"
+Product ||--o{ CartItem : "trong giỏ"
+
+' Ingredient relationships
+Ingredient ||--o{ ProductIngredient : "sử dụng trong"
+
+' Order relationships
+Order ||--|{ OrderItem : "chứa"
+Order }o--|| Store : "thuộc về"
+Order }o--o| Promotion : "áp dụng"
+
+' Cart relationships
+Cart ||--|{ CartItem : "chứa"
+
+note right of User
+  <b>Phân quyền:</b>
+  - Admin: Toàn quyền
+  - Cashier: Thu ngân
+  - Receptionist: Lễ tân
+  - Chef: Đầu bếp (nhà bếp)
+  - Warehouse: Quản lý kho
+  - Customer: Khách hàng
+end note
+
+note right of Order
+  <b>Trạng thái đơn hàng:</b>
+  pending → confirmed → preparing
+  → ready → delivering → completed
+  
+  <b>Có thể hủy:</b>
+  pending/confirmed → cancelled
+end note
+
+note right of Ingredient
+  <b>Cảnh báo kho:</b>
+  - stock <= 0: Hết hàng
+  - stock <= minStock: Sắp hết
+  - stock > minStock: Đủ hàng
+end note
+
+note bottom of Product
+  <b>Thông tin sản phẩm:</b>
+  - Image lưu trên Cloudinary
+  - Stock: Tồn kho hiện tại
+  - Liên kết với Category & Ingredients
+end note
+
+@enduml
