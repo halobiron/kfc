@@ -9,32 +9,36 @@ const mockIngredients = {
             stock: 15.5,
             minStock: 50.0,
             category: 'Thực phẩm tươi',
+            supplier: 'CP Food',
+            supplierContact: '028 3836 1234',
             lastUpdated: '2026-01-25T10:00:00Z'
         },
         {
             _id: 'ing_002',
             name: 'Bột chiên xù đặc biệt KFC',
-            unit: 'Bao (10kg)',
-            stock: 45,
-            minStock: 10,
+            unit: 'Kg',
+            stock: 450, // 45 bao * 10kg
+            minStock: 100,
             category: 'Nguyên liệu khô',
+            supplier: 'Ajinomoto',
+            supplierContact: '0912 345 678',
             lastUpdated: '2026-01-25T10:00:00Z'
         },
         {
             _id: 'ing_003',
             name: 'Dầu thực vật tinh luyện',
-            unit: 'Can (20L)',
-            stock: 8,
-            minStock: 15,
+            unit: 'Lít',
+            stock: 160, // 8 can * 20L
+            minStock: 30,
             category: 'Phụ liệu',
             lastUpdated: '2026-01-25T10:00:00Z'
         },
         {
             _id: 'ing_004',
             name: 'Khoai tây cắt thanh đông lạnh',
-            unit: 'Bao (5kg)',
-            stock: 60,
-            minStock: 20,
+            unit: 'Kg',
+            stock: 300, // 60 bao * 5kg
+            minStock: 100,
             category: 'Thực phẩm đông lạnh',
             lastUpdated: '2026-01-25T10:00:00Z'
         },
@@ -50,27 +54,27 @@ const mockIngredients = {
         {
             _id: 'ing_006',
             name: 'Sốt Mayonnaise',
-            unit: 'Thùng (4 can)',
-            stock: 3,
-            minStock: 5,
+            unit: 'Lít',
+            stock: 12, // 3 thung -> assume 4L each? Let's say 4L.
+            minStock: 20,
             category: 'Gia vị',
             lastUpdated: '2026-01-25T10:00:00Z'
         },
         {
             _id: 'ing_007',
             name: 'Bao bì/Giấy gói/Hộp giấy',
-            unit: 'Kiện (500 cái)',
-            stock: 25,
-            minStock: 10,
+            unit: 'Cái',
+            stock: 12500, // 25 kien * 500
+            minStock: 5000,
             category: 'Vật tư',
             lastUpdated: '2026-01-25T10:00:00Z'
         },
         {
             _id: 'ing_008',
             name: 'Nước cốt Pepsi',
-            unit: 'Bình (18L)',
-            stock: 12,
-            minStock: 5,
+            unit: 'Lít',
+            stock: 216, // 12 binh * 18L
+            minStock: 90,
             category: 'Đồ uống',
             lastUpdated: '2026-01-25T10:00:00Z'
         }
@@ -87,13 +91,39 @@ export const getAllIngredients = () => async (dispatch) => {
     });
 };
 
-export const updateIngredientStock = (id, amount) => async (dispatch) => {
-    // Simulate API delay
+
+
+export const createIngredient = (formData) => async (dispatch) => {
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    const newIngredient = {
+        _id: `ing_${Date.now()}`,
+        ...formData,
+        stock: parseFloat(formData.stock) || 0,
+        minStock: parseFloat(formData.minStock) || 0,
+        lastUpdated: new Date().toISOString()
+    };
+
+    mockIngredients.data.unshift(newIngredient);
+
+    dispatch({
+        type: 'ALL_INGREDIENTS',
+        payload: { ...mockIngredients }
+    });
+};
+
+export const updateIngredientStock = (id, amount, updates = {}) => async (dispatch) => {
     await new Promise(resolve => setTimeout(resolve, 300));
 
     const index = mockIngredients.data.findIndex(ing => ing._id === id);
     if (index !== -1) {
         mockIngredients.data[index].stock += parseFloat(amount);
+
+        // Apply other updates (unit, supplier, etc)
+        if (updates.unit) mockIngredients.data[index].unit = updates.unit;
+        if (updates.supplier) mockIngredients.data[index].supplier = updates.supplier;
+        if (updates.supplierContact) mockIngredients.data[index].supplierContact = updates.supplierContact;
+
         mockIngredients.data[index].lastUpdated = new Date().toISOString();
 
         dispatch({
@@ -104,7 +134,6 @@ export const updateIngredientStock = (id, amount) => async (dispatch) => {
             }
         });
 
-        // Refresh the list
         dispatch({
             type: 'ALL_INGREDIENTS',
             payload: { ...mockIngredients }
