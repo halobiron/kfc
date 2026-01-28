@@ -69,26 +69,7 @@ const Nav = () => {
           </li>
         </ul>
 
-        <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>Báo cáo đã lưu</span>
-          <a className="link-secondary" href="#" aria-label="Add a new report">
-            <FiPlusCircle />
-          </a>
-        </h6>
-        <ul className="nav flex-column mb-2">
-          <li className="nav-item">
-            <a className="nav-link" href="#">
-              <FiFileText style={{ marginRight: '8px' }} />
-              Tháng này
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">
-              <FiFileText style={{ marginRight: '8px' }} />
-              Quý trước
-            </a>
-          </li>
-        </ul>
+
       </div>
     </nav>
   )
