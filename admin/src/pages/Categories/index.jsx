@@ -9,10 +9,6 @@ const Categories = () => {
     { _id: '1', name: 'Gà rán', description: 'Các món gà rán giòn tan', slug: 'ga-ran', productCount: 15, isActive: true },
     { _id: '2', name: 'Burger', description: 'Burger nhiều loại với nhân thịt gà, bò', slug: 'burger', productCount: 12, isActive: true },
     { _id: '3', name: 'Cơm', description: 'Các món cơm với gà giòn cay', slug: 'com', productCount: 8, isActive: true },
-    { _id: '4', name: 'Mì Ý', description: 'Mì Ý sốt kem, sốt cà chua', slug: 'mi-y', productCount: 6, isActive: true },
-    { _id: '5', name: 'Nước uống', description: 'Pepsi, 7Up, Lipton, Aquafina', slug: 'nuoc-uong', productCount: 10, isActive: true },
-    { _id: '6', name: 'Món phụ', description: 'Khoai tây chiên, salad, súp', slug: 'mon-phu', productCount: 9, isActive: true },
-    { _id: '7', name: 'Tráng miệng', description: 'Bánh tart trứng, sundae kem', slug: 'trang-mieng', productCount: 5, isActive: false },
   ]);
 
   const [showModal, setShowModal] = useState(false);
@@ -45,7 +41,7 @@ const Categories = () => {
     e.preventDefault();
     if (editMode) {
       // Update category
-      setCategories(categories.map(cat => 
+      setCategories(categories.map(cat =>
         cat._id === currentCategory._id ? currentCategory : cat
       ));
       alert('Cập nhật danh mục thành công!');
@@ -70,7 +66,7 @@ const Categories = () => {
   };
 
   const handleToggleActive = (id) => {
-    setCategories(categories.map(cat => 
+    setCategories(categories.map(cat =>
       cat._id === id ? { ...cat, isActive: !cat.isActive } : cat
     ));
   };

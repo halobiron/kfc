@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllIngredients, updateIngredientStock } from '../../redux/actions/ingredientActions';
-import { FiBox, FiPlus, FiAlertTriangle, FiRefreshCw, FiArrowDown } from 'react-icons/fi';
+import { FiBox, FiPlus, FiAlertTriangle } from 'react-icons/fi';
 import StatCard from '../../components/StatCard';
 import './ingredient.css';
 
@@ -37,15 +37,7 @@ const Ingredient = () => {
             <div className="page-header d-flex justify-content-between align-items-center">
                 <h1 className="page-title">Quản lý Nguyên liệu (Kho)</h1>
                 <div className="d-flex gap-2">
-                    <button
-                        className="btn btn-outline-primary d-flex align-items-center gap-2"
-                        onClick={() => dispatch(getAllIngredients())}
-                    >
-                        <FiRefreshCw /> Làm mới
-                    </button>
-                    <button className="btn btn-primary d-flex align-items-center gap-2 shadow-sm">
-                        <FiBox size={20} /> Thống kê kho
-                    </button>
+
                 </div>
             </div>
 
@@ -70,7 +62,7 @@ const Ingredient = () => {
             </div>
 
             <div className="card">
-                <div className="card-header">Danh mục nguyên liệu thực tế (KFC Mock)</div>
+                <div className="card-header">Danh mục nguyên liệu</div>
                 <div className="table-responsive">
                     <table className="table align-middle">
                         <thead>
@@ -85,7 +77,7 @@ const Ingredient = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {ingredients && ingredients.map((ing, i) => {
+                            {ingredients && ingredients.slice(0, 5).map((ing, i) => {
                                 const status = getStockStatus(ing);
                                 const isLow = ing.stock <= ing.minStock;
 
