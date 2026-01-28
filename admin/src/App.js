@@ -14,6 +14,7 @@ import Staff from './pages/Staff';
 import Promotions from './pages/Promotions';
 import Kitchen from './pages/Kitchen';
 import Stores from './pages/Stores';
+import ChangePassword from './pages/ChangePassword';
 
 import {
   BrowserRouter,
@@ -48,6 +49,7 @@ function App() {
                       <Route path="/promotions" element={<Promotions />} />
                       <Route path="/stores" element={<Stores />} />
                       <Route path="/reports" element={<Reports />} />
+                      <Route path="/change-password" element={<ChangePassword />} />
                     </Routes>
                   </div>
                 </div>
