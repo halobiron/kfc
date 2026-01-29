@@ -2,33 +2,10 @@ import React, { useState, useMemo } from 'react';
 import Card from '../../components/Card';
 import Layout from '../../components/Layout';
 import './product.css';
-
-// Mock products data
-const allProducts = [
-    { id: 1, name: 'Combo Gà Rán 1 Người', price: 89000, category: 'combo', image: 'product1.png' },
-    { id: 2, name: 'Burger Zinger', price: 69000, category: 'burger', image: 'product2.png' },
-    { id: 3, name: 'Gà Popcorn (Vừa)', price: 38000, category: 'ga-ran', image: 'product3.png' },
-    { id: 4, name: 'Gà Rán Giòn 2 Miếng', price: 54000, category: 'ga-ran', image: 'product1.png' },
-    { id: 5, name: 'Burger Tôm', price: 59000, category: 'burger', image: 'product2.png' },
-    { id: 6, name: 'Combo Nhóm 4-6 Người', price: 399000, category: 'combo', image: 'product1.png' },
-    { id: 7, name: 'Cơm Gà Giòn Cay', price: 45000, category: 'com', image: 'product3.png' },
-    { id: 8, name: 'Pepsi Lon', price: 20000, category: 'nuoc-uong', image: 'product2.png' },
-    { id: 9, name: 'Khoai Tây Chiên (L)', price: 25000, category: 'mon-phu', image: 'product1.png' },
-    { id: 10, name: 'Sundae Kem Dâu', price: 15000, category: 'trang-mieng', image: 'product3.png' },
-];
+import { allProducts, categories } from '../../data/products';
 
 const Product = () => {
 
-    const categories = [
-        { id: 'all', name: 'Tất cả', slug: 'all' },
-        { id: 'combo', name: 'Combo', slug: 'combo' },
-        { id: 'ga-ran', name: 'Gà Rán', slug: 'ga-ran' },
-        { id: 'burger', name: 'Burger', slug: 'burger' },
-        { id: 'com', name: 'Cơm', slug: 'com' },
-        { id: 'nuoc-uong', name: 'Nước Uống', slug: 'nuoc-uong' },
-        { id: 'mon-phu', name: 'Món Phụ', slug: 'mon-phu' },
-        { id: 'trang-mieng', name: 'Tráng Miệng', slug: 'trang-mieng' },
-    ];
 
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
@@ -111,7 +88,7 @@ const Product = () => {
                                 <div className="row">
                                     {filteredProducts.map(product => (
                                         <div key={product.id} className="col-md-4 mb-4">
-                                            <Card />
+                                            <Card product={product} />
                                         </div>
                                     ))}
                                 </div>

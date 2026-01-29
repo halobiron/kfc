@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Card from '../../components/Card'
 import Layout from '../../components/Layout'
 import Slider from '../../components/Slider'
+import { allProducts } from '../../data/products'
 import './Home.css'
 
 const Home = () => {
@@ -52,15 +53,11 @@ const Home = () => {
           </div>
 
           <div className="row">
-            <div className="col-md-4">
-              <Card />
-            </div>
-            <div className="col-md-4">
-              <Card />
-            </div>
-            <div className="col-md-4">
-              <Card />
-            </div>
+            {allProducts.slice(0, 3).map(product => (
+              <div key={product.id} className="col-md-4">
+                <Card product={product} />
+              </div>
+            ))}
           </div>
         </div>
       </section>

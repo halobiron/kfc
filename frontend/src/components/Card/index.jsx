@@ -1,26 +1,21 @@
 import React from 'react';
 import './card.css';
-import product1 from '../../assets/img/product1.png'
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/slices/cartSlice';
 import { useNavigate } from 'react-router-dom';
 
-const Card = () => {
+const Card = ({ product }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const product = {
-        id: 1,
-        name: 'Gà rán giòn KFC',
-        price: 520000,
-        image: product1,
-        description: 'Gà rán giòn bên ngoài, mềm bên trong với gia vị bí mật đặc biệt của KFC.'
-    };
+    // Fallback if no product is provided
+    if (!product) return null;
+
 
     return (
         <div className='card-wrapper'>
             <div className="kfc-product-card" onClick={() => navigate(`/product-detail/${product.id}`)} style={{ cursor: 'pointer' }}>
-                <img src={product1} className="product-image" alt={product.name} />
+                <img src={product.image} className="product-image" alt={product.name} />
                 <div className="card-body">
                     {/* Title and Price on same row */}
                     <div className="title-price-row">

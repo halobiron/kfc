@@ -22,7 +22,6 @@
 ### ⚠️ **Điểm yếu cần cải thiện:**
 - ✗ Thiếu các thư viện UI/UX hiện đại
 - ✗ Không có loading states & skeleton screens
-- ✗ Thiếu hệ thống thông báo (toast/notification)
 - ✗ Chưa có error handling tốt
 - ✗ Thiếu animations & transitions
 - ✗ Mock data hardcoded, chưa integrate API thật
@@ -93,61 +92,21 @@
 
 ---
 
-## **I. CẤP ĐỘ QUAN TRỌNG CAO (CRITICAL)** 🔴
-
-### **1. Toast Notification System** 
-**Mức độ:** ⭐⭐⭐⭐⭐ (Bắt buộc)
-
-**Vấn đề hiện tại:**
-- Dùng `alert()` native trong ProductDetail.jsx: `alert('Đã thêm vào giỏ hàng!')`
-- Dùng `alert()` trong Profile.jsx, Cart.jsx, Checkout.jsx
-- Dùng `window.confirm()` native
-- Không có feedback UI đẹp cho user
-
-**Giải pháp:**
-```bash
-npm install react-toastify
-# hoặc
-npm install react-hot-toast
-```
-
-**Files cần sửa:**
-- `src/pages/ProductDetail/index.jsx` - Thay alert bằng toast
-- `src/pages/Cart/index.jsx` - Toast khi xóa item
-- `src/pages/Checkout/index.jsx` - Toast khi đặt hàng
-- `src/pages/Profile/index.jsx` - Toast khi cập nhật thông tin
-- `src/pages/Login/index.jsx` - Toast khi login thành công/thất bại
-- `src/pages/Register/index.jsx` - Toast khi đăng ký
-
-**Ví dụ triển khai:**
-```jsx
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-// Trong component
-const handleAddToCart = () => {
-  dispatch(addToCart({ ...product, quantity }));
-  toast.success('Đã thêm vào giỏ hàng!', {
-    position: "top-right",
-    autoClose: 3000,
-  });
-};
-```
-
-**Lợi ích cho BTL:**
-- UI/UX chuyên nghiệp hơn rất nhiều
-- Dễ demo và gây ấn tượng
-- Giảng viên dễ nhận thấy sự khác biệt
 
 ---
 
-### **2. Loading States & Skeleton Screens**
+### **1. Loading States & Skeleton Screens**
 **Mức độ:** ⭐⭐⭐⭐⭐ (Bắt buộc)
 
 **Vấn đề hiện tại:**
 - Không có loading indicator khi fetch data
 - Các trang render trống trước khi có data
 - Trải nghiệm người dùng kém khi network chậm
+
+**Tham khảo mẫu:**
+- **Repo:** `kfc-mern`
+- **Files:** `frontend/src/components/HeroSkeleton.js`, `ProductPageSkeleton.js`
+- **Cách làm:** Repo này sử dụng `react-content-loader` để tạo khung xương (skeleton) khớp với layout thật.
 
 **Giải pháp:**
 ```bash
@@ -165,10 +124,11 @@ src/components/Skeleton/
   └── CategorySkeleton.jsx
 ```
 
-**Ví dụ triển khai:**
+**Ví dụ triển khai (Dựa trên kfc-mern):**
 ```jsx
 import ContentLoader from 'react-content-loader';
 
+// Tham khảo HeroSkeleton.js trong kfc-mern
 const ProductCardSkeleton = () => (
   <ContentLoader 
     speed={2}
@@ -178,6 +138,7 @@ const ProductCardSkeleton = () => (
     backgroundColor="#f3f3f3"
     foregroundColor="#ecebeb"
   >
+    {/* Vẽ các hình khối khớp với Card thật */}
     <rect x="0" y="0" rx="8" ry="8" width="280" height="200" /> 
     <rect x="10" y="220" rx="4" ry="4" width="260" height="20" /> 
     <rect x="10" y="250" rx="3" ry="3" width="150" height="15" /> 
@@ -454,7 +415,7 @@ export default productSlice.reducer;
 
 ---
 
-### **5. Animations & Transitions**
+### **4. Animations & Transitions**
 **Mức độ:** ⭐⭐⭐⭐ (Quan trọng)
 
 **Vấn đề hiện tại:**
@@ -462,14 +423,19 @@ export default productSlice.reducer;
 - Thiếu hover effects mượt mà
 - Không có page transitions
 
+**Tham khảo mẫu:**
+- **Repo:** `KFC-CLONE` (trong thư mục `kfc-clone-by-iesparag`)
+- **Tech:** `framer-motion`
+- **Mô tả:** Repo này sử dụng `framer-motion` rất tốt cho các hiệu ứng xuất hiện (fadeIn), hover card (scale up), và chuyển trang. Hãy chú ý cách họ dùng component `motion.div`.
+
 **Giải pháp:**
 ```bash
 npm install framer-motion
 ```
 
-**Triển khai:**
+**Triển khai chi tiết:**
 
-**a) Page Transitions:**
+**a) Page Transitions (Hiệu ứng chuyển trang):**
 ```jsx
 // src/components/Layout/index.jsx
 import { motion } from 'framer-motion';
@@ -497,7 +463,7 @@ const Layout = ({ children }) => (
 );
 ```
 
-**b) Card Animations:**
+**b) Card Animations (Hiệu ứng Hover Card):**
 ```jsx
 // src/components/Card/index.jsx
 import { motion } from 'framer-motion';
@@ -505,7 +471,7 @@ import { motion } from 'framer-motion';
 const Card = ({ product }) => (
   <motion.div
     className="card"
-    whileHover={{ scale: 1.05, y: -5 }}
+    whileHover={{ scale: 1.05, y: -5, boxShadow: "0px 10px 20px rgba(0,0,0,0.1)" }}
     whileTap={{ scale: 0.95 }}
     transition={{ type: "spring", stiffness: 300 }}
   >
@@ -514,7 +480,7 @@ const Card = ({ product }) => (
 );
 ```
 
-**c) Modal Animations:**
+**c) Modal Animations (Hiệu ứng Modal):**
 ```jsx
 // src/components/Modal/index.jsx
 import { motion, AnimatePresence } from 'framer-motion';
@@ -545,7 +511,7 @@ const Modal = ({ isOpen, onClose, children }) => (
 );
 ```
 
-**d) List Animations:**
+**d) List Animations (Hiệu ứng danh sách xuất hiện lần lượt):**
 ```jsx
 const listVariants = {
   hidden: { opacity: 0 },
@@ -571,39 +537,25 @@ const itemVariants = {
 </motion.div>
 ```
 
-**e) CSS Transitions (Alternative/Supplement):**
+**e) CSS Transitions (Alternative SIMPLE):**
+Nếu không muốn dùng library, có thể dùng CSS thuần như sau:
 ```css
 /* src/App.css */
-.page-transition-enter {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.page-transition-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 300ms, transform 300ms;
-}
-
 .card {
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
 .btn {
-  transition: all 0.2s ease;
-}
-
-.btn:hover {
-  transform: scale(1.05);
+  transition: transform 0.2s ease;
 }
 
 .btn:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
 }
 ```
 
@@ -889,185 +841,6 @@ const Home = () => {
 
 ---
 
-### **8. Google Maps Integration**
-**Mức độ:** ⭐⭐⭐⭐
-
-**Vấn đề hiện tại:**
-- StoreSystem page chỉ list text
-- Không có map visualization
-- Không có store locator
-
-**Giải pháp:**
-```bash
-npm install @react-google-maps/api
-```
-
-**Triển khai:**
-```jsx
-// src/pages/StoreSystem/index.jsx
-import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
-
-const StoreSystem = () => {
-  const [selectedStore, setSelectedStore] = useState(null);
-  const [userLocation, setUserLocation] = useState(null);
-  const [stores, setStores] = useState([
-    {
-      id: 1,
-      name: 'KFC Vincom Bà Triệu',
-      address: '191 Bà Triệu, Hai Bà Trưng, Hà Nội',
-      phone: '1900 1166',
-      hours: '9:00 - 22:00',
-      position: { lat: 21.0118, lng: 105.8479 }
-    },
-    // ... more stores
-  ]);
-
-  const mapContainerStyle = {
-    width: '100%',
-    height: '600px'
-  };
-
-  const center = userLocation || { lat: 21.0285, lng: 105.8542 }; // Hà Nội
-
-  useEffect(() => {
-    // Get user location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
-        },
-        (error) => console.error('Error getting location:', error)
-      );
-    }
-  }, []);
-
-  const findNearestStore = () => {
-    if (!userLocation) {
-      toast.warning('Vui lòng cho phép truy cập vị trí');
-      return;
-    }
-
-    // Calculate distances and find nearest
-    const storesWithDistance = stores.map(store => ({
-      ...store,
-      distance: calculateDistance(userLocation, store.position)
-    }));
-
-    const nearest = storesWithDistance.sort((a, b) => a.distance - b.distance)[0];
-    setSelectedStore(nearest);
-    // Center map on nearest store
-  };
-
-  return (
-    <Layout>
-      <div className="store-system-page">
-        <div className="container-fluid">
-          <div className="row">
-            {/* Left: Store List */}
-            <div className="col-lg-4">
-              <div className="store-list">
-                <div className="search-store">
-                  <input 
-                    type="text" 
-                    placeholder="Tìm cửa hàng gần bạn..."
-                  />
-                  <button onClick={findNearestStore}>
-                    <i className="bi bi-geo-alt-fill"></i> Tìm gần tôi
-                  </button>
-                </div>
-
-                <div className="stores-container">
-                  {stores.map(store => (
-                    <div 
-                      key={store.id}
-                      className={`store-item ${selectedStore?.id === store.id ? 'active' : ''}`}
-                      onClick={() => setSelectedStore(store)}
-                    >
-                      <h4>{store.name}</h4>
-                      <p><i className="bi bi-geo-alt"></i> {store.address}</p>
-                      <p><i className="bi bi-telephone"></i> {store.phone}</p>
-                      <p><i className="bi bi-clock"></i> {store.hours}</p>
-                      <button className="btn-direction">Chỉ đường</button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Map */}
-            <div className="col-lg-8">
-              <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
-                <GoogleMap
-                  mapContainerStyle={mapContainerStyle}
-                  center={center}
-                  zoom={13}
-                >
-                  {/* User location marker */}
-                  {userLocation && (
-                    <Marker
-                      position={userLocation}
-                      icon={{
-                        url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-                      }}
-                    />
-                  )}
-
-                  {/* Store markers */}
-                  {stores.map(store => (
-                    <Marker
-                      key={store.id}
-                      position={store.position}
-                      onClick={() => setSelectedStore(store)}
-                      icon={{
-                        url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
-                      }}
-                    />
-                  ))}
-
-                  {/* Info Window */}
-                  {selectedStore && (
-                    <InfoWindow
-                      position={selectedStore.position}
-                      onCloseClick={() => setSelectedStore(null)}
-                    >
-                      <div className="store-info-window">
-                        <h4>{selectedStore.name}</h4>
-                        <p>{selectedStore.address}</p>
-                        <a 
-                          href={`https://www.google.com/maps/dir/?api=1&destination=${selectedStore.position.lat},${selectedStore.position.lng}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Chỉ đường
-                        </a>
-                      </div>
-                    </InfoWindow>
-                  )}
-                </GoogleMap>
-              </LoadScript>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Layout>
-  );
-};
-
-function calculateDistance(pos1, pos2) {
-  const R = 6371; // Earth radius in km
-  const dLat = (pos2.lat - pos1.lat) * Math.PI / 180;
-  const dLng = (pos2.lng - pos1.lng) * Math.PI / 180;
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(pos1.lat * Math.PI / 180) * Math.cos(pos2.lat * Math.PI / 180) *
-    Math.sin(dLng/2) * Math.sin(dLng/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
-}
-```
 
 ---
 
@@ -2174,8 +1947,8 @@ describe('Card Component', () => {
 ## 📝 **CHECKLIST THỰC HIỆN ƯU TIÊN**
 
 ### **Tuần 1: Core Improvements** (Bắt buộc - Critical)
-- [ ] Cài đặt react-toastify và thay thế tất cả alert()
-- [ ] Tạo Loading skeleton components
+- [✅] Cài đặt react-toastify và thay thế tất cả alert() (ĐÃ LÀM)
+- [ ] Tạo Loading skeleton components (Tham khảo kfc-mern)
 - [ ] Setup axios với interceptors
 - [ ] Tạo Error Boundary và 404 page
 - [ ] Thêm empty states cho các pages
@@ -2188,7 +1961,6 @@ describe('Card Component', () => {
 - [ ] Cập nhật Checkout flow
 
 ### **Tuần 3: Advanced Features** (Tùy chọn - Nice to have)
-- [ ] Google Maps integration cho StoreSystem
 - [ ] Reviews & Ratings system
 - [ ] Favorites/Wishlist feature
 - [ ] i18n setup (optional)
@@ -2261,11 +2033,10 @@ Dự án frontend của bạn có **nền tảng tốt** với:
 - ✅ Basic responsive
 
 **Cần bổ sung ngay** để đạt điểm cao:
-1. Toast notifications (Bắt buộc)
-2. Loading states (Bắt buộc)
-3. Error handling (Bắt buộc)
-4. Animations (Quan trọng)
-5. API integration (Quan trọng)
+1. Loading states (Bắt buộc - Xem kfc-mern)
+2. Error handling (Bắt buộc)
+3. Animations (Quan trọng - Xem KFC-CLONE)
+4. API integration (Quan trọng)
 
 **Bonus points:**
 - Google Maps
