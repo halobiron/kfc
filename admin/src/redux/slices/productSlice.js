@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '../../utils/api';
 import product1 from '@shared-assets/img/product1.png';
 import product2 from '@shared-assets/img/product2.png';
 import product3 from '@shared-assets/img/product3.png';
@@ -42,7 +42,7 @@ const mockProducts = {
 export const getAllProducts = createAsyncThunk(
     'products/getAllProducts',
     async () => {
-        const response = await axios.get(`http://localhost:9000/api/v1/products`);
+        const response = await api.get('/products');
         return response.data;
     }
 );
