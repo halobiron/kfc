@@ -14,10 +14,7 @@
     flex-direction: column;
 }
 
-.kfc-product-card:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px);
-}
+
 
 /* Product Image */
 .product-image {
@@ -81,10 +78,4 @@
     cursor: pointer;
     transition: all 0.3s;
     text-transform: capitalize;
-}
-
-.btn-add:hover {
-    background-color: var(--kfc-red);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(228, 0, 43, 0.3);
 }

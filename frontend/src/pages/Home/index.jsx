@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Card from '../../components/Card'
 import Layout from '../../components/Layout'
 import Slider from '../../components/Slider'
+import AnimatedPage from '../../components/AnimatedPage'
 import { allProducts } from '../../data/products'
 import './Home.css'
 
@@ -18,50 +19,52 @@ const Home = () => {
   ];
 
   return (
-    <Layout>
-      <Slider />
+    <AnimatedPage>
+      <Layout>
+        <Slider />
 
-      {/* Category Grid Section */}
-      <section className="home-category-section">
-        <div className="container">
-          <div className="section-header text-start mt-4">
-            <h3>DANH MỤC MÓN ĂN</h3>
-          </div>
-          <div className="row g-3">
-            {categories.map((cat, index) => (
-              <div key={index} className="col-6 col-md-4 col-lg-3">
-                <Link to="/products" className="text-decoration-none text-dark">
-                  <div className="category-card">
-                    <div className="mock-icon">
-                      <i className={`bi ${cat.icon}`}></i>
+        {/* Category Grid Section */}
+        <section className="home-category-section">
+          <div className="container">
+            <div className="section-header text-start mt-4">
+              <h3>DANH MỤC MÓN ĂN</h3>
+            </div>
+            <div className="row g-3">
+              {categories.map((cat, index) => (
+                <div key={index} className="col-6 col-md-4 col-lg-3">
+                  <Link to="/products" className="text-decoration-none text-dark">
+                    <div className="category-card">
+                      <div className="mock-icon">
+                        <i className={`bi ${cat.icon}`}></i>
+                      </div>
+                      <div className="category-title">{cat.title}</div>
                     </div>
-                    <div className="category-title">{cat.title}</div>
-                  </div>
-                </Link>
-              </div>
-            ))}
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Hot Deals / Recommendations Section */}
-      <section className="home-product-section py-5">
-        <div className="container">
-          <div className="section-header text-center">
-            <h3>CÓ THỂ BẠN SẼ THÍCH</h3>
-            <hr className="w-25 mx-auto text-danger border-2 opacity-100" />
-          </div>
+        {/* Hot Deals / Recommendations Section */}
+        <section className="home-product-section py-5">
+          <div className="container">
+            <div className="section-header text-center">
+              <h3>CÓ THỂ BẠN SẼ THÍCH</h3>
+              <hr className="w-25 mx-auto text-danger border-2 opacity-100" />
+            </div>
 
-          <div className="row">
-            {allProducts.slice(0, 3).map(product => (
-              <div key={product.id} className="col-md-4">
-                <Card product={product} />
-              </div>
-            ))}
+            <div className="row">
+              {allProducts.slice(0, 3).map(product => (
+                <div key={product.id} className="col-md-4">
+                  <Card product={product} />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-    </Layout>
+        </section>
+      </Layout>
+    </AnimatedPage>
   )
 }
 
