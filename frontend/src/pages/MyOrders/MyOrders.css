@@ -518,3 +518,14 @@
         padding-left: 0.5rem;
     }
 }
+
+.empty-orders-illustration {
+    width: 200px;
+    height: 200px;
+    background-image: url("https://static.kfcvietnam.com.vn/images/web/empty-cart.png?v=5.0");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0 auto 10px;
+    opacity: 0.8;
+}

@@ -188,7 +188,7 @@ const MyOrders = () => {
 
                     {filteredOrders.length === 0 ? (
                         <div className="empty-orders text-center py-5">
-                            <i className="bi bi-search display-1 text-muted"></i>
+                            <div className="empty-orders-illustration mobile-scale"></div>
                             <h4 className="mt-3">Không tìm thấy đơn hàng nào</h4>
                             <p className="text-muted">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
                             <button

@@ -13,6 +13,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfUse from './pages/TermsOfUse';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorPage from './pages/ErrorPage';
+import OrderSuccess from './pages/OrderSuccess';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -46,6 +47,7 @@ const AnimatedRoutes = () => {
         <Route path="/stores" element={<AnimatedPage><StoreSystem /></AnimatedPage>} />
         <Route path="/privacy-policy" element={<AnimatedPage><PrivacyPolicy /></AnimatedPage>} />
         <Route path="/terms-of-use" element={<AnimatedPage><TermsOfUse /></AnimatedPage>} />
+        <Route path="/order-success" element={<AnimatedPage><OrderSuccess /></AnimatedPage>} />
         <Route path="*" element={<AnimatedPage><ErrorPage showLayout={false} /></AnimatedPage>} />
       </Routes>
     </AnimatePresence>

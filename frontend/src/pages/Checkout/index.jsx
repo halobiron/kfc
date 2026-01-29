@@ -140,8 +140,8 @@ const Checkout = () => {
                 { autoClose: 5000 }
             );
 
-            // Redirect to My Orders
-            navigate('/my-orders');
+            // Redirect to Success Page
+            navigate('/order-success');
         }, 1500);
     };
 
@@ -159,7 +159,7 @@ const Checkout = () => {
                         {/* Delivery Type Selection */}
                         <div className="form-card">
                             <h3 className="form-title">
-                                <i className="bi bi-truck"></i>
+                                <i className="bi bi-bicycle"></i>
                                 Hình Thức Nhận Hàng
                             </h3>
                             <div className="delivery-type-options" style={{ display: 'flex', gap: '15px' }}>
@@ -213,7 +213,7 @@ const Checkout = () => {
                                         style={{ position: 'absolute', top: '10px', left: '10px' }}
                                     />
                                     <i className="bi bi-shop" style={{ fontSize: '2rem', color: '#e4002b', display: 'block', marginBottom: '10px' }}></i>
-                                    <div style={{ fontWeight: '600', fontSize: '1rem', marginBottom: '5px' }}>Lấy tại quầy</div>
+                                    <div style={{ fontWeight: '600', fontSize: '1rem', marginBottom: '5px' }}>Đặt Hẹn Đến Lấy</div>
                                     <div style={{ fontSize: '0.85rem', color: '#666', marginBottom: '5px' }}>Tự đến cửa hàng lấy món</div>
                                     <div style={{ fontSize: '0.85rem', color: '#28a745', fontWeight: 'bold' }}>Miễn phí ship</div>
                                 </div>
@@ -272,7 +272,7 @@ const Checkout = () => {
                                                 className="form-control-custom"
                                                 name="note"
                                                 rows="2"
-                                                placeholder="Ví dụ: Gọi trước khi giao, để ở quầy lễ tân..."
+                                                placeholder="Ví dụ: Lấy nhiều tương ớt, không lấy đá, giao lên tận phòng..."
                                                 value={formData.note}
                                                 onChange={handleInputChange}
                                             ></textarea>
