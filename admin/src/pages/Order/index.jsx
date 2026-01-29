@@ -1,109 +1,97 @@
 import React from 'react'
+import { FiEye } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 const Order = () => {
   return (
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Orders</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            This week
-          </button>
-        </div>
+    <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+      <div className="page-header">
+        <h1 className="page-title">Đơn hàng</h1>
       </div>
 
-      <h2>Section title</h2>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,002</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>data</td>
-              <td>rich</td>
-              <td>dashboard</td>
-              <td>tabular</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>information</td>
-              <td>placeholder</td>
-              <td>illustrative</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,004</td>
-              <td>text</td>
-              <td>random</td>
-              <td>layout</td>
-              <td>dashboard</td>
-            </tr>
-            <tr>
-              <td>1,005</td>
-              <td>dashboard</td>
-              <td>irrelevant</td>
-              <td>text</td>
-              <td>placeholder</td>
-            </tr>
-            <tr>
-              <td>1,006</td>
-              <td>dashboard</td>
-              <td>illustrative</td>
-              <td>rich</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,007</td>
-              <td>placeholder</td>
-              <td>tabular</td>
-              <td>information</td>
-              <td>irrelevant</td>
-            </tr>
-            <tr>
-              <td>1,008</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,009</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            
-           
-          </tbody>
-        </table>
+      <div className="card">
+        <div className="card-header">Đơn hàng gần đây</div>
+        <div className="table-responsive">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Mã đơn hàng</th>
+                <th scope="col">Khách hàng</th>
+                <th scope="col">Sản phẩm</th>
+                <th scope="col">Tổng tiền</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="fw-bold">ORD1001</td>
+                <td>Nguyen Van A</td>
+                <td>Combo Gà Rán Truyền Thống (x2), Pepsi (L)</td>
+                <td>189.000 đ</td>
+                <td><span className="badge badge-success">Hoàn thành</span></td>
+                <td>
+                  <Link to="/orders/1001" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
+                    <FiEye style={{ marginRight: '4px' }} />
+                    Xem
+                  </Link>
+                </td>
+              </tr>
+              <tr>
+                <td className="fw-bold">ORD1002</td>
+                <td>Tran Thi B</td>
+                <td>Burger Tôm, Khoai tây chiên (M)</td>
+                <td>75.000 đ</td>
+                <td><span className="badge badge-warning">Đang xử lý</span></td>
+                <td>
+                  <Link to="/orders/1002" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
+                    <FiEye style={{ marginRight: '4px' }} />
+                    Xem
+                  </Link>
+                </td>
+              </tr>
+              <tr>
+                <td className="fw-bold">ORD1003</td>
+                <td>Le Van C</td>
+                <td>Cơm Gà Giòn Cay, 7Up (M)</td>
+                <td>55.000 đ</td>
+                <td><span className="badge badge-warning">Chờ xác nhận</span></td>
+                <td>
+                  <Link to="/orders/1003" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
+                    <FiEye style={{ marginRight: '4px' }} />
+                    Xem
+                  </Link>
+                </td>
+              </tr>
+              <tr>
+                <td className="fw-bold">ORD1004</td>
+                <td>Pham Thi D</td>
+                <td>Gà Rán (3 miếng), Salad Bắp Cải</td>
+                <td>120.000 đ</td>
+                <td><span className="badge badge-success">Hoàn thành</span></td>
+                <td>
+                  <Link to="/orders/1004" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
+                    <FiEye style={{ marginRight: '4px' }} />
+                    Xem
+                  </Link>
+                </td>
+              </tr>
+              <tr>
+                <td className="fw-bold">ORD1005</td>
+                <td>Hoang Van E</td>
+                <td>Combo Nhóm (4 người)</td>
+                <td>350.000 đ</td>
+                <td><span className="badge badge-danger">Đã hủy</span></td>
+                <td>
+                  <Link to="/orders/1005" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
+                    <FiEye style={{ marginRight: '4px' }} />
+                    Xem
+                  </Link>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </main>
   )

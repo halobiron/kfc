@@ -1,64 +1,106 @@
 import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import { getAllProducts } from '../../redux/actions/productActions'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { getAllProductsMock } from '../../redux/slices/productSlice'
 import AddModal from './AddModal';
 import './product.css';
+import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
 
 const Product = () => {
 
   const dispatch = useDispatch();
-  const {products} = useSelector(state=>state.products)
+  const navigate = useNavigate();
+  const { products } = useSelector(state => state.products)
 
   const [showModal, setShowModal] = useState(false)
 
-  useEffect(()=>{
-    dispatch(getAllProducts());
-  }, [])
+  useEffect(() => {
+    dispatch(getAllProductsMock());
+  }, [dispatch])
 
   return (
     <>
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Products</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" onClick={()=>setShowModal(true)}>Add New</button>
+      <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <div className="page-header d-flex justify-content-between align-items-center">
+          <h1 className="page-title">Quản lý Món ăn</h1>
+          <button
+            type="button"
+            className="btn btn-primary d-flex align-items-center gap-2 shadow-sm"
+            onClick={() => setShowModal(true)}
+          >
+            <FiPlus size={20} /> Thêm món mới
+          </button>
+        </div>
+
+        <div className="card">
+          <div className="card-header">Danh sách món ăn</div>
+          <div className="table-responsive">
+            <table className="table align-middle">
+              <thead>
+                <tr>
+                  <th scope="col" className="ps-4">#</th>
+                  <th scope="col">Tên món</th>
+                  <th scope="col">Mô tả</th>
+                  <th scope="col" className="text-end">Giá bán</th>
+                  <th scope="col" className="text-center">Tồn kho</th>
+                  <th scope="col" className="text-end pe-4">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  products.data && products.data.map((product, i) => {
+                    return (
+                      <tr key={product._id}>
+                        <td className="ps-4 fw-bold">PRD{1000 + i + 1}</td>
+                        <td>
+                          <div className="d-flex align-items-center gap-3">
+                            <div className="product-img-wrapper">
+                              <img
+                                src={product.image}
+                                alt={product.title}
+                                className="product-thumbnail"
+                                onError={(e) => {
+                                  e.target.src = 'https://via.placeholder.com/50x50?text=KFC';
+                                }}
+                              />
+                            </div>
+                            <div className="fw-bold">{product.title}</div>
+                          </div>
+                        </td>
+                        <td className="text-muted small" style={{ maxWidth: '300px' }}>{product.description}</td>
+                        <td className="text-end fw-bold text-danger">
+                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                        </td>
+                        <td className="text-center">
+                          <span className={`badge ${product.stock > 10 ? 'badge-success' : 'badge-warning'}`}>
+                            {product.stock > 0 ? 'Còn hàng' : 'Hết hàng'} ({product.stock})
+                          </span>
+                        </td>
+                        <td className="text-end pe-4">
+                          <button
+                            className="btn-action btn-edit border-0 d-inline-flex align-items-center"
+                            onClick={() => navigate(`/products/${product._id}`)}
+                          >
+                            <FiEdit2 style={{ marginRight: '4px' }} />
+                            Sửa
+                          </button>
+                          <button className="btn-action btn-delete border-0 d-inline-flex align-items-center">
+                            <FiTrash2 style={{ marginRight: '4px' }} />
+                            Xóa
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  })
+                }
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">Description</th>
-              <th scope="col">Price</th>
-              <th scope="col">Stock</th>
-            </tr>
-          </thead>
-          <tbody>
-
-            {
-              products.data && products.data.map((product, i)=>{
-                return (
-                  <tr key={product._id}>
-                    <td>{i+1}</td>
-                    <td>{product.title}</td>
-                    <td>{product.description}</td>
-                    <td>{product.price}</td>
-                    <td>{product.stock}</td>
-                  </tr>
-                )
-              })
-            }
-          </tbody>
-        </table>
-      </div>
-    </main>
-    {showModal ? <AddModal setShowModal={setShowModal}/> : null}
+      </main>
+      {showModal ? <AddModal setShowModal={setShowModal} /> : null}
     </>
   )
 }

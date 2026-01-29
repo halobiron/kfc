@@ -1,0 +1,10 @@
+
+.form-check-input:checked {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.badge {
+  padding: 0.4em 0.8em;
+  font-weight: 500;
+}

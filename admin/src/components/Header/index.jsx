@@ -1,21 +1,31 @@
 import React from 'react'
 import Nav from '../Nav'
+import { FiSearch, FiLogOut } from 'react-icons/fi';
+import kfcLogo from '@shared-assets/img/footer-logo.png';
 const Header = () => {
   return (
     <>
-      <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a>
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+      <header className="navbar navbar-dark sticky-top flex-md-nowrap p-0 shadow-sm" style={{ backgroundColor: 'var(--kfc-red)', borderBottom: 'none' }}>
+        <a className="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#" style={{ color: 'var(--kfc-red)' }}>
+          <img src={kfcLogo} alt="KFC" style={{ height: '30px' }} />
+        </a>
+        <button className="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
         </button>
-        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"/>
-        <div class="navbar-nav">
-            <div class="nav-item text-nowrap">
-            <a class="nav-link px-3" href="#">Sign out</a>
-            </div>
+        <div className="w-100 d-flex align-items-center px-3">
+          <FiSearch style={{ marginRight: '10px', color: 'var(--kfc-white)' }} />
+          <input className="form-control form-control-dark w-100" type="text" placeholder="Tìm kiếm..." aria-label="Search" style={{ borderRadius: '4px' }} />
+        </div>
+        <div className="navbar-nav">
+          <div className="nav-item text-nowrap">
+            <a className="nav-link px-3 d-flex align-items-center" href="#" style={{ color: 'var(--kfc-white)' }}>
+              <FiLogOut style={{ marginRight: '5px' }} />
+              Đăng xuất
+            </a>
+          </div>
         </div>
       </header>
-      <Nav/>
+      <Nav />
     </>
   )
 }

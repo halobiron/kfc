@@ -1,12 +1,10 @@
-import {combineReducers, createStore, applyMiddleware } from 'redux';
-import { productReducer } from './reducers/productReducer';
-import thunkMiddleware from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
-const composedEnhancer = composeWithDevTools(applyMiddleware(thunkMiddleware))
+import { configureStore } from '@reduxjs/toolkit';
+import productReducer from './slices/productSlice';
+import ingredientReducer from './slices/ingredientSlice';
 
-const rootReducer = combineReducers({
-    products: productReducer
-})
-
-
-export const store = createStore(rootReducer, composedEnhancer)
+export const store = configureStore({
+    reducer: {
+        products: productReducer,
+        ingredients: ingredientReducer
+    },
+});

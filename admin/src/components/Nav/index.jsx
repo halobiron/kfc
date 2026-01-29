@@ -1,81 +1,81 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiBox, FiTag, FiPackage, FiMapPin, FiLock } from 'react-icons/fi';
 
 const Nav = () => {
   return (
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-      <div class="position-sticky pt-3">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <Link class="nav-link active" aria-current="page" to="/home">
-              <span data-feather="home"></span>
-              Dashboard
+    <nav id="sidebarMenu" className="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse">
+      <div className="position-sticky pt-3">
+        <ul className="nav flex-column">
+          <li className="nav-item">
+            <Link className="nav-link active" aria-current="page" to="/home">
+              <FiHome style={{ marginRight: '8px' }} />
+              Tổng quan
             </Link>
           </li>
-          <li class="nav-item">
-            <Link class="nav-link" to="/orders">
-              <span data-feather="file"></span>
-              Orders
+          <li className="nav-item">
+            <Link className="nav-link" to="/orders">
+              <FiFileText style={{ marginRight: '8px' }} />
+              Đơn hàng
             </Link>
           </li>
-          <li class="nav-item">
-            <Link class="nav-link" to="/products">
-              <span data-feather="shopping-cart"></span>
-              Products
+          <li className="nav-item">
+            <Link className="nav-link" to="/kitchen">
+              <FiPackage style={{ marginRight: '8px' }} />
+              Bếp
             </Link>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="users"></span>
-              Customers
-            </a>
+          <li className="nav-item">
+            <Link className="nav-link" to="/products">
+              <FiShoppingCart style={{ marginRight: '8px' }} />
+              Sản phẩm
+            </Link>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="bar-chart-2"></span>
-              Reports
-            </a>
+          <li className="nav-item">
+            <Link className="nav-link" to="/categories">
+              <FiTag style={{ marginRight: '8px' }} />
+              Danh mục
+            </Link>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="layers"></span>
-              Integrations
-            </a>
+          <li className="nav-item">
+            <Link className="nav-link" to="/ingredients">
+              <FiBox style={{ marginRight: '8px' }} />
+              Nguyên liệu
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/staff">
+              <FiUsers style={{ marginRight: '8px' }} />
+              Người dùng
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/promotions">
+              <FiTag style={{ marginRight: '8px' }} />
+              Khuyến mãi
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/reports">
+              <FiBarChart2 style={{ marginRight: '8px' }} />
+              Báo cáo
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/stores">
+              <FiMapPin style={{ marginRight: '8px' }} />
+              Cửa hàng
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/change-password">
+              <FiLock style={{ marginRight: '8px' }} />
+              Đổi mật khẩu
+            </Link>
           </li>
         </ul>
 
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>Saved reports</span>
-          <a class="link-secondary" href="#" aria-label="Add a new report">
-            <span data-feather="plus-circle"></span>
-          </a>
-        </h6>
-        <ul class="nav flex-column mb-2">
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Current month
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Last quarter
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Social engagement
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Year-end sale
-            </a>
-          </li>
-        </ul>
+
       </div>
     </nav>
   )

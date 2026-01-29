@@ -1,18 +1,212 @@
-.headerWrapper{
+/* Header Wrapper */
+.kfc-header {
+    background: white;
+}
+
+/* Main Navigation */
+.main-nav {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.navbar-brand img {
+    height: 40px;
+    width: auto;
+}
+
+.nav-link {
+    font-size: 1rem;
+    font-weight: 700;
+    transition: color 0.2s ease;
+    letter-spacing: 0.5px;
+}
+
+.nav-link:hover {
+    color: var(--kfc-red) !important;
+}
+
+
+/* Hamburger Menu */
+.hamburger-menu {
+    background: none;
+    border: none;
+    color: var(--kfc-black);
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.hamburger-menu:hover {
+    color: var(--kfc-red);
+}
+
+/* Secondary Bar */
+.secondary-bar {
+    background-color: var(--kfc-dark);
+    color: white;
+}
+
+/* Order Type Toggle */
+.order-type-toggle {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    gap: 0.5rem;
 }
-.auth-link ul{
+
+.order-type-item {
+    background: transparent;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
     display: flex;
-    list-style-type: none;
-}
-.auth-link ul li{
-    margin: 0 8px;
-}
-.auth-link ul li a{
-    text-decoration: none;
+    align-items: center;
     text-transform: uppercase;
-    font-weight: bold;
-    color: #000;
+    letter-spacing: 0.5px;
+    user-select: none;
+    cursor: default;
+}
+
+.order-type-item i {
+    color: var(--kfc-red);
+    font-size: 1.1rem;
+}
+
+/* CTA Button */
+.cta-button {
+    background-color: var(--kfc-red);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cta-button:hover {
+    background-color: #c41230;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(228, 0, 43, 0.3);
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    min-width: 200px;
+    z-index: 1050;
+}
+
+@media (max-width: 576px) {
+    .dropdown-menu {
+        min-width: 160px;
+        max-width: calc(100vw - 32px);
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+}
+
+.dropdown-item {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--kfc-black);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(228, 0, 43, 0.1);
+    color: var(--kfc-red);
+    padding-left: 1.5rem;
+}
+
+.dropdown-item i {
+    transition: transform 0.2s ease;
+}
+
+.dropdown-item:hover i {
+    transform: translateX(2px);
+}
+
+.dropdown-divider {
+    margin: 0.5rem 0;
+    border-color: #f0f0f0;
+}
+
+/* User Icon Button */
+.btn:focus {
+    box-shadow: none;
+}
+
+.btn i.bi-person-circle {
+    transition: all 0.3s ease;
+}
+
+.btn:hover i.bi-person-circle {
+    color: var(--kfc-red) !important;
+    transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .secondary-bar {
+        display: none;
+    }
+
+    .hamburger-menu {
+        display: block;
+    }
+
+    .dropdown-menu-end {
+        right: 0 !important;
+        left: auto !important;
+    }
+
+    /* Prevent dropdown from pushing horizontal scroll */
+    .dropdown-menu.show {
+        max-width: calc(100vw - 2rem);
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar-toggler {
+        display: none;
+    }
+}
+
+/* Popcorn Cart Icon Animation */
+.kfc-cart-icon {
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    overflow: visible !important;
+}
+
+.position-relative:hover .kfc-cart-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.position-relative:hover .kfc-cart-icon .popcorn-kernels {
+    transform-origin: center;
+    animation: popcornShake 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes popcornShake {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        transform: translateY(-4px) scale(1.1);
+    }
 }
