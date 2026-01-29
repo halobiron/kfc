@@ -20,8 +20,37 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  useLocation,
 } from "react-router-dom";
+import { AnimatePresence } from 'framer-motion';
+import Layout from './components/Layout';
 
+import AnimatedPage from './components/AnimatedPage';
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
+        <Route path="/products" element={<AnimatedPage><Product /></AnimatedPage>} />
+        <Route path="/product-detail/:id" element={<AnimatedPage><ProductDetail /></AnimatedPage>} />
+        <Route path="/product-detail" element={<AnimatedPage><ProductDetail /></AnimatedPage>} />
+        <Route path="/cart" element={<AnimatedPage><Cart /></AnimatedPage>} />
+        <Route path="/login" element={<AnimatedPage><Login /></AnimatedPage>} />
+        <Route path="/register" element={<AnimatedPage><Register /></AnimatedPage>} />
+        <Route path="/profile" element={<AnimatedPage><Profile /></AnimatedPage>} />
+        <Route path="/my-orders" element={<AnimatedPage><MyOrders /></AnimatedPage>} />
+        <Route path="/checkout" element={<AnimatedPage><Checkout /></AnimatedPage>} />
+        <Route path="/stores" element={<AnimatedPage><StoreSystem /></AnimatedPage>} />
+        <Route path="/privacy-policy" element={<AnimatedPage><PrivacyPolicy /></AnimatedPage>} />
+        <Route path="/terms-of-use" element={<AnimatedPage><TermsOfUse /></AnimatedPage>} />
+        <Route path="*" element={<AnimatedPage><ErrorPage showLayout={false} /></AnimatedPage>} />
+      </Routes>
+    </AnimatePresence>
+  );
+};
 
 function App() {
   return (
@@ -38,22 +67,9 @@ function App() {
           draggable
           pauseOnHover
         />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Product />} />
-          <Route path="/product-detail/:id" element={<ProductDetail />} />
-          <Route path="/product-detail" element={<ProductDetail />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/my-orders" element={<MyOrders />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/stores" element={<StoreSystem />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-use" element={<TermsOfUse />} />
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
+        <Layout>
+          <AnimatedRoutes />
+        </Layout>
       </BrowserRouter>
     </ErrorBoundary>
   );

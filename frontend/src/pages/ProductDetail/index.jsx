@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import Layout from '../../components/Layout';
 import product1 from '../../assets/img/product1.png';
 import './product-detail.css';
 import { useDispatch } from 'react-redux';
@@ -31,63 +30,61 @@ const ProductDetail = () => {
     };
 
     return (
-        <Layout>
-            <div className='product-detail-wrapper'>
-                <div className="container py-5">
-                    <div className="product-breadcrumb mb-4">
-                        <span>Trang chủ</span> <span className="separator">/</span> <span>Thực đơn</span> <span className="separator">/</span> <span>{product.category}</span> <span className="separator">/</span> <span className="current">{product.name}</span>
-                    </div>
+        <div className='product-detail-wrapper'>
+            <div className="container py-5">
+                <div className="product-breadcrumb mb-4">
+                    <span>Trang chủ</span> <span className="separator">/</span> <span>Thực đơn</span> <span className="separator">/</span> <span>{product.category}</span> <span className="separator">/</span> <span className="current">{product.name}</span>
+                </div>
 
-                    <div className="row g-4 justify-content-center">
-                        <div className="col-lg-7 col-md-6">
-                            <div className="product-image-container">
-                                <img src={product.image} alt={product.name} className="img-fluid" />
-                            </div>
+                <div className="row g-4 justify-content-center">
+                    <div className="col-lg-7 col-md-6">
+                        <div className="product-image-container">
+                            <img src={product.image} alt={product.name} className="img-fluid" />
                         </div>
-                        <div className="col-lg-5 col-md-6">
-                            <div className="product-info-card">
-                                <div className="product-category-badge">{product.category}</div>
-                                <h1 className="product-title">{product.name}</h1>
-                                <p className="product-description">{product.description}</p>
+                    </div>
+                    <div className="col-lg-5 col-md-6">
+                        <div className="product-info-card">
+                            <div className="product-category-badge">{product.category}</div>
+                            <h1 className="product-title">{product.name}</h1>
+                            <p className="product-description">{product.description}</p>
 
-                                <div className="product-price-section">
-                                    <span className="product-price">{product.price.toLocaleString('vi-VN')}₫</span>
+                            <div className="product-price-section">
+                                <span className="product-price">{product.price.toLocaleString('vi-VN')}₫</span>
+                            </div>
+
+                            <div className="quantity-section">
+                                <span className="section-label">Số lượng</span>
+                                <div className="quantity-selector">
+                                    <button className="quantity-btn" onClick={handleDecrease}>-</button>
+                                    <input
+                                        type="text"
+                                        className="quantity-input"
+                                        value={quantity}
+                                        readOnly
+                                    />
+                                    <button className="quantity-btn" onClick={handleIncrease}>+</button>
                                 </div>
+                            </div>
 
-                                <div className="quantity-section">
-                                    <span className="section-label">Số lượng</span>
-                                    <div className="quantity-selector">
-                                        <button className="quantity-btn" onClick={handleDecrease}>-</button>
-                                        <input
-                                            type="text"
-                                            className="quantity-input"
-                                            value={quantity}
-                                            readOnly
-                                        />
-                                        <button className="quantity-btn" onClick={handleIncrease}>+</button>
-                                    </div>
+                            <button className="add-to-cart-btn" onClick={handleAddToCart}>
+                                Thêm vào giỏ hàng
+                            </button>
+
+                            <div className="product-features">
+                                <div className="feature-item">
+                                    <span className="feature-icon">✓</span>
+                                    <span>Giao hàng nhanh</span>
                                 </div>
-
-                                <button className="add-to-cart-btn" onClick={handleAddToCart}>
-                                    Thêm vào giỏ hàng
-                                </button>
-
-                                <div className="product-features">
-                                    <div className="feature-item">
-                                        <span className="feature-icon">✓</span>
-                                        <span>Giao hàng nhanh</span>
-                                    </div>
-                                    <div className="feature-item">
-                                        <span className="feature-icon">✓</span>
-                                        <span>Đảm bảo chất lượng</span>
-                                    </div>
+                                <div className="feature-item">
+                                    <span className="feature-icon">✓</span>
+                                    <span>Đảm bảo chất lượng</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </Layout>
+        </div>
     );
 };
 
