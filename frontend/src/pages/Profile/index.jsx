@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import Layout from '../../components/Layout';
 import './Profile.css';
 
@@ -33,7 +34,7 @@ const Profile = () => {
 
   const handleUpdateInfo = (e) => {
     e.preventDefault();
-    alert('Cập nhật thông tin thành công!');
+    toast.success('Cập nhật thông tin thành công!');
   };
 
   const handleAddAddress = () => {
@@ -56,16 +57,17 @@ const Profile = () => {
   const handleDeleteAddress = (id) => {
     if (window.confirm('Bạn có chắc muốn xóa địa chỉ này?')) {
       setAddresses(addresses.filter(addr => addr.id !== id));
+      toast.success('Đã xóa địa chỉ');
     }
   };
 
   const handleChangePassword = (e) => {
     e.preventDefault();
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert('Mật khẩu xác nhận không khớp!');
+      toast.error('Mật khẩu xác nhận không khớp!');
       return;
     }
-    alert('Đổi mật khẩu thành công!');
+    toast.success('Đổi mật khẩu thành công!');
     setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
   };
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { toast } from 'react-toastify';
 import Layout from '../../components/Layout'
 import { Link } from 'react-router-dom'
 import { useFormik } from 'formik';
@@ -20,6 +21,7 @@ const Login = () => {
         }),
         onSubmit: (values) => {
             console.log(values)
+            toast.info('Đang đăng nhập...');
         }
     })
 

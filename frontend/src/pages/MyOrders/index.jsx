@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import Layout from '../../components/Layout';
 import './MyOrders.css';
 
@@ -110,7 +111,7 @@ const MyOrders = () => {
     };
 
     const confirmCancelOrder = () => {
-        alert(`Đơn hàng #${orderToCancel.id} đã được hủy thành công. Lý do: ${cancelReason || 'Không có'}.`);
+        toast.success(`Đơn hàng #${orderToCancel.id} đã được hủy thành công.`);
 
         // Update local state to reflect cancellation
         const updatedOrders = orders.map(o =>

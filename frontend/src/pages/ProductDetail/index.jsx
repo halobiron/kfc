@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import Layout from '../../components/Layout';
 import product1 from '../../assets/img/product1.png';
 import './product-detail.css';
@@ -26,7 +27,7 @@ const ProductDetail = () => {
 
     const handleAddToCart = () => {
         dispatch(addToCart({ ...product, quantity }));
-        alert(`Đã thêm ${quantity} ${product.name} vào giỏ hàng!`);
+        toast.success(`Đã thêm ${quantity} ${product.name} vào giỏ hàng!`);
     };
 
     return (

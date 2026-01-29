@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { toast } from 'react-toastify';
 import Layout from '../../components/Layout'
 import { Link } from 'react-router-dom'
 import { useFormik } from 'formik';
@@ -29,11 +30,11 @@ const Register = () => {
         }),
         onSubmit: (values) => {
             if (!agreedToTerms) {
-                alert('Vui lòng đồng ý với Chính Sách Hoạt Động và Chính Sách Bảo Mật');
+                toast.warn('Vui lòng đồng ý với Chính Sách Hoạt Động và Chính Sách Bảo Mật');
                 return;
             }
             console.log('Form submitted:', values)
-            alert('Đăng ký thành công!')
+            toast.success('Đăng ký thành công!');
         }
     })
 

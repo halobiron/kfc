@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import './Cart.css';
@@ -55,6 +56,7 @@ const Cart = () => {
     const handleRemoveItem = (id) => {
         if (window.confirm("Bạn có chắc muốn xóa món này khỏi giỏ hàng?")) {
             setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+            toast.success("Đã xóa sản phẩm khỏi giỏ hàng");
         }
     };
 

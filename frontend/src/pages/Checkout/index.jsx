@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import { AVAILABLE_COUPONS } from '../../data/coupons';
@@ -104,17 +105,17 @@ const Checkout = () => {
     const handlePlaceOrder = () => {
         // Basic Validation
         if (!formData.fullName || !formData.phone) {
-            alert("Vui lòng điền đầy đủ thông tin!");
+            toast.error("Vui lòng điền đầy đủ thông tin!");
             return;
         }
 
         if (deliveryType === 'delivery' && !formData.address) {
-            alert("Vui lòng nhập địa chỉ giao hàng!");
+            toast.error("Vui lòng nhập địa chỉ giao hàng!");
             return;
         }
 
         if (deliveryType === 'pickup' && !selectedStore) {
-            alert("Vui lòng chọn cửa hàng để lấy món!");
+            toast.error("Vui lòng chọn cửa hàng để lấy món!");
             return;
         }
 
@@ -125,11 +126,19 @@ const Checkout = () => {
             setIsSubmitting(false);
 
             // Success Mock
-            const deliveryInfo = deliveryType === 'pickup' 
+            const deliveryInfo = deliveryType === 'pickup'
                 ? `Lấy tại: ${stores.find(s => s.id === parseInt(selectedStore))?.name}`
                 : `Giao đến: ${formData.address}`;
-            
-            alert(`Đặt hàng thành công! Mã đơn: KFC${Date.now().toString().slice(-6)}\n${deliveryInfo}\nPhương thức: ${paymentMethod === 'cod' ? 'Thanh toán tiền mặt' : 'Thanh toán Online'}\nGiảm giá: ${formatCurrency(discountAmount)}\nTổng thanh toán: ${formatCurrency(total)}`);
+
+            toast.success(
+                <div>
+                    <strong>Đặt hàng thành công!</strong><br />
+                    Mã đơn: KFC{Date.now().toString().slice(-6)}<br />
+                    {deliveryInfo}<br />
+                    Tổng: {formatCurrency(total)}
+                </div>,
+                { autoClose: 5000 }
+            );
 
             // Redirect to My Orders
             navigate('/my-orders');
