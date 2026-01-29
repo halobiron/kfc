@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getProductById, updateProduct } from '../../redux/actions/productActions';
-import { getAllIngredients } from '../../redux/actions/ingredientActions';
+import { getProductById, updateProduct } from '../../redux/slices/productSlice';
+import { getAllIngredients } from '../../redux/slices/ingredientSlice';
+import { toast } from 'react-toastify';
 import { FiArrowLeft, FiSave, FiX, FiImage, FiBox, FiPlus, FiTrash2, FiActivity } from 'react-icons/fi';
 import './productDetails.css';
 
@@ -52,7 +53,7 @@ const ProductDetails = () => {
                 recipe
             };
             await dispatch(updateProduct(id, productData));
-            alert('Cập nhật sản phẩm thành công!');
+            toast.success('Cập nhật sản phẩm thành công!');
             navigate('/products');
         }
     });
@@ -79,7 +80,7 @@ const ProductDetails = () => {
         if (ingredient) {
             const exists = recipe.find(r => r.ingredientId === selectedIngredientId);
             if (exists) {
-                alert('Nguyên liệu này đã có trong công thức!');
+                toast.warning('Nguyên liệu này đã có trong công thức!');
                 return;
             }
 

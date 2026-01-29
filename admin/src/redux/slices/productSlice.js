@@ -6,53 +6,79 @@ import product3 from '@shared-assets/img/product3.png';
 
 // Mock data
 const mockProducts = {
-    success: true,
-    data: [
-        {
-            _id: 'P1001',
-            title: 'Gà Rán Giòn Cay',
-            description: 'Gà rán giòn tan với lớp vỏ cay nồng đặc trưng, ướp theo công thức bí mật 11 loại gia vị',
-            price: 45000,
-            stock: 25,
-            category: 'Gà Rán',
-            image: product1
-        },
-        {
-            _id: 'P1002',
-            title: 'Gà Rán Truyền Thống',
-            description: 'Gà rán giòn rụm với hương vị truyền thống, được yêu thích nhất tại KFC',
-            price: 42000,
-            stock: 30,
-            category: 'Gà Rán',
-            image: product2
-        },
-        {
-            _id: 'P1003',
-            title: 'Burger Zinger',
-            description: 'Burger gà giòn cay đặc biệt với rau xà lách tươi, sốt mayonnaise đậm đà',
-            price: 52000,
-            stock: 18,
-            category: 'Burger',
-            image: product3
-        }
-    ]
+  success: true,
+  data: [
+    {
+      _id: 'P1001',
+      title: 'Gà Rán Giòn Cay',
+      description: 'Gà rán giòn tan với lớp vỏ cay nồng đặc trưng, ướp theo công thức bí mật 11 loại gia vị',
+      price: 45000,
+      stock: 25,
+      category: 'Gà Rán',
+      image: product1
+    },
+    {
+      _id: 'P1002',
+      title: 'Gà Rán Truyền Thống',
+      description: 'Gà rán giòn rụm với hương vị truyền thống, được yêu thích nhất tại KFC',
+      price: 42000,
+      stock: 30,
+      category: 'Gà Rán',
+      image: product2
+    },
+    {
+      _id: 'P1003',
+      title: 'Burger Zinger',
+      description: 'Burger gà giòn cay đặc biệt với rau xà lách tươi, sốt mayonnaise đậm đà',
+      price: 52000,
+      stock: 18,
+      category: 'Burger',
+      image: product3
+    }
+  ]
 };
 
 // Async Thunks
 export const getAllProducts = createAsyncThunk(
-    'products/getAllProducts',
-    async () => {
-        const response = await api.get('/products');
-        return response.data;
-    }
+  'products/getAllProducts',
+  async () => {
+    const response = await api.get('/products');
+    return response.data;
+  }
 );
 
 export const getAllProductsMock = createAsyncThunk(
-    'products/getAllProductsMock',
-    async () => {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        return mockProducts;
-    }
+  'products/getAllProductsMock',
+  async () => {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return mockProducts;
+  }
+);
+
+export const getProductById = createAsyncThunk(
+  'products/getProductById',
+  async (id) => {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return mockProducts.data.find(p => p._id === id);
+  }
+);
+
+export const addNewProduct = createAsyncThunk(
+  'products/addNewProduct',
+  async (productData) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return { ...productData, _id: `P${Date.now()}` };
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  'products/updateProduct',
+  async ({ id, data }) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return { id, ...data };
+  }
 );
 
 const productSlice = createSlice({

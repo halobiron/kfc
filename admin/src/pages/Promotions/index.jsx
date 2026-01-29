@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { FiPlus, FiEdit2, FiTrash2, FiGift, FiPercent } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 import StatCard from '../../components/StatCard';
 import './promotions.css';
 
 const Promotions = () => {
   // Mock data - sẽ thay bằng Redux sau
   const [promotions, setPromotions] = useState([
-    { 
-      _id: '1', 
-      code: 'KFCVIP50', 
-      description: 'Giảm 50k cho đơn từ 200k', 
+    {
+      _id: '1',
+      code: 'KFCVIP50',
+      description: 'Giảm 50k cho đơn từ 200k',
       discountType: 'fixed',
       discountValue: 50000,
       minOrderValue: 200000,
@@ -19,10 +20,10 @@ const Promotions = () => {
       endDate: '2024-12-31',
       isActive: true
     },
-    { 
-      _id: '2', 
-      code: 'COMBO30', 
-      description: 'Giảm 30% cho combo từ 300k', 
+    {
+      _id: '2',
+      code: 'COMBO30',
+      description: 'Giảm 30% cho combo từ 300k',
       discountType: 'percent',
       discountValue: 30,
       minOrderValue: 300000,
@@ -32,10 +33,10 @@ const Promotions = () => {
       endDate: '2024-06-30',
       isActive: true
     },
-    { 
-      _id: '3', 
-      code: 'FREESHIP', 
-      description: 'Miễn phí vận chuyển cho đơn từ 150k', 
+    {
+      _id: '3',
+      code: 'FREESHIP',
+      description: 'Miễn phí vận chuyển cho đơn từ 150k',
       discountType: 'freeship',
       discountValue: 0,
       minOrderValue: 150000,
@@ -45,10 +46,10 @@ const Promotions = () => {
       endDate: '2024-12-31',
       isActive: true
     },
-    { 
-      _id: '4', 
-      code: 'WEEKEND20', 
-      description: 'Giảm 20% cuối tuần', 
+    {
+      _id: '4',
+      code: 'WEEKEND20',
+      description: 'Giảm 20% cuối tuần',
       discountType: 'percent',
       discountValue: 20,
       minOrderValue: 100000,
@@ -109,10 +110,10 @@ const Promotions = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editMode) {
-      setPromotions(promotions.map(promo => 
+      setPromotions(promotions.map(promo =>
         promo._id === currentPromotion._id ? { ...currentPromotion, usedCount: promo.usedCount } : promo
       ));
-      alert('Cập nhật khuyến mãi thành công!');
+      toast.success('Cập nhật khuyến mãi thành công!');
     } else {
       const newPromotion = {
         ...currentPromotion,
@@ -120,7 +121,7 @@ const Promotions = () => {
         usedCount: 0
       };
       setPromotions([...promotions, newPromotion]);
-      alert('Thêm khuyến mãi thành công!');
+      toast.success('Thêm khuyến mãi thành công!');
     }
     handleCloseModal();
   };
@@ -128,12 +129,12 @@ const Promotions = () => {
   const handleDelete = (id) => {
     if (window.confirm('Bạn có chắc muốn xóa khuyến mãi này?')) {
       setPromotions(promotions.filter(promo => promo._id !== id));
-      alert('Xóa khuyến mãi thành công!');
+      toast.success('Xóa khuyến mãi thành công!');
     }
   };
 
   const handleToggleActive = (id) => {
-    setPromotions(promotions.map(promo => 
+    setPromotions(promotions.map(promo =>
       promo._id === id ? { ...promo, isActive: !promo.isActive } : promo
     ));
   };
@@ -235,7 +236,7 @@ const Promotions = () => {
                             {promotion.usedCount}/{promotion.maxUsage}
                           </small>
                           <div className="progress" style={{ width: '80px', height: '6px' }}>
-                            <div 
+                            <div
                               className={`progress-bar ${usagePercent >= 80 ? 'bg-danger' : usagePercent >= 50 ? 'bg-warning' : 'bg-success'}`}
                               style={{ width: `${usagePercent}%` }}
                             ></div>
@@ -320,7 +321,7 @@ const Promotions = () => {
                       </select>
                     </div>
                   </div>
-                  
+
                   <div className="mb-3">
                     <label className="form-label">Mô tả <span className="text-danger">*</span></label>
                     <textarea

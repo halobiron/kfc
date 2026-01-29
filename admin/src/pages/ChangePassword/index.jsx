@@ -1,5 +1,6 @@
 import React from 'react'
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 const ChangePassword = () => {
@@ -19,7 +20,7 @@ const ChangePassword = () => {
         onSubmit: (values, { setSubmitting, resetForm }) => {
             // Simulate API call
             setTimeout(() => {
-                alert('Đổi mật khẩu thành công!');
+                toast.success('Đổi mật khẩu thành công!');
                 setSubmitting(false);
                 resetForm();
             }, 500);

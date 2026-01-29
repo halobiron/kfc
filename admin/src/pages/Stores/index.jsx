@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import AddStoreModal from './AddStoreModal';
+import { toast } from 'react-toastify';
 import './stores.css';
 import { FiEdit2, FiTrash2, FiPlus, FiMapPin, FiPhone, FiClock } from 'react-icons/fi';
 
@@ -103,7 +104,7 @@ const Stores = () => {
                                                         className="btn-action btn-edit border-0 d-inline-flex align-items-center"
                                                         onClick={() => {
                                                             // navigate(`/stores/${store._id}`)
-                                                            alert("Chức năng chỉnh sửa sẽ được cập nhật sau khi có API")
+                                                            toast.info("Chức năng chỉnh sửa sẽ được cập nhật sau khi có API")
                                                         }}
                                                     >
                                                         <FiEdit2 style={{ marginRight: '4px' }} />
@@ -111,7 +112,7 @@ const Stores = () => {
                                                     </button>
                                                     <button
                                                         className="btn-action btn-delete border-0 d-inline-flex align-items-center"
-                                                        onClick={() => alert("Chức năng xóa sẽ được cập nhật sau khi có API")}
+                                                        onClick={() => toast.info("Chức năng xóa sẽ được cập nhật sau khi có API")}
                                                     >
                                                         <FiTrash2 style={{ marginRight: '4px' }} />
                                                         Xóa

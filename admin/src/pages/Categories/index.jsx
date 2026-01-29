@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiPlus, FiEdit2, FiTrash2, FiTag } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 import StatCard from '../../components/StatCard';
 import './categories.css';
 
@@ -44,7 +45,7 @@ const Categories = () => {
       setCategories(categories.map(cat =>
         cat._id === currentCategory._id ? currentCategory : cat
       ));
-      alert('Cập nhật danh mục thành công!');
+      toast.success('Cập nhật danh mục thành công!');
     } else {
       // Add new category
       const newCategory = {
@@ -53,7 +54,7 @@ const Categories = () => {
         productCount: 0
       };
       setCategories([...categories, newCategory]);
-      alert('Thêm danh mục thành công!');
+      toast.success('Thêm danh mục thành công!');
     }
     handleCloseModal();
   };
@@ -61,7 +62,7 @@ const Categories = () => {
   const handleDelete = (id) => {
     if (window.confirm('Bạn có chắc muốn xóa danh mục này?')) {
       setCategories(categories.filter(cat => cat._id !== id));
-      alert('Xóa danh mục thành công!');
+      toast.success('Xóa danh mục thành công!');
     }
   };
 

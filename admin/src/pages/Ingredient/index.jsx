@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllIngredients, updateIngredientStock, createIngredient } from '../../redux/slices/ingredientSlice';
+import { toast } from 'react-toastify';
 import { FiPlus } from 'react-icons/fi';
 import './ingredient.css';
 
@@ -54,7 +55,7 @@ const Ingredient = () => {
             setPackSize('1');
             setEditSupplier('');
             setEditSupplierContact('');
-            alert(`Đã nhập thêm ${finalAmount} ${selectedIng.unit} vào kho.`);
+            toast.success(`Đã nhập thêm ${finalAmount} ${selectedIng.unit} vào kho.`);
         }
     };
 
@@ -71,7 +72,7 @@ const Ingredient = () => {
             supplierContact: '',
             stock: 0
         });
-        alert('Đã thêm nguyên liệu mới');
+        toast.success('Đã thêm nguyên liệu mới');
     };
 
     const openRestockModal = (ing) => {

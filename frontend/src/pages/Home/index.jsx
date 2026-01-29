@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Card from '../../components/Card'
 import Layout from '../../components/Layout'
 import Slider from '../../components/Slider'
@@ -7,7 +8,6 @@ import './Home.css'
 const Home = () => {
   // Mock Categories to match KFC Vietnam structure
   const categories = [
-    { title: "Ưu Đãi", icon: "bi-percent" },
     { title: "Món Mới", icon: "bi-star-fill" },
     { title: "Combo 1 Người", icon: "bi-person-fill" },
     { title: "Combo Nhóm", icon: "bi-people-fill" },
@@ -29,12 +29,14 @@ const Home = () => {
           <div className="row g-3">
             {categories.map((cat, index) => (
               <div key={index} className="col-6 col-md-4 col-lg-3">
-                <div className="category-card">
-                  <div className="mock-icon">
-                    <i className={`bi ${cat.icon}`}></i>
+                <Link to="/products" className="text-decoration-none text-dark">
+                  <div className="category-card">
+                    <div className="mock-icon">
+                      <i className={`bi ${cat.icon}`}></i>
+                    </div>
+                    <div className="category-title">{cat.title}</div>
                   </div>
-                  <div className="category-title">{cat.title}</div>
-                </div>
+                </Link>
               </div>
             ))}
           </div>

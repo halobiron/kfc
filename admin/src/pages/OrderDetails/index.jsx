@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FiArrowLeft, FiPrinter, FiXCircle, FiCheckCircle, FiTruck, FiPackage, FiClock, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
 
 const OrderDetails = () => {
@@ -58,7 +59,7 @@ const OrderDetails = () => {
     const handleStatusChange = (newStatus) => {
         setStatus(newStatus);
         // Alert or API call would go here
-        alert(`Cập nhật trạng thái đơn hàng thành: ${newStatus}`);
+        toast.success(`Cập nhật trạng thái đơn hàng thành: ${newStatus}`);
     };
 
     if (!order) return <div className="text-center p-5"><div className="spinner spinner-lg"></div></div>;
@@ -200,7 +201,7 @@ const OrderDetails = () => {
                                 <option value="Hoàn thành">Hoàn thành</option>
                                 <option value="Đã hủy">Đã hủy</option>
                             </select>
-                            <button className="btn btn-primary w-100" onClick={() => alert('Đã lưu trạng thái')}>
+                            <button className="btn btn-primary w-100" onClick={() => toast.success('Đã lưu trạng thái')}>
                                 <FiCheckCircle className="me-2" /> Cập nhật
                             </button>
                         </div>

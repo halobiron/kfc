@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { addNewProduct } from '../../redux/actions/productActions';
+import { addNewProduct } from '../../redux/slices/productSlice';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 
