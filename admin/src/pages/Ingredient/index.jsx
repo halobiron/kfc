@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllIngredients, updateIngredientStock, createIngredient } from '../../redux/actions/ingredientActions';
+import { getAllIngredients, updateIngredientStock, createIngredient } from '../../redux/slices/ingredientSlice';
 import { FiPlus } from 'react-icons/fi';
 import './ingredient.css';
 

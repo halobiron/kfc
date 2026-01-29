@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { getAllProductsMock } from '../../redux/actions/productActions'
+import { getAllProductsMock } from '../../redux/slices/productSlice'
 import AddModal from './AddModal';
 import './product.css';
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
