@@ -12,16 +12,16 @@ const Card = ({ product }) => {
         <div className='card-wrapper'>
             <motion.div
                 className="kfc-product-card"
-                onClick={() => navigate(`/product-detail/${product.id}`)}
+                onClick={() => navigate(`/product-detail/${product._id}`)}
                 style={{ cursor: 'pointer' }}
                 whileHover={{ scale: 1.02, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
-                <img src={product.image} className="product-image" alt={product.name} />
+                <img src={product.productImage} className="product-image" alt={product.title} />
                 <div className="card-body">
                     {/* Title and Price on same row */}
                     <div className="title-price-row">
-                        <h5 className="product-title">{product.name}</h5>
+                        <h5 className="product-title">{product.title}</h5>
                         <span className="product-price">{product.price.toLocaleString('vi-VN')}₫</span>
                     </div>
                     <p className="product-description">{product.description}</p>

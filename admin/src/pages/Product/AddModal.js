@@ -17,6 +17,7 @@ const AddModal = ({ setShowModal }) => {
       description: '',
       price: '',
       stock: '',
+      category: 'combo', // Default value
       productImage: ''
     },
     validationSchema: Yup.object({
@@ -24,12 +25,23 @@ const AddModal = ({ setShowModal }) => {
       description: Yup.string().required('Mô tả không được để trống'),
       price: Yup.string().required('Giá bán không được để trống'),
       stock: Yup.string().required('Số lượng tồn kho không được để trống'),
+      category: Yup.string().required('Danh mục không được để trống'),
     }),
     onSubmit: (values) => {
       dispatch(addNewProduct(values));
       setShowModal(false);
     }
   })
+
+  const categories = [
+    { id: 'combo', name: 'Combo' },
+    { id: 'ga-ran', name: 'Gà Rán' },
+    { id: 'burger', name: 'Burger' },
+    { id: 'com', name: 'Cơm' },
+    { id: 'nuoc-uong', name: 'Nước Uống' },
+    { id: 'mon-phu', name: 'Món Phụ' },
+    { id: 'trang-mieng', name: 'Tráng Miệng' },
+  ];
 
   return (
     <div className="modal-overlay-wrapper">
@@ -45,16 +57,25 @@ const AddModal = ({ setShowModal }) => {
             {touched.title && errors.title && <div className="text-danger small">{errors.title}</div>}
           </div>
           <div class="col-md-6">
+            <label for="category" class="form-label">Danh mục</label>
+            <select name="category" onChange={handleChange} onBlur={handleblur} value={values.category} class="form-select" id="category">
+              {categories.map(cat => (
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
+              ))}
+            </select>
+            {touched.category && errors.category && <div className="text-danger small">{errors.category}</div>}
+          </div>
+          <div class="col-12">
             <label for="description" class="form-label">Mô tả</label>
             <input type="text" name='description' onChange={handleChange} onBlur={handleblur} value={values.description} class="form-control" id="description" placeholder="Mô tả ngắn gọn về món ăn..." />
             {touched.description && errors.description && <div className="text-danger small">{errors.description}</div>}
           </div>
-          <div class="col-12">
+          <div class="col-md-6">
             <label for="price" class="form-label">Giá bán (VNĐ)</label>
             <input type="number" name='price' onChange={handleChange} onBlur={handleblur} value={values.price} class="form-control" id="price" placeholder="Ví dụ: 50000" />
             {touched.price && errors.price && <div className="text-danger small">{errors.price}</div>}
           </div>
-          <div class="col-12">
+          <div class="col-md-6">
             <label for="stock" class="form-label">Số lượng tồn kho</label>
             <input type="number" name='stock' onChange={handleChange} onBlur={handleblur} value={values.stock} class="form-control" id="stock" placeholder="Nhập số lượng..." />
             {touched.stock && errors.stock && <div className="text-danger small">{errors.stock}</div>}

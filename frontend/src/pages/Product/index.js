@@ -1,21 +1,29 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/Card';
 
 import './product.css';
-import { allProducts, categories } from '../../data/products';
+import { categories } from '../../data/products';
 import AnimatedPage from '../../components/AnimatedPage';
+import { getAllProducts } from '../../redux/slices/productSlice';
 
 const Product = () => {
-
+    const dispatch = useDispatch();
+    const { products, loading } = useSelector((state) => state.products);
 
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
 
+    useEffect(() => {
+        dispatch(getAllProducts());
+    }, [dispatch]);
+
     // Filter products based on category and search
     const filteredProducts = useMemo(() => {
-        let filtered = allProducts;
+        let filtered = products;
 
         // Filter by category
+        // Note: Backend might return 'category' field differently (e.g. capitalized), we might need to normalize
         if (selectedCategory !== 'all') {
             filtered = filtered.filter(product => product.category === selectedCategory);
         }
@@ -23,12 +31,12 @@ const Product = () => {
         // Filter by search term
         if (searchTerm.trim()) {
             filtered = filtered.filter(product =>
-                product.name.toLowerCase().includes(searchTerm.toLowerCase())
+                product.title && product.title.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
 
         return filtered;
-    }, [selectedCategory, searchTerm]);
+    }, [selectedCategory, searchTerm, products]);
 
     return (
         <AnimatedPage>
@@ -81,14 +89,20 @@ const Product = () => {
 
                     {/* Products Grid */}
                     <div className="products-section">
-                        {filteredProducts.length > 0 ? (
+                        {loading ? (
+                            <div className="text-center py-5">
+                                <div className="spinner-border text-danger" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        ) : filteredProducts.length > 0 ? (
                             <>
                                 <div className="results-count mb-3">
                                     Tìm thấy <strong>{filteredProducts.length}</strong> món ăn
                                 </div>
                                 <div className="row">
                                     {filteredProducts.map(product => (
-                                        <div key={product.id} className="col-md-4 mb-4">
+                                        <div key={product._id} className="col-md-4 mb-4">
                                             <Card product={product} />
                                         </div>
                                     ))}
