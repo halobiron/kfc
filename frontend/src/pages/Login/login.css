@@ -26,10 +26,6 @@
     object-fit: cover;
 }
 
-
-
-
-
 /* Right login form */
 .login-form-section {
     flex: 1;
@@ -41,12 +37,7 @@
 }
 
 .login-title {
-    font-size: 2rem;
-    font-weight: 700;
     margin-bottom: 40px;
-    color: #000;
-    text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 .login-form {
@@ -105,29 +96,26 @@
     padding: 5px;
 }
 
-.password-toggle:hover {
+.password-toggle:hover { color: #E4002B; }
+
+.login-form-section a {
     color: #E4002B;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s ease;
 }
 
-/* Forgot password link */
+.login-form-section a:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
 .forgot-password {
     text-align: right;
-    margin-top: -20px;
-    margin-bottom: 25px;
-}
-
-.forgot-password a {
-    color: #666;
-    text-decoration: none;
+    margin: -20px 0 25px;
     font-size: 0.9rem;
-    transition: color 0.3s ease;
 }
 
-.forgot-password a:hover {
-    color: #E4002B;
-}
-
-/* Login button */
 .btn-login {
     width: 100%;
     padding: 14px;
@@ -218,15 +206,12 @@
     font-size: 0.95rem;
 }
 
-.register-link a {
-    color: #E4002B;
-    text-decoration: none;
-    font-weight: 600;
-    margin-left: 5px;
-}
-
-.register-link a:hover {
-    text-decoration: underline;
+.auth-footer-policies {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.6;
 }
 
 /* Error messages */
@@ -256,10 +241,4 @@
     .login-form-section {
         padding: 30px 20px;
     }
-
-    .login-title {
-        font-size: 1.5rem;
-    }
-
-
 }

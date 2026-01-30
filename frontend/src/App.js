@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import './App.css';
 import Home from './pages/Home';
 import Product from './pages/Product';
@@ -25,6 +26,9 @@ import {
 import { AnimatePresence } from 'framer-motion';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
+import { useDispatch } from 'react-redux';
+import { loadUserStart, loadUserSuccess, loadUserFailure } from './redux/slices/authSlice';
+import authApi from './api/authApi';
 
 import AnimatedPage from './components/AnimatedPage';
 
@@ -56,6 +60,29 @@ const AnimatedRoutes = () => {
 };
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user && user.token) {
+        try {
+          dispatch(loadUserStart());
+          const response = await authApi.getMe();
+          if (response.data.status) {
+            dispatch(loadUserSuccess({
+              ...response.data.data,
+              token: user.token
+            }));
+          }
+        } catch (error) {
+          dispatch(loadUserFailure());
+        }
+      }
+    };
+    loadUser();
+  }, [dispatch]);
+
   return (
     <ErrorBoundary>
       <BrowserRouter>

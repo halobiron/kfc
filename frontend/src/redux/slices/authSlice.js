@@ -35,9 +35,23 @@ const authSlice = createSlice({
             state.error = null;
             localStorage.removeItem('user');
         },
+        loadUserStart: (state) => {
+            state.loading = true;
+        },
+        loadUserSuccess: (state, action) => {
+            state.loading = false;
+            state.isAuthenticated = true;
+            state.user = action.payload;
+        },
+        loadUserFailure: (state) => {
+            state.loading = false;
+            state.isAuthenticated = false;
+            state.user = null;
+            localStorage.removeItem('user');
+        },
     },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout } = authSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, logout, loadUserStart, loadUserSuccess, loadUserFailure } = authSlice.actions;
 
 export default authSlice.reducer;
