@@ -29,7 +29,7 @@
     font-weight: 700;
     text-transform: uppercase;
     font-size: 1.5rem;
-    color: #202124;
+    color: var(--kfc-black);
 }
 
 .section-header {
@@ -38,10 +38,8 @@
 }
 
 .section-header h3 {
-    font-family: 'Oswald', sans-serif;
     font-weight: 800;
-    text-transform: uppercase;
-    color: #202124;
+    color: var(--kfc-black);
     font-size: 2.25rem;
 }
 

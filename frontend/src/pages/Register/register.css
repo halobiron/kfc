@@ -19,7 +19,7 @@
     justify-content: center;
     overflow: hidden;
     position: relative;
-    background-color: #E4002B;
+    background-color: var(--kfc-red);
 }
 
 .banner-image {
@@ -74,7 +74,7 @@
 }
 
 .form-input:focus {
-    border-bottom-color: #E4002B;
+    border-bottom-color: var(--kfc-red);
 }
 
 .form-input::placeholder {

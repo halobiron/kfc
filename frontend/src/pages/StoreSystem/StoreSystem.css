@@ -25,12 +25,10 @@
 }
 
 .sidebar-title {
-    font-family: 'Oswald', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
-    color: #202124;
+    color: var(--kfc-black);
     margin-bottom: 20px;
-    letter-spacing: 0.5px;
 }
 
 .search-wrapper {
@@ -55,9 +53,8 @@
     width: 18px;
     height: 18px;
     margin-top: -9px;
-    /* Exact centering (half of height) */
     border: 2px solid #e0e0e0;
-    border-top-color: #e4002b;
+    border-top-color: var(--kfc-red);
     border-radius: 50%;
     animation: search-spin 0.8s linear infinite;
     z-index: 5;
@@ -74,7 +71,6 @@
     padding: 10px 15px 10px 40px;
     border: 1px solid #e0e0e0;
     border-radius: 50px;
-    /* Pill shape for modern look */
     font-size: 13px;
     outline: none;
     transition: all 0.2s;
@@ -82,7 +78,7 @@
 }
 
 .store-search-input:focus {
-    border-color: #e4002b;
+    border-color: var(--kfc-red);
     background-color: #fff;
     box-shadow: 0 0 0 3px rgba(228, 0, 43, 0.1);
 }
@@ -97,7 +93,7 @@
 }
 
 .city-dropdown:focus {
-    border-color: #e4002b;
+    border-color: var(--kfc-red);
     box-shadow: none;
 }
 

@@ -101,18 +101,13 @@ const orderSchema = new Schema({
 });
 
 // Auto generate order number
-orderSchema.pre('save', async function(next) {
-    if (!this.isNew) return next();
+orderSchema.pre('save', async function() {
+    if (!this.isNew) return;
     
-    try {
-        const count = await mongoose.model('Order').countDocuments();
-        const date = new Date();
-        const dateStr = date.getFullYear() + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
-        this.orderNumber = `ORD${dateStr}${String(count + 1).padStart(5, '0')}`;
-        next();
-    } catch (error) {
-        next(error);
-    }
+    const count = await mongoose.model('Order').countDocuments();
+    const date = new Date();
+    const dateStr = date.getFullYear() + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
+    this.orderNumber = `ORD${dateStr}${String(count + 1).padStart(5, '0')}`;
 });
 
 const Order = mongoose.model('Order', orderSchema);

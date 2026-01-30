@@ -7,10 +7,9 @@
 
 /* Hero Banner */
 .product-hero {
-    background: linear-gradient(135deg, #e4002b 0%, #c20024 100%);
+    background: linear-gradient(135deg, var(--kfc-red) 0%, #c20024 100%);
     padding: 3rem 0 2rem;
     margin-bottom: 0;
-    /* Remove margin as sticky nav is below */
 }
 
 .hero-title {
@@ -66,11 +65,9 @@
     height: 100%;
     padding-bottom: 8px;
     
-    font-family: 'Oswald', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
     color: #333;
-    text-transform: uppercase;
     text-decoration: none;
     transition: all 0.2s;
     position: relative;
@@ -79,12 +76,11 @@
 }
 
 .category-wrapper a:hover {
-    color: #e4002b;
+    color: var(--kfc-red);
 }
 
 .category-wrapper a.active {
     color: #333;
-    /* Stays dark */
 }
 
 /* Red indicator for active state */
@@ -95,7 +91,7 @@
     left: 0;
     width: 100%;
     height: 5px;
-    background-color: #e4002b;
+    background-color: var(--kfc-red);
 }
 
 /* Products Sections */
