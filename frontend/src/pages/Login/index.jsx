@@ -1,14 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify';
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginStart, loginSuccess, loginFailure } from '../../redux/slices/authSlice';
+import authApi from '../../api/authApi';
 import './login.css'
 import signinImg from '../../assets/img/signin.jpg'
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { isAuthenticated, loading } = useSelector((state) => state.auth);
+
+    const from = location.state?.from?.pathname || "/";
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate(from, { replace: true });
+        }
+    }, [isAuthenticated, navigate, from]);
 
     const { handleBlur, handleSubmit, handleChange, touched, errors, values } = useFormik({
         initialValues: {
@@ -19,9 +34,26 @@ const Login = () => {
             email: Yup.string().email('Vui lòng nhập email hợp lệ').required('Email là bắt buộc'),
             password: Yup.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự').required('Mật khẩu là bắt buộc'),
         }),
-        onSubmit: (values) => {
-            console.log(values)
-            toast.info('Đang đăng nhập...');
+        onSubmit: async (values) => {
+            try {
+                dispatch(loginStart());
+                const response = await authApi.login(values);
+                if (response.data.status) {
+                    const userData = {
+                        ...response.data.user,
+                        token: response.data.token
+                    };
+                    dispatch(loginSuccess(userData));
+                    toast.success('Đăng nhập thành công!');
+                } else {
+                    dispatch(loginFailure(response.data.message));
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                const message = error.response?.data?.message || 'Đăng nhập thất bại';
+                dispatch(loginFailure(message));
+                toast.error(message);
+            }
         }
     })
 
@@ -81,7 +113,9 @@ const Login = () => {
                             <Link to="/forgot-password">Bạn quên mật khẩu?</Link>
                         </div>
 
-                        <button type="submit" className="btn-login">Đăng nhập</button>
+                        <button type="submit" className="btn-login" disabled={loading}>
+                            {loading ? 'Đang xử lý...' : 'Đăng nhập'}
+                        </button>
                     </form>
 
                     <div className="social-divider">Hoặc tiếp tục với</div>

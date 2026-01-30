@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/slices/authSlice';
 import axiosClient from '../../api/axiosClient';
 import './Account.css';
 
 const Account = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { user } = useSelector(state => state.auth);
     const [activeTab, setActiveTab] = useState('orders'); // 'orders', 'profile', 'addresses'
 
     // User profile state
     const [userInfo, setUserInfo] = useState({
-        name: 'Nguyễn Văn A',
-        email: 'nguyenvana@example.com',
-        phone: '0901234567',
-        birthdate: '1990-01-01'
+        name: user?.name || 'Nguyễn Văn A',
+        email: user?.email || 'nguyenvana@example.com',
+        phone: user?.phone || '0901234567',
+        birthdate: user?.birthdate || '1990-01-01'
     });
 
     const [addresses, setAddresses] = useState([
@@ -148,7 +152,7 @@ const Account = () => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        dispatch(logout());
         navigate('/login');
         toast.success('Đăng xuất thành công!');
     };

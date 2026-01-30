@@ -24,6 +24,7 @@ import {
 } from "react-router-dom";
 import { AnimatePresence } from 'framer-motion';
 import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
 
 import AnimatedPage from './components/AnimatedPage';
 
@@ -40,10 +41,10 @@ const AnimatedRoutes = () => {
         <Route path="/cart" element={<AnimatedPage><Cart /></AnimatedPage>} />
         <Route path="/login" element={<AnimatedPage><Login /></AnimatedPage>} />
         <Route path="/register" element={<AnimatedPage><Register /></AnimatedPage>} />
-        <Route path="/account" element={<AnimatedPage><Account /></AnimatedPage>} />
-        <Route path="/profile" element={<AnimatedPage><Account /></AnimatedPage>} />
-        <Route path="/my-orders" element={<AnimatedPage><Account /></AnimatedPage>} />
-        <Route path="/checkout" element={<AnimatedPage><Checkout /></AnimatedPage>} />
+        <Route path="/account" element={<ProtectedRoute><AnimatedPage><Account /></AnimatedPage></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><AnimatedPage><Account /></AnimatedPage></ProtectedRoute>} />
+        <Route path="/my-orders" element={<ProtectedRoute><AnimatedPage><Account /></AnimatedPage></ProtectedRoute>} />
+        <Route path="/checkout" element={<ProtectedRoute><AnimatedPage><Checkout /></AnimatedPage></ProtectedRoute>} />
         <Route path="/stores" element={<AnimatedPage><StoreSystem /></AnimatedPage>} />
         <Route path="/privacy-policy" element={<AnimatedPage><PrivacyPolicy /></AnimatedPage>} />
         <Route path="/terms-of-use" element={<AnimatedPage><TermsOfUse /></AnimatedPage>} />

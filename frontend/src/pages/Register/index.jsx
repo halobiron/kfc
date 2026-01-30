@@ -1,15 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify';
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginStart, loginSuccess, loginFailure } from '../../redux/slices/authSlice';
+import authApi from '../../api/authApi';
 import './register.css'
 import signinImg from '../../assets/img/signin.jpg'
 
 const Register = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { isAuthenticated, loading } = useSelector((state) => state.auth);
     const [showPassword, setShowPassword] = useState(false);
     const [agreedToTerms, setAgreedToTerms] = useState(false);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/');
+        }
+    }, [isAuthenticated, navigate]);
 
     const { handleSubmit, handleChange, handleBlur, values, touched, errors, isValid, dirty } = useFormik({
         initialValues: {
@@ -17,7 +29,8 @@ const Register = () => {
             lastName: '',
             phone: '',
             email: '',
-            password: ''
+            password: '',
+            confirmPassword: ''
         },
         validationSchema: Yup.object({
             firstName: Yup.string().max(50, 'Tối đa 50 ký tự').required('Vui lòng nhập tên'),
@@ -26,15 +39,43 @@ const Register = () => {
                 .matches(/^[0-9]{10}$/, 'Số điện thoại phải có 10 chữ số')
                 .required('Vui lòng nhập số điện thoại'),
             email: Yup.string().email('Email không hợp lệ').required('Vui lòng nhập email'),
-            password: Yup.string().min(6, 'Mật khẩu tối thiểu 6 ký tự').required('Vui lòng nhập mật khẩu')
+            password: Yup.string().min(6, 'Mật khẩu tối thiểu 6 ký tự').required('Vui lòng nhập mật khẩu'),
+            confirmPassword: Yup.string()
+                .oneOf([Yup.ref('password'), null], 'Mật khẩu xác nhận không khớp')
+                .required('Vui lòng xác nhận mật khẩu')
         }),
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             if (!agreedToTerms) {
                 toast.warn('Vui lòng đồng ý với Chính Sách Hoạt Động và Chính Sách Bảo Mật');
                 return;
             }
-            console.log('Form submitted:', values)
-            toast.success('Đăng ký thành công!');
+            try {
+                dispatch(loginStart());
+                const registerData = {
+                    name: `${values.lastName} ${values.firstName}`,
+                    email: values.email,
+                    phone: values.phone,
+                    password: values.password,
+                    confirmPassword: values.confirmPassword
+                };
+                const response = await authApi.register(registerData);
+                if (response.data.status) {
+                    const userData = {
+                        ...response.data.user,
+                        token: response.data.token
+                    };
+                    dispatch(loginSuccess(userData));
+                    toast.success('Đăng ký thành công!');
+                    navigate('/');
+                } else {
+                    dispatch(loginFailure(response.data.message));
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                const message = error.response?.data?.message || 'Đăng ký thất bại';
+                dispatch(loginFailure(message));
+                toast.error(message);
+            }
         }
     })
 
@@ -133,6 +174,23 @@ const Register = () => {
                             <p className='error'>{touched.password && errors.password ? errors.password : ''}</p>
                         </div>
 
+                        <div className="form-group">
+                            <label htmlFor="confirmPassword">Xác nhận mật khẩu *</label>
+                            <div className="password-wrapper">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    onChange={handleChange}
+                                    value={values.confirmPassword}
+                                    onBlur={handleBlur}
+                                    name='confirmPassword'
+                                    className="form-input"
+                                    id="confirmPassword"
+                                    placeholder="••••••••"
+                                />
+                            </div>
+                            <p className='error'>{touched.confirmPassword && errors.confirmPassword ? errors.confirmPassword : ''}</p>
+                        </div>
+
                         <div className="terms-group">
                             <label className="terms-checkbox">
                                 <input
@@ -147,8 +205,8 @@ const Register = () => {
                             </label>
                         </div>
 
-                        <button type="submit" className="btn-register" disabled={!isValid || !dirty || !agreedToTerms}>
-                            Tạo tài khoản
+                        <button type="submit" className="btn-register" disabled={!isValid || !dirty || !agreedToTerms || loading}>
+                            {loading ? 'Đang xử lý...' : 'Tạo tài khoản'}
                         </button>
                     </form>
 

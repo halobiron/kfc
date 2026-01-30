@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/img/KFC-Logo.png';
@@ -9,6 +9,17 @@ const Header = () => {
 
   const cartQuantity = useSelector(state => state.cart.totalQuantity);
   const navigate = useNavigate();
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [prevQuantity, setPrevQuantity] = useState(cartQuantity);
+
+  useEffect(() => {
+    if (cartQuantity > prevQuantity) {
+      setIsAnimating(true);
+      const timer = setTimeout(() => setIsAnimating(false), 600); // 0.6s animation
+      return () => clearTimeout(timer);
+    }
+    setPrevQuantity(cartQuantity);
+  }, [cartQuantity, prevQuantity]);
 
   return (
     <>
@@ -49,34 +60,15 @@ const Header = () => {
                     <i className="bi bi-person-circle" style={{ fontSize: '28px', lineHeight: '1' }}></i>
                   </Link>
 
-                  <div className="position-relative d-flex align-items-center justify-content-center" onClick={() => navigate('/cart')} style={{ cursor: 'pointer', width: '36px', height: '36px', overflow: 'visible' }}>
-                    <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="kfc-cart-icon" style={{ overflow: 'visible' }}>
-                      <defs>
-                        <linearGradient id="popcornGradient" x1="32" y1="7" x2="32" y2="24" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="#FFC72C" />
-                          <stop offset="1" stopColor="#FFB300" />
-                        </linearGradient>
-                      </defs>
-                      <g className="popcorn-kernels" style={{ transformBox: 'fill-box' }}>
-                        <circle cx="18" cy="14" r="7" fill="url(#popcornGradient)" stroke="#E4002B" strokeWidth="1.5" />
-                        <circle cx="32" cy="7" r="8" fill="url(#popcornGradient)" stroke="#E4002B" strokeWidth="1.5" />
-                        <circle cx="46" cy="14" r="7" fill="url(#popcornGradient)" stroke="#E4002B" strokeWidth="1.5" />
-                      </g>
-                      {/* Scaled bucket for better height match - tapered trapezoid */}
-                      <path d="M14 18 L19 57 H45 L50 18 H14Z" fill="white" stroke="#E4002B" strokeWidth="2" strokeLinejoin="round" />
-                    </svg>
-
-                    <span className="position-absolute fw-bold" style={{
-                      top: '58%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      color: 'var(--kfc-red)',
-                      fontSize: '0.9rem',
-                      zIndex: 2,
-                      userSelect: 'none'
-                    }}>
+                  {/* Cart Icon */}
+                  <div className="shopping-cart">
+                    <div
+                      className={`basket mat-ripple mat-ripple-unbounded ${cartQuantity === 0 ? 'blank' : ''} ${isAnimating ? 'Itemadded' : ''}`}
+                      onClick={() => navigate('/cart')}
+                      title="Giỏ hàng"
+                    >
                       {cartQuantity}
-                    </span>
+                    </div>
                   </div>
                 </div>
               </div>
