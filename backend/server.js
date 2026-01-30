@@ -1,20 +1,36 @@
 const express = require('express')
 const app = express();
 require('dotenv').config();
-const products = require('./routes/products')
-const categories = require('./routes/categories')
-const coupons = require('./routes/coupons')
+const cookieParser = require('cookie-parser');
 const { connectDatabase } = require('./config/config');
 const cloudinary = require('cloudinary').v2
 const cors = require('cors')
 
+// Routes
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
+const productRoutes = require('./routes/products');
+const categoryRoutes = require('./routes/categories');
+const couponRoutes = require('./routes/coupons');
+const orderRoutes = require('./routes/orders');
+const storeRoutes = require('./routes/stores');
+const ingredientRoutes = require('./routes/ingredients');
+
 connectDatabase();
 app.use(cors())
+app.use(cookieParser());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }))
-app.use('/api/v1', products);
-app.use('/api/v1', categories);
-app.use('/api/v1', coupons);
+
+// Register routes
+app.use('/api/v1', authRoutes);
+app.use('/api/v1', userRoutes);
+app.use('/api/v1', productRoutes);
+app.use('/api/v1', categoryRoutes);
+app.use('/api/v1', couponRoutes);
+app.use('/api/v1', orderRoutes);
+app.use('/api/v1', storeRoutes);
+app.use('/api/v1', ingredientRoutes);
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
