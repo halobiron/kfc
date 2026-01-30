@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
-import { AVAILABLE_COUPONS } from '../../data/coupons';
 import './Checkout.css';
+import { getAllCoupons, getCouponByCode } from '../../redux/slices/couponSlice';
 
 const Checkout = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { coupons } = useSelector((state) => state.coupons);
+
+    useEffect(() => {
+        dispatch(getAllCoupons());
+    }, [dispatch]);
 
     // Mock Cart Data (Should match Cart page mock)
     const cartItems = [
@@ -70,7 +77,10 @@ const Checkout = () => {
     const handleApplyCoupon = () => {
         if (!couponCode) return;
 
-        const coupon = AVAILABLE_COUPONS.find(c => c.code === couponCode.toUpperCase());
+        // Find coupon from Redux state
+        const coupon = Array.isArray(coupons) 
+            ? coupons.find(c => c.code === couponCode.toUpperCase())
+            : null;
 
         if (!coupon) {
             setCouponError('Mã khuyến mãi không hợp lệ!');

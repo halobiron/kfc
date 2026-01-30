@@ -2,6 +2,8 @@ const express = require('express')
 const app = express();
 require('dotenv').config();
 const products = require('./routes/products')
+const categories = require('./routes/categories')
+const coupons = require('./routes/coupons')
 const { connectDatabase } = require('./config/config');
 const cloudinary = require('cloudinary').v2
 const cors = require('cors')
@@ -11,6 +13,8 @@ app.use(cors())
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }))
 app.use('/api/v1', products);
+app.use('/api/v1', categories);
+app.use('/api/v1', coupons);
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

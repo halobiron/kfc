@@ -1,22 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Card from '../../components/Card'
 
 import Slider from '../../components/Slider'
 
-import { allProducts } from '../../data/products'
+import { getAllProducts } from '../../redux/slices/productSlice'
+import { getAllCategories } from '../../redux/slices/categorySlice'
+import { getAllCoupons } from '../../redux/slices/couponSlice'
 import './Home.css'
 
 const Home = () => {
-  // Mock Categories to match KFC Vietnam structure
-  const categories = [
-    { title: "Món Mới", icon: "bi-star-fill" },
-    { title: "Combo 1 Người", icon: "bi-person-fill" },
-    { title: "Combo Nhóm", icon: "bi-people-fill" },
-    { title: "Gà Rán", icon: "bi-egg-fried" },
-    { title: "Burger - Cơm", icon: "bi-hdd-stack" },
-    { title: "Thức Uống", icon: "bi-cup-straw" },
-  ];
+  const dispatch = useDispatch();
+  const { products, loading: productsLoading } = useSelector((state) => state.products);
+  const { categories, loading: categoriesLoading } = useSelector((state) => state.categories);
+  const { coupons, loading: couponsLoading } = useSelector((state) => state.coupons);
+
+  useEffect(() => {
+    dispatch(getAllProducts());
+    dispatch(getAllCategories());
+    dispatch(getAllCoupons());
+  }, [dispatch]);
+
+
+  // Get first 3 products from API
+  const featuredProducts = Array.isArray(products) ? products.slice(0, 3) : [];
 
   return (
     <>
@@ -36,7 +44,7 @@ const Home = () => {
                     <div className="mock-icon">
                       <i className={`bi ${cat.icon}`}></i>
                     </div>
-                    <div className="category-title">{cat.title}</div>
+                    <div className="category-title">{cat.name}</div>
                   </div>
                 </Link>
               </div>
@@ -53,13 +61,21 @@ const Home = () => {
             <hr className="w-25 mx-auto text-danger border-2 opacity-100" />
           </div>
 
-          <div className="row">
-            {allProducts.slice(0, 3).map(product => (
-              <div key={product.id} className="col-md-4">
-                <Card product={product} />
+          {productsLoading ? (
+            <div className="text-center py-5">
+              <div className="spinner-border text-danger" role="status">
+                <span className="visually-hidden">Loading...</span>
               </div>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className="row">
+              {featuredProducts.map(product => (
+                <div key={product._id} className="col-md-4">
+                  <Card product={product} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

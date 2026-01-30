@@ -1,0 +1,38 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axiosClient from '../../api/axiosClient';
+
+// Async Thunks
+export const getAllCategories = createAsyncThunk(
+    'categories/getAllCategories',
+    async () => {
+        const response = await axiosClient.get('/categories');
+        return response.data.data;
+    }
+);
+
+const categorySlice = createSlice({
+    name: 'categories',
+    initialState: {
+        categories: [],
+        loading: false,
+        error: null,
+    },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(getAllCategories.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getAllCategories.fulfilled, (state, action) => {
+                state.loading = false;
+                state.categories = action.payload || [];
+            })
+            .addCase(getAllCategories.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            });
+    },
+});
+
+export default categorySlice.reducer;

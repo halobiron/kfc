@@ -3,19 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/Card';
 
 import './product.css';
-import { categories } from '../../data/products';
 import AnimatedPage from '../../components/AnimatedPage';
 import { getAllProducts } from '../../redux/slices/productSlice';
+import { getAllCategories } from '../../redux/slices/categorySlice';
 
 const Product = () => {
     const dispatch = useDispatch();
     const { products, loading } = useSelector((state) => state.products);
+    const { categories } = useSelector((state) => state.categories);
 
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         dispatch(getAllProducts());
+        dispatch(getAllCategories());
     }, [dispatch]);
 
     // Filter products based on category and search
@@ -23,7 +25,6 @@ const Product = () => {
         let filtered = products;
 
         // Filter by category
-        // Note: Backend might return 'category' field differently (e.g. capitalized), we might need to normalize
         if (selectedCategory !== 'all') {
             filtered = filtered.filter(product => product.category === selectedCategory);
         }
@@ -37,6 +38,12 @@ const Product = () => {
 
         return filtered;
     }, [selectedCategory, searchTerm, products]);
+
+    // Prepare categories for display with 'all' option
+    const categoryList = [
+        { _id: 'all', name: 'Tất cả', slug: 'all', icon: 'bi-grid' },
+        ...(Array.isArray(categories) ? categories : [])
+    ];
 
     return (
         <AnimatedPage>
@@ -75,11 +82,11 @@ const Product = () => {
                     {/* Category Filter */}
                     <div className="category-filter mb-4">
                         <div className="category-scroll">
-                            {categories.map(category => (
+                            {categoryList.map(category => (
                                 <button
-                                    key={category.id}
-                                    className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
-                                    onClick={() => setSelectedCategory(category.id)}
+                                    key={category._id}
+                                    className={`category-btn ${selectedCategory === category.slug ? 'active' : ''}`}
+                                    onClick={() => setSelectedCategory(category.slug)}
                                 >
                                     {category.name}
                                 </button>
