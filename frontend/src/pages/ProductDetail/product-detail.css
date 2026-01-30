@@ -45,19 +45,17 @@
     cursor: default;
 }
 
-/* Product Image Container */
+/* Product Image Container - Optimized for 480x390 images */
 .product-image-container {
     background-color: #fff;
     border-radius: 12px;
-    padding: 30px;
-    /* Added some padding back to prevent "vỡ" */
+    padding: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-    min-height: 480px;
-    /* Reduced from 550px for a more compact card */
-    height: 100%;
+    aspect-ratio: 480 / 390;
+    width: 100%;
     transition: transform 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -65,11 +63,9 @@
 }
 
 
-
-
 .product-image-container img {
-    max-width: 100%;
-    max-height: 420px;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     transition: transform 0.3s ease;
 }
@@ -260,23 +256,22 @@
 /* Responsive Design */
 @media (max-width: 1199px) {
     .product-title {
-        font-size: 36px;
+        font-size: 32px;
     }
 }
 
 @media (max-width: 991px) {
     .product-image-container {
-        min-height: 450px;
-        padding: 40px;
+        padding: 30px;
         margin-bottom: 24px;
     }
 
     .product-info-card {
-        padding: 50px 35px 35px;
+        padding: 45px 30px 30px;
     }
 
     .product-title {
-        font-size: 32px;
+        font-size: 30px;
     }
 }
 
@@ -287,35 +282,30 @@
     }
 
     .product-image-container {
-        min-height: 320px;
-        padding: 30px;
-        border-radius: 20px;
-    }
-
-    .product-image-container img {
-        max-height: 280px;
+        padding: 20px;
+        border-radius: 12px;
     }
 
     .product-info-card {
-        padding: 45px 25px 30px;
-        border-radius: 20px;
+        padding: 40px 20px 25px;
+        border-radius: 12px;
     }
 
     .product-title {
-        font-size: 28px;
+        font-size: 26px;
     }
 
     .product-description {
-        font-size: 15px;
+        font-size: 14px;
         margin-bottom: 24px;
     }
 
     .product-price {
-        font-size: 30px;
+        font-size: 28px;
     }
 
     .add-to-cart-btn {
-        padding: 16px 28px;
-        font-size: 16px;
+        padding: 14px 24px;
+        font-size: 15px;
     }
 }

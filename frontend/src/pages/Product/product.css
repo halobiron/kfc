@@ -136,6 +136,11 @@
     padding-bottom: 3rem;
 }
 
+.products-section .row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 1.5rem;
+}
+
 .results-count {
     color: #666;
     font-size: 14px;

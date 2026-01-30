@@ -43,6 +43,16 @@
     font-size: 1.5rem;
 }
 
+/* Product Section */
+.home-product-section {
+    background-color: #f8f9fa;
+}
+
+.home-product-section .row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 1.5rem;
+}
+
 /* Mock icons until real assets are available */
 .mock-icon {
     width: 60px;

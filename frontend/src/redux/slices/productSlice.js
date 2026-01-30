@@ -6,7 +6,7 @@ export const getAllProducts = createAsyncThunk(
     'products/getAllProducts',
     async () => {
         const response = await axiosClient.get('/products');
-        return response.data;
+        return response.data.data;
     }
 );
 
@@ -14,7 +14,7 @@ export const getProductById = createAsyncThunk(
     'products/getProductById',
     async (id) => {
         const response = await axiosClient.get(`/product/${id}`);
-        return response.data;
+        return response.data.data;
     }
 );
 
@@ -35,7 +35,7 @@ const productSlice = createSlice({
             })
             .addCase(getAllProducts.fulfilled, (state, action) => {
                 state.loading = false;
-                state.products = action.payload.data || [];
+                state.products = action.payload || [];
             })
             .addCase(getAllProducts.rejected, (state, action) => {
                 state.loading = false;
@@ -47,7 +47,7 @@ const productSlice = createSlice({
             })
             .addCase(getProductById.fulfilled, (state, action) => {
                 state.loading = false;
-                state.currentProduct = action.payload.data;
+                state.currentProduct = action.payload;
             })
             .addCase(getProductById.rejected, (state, action) => {
                 state.loading = false;

@@ -16,19 +16,21 @@
 
 
 
-/* Product Image */
+/* Product Image - Optimized for 480x390 aspect ratio */
 .product-image {
     width: 100%;
-    height: 200px;
+    aspect-ratio: 480 / 390;
     object-fit: cover;
+    display: block;
 }
 
 /* Card Body */
 .card-body {
-    padding: 1.25rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    gap: 0.5rem;
 }
 
 /* Title and Price Row - CRITICAL */
@@ -36,33 +38,44 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 0.75rem;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .product-title {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 800;
     color: var(--kfc-black);
     margin: 0;
     flex: 1;
     line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 2.5em;
 }
 
 .product-price {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 800;
-    color: var(--kfc-black);
+    color: #e4002b;
     white-space: nowrap;
 }
 
 /* Product Description */
 .product-description {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #666;
-    margin-bottom: 1rem;
-    line-height: 1.5;
-    flex-grow: 1;
+    margin: 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 2.8em;
+    max-height: 2.8em;
 }
 
 /* Add Button */
@@ -71,11 +84,54 @@
     background-color: #9e9e9e;
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
+    padding: 0.6rem 1.125rem;
+    font-size: 0.875rem;
     font-weight: 700;
     border-radius: 25px;
     cursor: pointer;
     transition: all 0.3s;
     text-transform: capitalize;
+    margin-top: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+    .product-title {
+        font-size: 1rem;
+    }
+    
+    .product-price {
+        font-size: 1rem;
+    }
+    
+    .card-body {
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .product-title {
+        font-size: 0.9rem;
+        min-height: 2.4em;
+    }
+    
+    .product-price {
+        font-size: 0.9rem;
+    }
+    
+    .product-description {
+        font-size: 0.75rem;
+        min-height: 2.6em;
+        max-height: 2.6em;
+    }
+    
+    .card-body {
+        padding: 0.875rem;
+        gap: 0.4rem;
+    }
+    
+    .btn-add {
+        padding: 0.55rem 1rem;
+        font-size: 0.8rem;
+    }
 }
