@@ -40,40 +40,14 @@ const Header = () => {
 
                 {/* Right Action Buttons */}
                 <div className="d-flex align-items-center gap-3">
-                  {/* User/Login - Dropdown */}
-                  <div className="dropdown">
-                    <button
-                      className="btn text-dark fw-bold d-flex align-items-center justify-content-center p-0 border-0"
-                      type="button"
-                      id="userDropdown"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      style={{ width: '36px', height: '36px', display: 'flex' }}
-                    >
-                      <i className="bi bi-person-circle" style={{ fontSize: '28px', lineHeight: '1' }}></i>
-                    </button>
-                    <ul className="dropdown-menu dropdown-menu-lg-end" aria-labelledby="userDropdown">
-                      <li>
-                        <Link className="dropdown-item" to="/profile">
-                          <i className="bi bi-person me-2"></i>
-                          Tài khoản của tôi
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item" to="/my-orders">
-                          <i className="bi bi-clock-history me-2"></i>
-                          Đơn hàng của tôi
-                        </Link>
-                      </li>
-                      <li><hr className="dropdown-divider" /></li>
-                      <li>
-                        <Link className="dropdown-item" to="/login">
-                          <i className="bi bi-box-arrow-in-right me-2"></i>
-                          Đăng nhập
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
+                  {/* User Account Link */}
+                  <Link
+                    to="/account"
+                    className="btn text-dark fw-bold d-flex align-items-center justify-content-center p-0 border-0"
+                    style={{ width: '36px', height: '36px' }}
+                  >
+                    <i className="bi bi-person-circle" style={{ fontSize: '28px', lineHeight: '1' }}></i>
+                  </Link>
 
                   <div className="position-relative d-flex align-items-center justify-content-center" onClick={() => navigate('/cart')} style={{ cursor: 'pointer', width: '36px', height: '36px', overflow: 'visible' }}>
                     <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="kfc-cart-icon" style={{ overflow: 'visible' }}>

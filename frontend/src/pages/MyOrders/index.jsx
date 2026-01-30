@@ -96,43 +96,60 @@ const MyOrders = () => {
                     </div>
 
                     {/* Search and Filter Section */}
-                    <div className="row mb-4 justify-content-center">
-                        <div className="col-md-8">
-                            <div className="search-filter-box p-3 bg-white rounded shadow-sm">
-                                <div className="row g-3">
-                                    <div className="col-md-7">
-                                        <div className="input-group">
-                                            <span className="input-group-text bg-white border-end-0">
-                                                <i className="bi bi-search text-muted"></i>
-                                            </span>
-                                            <input
-                                                type="text"
-                                                className="form-control border-start-0 ps-0"
-                                                placeholder="Tìm theo Mã đơn hàng hoặc Tên món..."
-                                                value={searchTerm}
-                                                onChange={(e) => setSearchTerm(e.target.value)}
-                                            />
+                    {orders.length > 0 && (
+                        <div className="row mb-4 justify-content-center">
+                            <div className="col-md-8">
+                                <div className="search-filter-box p-3 bg-white rounded shadow-sm">
+                                    <div className="row g-3">
+                                        <div className="col-md-7">
+                                            <div className="input-group">
+                                                <span className="input-group-text bg-white border-end-0">
+                                                    <i className="bi bi-search text-muted"></i>
+                                                </span>
+                                                <input
+                                                    type="text"
+                                                    className="form-control border-start-0 ps-0"
+                                                    placeholder="Tìm theo Mã đơn hàng hoặc Tên món..."
+                                                    value={searchTerm}
+                                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-md-5">
-                                        <select
-                                            className="form-select"
-                                            value={filterStatus}
-                                            onChange={(e) => setFilterStatus(e.target.value)}
-                                        >
-                                            {statusOptions.map(status => (
-                                                <option key={status} value={status}>
-                                                    {status === 'All' ? 'Tất cả trạng thái' : status}
-                                                </option>
-                                            ))}
-                                        </select>
+                                        <div className="col-md-5">
+                                            <select
+                                                className="form-select"
+                                                value={filterStatus}
+                                                onChange={(e) => setFilterStatus(e.target.value)}
+                                            >
+                                                {statusOptions.map(status => (
+                                                    <option key={status} value={status}>
+                                                        {status === 'All' ? 'Tất cả trạng thái' : status}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    )}
 
-                    {filteredOrders.length === 0 ? (
+                    {loading ? (
+                        <div className="text-center py-5">
+                            <div className="spinner-border text-danger" role="status">
+                                <span className="visually-hidden">Đang tải...</span>
+                            </div>
+                        </div>
+                    ) : orders.length === 0 ? (
+                        <div className="empty-orders text-center py-5">
+                            <div className="empty-orders-illustration mobile-scale"></div>
+                            <h4 className="mt-3">Bạn chưa có đơn hàng nào</h4>
+                            <p className="text-muted">Hãy đặt những món ăn đầu tiên của bạn ngay nhé!</p>
+                            <a href="/menu" className="btn btn-danger mt-3 px-5 rounded-pill">
+                                ĐẶT HÀNG NGAY
+                            </a>
+                        </div>
+                    ) : filteredOrders.length === 0 ? (
                         <div className="empty-orders text-center py-5">
                             <div className="empty-orders-illustration mobile-scale"></div>
                             <h4 className="mt-3">Không tìm thấy đơn hàng nào</h4>

@@ -5,8 +5,7 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Profile from './pages/Profile';
-import MyOrders from './pages/MyOrders';
+import Account from './pages/Account';
 import Checkout from './pages/Checkout';
 import StoreSystem from './pages/StoreSystem';
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -41,8 +40,9 @@ const AnimatedRoutes = () => {
         <Route path="/cart" element={<AnimatedPage><Cart /></AnimatedPage>} />
         <Route path="/login" element={<AnimatedPage><Login /></AnimatedPage>} />
         <Route path="/register" element={<AnimatedPage><Register /></AnimatedPage>} />
-        <Route path="/profile" element={<AnimatedPage><Profile /></AnimatedPage>} />
-        <Route path="/my-orders" element={<AnimatedPage><MyOrders /></AnimatedPage>} />
+        <Route path="/account" element={<AnimatedPage><Account /></AnimatedPage>} />
+        <Route path="/profile" element={<AnimatedPage><Account /></AnimatedPage>} />
+        <Route path="/my-orders" element={<AnimatedPage><Account /></AnimatedPage>} />
         <Route path="/checkout" element={<AnimatedPage><Checkout /></AnimatedPage>} />
         <Route path="/stores" element={<AnimatedPage><StoreSystem /></AnimatedPage>} />
         <Route path="/privacy-policy" element={<AnimatedPage><PrivacyPolicy /></AnimatedPage>} />
