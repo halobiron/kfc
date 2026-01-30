@@ -19,18 +19,13 @@ const userSchema = new Schema({
     },
     phone: {
         type: String,
-        required: [true, 'Số điện thoại là bắt buộc'],
         match: [/^[0-9]{10,11}$/, 'Số điện thoại không hợp lệ']
     },
     password: {
         type: String,
         required: [true, 'Mật khẩu là bắt buộc'],
         minlength: [6, 'Mật khẩu phải có ít nhất 6 ký tự'],
-        select: false // Không trả về password khi query
-    },
-    avatar: {
-        type: String,
-        default: null
+        select: false
     },
     addresses: [
         {
@@ -69,7 +64,7 @@ const userSchema = new Schema({
 });
 
 // Hash password trước khi lưu
-userSchema.pre('save', async function() {
+userSchema.pre('save', async function () {
     if (!this.isModified('password')) {
         return;
     }
@@ -78,7 +73,7 @@ userSchema.pre('save', async function() {
 });
 
 // Method so sánh password
-userSchema.methods.matchPassword = async function(enteredPassword) {
+userSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 

@@ -25,8 +25,7 @@ const sendToken = (user, statusCode, res) => {
             name: user.name,
             email: user.email,
             phone: user.phone,
-            role: user.role,
-            avatar: user.avatar
+            role: user.role
         }
     });
 };
@@ -143,6 +142,51 @@ exports.getCurrentUser = async (req, res, next) => {
             status: true,
             data: user
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// GOOGLE LOGIN
+exports.googleLogin = async (req, res, next) => {
+    try {
+        const { token } = req.body;
+
+        if (!token) {
+            return res.status(400).json({
+                status: false,
+                message: 'Token không hợp lệ'
+            });
+        }
+
+        // Set credentials with the access token
+        client.setCredentials({ access_token: token });
+
+        // Get user info from Google
+        const userRes = await client.request({
+            url: 'https://www.googleapis.com/oauth2/v3/userinfo'
+        });
+
+        const { name, email } = userRes.data;
+
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            // Generate a random password for google users
+            const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+
+            user = await User.create({
+                name,
+                email,
+                password: randomPassword,
+                role: 'customer'
+            });
+        }
+
+        sendToken(user, 200, res);
     } catch (error) {
         next(error);
     }

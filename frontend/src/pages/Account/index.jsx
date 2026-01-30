@@ -10,30 +10,17 @@ const Account = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user } = useSelector(state => state.auth);
-    const [activeTab, setActiveTab] = useState('orders'); // 'orders', 'profile', 'addresses'
+    const [activeTab, setActiveTab] = useState('orders');
 
     // User profile state
     const [userInfo, setUserInfo] = useState({
-        name: user?.name || 'Nguyễn Văn A',
-        email: user?.email || 'nguyenvana@example.com',
-        phone: user?.phone || '0901234567',
-        birthdate: user?.birthdate || '1990-01-01'
+        name: user?.name || '',
+        email: user?.email || '',
+        phone: user?.phone || '',
+        birthdate: user?.birthdate || ''
     });
 
-    const [addresses, setAddresses] = useState([
-        {
-            id: 1,
-            label: 'Nhà riêng',
-            fullAddress: '123 Đường ABC, Phường XYZ, Quận 1, TP.HCM',
-            isDefault: true
-        },
-        {
-            id: 2,
-            label: 'Công ty',
-            fullAddress: '456 Đường DEF, Phường GHI, Quận 3, TP.HCM',
-            isDefault: false
-        }
-    ]);
+    const [addresses, setAddresses] = useState([]);
 
     const [passwordData, setPasswordData] = useState({
         currentPassword: '',

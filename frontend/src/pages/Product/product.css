@@ -60,10 +60,12 @@
 }
 
 .category-wrapper a {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
     display: flex;
     align-items: flex-end;
     height: 100%;
-    padding-bottom: 8px;
+    padding-bottom: 5px;
     
     font-size: 1.5rem;
     font-weight: 700;

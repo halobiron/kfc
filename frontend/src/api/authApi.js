@@ -13,6 +13,10 @@ const authApi = {
         const url = '/auth/me';
         return axiosClient.get(url);
     },
+    googleLogin: (data) => {
+        const url = '/auth/google';
+        return axiosClient.post(url, data);
+    },
 };
 
 export default authApi;
