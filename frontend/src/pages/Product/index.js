@@ -1,5 +1,6 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import Card from '../../components/Card';
 
 import './product.css';
@@ -9,41 +10,80 @@ import { getAllCategories } from '../../redux/slices/categorySlice';
 
 const Product = () => {
     const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
     const { products, loading } = useSelector((state) => state.products);
     const { categories } = useSelector((state) => state.categories);
 
-    const [selectedCategory, setSelectedCategory] = useState('all');
-    const [searchTerm, setSearchTerm] = useState('');
+    // Track active category for sticky nav highlighting
+    const [activeCategory, setActiveCategory] = useState(null);
 
     useEffect(() => {
         dispatch(getAllProducts());
         dispatch(getAllCategories());
     }, [dispatch]);
 
-    // Filter products based on category and search
-    const filteredProducts = useMemo(() => {
-        let filtered = products;
+    // Scroll to section based on URL or click
+    const scrollToCategory = (slug) => {
+        const element = document.getElementById(slug);
+        if (element) {
+            // Offset for sticky header (adjust 150px as needed based on header height)
+            const headerOffset = 180;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-        // Filter by category
-        if (selectedCategory !== 'all') {
-            filtered = filtered.filter(product => product.category === selectedCategory);
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
         }
+    };
 
-        // Filter by search term
-        if (searchTerm.trim()) {
-            filtered = filtered.filter(product =>
-                product.title && product.title.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+    // Handle URL param for initial scroll
+    useEffect(() => {
+        if (!loading && categories.length > 0) {
+            const categoryParam = searchParams.get('category');
+            if (categoryParam) {
+                // Small timeout to ensure DOM is ready
+                setTimeout(() => scrollToCategory(categoryParam), 100);
+            }
         }
+    }, [searchParams, loading, categories]);
 
-        return filtered;
-    }, [selectedCategory, searchTerm, products]);
+    // Intersection Observer to update active category on scroll
+    useEffect(() => {
+        const observerOptions = {
+            root: null,
+            rootMargin: '-180px 0px -70% 0px', // Adjust to trigger when section is near top
+            threshold: 0
+        };
 
-    // Prepare categories for display with 'all' option
-    const categoryList = [
-        { _id: 'all', name: 'Tất cả', slug: 'all', icon: 'bi-grid' },
-        ...(Array.isArray(categories) ? categories : [])
-    ];
+        const observerCallback = (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setActiveCategory(entry.target.id);
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+        categories.forEach((category) => {
+            const element = document.getElementById(category.slug);
+            if (element) {
+                observer.observe(element);
+            }
+        });
+
+        return () => {
+            if (observer) observer.disconnect();
+        };
+    }, [categories, products]); // Re-run when content loads
+
+    // Helper to get products for a category
+    const getProductsByCategory = (categorySlug) => {
+        if (!products) return [];
+        return products.filter(product => product.category === categorySlug);
+    };
 
     return (
         <AnimatedPage>
@@ -56,45 +96,29 @@ const Product = () => {
                     </div>
                 </div>
 
+                {/* Sticky Category Navigation (Matching KFC Vietnam structure) */}
+                <div className="category-wrapper">
+                    <div className="container">
+                        <div className="category-nav-scroll">
+                            <ul>
+                                {categories.map(category => (
+                                    <li key={category._id}>
+                                        <a
+                                            className={activeCategory === category.slug ? 'active' : ''}
+                                            onClick={() => scrollToCategory(category.slug)}
+                                        >
+                                            {category.name}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="container py-4">
-                    {/* Search Bar */}
-                    <div className="search-section mb-4">
-                        <div className="search-box">
-                            <i className="bi bi-search"></i>
-                            <input
-                                type="text"
-                                className="search-input"
-                                placeholder="Tìm kiếm món ăn..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                            {searchTerm && (
-                                <button
-                                    className="clear-search"
-                                    onClick={() => setSearchTerm('')}
-                                >
-                                    <i className="bi bi-x-circle-fill"></i>
-                                </button>
-                            )}
-                        </div>
-                    </div>
+                    {/* Products Sections */}
 
-                    {/* Category Filter */}
-                    <div className="category-filter mb-4">
-                        <div className="category-scroll">
-                            {categoryList.map(category => (
-                                <button
-                                    key={category._id}
-                                    className={`category-btn ${selectedCategory === category.slug ? 'active' : ''}`}
-                                    onClick={() => setSelectedCategory(category.slug)}
-                                >
-                                    {category.name}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Products Grid */}
                     <div className="products-section">
                         {loading ? (
                             <div className="text-center py-5">
@@ -102,33 +126,26 @@ const Product = () => {
                                     <span className="visually-hidden">Loading...</span>
                                 </div>
                             </div>
-                        ) : filteredProducts.length > 0 ? (
-                            <>
-                                <div className="results-count mb-3">
-                                    Tìm thấy <strong>{filteredProducts.length}</strong> món ăn
-                                </div>
-                                <div className="row">
-                                    {filteredProducts.map(product => (
-                                        <div key={product._id} className="col-md-4 mb-4">
-                                            <Card product={product} />
-                                        </div>
-                                    ))}
-                                </div>
-                            </>
                         ) : (
-                            <div className="no-results">
-                                <i className="bi bi-search" style={{ fontSize: '48px', color: '#ccc' }}></i>
-                                <p className="mt-3">Không tìm thấy món ăn nào phù hợp</p>
-                                <button
-                                    className="btn btn-danger mt-2"
-                                    onClick={() => {
-                                        setSearchTerm('');
-                                        setSelectedCategory('all');
-                                    }}
-                                >
-                                    Xem tất cả món
-                                </button>
-                            </div>
+                            <>
+                                {categories.map(category => {
+                                    const categoryProducts = getProductsByCategory(category.slug);
+                                    if (categoryProducts.length === 0) return null;
+
+                                    return (
+                                        <div key={category._id} id={category.slug} className="category-section mb-5">
+                                            <h2 className="category-title mb-4">{category.name}</h2>
+                                            <div className="row">
+                                                {categoryProducts.map(product => (
+                                                    <div key={product._id} className="col-md-4 mb-4">
+                                                        <Card product={product} />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </>
                         )}
                     </div>
                 </div>

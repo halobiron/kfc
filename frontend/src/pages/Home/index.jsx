@@ -33,13 +33,14 @@ const Home = () => {
       {/* Category Grid Section */}
       <section className="home-category-section">
         <div className="container">
-          <div className="section-header text-start mt-4">
+          <div className="section-header text-center mt-4">
             <h3>DANH MỤC MÓN ĂN</h3>
+            <hr className="w-25 mx-auto text-danger border-2 opacity-100" />
           </div>
           <div className="row g-3">
             {categories.map((cat, index) => (
               <div key={index} className="col-6 col-md-4 col-lg-3">
-                <Link to="/products" className="text-decoration-none text-dark">
+                <Link to={`/products?category=${cat.slug}`} className="text-decoration-none text-dark">
                   <div className="category-card">
                     <div className="mock-icon">
                       <i className={`bi ${cat.icon}`}></i>

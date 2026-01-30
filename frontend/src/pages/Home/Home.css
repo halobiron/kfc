@@ -24,10 +24,11 @@
 }
 
 .category-title {
+    font-family: 'Oswald', sans-serif;
     margin-top: 1rem;
     font-weight: 700;
     text-transform: uppercase;
-    font-size: 0.9rem;
+    font-size: 1.5rem;
     color: #202124;
 }
 
@@ -37,10 +38,11 @@
 }
 
 .section-header h3 {
+    font-family: 'Oswald', sans-serif;
     font-weight: 800;
     text-transform: uppercase;
     color: #202124;
-    font-size: 1.5rem;
+    font-size: 2.25rem;
 }
 
 /* Product Section */
