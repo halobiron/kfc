@@ -2,67 +2,47 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import api from '../../utils/api';
 import { FiArrowLeft, FiPrinter, FiXCircle, FiCheckCircle, FiTruck, FiPackage, FiClock, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
 
 const OrderDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    // Mock data based on ID (simplified logic)
     const [order, setOrder] = useState(null);
     const [status, setStatus] = useState('');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Mock API call simulation
-        const mockOrder = {
-            id: id || '#1001',
-            date: '25/01/2026 10:30',
-            customer: {
-                name: 'Nguyen Van A',
-                email: 'nguyenvana@gmail.com',
-                phone: '0901234567',
-                address: '123 Nguyen Trai, Thanh Xuan, Ha Noi'
-            },
-            status: 'Hoàn thành',
-            paymentMethod: 'Thanh toán trực tuyến (Momo)',
-            paymentStatus: 'Đã thanh toán',
-            items: [
-                { id: 1, name: 'Combo Gà Rán Truyền Thống', quantity: 2, price: 89000, total: 178000, note: 'Không cay' },
-                { id: 2, name: 'Pepsi (L)', quantity: 1, price: 11000, total: 11000, note: '' }
-            ],
-            subtotal: 189000,
-            discount: 0,
-            shippingFee: 15000,
-            total: 204000,
-            history: [
-                { status: 'Chờ thanh toán', time: '25/01/2026 10:30' },
-                { status: 'Đã xác nhận', time: '25/01/2026 10:32' },
-                { status: 'Đang chuẩn bị', time: '25/01/2026 10:35' },
-                { status: 'Đang giao', time: '25/01/2026 10:55' },
-                { status: 'Hoàn thành', time: '25/01/2026 11:20' }
-            ]
-        };
-
-        // If ID is different, maybe return different data (mocking)
-        if (id === '#1002') {
-            mockOrder.status = 'Đang xử lý';
-            mockOrder.history = [
-                { status: 'Chờ thanh toán', time: '25/01/2026 14:30' },
-                { status: 'Đã xác nhận', time: '25/01/2026 14:32' }
-            ];
-        }
-
-        setOrder(mockOrder);
-        setStatus(mockOrder.status);
+        fetchOrderDetails();
     }, [id]);
 
-    const handleStatusChange = (newStatus) => {
-        setStatus(newStatus);
-        // Alert or API call would go here
-        toast.success(`Cập nhật trạng thái đơn hàng thành: ${newStatus}`);
+    const fetchOrderDetails = async () => {
+        try {
+            const response = await api.get(`/order/${id}`);
+            setOrder(response.data.data);
+            setStatus(response.data.data.status);
+        } catch (error) {
+            console.error('Lỗi khi tải chi tiết đơn hàng:', error);
+            toast.error('Không thể tải chi tiết đơn hàng.');
+            navigate('/orders');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    if (!order) return <div className="text-center p-5"><div className="spinner spinner-lg"></div></div>;
+    const handleStatusChange = async (newStatus) => {
+        try {
+            await api.put(`/order/update/${id}`, { status: newStatus });
+            setStatus(newStatus);
+            toast.success(`Cập nhật trạng thái đơn hàng thành: ${newStatus}`);
+            fetchOrderDetails();
+        } catch (error) {
+            toast.error('Không thể cập nhật trạng thái đơn hàng.');
+        }
+    };
+
+    if (loading) return <div className="text-center p-5"><div className="spinner spinner-lg"></div></div>;
 
     const getStatusBadge = (status) => {
         switch (status) {

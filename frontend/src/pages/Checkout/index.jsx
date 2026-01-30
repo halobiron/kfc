@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import axiosClient from '../../api/axiosClient';
 
 import './Checkout.css';
 import { getAllCoupons, getCouponByCode } from '../../redux/slices/couponSlice';
@@ -10,17 +11,23 @@ const Checkout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { coupons } = useSelector((state) => state.coupons);
+    const { items: cartItems } = useSelector((state) => state.cart);
+    const [stores, setStores] = useState([]);
 
     useEffect(() => {
         dispatch(getAllCoupons());
+        fetchStores();
     }, [dispatch]);
 
-    // Mock Cart Data (Should match Cart page mock)
-    const cartItems = [
-        { id: 1, name: "Combo Gà Rán 1 Người", price: 89000, quantity: 1 },
-        { id: 2, name: "Burger Zinger", price: 69000, quantity: 2 },
-        { id: 3, name: "Gà Popcorn (Vừa)", price: 38000, quantity: 1 }
-    ];
+    const fetchStores = async () => {
+        try {
+            const response = await axiosClient.get('/stores');
+            setStores(response.data.data || []);
+        } catch (error) {
+            console.error('Lỗi khi tải cửa hàng:', error);
+            toast.error('Không thể tải danh sách cửa hàng.');
+        }
+    };
 
     const [formData, setFormData] = useState({
         fullName: '',
@@ -29,22 +36,10 @@ const Checkout = () => {
         note: ''
     });
 
-    const [deliveryType, setDeliveryType] = useState('delivery'); // 'delivery' or 'pickup'
+    const [deliveryType, setDeliveryType] = useState('delivery');
     const [selectedStore, setSelectedStore] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('cod');
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // Danh sách cửa hàng KFC
-    const stores = [
-        { id: 1, name: 'KFC Vincom Bà Triệu', address: '191 Bà Triệu, Hai Bà Trưng, Hà Nội' },
-        { id: 2, name: 'KFC Royal City', address: '72A Nguyễn Trãi, Thanh Xuân, Hà Nội' },
-        { id: 3, name: 'KFC Times City', address: '458 Minh Khai, Hai Bà Trưng, Hà Nội' },
-        { id: 4, name: 'KFC Thái Hà', address: '90 Thái Hà, Đống Đa, Hà Nội' },
-        { id: 5, name: 'KFC Aeon Mall Long Biên', address: '27 Cổ Linh, Long Biên, Hà Nội' },
-        { id: 6, name: 'KFC Nguyễn Chí Thanh', address: '54 Nguyễn Chí Thanh, Đống Đa, Hà Nội' },
-        { id: 7, name: 'KFC Vincom Nguyễn Chí Thanh', address: '54A Nguyễn Chí Thanh, Đống Đa, Hà Nội' },
-        { id: 8, name: 'KFC Lotte Center', address: '54 Liễu Giai, Ba Đình, Hà Nội' }
-    ];
 
     // Promotion State
     const [couponCode, setCouponCode] = useState('');
@@ -112,7 +107,7 @@ const Checkout = () => {
         }));
     };
 
-    const handlePlaceOrder = () => {
+    const handlePlaceOrder = async () => {
         // Basic Validation
         if (!formData.fullName || !formData.phone) {
             toast.error("Vui lòng điền đầy đủ thông tin!");
@@ -131,20 +126,28 @@ const Checkout = () => {
 
         setIsSubmitting(true);
 
-        // Simulate API Call
-        setTimeout(() => {
-            setIsSubmitting(false);
+        try {
+            const orderData = {
+                items: cartItems,
+                customer: {
+                    name: formData.fullName,
+                    phone: formData.phone,
+                    address: deliveryType === 'delivery' ? formData.address : null,
+                    storeId: deliveryType === 'pickup' ? selectedStore : null
+                },
+                deliveryType,
+                paymentMethod,
+                couponCode: appliedCoupon?.code || null,
+                note: formData.note,
+                total
+            };
 
-            // Success Mock
-            const deliveryInfo = deliveryType === 'pickup'
-                ? `Lấy tại: ${stores.find(s => s.id === parseInt(selectedStore))?.name}`
-                : `Giao đến: ${formData.address}`;
-
+            const response = await axiosClient.post('/order/new', orderData);
+            
             toast.success(
                 <div>
                     <strong>Đặt hàng thành công!</strong><br />
-                    Mã đơn: KFC{Date.now().toString().slice(-6)}<br />
-                    {deliveryInfo}<br />
+                    Mã đơn: {response.data.data._id}<br />
                     Tổng: {formatCurrency(total)}
                 </div>,
                 { autoClose: 5000 }
@@ -152,7 +155,11 @@ const Checkout = () => {
 
             // Redirect to Success Page
             navigate('/order-success');
-        }, 1500);
+        } catch (error) {
+            toast.error('Không thể đặt hàng. Vui lòng thử lại.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (

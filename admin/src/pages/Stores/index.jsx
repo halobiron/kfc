@@ -1,40 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import AddStoreModal from './AddStoreModal';
 import { toast } from 'react-toastify';
+import api from '../../utils/api';
 import './stores.css';
 import { FiEdit2, FiTrash2, FiPlus, FiMapPin, FiPhone, FiClock } from 'react-icons/fi';
 
 const Stores = () => {
-    //   const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false)
+    const [stores, setStores] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // Mock data for display purposes until backend is ready
-    const [stores] = useState([
-        {
-            _id: '1',
-            name: 'KFC Nguyễn Trãi',
-            address: '123 Nguyễn Trãi, Quận 1, TP.HCM',
-            city: 'hcm',
-            phone: '1900 1166',
-            openTime: '08:00 - 22:00',
-        },
-        {
-            _id: '2',
-            name: 'KFC Hoàn Kiếm',
-            address: '456 Hoàng Diệu, Quận Hoàn Kiếm, Hà Nội',
-            city: 'hn',
-            phone: '1900 1166',
-            openTime: '08:00 - 22:00',
-        },
-        {
-            _id: '3',
-            name: 'KFC Đà Nẵng',
-            address: '555 Trần Phú, Quận Hải Châu, Đà Nẵng',
-            city: 'dn',
-            phone: '1900 1166',
-            openTime: '08:00 - 22:00',
+    useEffect(() => {
+        fetchStores();
+    }, []);
+
+    const fetchStores = async () => {
+        try {
+            const response = await api.get('/stores');
+            setStores(response.data.data || []);
+        } catch (error) {
+            console.error('Lỗi khi tải cửa hàng:', error);
+            toast.error('Không thể tải danh sách cửa hàng.');
+        } finally {
+            setLoading(false);
         }
-    ]);
+    };
 
     return (
         <>

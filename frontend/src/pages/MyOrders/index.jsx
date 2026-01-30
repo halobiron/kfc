@@ -1,91 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import axiosClient from '../../api/axiosClient';
 
 import './MyOrders.css';
 
 const MyOrders = () => {
-    // Mock data with detailed status tracking
-    const mockOrders = [
-        {
-            id: 'ORD1001',
-            date: '24/01/2026 14:30',
-            status: 'Đang giao',
-            statusClass: 'shipping',
-            total: 299000,
-            items: [
-                { name: 'Combo Gà Rán 1 Người', quantity: 1, price: 99000 },
-                { name: 'Pepsi Lon', quantity: 2, price: 20000 }
-            ],
-            canCancel: false,
-            timeline: [
-                { status: 'Chờ xác nhận', time: '24/01/2026 14:30', completed: true },
-                { status: 'Đang chuẩn bị', time: '24/01/2026 14:35', completed: true },
-                { status: 'Đang giao', time: '24/01/2026 15:10', completed: true },
-                { status: 'Hoàn thành', time: null, completed: false }
-            ]
-        },
-        {
-            id: 'ORD1002',
-            date: '23/01/2026 19:15',
-            status: 'Hoàn thành',
-            statusClass: 'completed',
-            total: 450000,
-            items: [
-                { name: 'Combo Nhóm 4-6 Người', quantity: 1, price: 399000 },
-                { name: 'Coca Cola 1.5L', quantity: 1, price: 25000 }
-            ],
-            canCancel: false,
-            timeline: [
-                { status: 'Chờ xác nhận', time: '23/01/2026 19:15', completed: true },
-                { status: 'Đang chuẩn bị', time: '23/01/2026 19:20', completed: true },
-                { status: 'Đang giao', time: '23/01/2026 19:55', completed: true },
-                { status: 'Hoàn thành', time: '23/01/2026 20:30', completed: true }
-            ]
-        },
-        {
-            id: 'ORD1003',
-            date: '24/01/2026 20:00',
-            status: 'Đang chuẩn bị',
-            statusClass: 'preparing',
-            total: 189000,
-            items: [
-                { name: 'Burger Zinger', quantity: 2, price: 69000 },
-                { name: 'Khoai Tây Chiên (L)', quantity: 1, price: 25000 }
-            ],
-            canCancel: true,
-            timeline: [
-                { status: 'Chờ xác nhận', time: '24/01/2026 20:00', completed: true },
-                { status: 'Đang chuẩn bị', time: '24/01/2026 20:05', completed: true },
-                { status: 'Đang giao', time: null, completed: false },
-                { status: 'Hoàn thành', time: null, completed: false }
-            ]
-        },
-        {
-            id: 'ORD1004',
-            date: '22/01/2026 12:45',
-            status: 'Đã hủy',
-            statusClass: 'cancelled',
-            total: 150000,
-            items: [
-                { name: 'Gà Rán Giòn Cay (3 miếng)', quantity: 1, price: 89000 }
-            ],
-            canCancel: false,
-            timeline: [
-                { status: 'Chờ xác nhận', time: '22/01/2026 12:45', completed: true },
-                { status: 'Đã hủy', time: '22/01/2026 12:50', completed: true, cancelled: true }
-            ]
-        }
-    ];
-
-    const [orders, setOrders] = useState(mockOrders);
-    const [filteredOrders, setFilteredOrders] = useState(mockOrders);
+    const [orders, setOrders] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('All');
 
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [orderToCancel, setOrderToCancel] = useState(null);
     const [cancelReason, setCancelReason] = useState('');
+    const [loading, setLoading] = useState(true);
 
+    // Fetch orders from API on component mount
+    useEffect(() => {
+        fetchOrders();
+    }, []);
+
+    const fetchOrders = async () => {
+        try {
+            const response = await axiosClient.get('/user/orders');
+            setOrders(response.data.data || []);
+        } catch (error) {
+            console.error('Lỗi khi tải đơn hàng:', error);
+            toast.error('Không thể tải đơn hàng. Vui lòng thử lại.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Filter orders based on search and status
     useEffect(() => {
         let result = orders;
 
@@ -98,7 +45,7 @@ const MyOrders = () => {
         if (searchTerm) {
             const lowerTerm = searchTerm.toLowerCase();
             result = result.filter(order =>
-                order.id.toLowerCase().includes(lowerTerm) ||
+                order._id.toLowerCase().includes(lowerTerm) ||
                 order.items.some(item => item.name.toLowerCase().includes(lowerTerm))
             );
         }
@@ -110,19 +57,18 @@ const MyOrders = () => {
         setOrderToCancel(order);
     };
 
-    const confirmCancelOrder = () => {
-        toast.success(`Đơn hàng #${orderToCancel.id} đã được hủy thành công.`);
-
-        // Update local state to reflect cancellation
-        const updatedOrders = orders.map(o =>
-            o.id === orderToCancel.id
-                ? { ...o, status: 'Đã hủy', statusClass: 'cancelled', canCancel: false }
-                : o
-        );
-
-        setOrders(updatedOrders);
-        setOrderToCancel(null);
-        setCancelReason('');
+    const confirmCancelOrder = async () => {
+        try {
+            await axiosClient.post(`/order/${orderToCancel._id}/cancel`, {
+                reason: cancelReason
+            });
+            toast.success(`Đơn hàng #${orderToCancel._id} đã được hủy thành công.`);
+            setOrderToCancel(null);
+            setCancelReason('');
+            fetchOrders(); // Refresh orders list
+        } catch (error) {
+            toast.error('Không thể hủy đơn hàng. Vui lòng thử lại.');
+        }
     };
 
     const formatCurrency = (amount) => {
@@ -201,10 +147,10 @@ const MyOrders = () => {
                     ) : (
                         <div className="orders-list">
                             {filteredOrders.map((order) => (
-                                <div key={order.id} className="order-card mb-4">
+                                <div key={order._id} className="order-card mb-4">
                                     <div className="order-header">
                                         <div className="order-info">
-                                            <h5 className="order-id">Đơn hàng {order.id}</h5>
+                                            <h5 className="order-id">Đơn hàng {order._id}</h5>
                                             <span className="order-date">
                                                 <i className="bi bi-calendar3 me-2"></i>
                                                 {order.date}
@@ -268,7 +214,7 @@ const MyOrders = () => {
                 <div className="order-modal-overlay" onClick={() => setSelectedOrder(null)}>
                     <div className="order-modal-content" onClick={(e) => e.stopPropagation()}>
                         <div className="order-modal-header">
-                            <h5 className="text-uppercase fw-bold">Chi tiết đơn hàng #{selectedOrder.id}</h5>
+                            <h5 className="text-uppercase fw-bold">Chi tiết đơn hàng #{selectedOrder._id}</h5>
                             <button className="btn-close-custom" onClick={() => setSelectedOrder(null)}>
                                 <i className="bi bi-x-lg"></i>
                             </button>

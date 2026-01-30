@@ -1,25 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
-// Mock data
-const mockIngredients = {
-    success: true,
-    data: [
-        {
-            _id: 'ing_001',
-            name: 'Thịt Gà tươi (Phi lê/Cánh/Đùi)',
-            unit: 'Kg',
-            stock: 15.5,
-            minStock: 50.0,
-            category: 'Thực phẩm tươi'
-        }
-    ]
-};
+import api from '../../utils/api';
 
 export const getAllIngredients = createAsyncThunk(
     'ingredients/getAllIngredients',
     async () => {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        return mockIngredients;
+        const response = await api.get('/ingredients');
+        return response.data;
     }
 );
 

@@ -1,71 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiClock, FiCheckCircle, FiAlertCircle, FiChevronRight } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import api from '../../utils/api';
 import StatCard from '../../components/StatCard';
 import './kitchen.css';
 
 const Kitchen = () => {
-  // Mock data - sẽ thay bằng Redux sau
-  const [orders, setOrders] = useState([
-    {
-      _id: '1',
-      orderNumber: 'ORD1001',
-      customerName: 'Nguyễn Văn A',
-      items: [
-        { name: 'Combo Gà Rán Truyền Thống', quantity: 2 },
-        { name: 'Pepsi (L)', quantity: 1 }
-      ],
-      status: 'pending',
-      createdAt: '10:30',
-      totalAmount: 189000
-    },
-    {
-      _id: '2',
-      orderNumber: 'ORD1002',
-      customerName: 'Trần Thị B',
-      items: [
-        { name: 'Burger Tôm', quantity: 1 },
-        { name: 'Khoai tây chiên (M)', quantity: 1 }
-      ],
-      status: 'preparing',
-      createdAt: '10:25',
-      totalAmount: 75000
-    },
-    {
-      _id: '3',
-      orderNumber: 'ORD1003',
-      customerName: 'Lê Văn C',
-      items: [
-        { name: 'Cơm Gà Giòn Cay', quantity: 1 },
-        { name: '7Up (M)', quantity: 1 }
-      ],
-      status: 'preparing',
-      createdAt: '10:20',
-      totalAmount: 55000
-    },
-    {
-      _id: '4',
-      orderNumber: 'ORD1004',
-      customerName: 'Phạm Thị D',
-      items: [
-        { name: 'Gà Rán (3 miếng)', quantity: 1 },
-        { name: 'Salad Bắp Cải', quantity: 1 }
-      ],
-      status: 'completed',
-      createdAt: '10:10',
-      totalAmount: 120000
-    },
-    {
-      _id: '5',
-      orderNumber: 'ORD1005',
-      customerName: 'Hoàng Văn E',
-      items: [
-        { name: 'Combo Nhóm (4 người)', quantity: 1 }
-      ],
-      status: 'pending',
-      createdAt: '10:35',
-      totalAmount: 350000
-    },
-  ]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await api.get('/orders');
+      setOrders(response.data.data || []);
+    } catch (error) {
+      console.error('Lỗi khi tải đơn hàng:', error);
+      toast.error('Không thể tải danh sách đơn hàng.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const statusConfig = {
     pending: { label: 'Chờ xác nhận', color: 'warning', icon: FiClock },
