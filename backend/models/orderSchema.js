@@ -6,12 +6,12 @@ const orderSchema = new Schema({
     orderNumber: {
         type: String,
         unique: true,
-        required: true
+        // Remove required: true because it's generated in pre-save hook
     },
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: false // Now optional for guest checkout
     },
     items: [
         {
@@ -46,8 +46,11 @@ const orderSchema = new Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ['cod', 'card', 'bank'],
+        enum: ['cod', 'card', 'bank', 'payos'],
         default: 'cod'
+    },
+    paymentCode: {
+        type: Number
     },
     couponCode: {
         type: String,
@@ -104,10 +107,14 @@ const orderSchema = new Schema({
 orderSchema.pre('save', async function() {
     if (!this.isNew) return;
     
-    const count = await mongoose.model('Order').countDocuments();
-    const date = new Date();
-    const dateStr = date.getFullYear() + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
-    this.orderNumber = `ORD${dateStr}${String(count + 1).padStart(5, '0')}`;
+    try {
+        const count = await this.constructor.countDocuments();
+        const date = new Date();
+        const dateStr = date.getFullYear() + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
+        this.orderNumber = `ORD${dateStr}${String(count + 1).padStart(5, '0')}`;
+    } catch (error) {
+        throw error;
+    }
 });
 
 const Order = mongoose.model('Order', orderSchema);

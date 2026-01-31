@@ -47,7 +47,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
 
-const createKfcIcon = (isActive) => L.divIcon({
+const createKfcIcon = (isActive, index) => L.divIcon({
     className: 'custom-kfc-marker',
     html: `<div style="
             width: 50px;
@@ -58,7 +58,18 @@ const createKfcIcon = (isActive) => L.divIcon({
             background-color: transparent;
             transform: scale(1.1);
             transform-origin: bottom center;
-        "></div>`,
+            position: relative;
+        ">
+            ${!isActive ? `<span style="
+                color: #fff;
+                font-weight: bold;
+                font-size: 14px;
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                font-family: Arial, sans-serif;
+            ">${index}</span>` : ''}
+        </div>`,
     iconSize: [50, 65],
     iconAnchor: [25, 65],
     popupAnchor: [0, -65]
@@ -430,11 +441,11 @@ const StoreSystem = () => {
                     )}
 
                     {/* Store Markers */}
-                    {sortedStores.map(store => (
+                    {sortedStores.map((store, index) => (
                         <Marker
                             key={store.id}
                             position={[store.location.lat, store.location.lng]}
-                            icon={createKfcIcon(expandedStore === store.id)}
+                            icon={createKfcIcon(expandedStore === store.id, index + 1)}
                             eventHandlers={{
                                 click: () => toggleStore(store.id),
                             }}

@@ -1,6 +1,7 @@
 const Order = require('../models/orderSchema');
 const Product = require('../models/productSchema');
 const Coupon = require('../models/couponSchema');
+const payos = require('../utils/payosClient');
 
 // CREATE ORDER
 exports.createOrder = async (req, res, next) => {
@@ -98,12 +99,15 @@ exports.createOrder = async (req, res, next) => {
 
         // Create order
         const order = await Order.create({
-            userId: req.user.id,
+            userId: req.user?.id || null,
             items: orderItems,
             deliveryType,
             deliveryInfo: {
-                ...deliveryInfo,
-                storeId: deliveryInfo.storeId || null
+                fullName: deliveryInfo?.name || '',
+                phone: deliveryInfo?.phone || '',
+                address: deliveryInfo?.address || null,
+                storeId: deliveryInfo?.storeId || null,
+                note: req.body.note || ''
             },
             paymentMethod,
             couponCode: couponCode || null,
@@ -120,7 +124,47 @@ exports.createOrder = async (req, res, next) => {
             ]
         });
 
-        await order.save();
+        if (paymentMethod === 'payos') {
+            // Generate numeric order code for PayOS (using timestamp + random part if needed, max 53 bit)
+            // PayOS orderCode must be integer
+            const paymentCode = Number(String(Date.now()).slice(-10)); 
+            
+            order.paymentCode = paymentCode;
+            await order.save();
+
+            const parsedAmount = parseInt(totalAmount);
+            const returnUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/order-success?orderId=${order._id}&status=success`;
+            const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/checkout?status=cancelled`;
+
+            const orderBody = {
+                orderCode: paymentCode,
+                amount: parsedAmount,
+                description: `Order ${order.orderNumber}`,
+                returnUrl: returnUrl,
+                cancelUrl: cancelUrl
+            };
+
+            try {
+                const paymentLinkResponse = await payos.paymentRequests.create(orderBody);
+                return res.status(201).json({
+                    status: true,
+                    message: 'Tạo đơn hàng thành công',
+                    data: order,
+                    checkoutUrl: paymentLinkResponse.checkoutUrl
+                });
+            } catch (payOsError) {
+                console.error('PayOS create link error:', payOsError);
+                // If PayOS link generation fails, we should delete the order 
+                // and inform the user so they can try again or choose another method.
+                await Order.findByIdAndDelete(order._id);
+                
+                return res.status(500).json({
+                    status: false,
+                    message: 'Lỗi khi tạo link thanh toán PayOS. Vui lòng thử lại hoặc chọn phương thức khác.',
+                    error: payOsError.message
+                });
+            }
+        }
 
         res.status(201).json({
             status: true,
@@ -157,8 +201,24 @@ exports.getOrderById = async (req, res, next) => {
             });
         }
 
-        // Check if user is owner or admin
-        if (order.userId.toString() !== req.user.id && req.user.role !== 'admin') {
+        // 1. If it's a guest order (no userId), allow viewing (can add phone verification later for security)
+        if (!order.userId) {
+            return res.status(200).json({
+                status: true,
+                data: order
+            });
+        }
+
+        // 2. If it's a registered order, require login and ownership/admin
+        if (!req.user) {
+            return res.status(401).json({
+                status: false,
+                message: 'Vui lòng đăng nhập để xem đơn hàng này'
+            });
+        }
+
+        const isOwner = order.userId.toString() === req.user.id;
+        if (!isOwner && req.user.role !== 'admin') {
             return res.status(403).json({
                 status: false,
                 message: 'Bạn không có quyền xem đơn hàng này'
@@ -248,7 +308,7 @@ exports.cancelOrder = async (req, res, next) => {
             });
         }
 
-        if (order.userId.toString() !== req.user.id) {
+        if (!order.userId || order.userId.toString() !== req.user.id) {
             return res.status(403).json({
                 status: false,
                 message: 'Bạn không có quyền hủy đơn hàng này'
@@ -283,6 +343,81 @@ exports.cancelOrder = async (req, res, next) => {
         res.status(200).json({
             status: true,
             message: 'Hủy đơn hàng thành công',
+            data: order
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// VERIFY PAYMENT (PAYOS)
+exports.verifyPayment = async (req, res, next) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({
+                status: false,
+                message: 'Không tìm thấy đơn hàng'
+            });
+        }
+
+        if (order.paymentMethod === 'payos' && order.paymentCode) {
+            const paymentLinkInfo = await payos.paymentRequests.get(order.paymentCode);
+            
+            if (paymentLinkInfo && paymentLinkInfo.status === 'PAID') {
+                if (!order.isPaid) {
+                    order.isPaid = true;
+                    order.paidAt = new Date();
+                    if (order.status === 'pending') {
+                        order.status = 'confirmed';
+                        order.statusHistory.push({
+                            status: 'confirmed',
+                            timestamp: new Date(),
+                            note: 'Thanh toán thành công qua PayOS'
+                        });
+                    }
+                    await order.save();
+                }
+            }
+        }
+        
+        res.status(200).json({
+            status: true,
+            data: order
+        });
+    } catch (error) {
+        // PayOS might throw if orderCode not found or other API errors
+        console.error("Payment verification failed:", error);
+        res.status(200).json({ status: true, data: await Order.findById(req.params.id) });
+    }
+};
+
+// LOOKUP GUEST ORDER
+exports.lookupOrder = async (req, res, next) => {
+    const { orderNumber, phone } = req.body;
+
+    try {
+        if (!orderNumber || !phone) {
+            return res.status(400).json({
+                status: false,
+                message: 'Vui lòng nhập Mã đơn hàng và Số điện thoại'
+            });
+        }
+
+        const order = await Order.findOne({ 
+            orderNumber: orderNumber.toUpperCase(),
+            'deliveryInfo.phone': phone
+        }).populate('items.productId');
+
+        if (!order) {
+            return res.status(404).json({
+                status: false,
+                message: 'Không tìm thấy đơn hàng với thông tin trên'
+            });
+        }
+
+        res.status(200).json({
+            status: true,
             data: order
         });
     } catch (error) {

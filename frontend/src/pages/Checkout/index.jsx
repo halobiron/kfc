@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import axiosClient from '../../api/axiosClient';
 import CustomSelect from '../../components/CustomSelect';
 
 import './Checkout.css';
-import { getAllCoupons, getCouponByCode } from '../../redux/slices/couponSlice';
+import { getAllCoupons } from '../../redux/slices/couponSlice';
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; 
@@ -19,6 +19,10 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return R * c;
 };
 
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+};
+
 const Checkout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -26,7 +30,6 @@ const Checkout = () => {
     const { items: cartItems } = useSelector((state) => state.cart);
     const [stores, setStores] = useState([]);
     const [isLocating, setIsLocating] = useState(false);
-    const [showSavedAddressSelect, setShowSavedAddressSelect] = useState(false);
 
     useEffect(() => {
         dispatch(getAllCoupons());
@@ -62,9 +65,23 @@ const Checkout = () => {
     const [appliedCoupon, setAppliedCoupon] = useState(null);
     const [couponError, setCouponError] = useState('');
 
-    const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const deliveryFee = deliveryType === 'pickup' ? 0 : (subtotal > 200000 ? 0 : 15000);
+    const subtotal = useMemo(() => cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0), [cartItems]);
+    const deliveryFee = useMemo(() => deliveryType === 'pickup' ? 0 : (subtotal > 200000 ? 0 : 15000), [deliveryType, subtotal]);
 
+    const discountAmount = useMemo(() => {
+        if (!appliedCoupon) return 0;
+
+        if (appliedCoupon.type === 'fixed') {
+            return appliedCoupon.discount;
+        } else if (appliedCoupon.type === 'percent') {
+            return (subtotal * appliedCoupon.discount) / 100;
+        } else if (appliedCoupon.type === 'shipping') {
+            return deliveryFee;
+        }
+        return 0;
+    }, [appliedCoupon, subtotal, deliveryFee]);
+
+    const total = useMemo(() => Math.max(0, subtotal + deliveryFee - discountAmount), [subtotal, deliveryFee, discountAmount]);
 
     const fetchSavedAddresses = async () => {
         try {
@@ -81,8 +98,32 @@ const Checkout = () => {
                 }
             }
         } catch (error) {
-            console.log('User not logged in or no addresses');
+            // User not logged in or no addresses
         }
+    };
+
+    const handleApplyCoupon = () => {
+        if (!couponCode) return;
+
+        // Find coupon from Redux state
+        const coupon = Array.isArray(coupons) 
+            ? coupons.find(c => c.code === couponCode.toUpperCase())
+            : null;
+
+        if (!coupon) {
+            setCouponError('Mã khuyến mãi không hợp lệ!');
+            setAppliedCoupon(null);
+            return;
+        }
+
+        if (subtotal < coupon.minOrder) {
+            setCouponError(`Đơn tối thiểu để áp dụng là ${formatCurrency(coupon.minOrder)}`);
+            setAppliedCoupon(null);
+            return;
+        }
+
+        setAppliedCoupon(coupon);
+        setCouponError('');
     };
 
     const handleAddressSelect = (e) => {
@@ -168,50 +209,6 @@ const Checkout = () => {
         }
     };
 
-    const calculateDiscount = () => {
-        if (!appliedCoupon) return 0;
-
-        if (appliedCoupon.type === 'fixed') {
-            return appliedCoupon.discount;
-        } else if (appliedCoupon.type === 'percent') {
-            return (subtotal * appliedCoupon.discount) / 100;
-        } else if (appliedCoupon.type === 'shipping') {
-            return deliveryFee; // Discount equals the shipping fee
-        }
-        return 0;
-    };
-
-    const discountAmount = calculateDiscount();
-    const total = Math.max(0, subtotal + deliveryFee - discountAmount);
-
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-    };
-
-    const handleApplyCoupon = () => {
-        if (!couponCode) return;
-
-        // Find coupon from Redux state
-        const coupon = Array.isArray(coupons) 
-            ? coupons.find(c => c.code === couponCode.toUpperCase())
-            : null;
-
-        if (!coupon) {
-            setCouponError('Mã khuyến mãi không hợp lệ!');
-            setAppliedCoupon(null);
-            return;
-        }
-
-        if (subtotal < coupon.minOrder) {
-            setCouponError(`Đơn tối thiểu để áp dụng là ${formatCurrency(coupon.minOrder)}`);
-            setAppliedCoupon(null);
-            return;
-        }
-
-        setAppliedCoupon(coupon);
-        setCouponError('');
-    };
-
     const removeCoupon = () => {
         setAppliedCoupon(null);
         setCouponCode('');
@@ -248,8 +245,11 @@ const Checkout = () => {
 
         try {
             const orderData = {
-                items: cartItems,
-                customer: {
+                items: cartItems.map(item => ({
+                    productId: item._id,
+                    quantity: item.quantity
+                })),
+                deliveryInfo: {
                     name: formData.fullName,
                     phone: formData.phone,
                     address: deliveryType === 'delivery' ? formData.address : null,
@@ -263,6 +263,11 @@ const Checkout = () => {
             };
 
             const response = await axiosClient.post('/order/new', orderData);
+
+            if (response.data.checkoutUrl) {
+                window.location.href = response.data.checkoutUrl;
+                return;
+            }
             
             toast.success(
                 <div>
@@ -273,8 +278,8 @@ const Checkout = () => {
                 { autoClose: 5000 }
             );
 
-            // Redirect to Success Page
-            navigate('/order-success');
+            // Redirect to Success Page with orderId
+            navigate(`/order-success?orderId=${response.data.data._id}`);
         } catch (error) {
             toast.error('Không thể đặt hàng. Vui lòng thử lại.');
         } finally {
@@ -531,18 +536,18 @@ const Checkout = () => {
                                 </div>
 
                                 <div
-                                    className={`payment-option ${paymentMethod === 'online' ? 'selected' : ''}`}
-                                    onClick={() => setPaymentMethod('online')}
+                                    className={`payment-option ${paymentMethod === 'payos' ? 'selected' : ''}`}
+                                    onClick={() => setPaymentMethod('payos')}
                                 >
                                     <input
                                         type="radio"
                                         name="paymentParams"
                                         className="payment-radio"
-                                        checked={paymentMethod === 'online'}
-                                        onChange={() => setPaymentMethod('online')}
+                                        checked={paymentMethod === 'payos'}
+                                        onChange={() => setPaymentMethod('payos')}
                                     />
-                                    <div className="payment-icon"><i className="bi bi-bank"></i></div>
-                                    <span className="payment-label">Thanh toán qua Thẻ / Ví điện tử</span>
+                                    <div className="payment-icon"><i className="bi bi-qr-code-scan"></i></div>
+                                    <span className="payment-label">Thanh toán Online (QR Code/Thẻ/Ví)</span>
                                 </div>
                             </div>
                         </div>
@@ -557,10 +562,10 @@ const Checkout = () => {
 
                             <div className="summary-items">
                                 {cartItems.map(item => (
-                                    <div key={item.id} className="summary-item">
+                                    <div key={item._id || item.id} className="summary-item">
                                         <div className="item-name-qty">
                                             <span className="item-qty">{item.quantity}x</span>
-                                            <span>{item.name}</span>
+                                            <span>{item.title || item.name}</span>
                                         </div>
                                         <span>{formatCurrency(item.price * item.quantity)}</span>
                                     </div>

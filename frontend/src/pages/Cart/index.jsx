@@ -1,6 +1,6 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, updateQuantity } from '../../redux/slices/cartSlice';
 
@@ -50,9 +50,9 @@ const Cart = () => {
                     <div className="empty-bucket">
                         <div>
                             <h2>Giỏ hàng của bạn đang trống. Hãy đặt món ngay!</h2>
-                            <a href="/products" className="start-order-btn">
+                            <Link to="/products" className="start-order-btn">
                                 Bắt đầu đặt hàng
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 ) : (
@@ -144,9 +144,9 @@ const Cart = () => {
                                     Thanh Toán
                                 </button>
 
-                                <a href="/products" className="continue-shopping-link">
+                                <Link to="/products" className="continue-shopping-link">
                                     Tiếp tục mua hàng
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

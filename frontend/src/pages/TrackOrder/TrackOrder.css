@@ -1,0 +1,50 @@
+.track-order-wrapper {
+    background: url('https://static.kfcvietnam.com.vn/images/web/store-selection/lg/localization-bg.jpg?v=5.0') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+.track-order-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.track-order-wrapper .form-control {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.track-order-wrapper .form-control:focus {
+    border-color: #e4002b;
+    box-shadow: none;
+}
+
+.track-order-wrapper .btn-danger {
+    background-color: #e4002b;
+    border: none;
+    padding: 12px;
+    text-transform: uppercase;
+}
+
+.order-result-card {
+    background: white;
+    border-radius: 8px;
+    border-left: 5px solid #e4002b;
+}
+
+.item-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px dashed #eee;
+}
+
+.status-badge {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}

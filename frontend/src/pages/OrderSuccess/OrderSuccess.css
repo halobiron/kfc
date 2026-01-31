@@ -44,3 +44,12 @@
         transform: scale(1);
     }
 }
+
+.cursor-pointer {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.cursor-pointer:hover {
+    opacity: 0.7;
+}

@@ -5,7 +5,7 @@ import categoryReducer from './slices/categorySlice';
 import couponReducer from './slices/couponSlice';
 import authReducer from './slices/authSlice';
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     cart: cartReducer,
     products: productReducer,
@@ -14,3 +14,9 @@ export default configureStore({
     auth: authReducer,
   },
 });
+
+store.subscribe(() => {
+  localStorage.setItem('cart', JSON.stringify(store.getState().cart));
+});
+
+export default store;

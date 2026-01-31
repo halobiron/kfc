@@ -6,15 +6,19 @@ const {
     getOrderById, 
     updateOrderStatus, 
     getAllOrders,
-    cancelOrder
+    cancelOrder,
+    verifyPayment,
+    lookupOrder
 } = require('../controllers/orderController');
 const { isAuthenticatedUser, authorizeRoles } = require('../middleware/auth');
 
 // User routes
-router.post('/order/new', isAuthenticatedUser, createOrder);
+router.post('/order/new', createOrder);
+router.post('/order/lookup', lookupOrder);
 router.get('/user/orders', isAuthenticatedUser, getUserOrders);
-router.get('/order/:id', isAuthenticatedUser, getOrderById);
+router.get('/order/:id', getOrderById);
 router.post('/order/:id/cancel', isAuthenticatedUser, cancelOrder);
+router.get('/order/:id/verify-payment', verifyPayment);
 
 // Admin routes
 router.get('/orders', isAuthenticatedUser, authorizeRoles('admin'), getAllOrders);
