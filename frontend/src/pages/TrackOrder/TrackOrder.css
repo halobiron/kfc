@@ -8,7 +8,7 @@
     background: rgba(255, 255, 255, 0.95);
     border: none;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .track-order-wrapper .form-control {
@@ -47,4 +47,102 @@
     border-radius: 20px;
     font-size: 0.85rem;
     font-weight: bold;
+}
+
+/* Timeline Styles - Scoped */
+.track-order-wrapper .timeline-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.track-order-wrapper .timeline {
+    position: relative;
+    padding-left: 20px;
+    list-style: none;
+    margin-bottom: 0;
+}
+
+.track-order-wrapper .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 5px;
+    bottom: 20px;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.track-order-wrapper .timeline-item {
+    position: relative;
+    padding-bottom: 25px;
+    padding-left: 25px;
+}
+
+.track-order-wrapper .timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.track-order-wrapper .timeline-dot {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #dee2e6;
+    z-index: 1;
+}
+
+.track-order-wrapper .timeline-item.latest .timeline-dot {
+    background: #e4002b;
+    border-color: #e4002b;
+    box-shadow: 0 0 0 3px rgba(228, 0, 43, 0.2);
+}
+
+.track-order-wrapper .timeline-item.completed .timeline-dot {
+    border-color: #28a745;
+    background: #28a745;
+}
+
+.track-order-wrapper .timeline-time {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-bottom: 2px;
+}
+
+.track-order-wrapper .timeline-status {
+    font-weight: 700;
+    margin-bottom: 2px;
+    color: #333;
+}
+
+.track-order-wrapper .timeline-note {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+}
+
+@media (min-width: 768px) {
+    .border-end-md {
+        border-right: 1px solid #dee2e6;
+    }
+}
+
+.border-bottom-dashed {
+    border-bottom: 1px dashed #eee;
+}
+
+.track-order-wrapper .timeline-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+
+.track-order-wrapper .timeline-wrapper::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.track-order-wrapper .timeline-wrapper::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
 }

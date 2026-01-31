@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllIngredients, updateIngredientStock, createIngredient } from '../../redux/slices/ingredientSlice';
+import { getAllIngredients, updateIngredientStock, createIngredient, updateIngredient } from '../../redux/slices/ingredientSlice';
 import { toast } from 'react-toastify';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiEdit2 } from 'react-icons/fi';
 import './ingredient.css';
 
 const Ingredient = () => {
@@ -10,6 +10,7 @@ const Ingredient = () => {
     const { ingredients } = useSelector(state => state.ingredients);
     const [showRestockModal, setShowRestockModal] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
     const [selectedIng, setSelectedIng] = useState(null);
     const [restockAmount, setRestockAmount] = useState('');
     const [packSize, setPackSize] = useState('1');
@@ -22,6 +23,7 @@ const Ingredient = () => {
         category: 'Thực phẩm tươi',
         unit: 'Kg',
         minStock: 10,
+        cost: '',
         supplier: '',
         supplierContact: '',
         stock: 0
@@ -49,30 +51,99 @@ const Ingredient = () => {
             if (editSupplier && editSupplier !== selectedIng.supplier) updates.supplier = editSupplier;
             if (editSupplierContact && editSupplierContact !== selectedIng.supplierContact) updates.supplierContact = editSupplierContact;
 
-            dispatch(updateIngredientStock(selectedIng._id, finalAmount, updates));
+            dispatch(updateIngredientStock({
+                id: selectedIng._id,
+                amount: finalAmount,
+                updates: updates
+            })).unwrap().then(() => {
+                toast.success(`Đã nhập thêm ${finalAmount} ${selectedIng.unit} vào kho.`);
+                dispatch(getAllIngredients()); // Refresh list
+            }).catch(err => {
+                toast.error(err.message || 'Lỗi khi nhập kho');
+            });
+
             setShowRestockModal(false);
             setRestockAmount('');
             setPackSize('1');
             setEditSupplier('');
             setEditSupplierContact('');
-            toast.success(`Đã nhập thêm ${finalAmount} ${selectedIng.unit} vào kho.`);
         }
     };
 
     const handleCreateWrapper = (e) => {
         e.preventDefault();
-        dispatch(createIngredient(newIng));
-        setShowAddModal(false);
+
+        if (isEditing && selectedIng) {
+            dispatch(updateIngredient({ id: selectedIng._id, data: newIng }))
+                .unwrap()
+                .then(() => {
+                    setShowAddModal(false);
+                    setIsEditing(false);
+                    setNewIng({
+                        name: '',
+                        category: 'Thực phẩm tươi',
+                        unit: 'Kg',
+                        minStock: 10,
+                        cost: '',
+                        supplier: '',
+                        supplierContact: '',
+                        stock: 0
+                    });
+                    toast.success('Đã cập nhật nguyên liệu');
+                    dispatch(getAllIngredients());
+                })
+                .catch(err => toast.error(err.message || 'Lỗi khi cập nhật nguyên liệu'));
+        } else {
+            dispatch(createIngredient(newIng))
+                .unwrap()
+                .then(() => {
+                    setShowAddModal(false);
+                    setNewIng({
+                        name: '',
+                        category: 'Thực phẩm tươi',
+                        unit: 'Kg',
+                        minStock: 10,
+                        cost: '',
+                        supplier: '',
+                        supplierContact: '',
+                        stock: 0
+                    });
+                    toast.success('Đã thêm nguyên liệu mới');
+                    dispatch(getAllIngredients());
+                })
+                .catch(err => toast.error(err.message || 'Lỗi khi tạo nguyên liệu'));
+        }
+    };
+
+    const openEditModal = (ing) => {
+        setSelectedIng(ing);
+        setNewIng({
+            name: ing.name,
+            category: ing.category,
+            unit: ing.unit,
+            minStock: ing.minStock,
+            stock: ing.stock,
+            cost: ing.cost || '',
+            supplier: ing.supplier || '',
+            supplierContact: ing.supplierContact || ''
+        });
+        setIsEditing(true);
+        setShowAddModal(true);
+    };
+
+    const openCreateModal = () => {
+        setIsEditing(false);
         setNewIng({
             name: '',
             category: 'Thực phẩm tươi',
             unit: 'Kg',
             minStock: 10,
+            cost: '',
             supplier: '',
             supplierContact: '',
             stock: 0
         });
-        toast.success('Đã thêm nguyên liệu mới');
+        setShowAddModal(true);
     };
 
     const openRestockModal = (ing) => {
@@ -97,7 +168,7 @@ const Ingredient = () => {
             <div className="page-header d-flex justify-content-between align-items-center">
                 <h1 className="page-title">Quản lý Nguyên liệu (Kho)</h1>
                 <div className="d-flex gap-2">
-                    <button className="btn btn-primary d-flex align-items-center gap-2 shadow-sm" onClick={() => setShowAddModal(true)}>
+                    <button className="btn btn-primary d-flex align-items-center gap-2 shadow-sm" onClick={openCreateModal}>
                         <FiPlus size={20} /> Thêm nguyên liệu
                     </button>
                 </div>
@@ -147,6 +218,12 @@ const Ingredient = () => {
                                             </span>
                                         </td>
                                         <td className="text-end pe-4">
+                                            <button
+                                                className="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 me-2"
+                                                onClick={() => openEditModal(ing)}
+                                            >
+                                                <FiEdit2 /> Sửa
+                                            </button>
                                             <button
                                                 className="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-1"
                                                 onClick={() => openRestockModal(ing)}
@@ -296,7 +373,7 @@ const Ingredient = () => {
                 <div className="modal-overlay-wrapper">
                     <div className="modal-overlay-inner overflow-hidden" style={{ width: '500px' }}>
                         <div className="d-flex justify-content-between align-items-center mb-4">
-                            <h5 className="mb-0 fw-bold">Thêm nguyên liệu mới</h5>
+                            <h5 className="mb-0 fw-bold">{isEditing ? 'Cập nhật nguyên liệu' : 'Thêm nguyên liệu mới'}</h5>
                             <button className="btn-close" onClick={() => setShowAddModal(false)}></button>
                         </div>
                         <form onSubmit={handleCreateWrapper}>
@@ -354,6 +431,20 @@ const Ingredient = () => {
                                     />
                                 </div>
                                 <div className="col-md-6">
+                                    <label className="form-label">Giá nhập (VND)</label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        value={newIng.cost}
+                                        onChange={(e) => setNewIng({ ...newIng, cost: e.target.value })}
+                                        required
+                                        placeholder="VD: 50000"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="row mb-3">
+                                <div className="col-md-6">
                                     <label className="form-label">Mức báo động (Min)</label>
                                     <input
                                         type="number"
@@ -390,7 +481,7 @@ const Ingredient = () => {
                             </div>
 
                             <div className="d-flex gap-2">
-                                <button type="submit" className="btn btn-primary w-100 py-2">Thêm mới</button>
+                                <button type="submit" className="btn btn-primary w-100 py-2">{isEditing ? 'Cập nhật' : 'Thêm mới'}</button>
                                 <button type="button" className="btn btn-light w-100 py-2" onClick={() => setShowAddModal(false)}>Hủy</button>
                             </div>
                         </form>

@@ -7,9 +7,10 @@ import CustomSelect from '../../components/CustomSelect';
 
 import './Checkout.css';
 import { getAllCoupons } from '../../redux/slices/couponSlice';
+import { clearCart } from '../../redux/slices/cartSlice';
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; 
+    const R = 6371;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -111,7 +112,7 @@ const Checkout = () => {
         if (!couponCode) return;
 
         // Find coupon from Redux state
-        const coupon = Array.isArray(coupons) 
+        const coupon = Array.isArray(coupons)
             ? coupons.find(c => c.code === couponCode.toUpperCase())
             : null;
 
@@ -156,15 +157,15 @@ const Checkout = () => {
                     setIsLocating(false);
                     return;
                 }
-                
+
                 // Wrap geolocation in promise
                 const pos = await new Promise((resolve, reject) => {
                     navigator.geolocation.getCurrentPosition(resolve, reject);
                 });
-                
+
                 lat = pos.coords.latitude;
                 lng = pos.coords.longitude;
-                
+
             } else if (sourceType === 'saved' && index !== null) {
                 const selected = savedAddresses[index];
                 if (!selected) return;
@@ -177,7 +178,7 @@ const Checkout = () => {
                     toast.info("Đang tìm tọa độ cho địa chỉ này...");
                     const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(selected.fullAddress)}&countrycodes=vn&limit=1`);
                     const data = await res.json();
-                    
+
                     if (data?.length > 0) {
                         lat = parseFloat(data[0].lat);
                         lng = parseFloat(data[0].lon);
@@ -269,11 +270,14 @@ const Checkout = () => {
 
             const response = await axiosClient.post('/order/new', orderData);
 
+            // Clear cart immediately upon successful request
+            dispatch(clearCart());
+
             if (response.data.checkoutUrl) {
                 window.location.href = response.data.checkoutUrl;
                 return;
             }
-            
+
             toast.success(
                 <div>
                     <strong>Đặt hàng thành công!</strong><br />
@@ -483,7 +487,7 @@ const Checkout = () => {
 
                                         <div className="col-12 form-group">
                                             <label className="form-label">Chọn cửa hàng KFC gần nhất *</label>
-                                            
+
                                             {isLocating && <div className="text-center small text-muted mb-2"><span className="spinner-border spinner-border-sm me-1"></span>Đang tìm kiếm...</div>}
 
                                             <CustomSelect

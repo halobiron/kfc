@@ -59,7 +59,7 @@ const Header = () => {
                   {/* User Account Link */}
                   <Link
                     to="/account"
-                    className="btn text-dark fw-bold d-flex align-items-center justify-content-center p-0 border-0"
+                    className="btn user-acc-btn text-dark fw-bold d-flex align-items-center justify-content-center p-0 border-0"
                     style={{ width: '36px', height: '36px' }}
                   >
                     <i className="bi bi-person-circle" style={{ fontSize: '28px', lineHeight: '1' }}></i>

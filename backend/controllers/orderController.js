@@ -1,6 +1,7 @@
 const Order = require('../models/orderSchema');
 const Product = require('../models/productSchema');
 const Coupon = require('../models/couponSchema');
+const Ingredient = require('../models/ingredientSchema');
 const payos = require('../utils/payosClient');
 
 // CREATE ORDER
@@ -127,8 +128,8 @@ exports.createOrder = async (req, res, next) => {
         if (paymentMethod === 'payos') {
             // Generate numeric order code for PayOS (using timestamp + random part if needed, max 53 bit)
             // PayOS orderCode must be integer
-            const paymentCode = Number(String(Date.now()).slice(-10)); 
-            
+            const paymentCode = Number(String(Date.now()).slice(-10));
+
             order.paymentCode = paymentCode;
             await order.save();
 
@@ -157,7 +158,7 @@ exports.createOrder = async (req, res, next) => {
                 // If PayOS link generation fails, we should delete the order 
                 // and inform the user so they can try again or choose another method.
                 await Order.findByIdAndDelete(order._id);
-                
+
                 return res.status(500).json({
                     status: false,
                     message: 'Lỗi khi tạo link thanh toán PayOS. Vui lòng thử lại hoặc chọn phương thức khác.',
@@ -193,7 +194,7 @@ exports.getUserOrders = async (req, res, next) => {
 exports.getOrderById = async (req, res, next) => {
     try {
         const order = await Order.findById(req.params.id).populate('items.productId');
-        
+
         if (!order) {
             return res.status(404).json({
                 status: false,
@@ -240,13 +241,62 @@ exports.updateOrderStatus = async (req, res, next) => {
 
     try {
         const order = await Order.findById(req.params.id);
-        
+
         if (!order) {
             return res.status(404).json({
                 status: false,
                 message: 'Đơn hàng không tìm thấy'
             });
         }
+
+        // START: Logic trừ nguyên liệu khi bắt đầu nấu (status: preparing)
+        if (status === 'preparing' && order.status !== 'preparing') {
+            const ingredientsToUpdate = [];
+
+            // 1. Tính toán tổng nguyên liệu cần thiết
+            for (const item of order.items) {
+                const product = await Product.findById(item.productId);
+                if (product && product.recipe && product.recipe.length > 0) {
+                    for (const recipeItem of product.recipe) {
+                        const ingredient = await Ingredient.findById(recipeItem.ingredientId);
+                        if (ingredient) {
+                            const quantityNeeded = recipeItem.quantity * item.quantity;
+
+                            // Gom nhóm nguyên liệu (xử lý trường hợp nhiều món dùng cùng nguyên liệu)
+                            const existing = ingredientsToUpdate.find(i => i.id.toString() === ingredient._id.toString());
+                            if (existing) {
+                                existing.needed += quantityNeeded;
+                            } else {
+                                ingredientsToUpdate.push({
+                                    id: ingredient._id,
+                                    needed: quantityNeeded,
+                                    name: ingredient.name,
+                                    unit: ingredient.unit,
+                                    doc: ingredient
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 2. Kiểm tra tồn kho
+            for (const update of ingredientsToUpdate) {
+                if (update.doc.stock < update.needed) {
+                    return res.status(400).json({
+                        status: false,
+                        message: `Không đủ nguyên liệu: ${update.name} (Cần: ${update.needed} ${update.unit}, Tồn: ${update.doc.stock})`
+                    });
+                }
+            }
+
+            // 3. Trừ kho
+            for (const update of ingredientsToUpdate) {
+                update.doc.stock -= update.needed;
+                await update.doc.save();
+            }
+        }
+        // END: Logic trừ nguyên liệu
 
         order.status = status;
         order.statusHistory.push({
@@ -287,11 +337,11 @@ exports.updateOrderStatus = async (req, res, next) => {
 exports.getAllOrders = async (req, res, next) => {
     try {
         const filter = {};
-        
+
         // Filter by store if user is restricted to a store
         if (req.user && req.user.storeId) {
             filter['deliveryInfo.storeId'] = req.user.storeId;
-        } 
+        }
         // Allow creating/switching filters if user is not restricted (e.g. Super Admin)
         else if (req.query.storeId) {
             filter['deliveryInfo.storeId'] = req.query.storeId;
@@ -332,7 +382,7 @@ exports.deleteOrder = async (req, res, next) => {
 exports.cancelOrder = async (req, res, next) => {
     try {
         const order = await Order.findById(req.params.id);
-        
+
         if (!order) {
             return res.status(404).json({
                 status: false,
@@ -347,7 +397,7 @@ exports.cancelOrder = async (req, res, next) => {
             });
         }
 
-        if (['shipped', 'delivered', 'cancelled'].includes(order.status)) {
+        if (['shipping', 'delivered', 'cancelled'].includes(order.status)) {
             return res.status(400).json({
                 status: false,
                 message: `Không thể hủy đơn hàng ở trạng thái ${order.status}`
@@ -395,7 +445,7 @@ exports.verifyPayment = async (req, res, next) => {
 
         if (order.paymentMethod === 'payos' && order.paymentCode) {
             const paymentLinkInfo = await payos.paymentRequests.get(order.paymentCode);
-            
+
             if (paymentLinkInfo && paymentLinkInfo.status === 'PAID') {
                 if (!order.isPaid) {
                     order.isPaid = true;
@@ -412,7 +462,7 @@ exports.verifyPayment = async (req, res, next) => {
                 }
             }
         }
-        
+
         res.status(200).json({
             status: true,
             data: order
@@ -436,7 +486,7 @@ exports.lookupOrder = async (req, res, next) => {
             });
         }
 
-        const order = await Order.findOne({ 
+        const order = await Order.findOne({
             orderNumber: orderNumber.toUpperCase(),
             'deliveryInfo.phone': phone
         }).populate('items.productId');

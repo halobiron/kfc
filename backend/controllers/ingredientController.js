@@ -17,7 +17,7 @@ exports.getAllIngredients = async (req, res, next) => {
 exports.getIngredientById = async (req, res, next) => {
     try {
         const ingredient = await Ingredient.findById(req.params.id);
-        
+
         if (!ingredient) {
             return res.status(404).json({
                 status: false,
@@ -37,7 +37,7 @@ exports.getIngredientById = async (req, res, next) => {
 // CREATE INGREDIENT
 exports.createIngredient = async (req, res, next) => {
     try {
-        const { name, category, unit, stock, minStock, cost, supplier } = req.body;
+        const { name, category, unit, stock, minStock, cost, supplier, supplierContact } = req.body;
 
         if (!name || !category || !unit || !stock || !cost) {
             return res.status(400).json({
@@ -53,7 +53,8 @@ exports.createIngredient = async (req, res, next) => {
             stock,
             minStock: minStock || 10,
             cost,
-            supplier
+            supplier,
+            supplierContact
         });
 
         res.status(201).json({
@@ -119,7 +120,7 @@ exports.deleteIngredient = async (req, res, next) => {
 // UPDATE STOCK
 exports.updateStock = async (req, res, next) => {
     try {
-        const { quantity, type } = req.body; // type: 'add' hoặc 'reduce'
+        const { quantity, type, supplier, supplierContact } = req.body; // type: 'add' hoặc 'reduce'
 
         if (!quantity || !type) {
             return res.status(400).json({
@@ -153,6 +154,9 @@ exports.updateStock = async (req, res, next) => {
                 message: 'Loại thay đổi không hợp lệ (add hoặc reduce)'
             });
         }
+
+        if (supplier) ingredient.supplier = supplier;
+        if (supplierContact) ingredient.supplierContact = supplierContact;
 
         ingredient.lastRestockDate = new Date();
         ingredient.updatedAt = new Date();

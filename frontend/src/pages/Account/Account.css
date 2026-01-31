@@ -162,17 +162,17 @@
         white-space: nowrap;
         margin: 0 -1.07142857rem;
     }
-    
+
     .account-left ul li {
         display: inline-block;
         margin: 0 1.07142857rem;
     }
-    
+
     .account-left ul li a {
         padding: 0.71428571rem 0;
         border-bottom: 3px solid #202124;
     }
-    
+
     .account-left ul li.active a {
         border-color: #e4002b;
     }
@@ -245,7 +245,7 @@
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
@@ -824,15 +824,15 @@
         padding-top: 0;
         padding-bottom: 0;
     }
-    
+
     .detail-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .form-row {
         flex-direction: column;
     }
-    
+
     .form-group {
         min-width: 100%;
     }
@@ -842,11 +842,11 @@
     .order-actions {
         flex-direction: column;
     }
-    
+
     .search-filter-section {
         flex-direction: column;
     }
-    
+
     .search-box,
     .filter-box {
         width: 100%;
@@ -865,6 +865,7 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1285,11 +1286,11 @@
     .order-actions {
         flex-direction: column;
     }
-    
+
     .search-filter-section {
         flex-direction: column;
     }
-    
+
     .search-box,
     .filter-box {
         width: 100%;
@@ -1320,5 +1321,125 @@
 
     .address-card {
         padding: 1rem;
+    }
+}
+
+/* Timeline Styles for Modal */
+.order-modal-body .timeline-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px dashed #e0e0e0;
+}
+
+.order-modal-body .timeline {
+    position: relative;
+    padding-left: 20px;
+    list-style: none;
+    margin-bottom: 0;
+}
+
+
+
+.order-modal-body .timeline-item {
+    position: relative;
+    padding-bottom: 2rem;
+    padding-left: 35px;
+}
+
+.order-modal-body .timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.order-modal-body .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 24px;
+    /* Adjust based on dot size / position */
+    bottom: -5px;
+    width: 2px;
+    background: #f0f0f0;
+    z-index: 0;
+}
+
+.order-modal-body .timeline-item:last-child::before {
+    display: none;
+}
+
+/* Timeline Dot Base */
+.order-modal-body .timeline-dot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    z-index: 2;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Completed State */
+.order-modal-body .timeline-item.completed .timeline-dot {
+    background: #fff;
+    border-color: #28a745;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2328a745'%3E%3Cpath d='M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+    background-size: 12px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Latest/Active State */
+.order-modal-body .timeline-item.latest .timeline-dot {
+    background: #e4002b;
+    border-color: #e4002b;
+    width: 22px;
+    height: 22px;
+    left: -1px;
+    top: -1px;
+    box-shadow: 0 0 0 4px rgba(228, 0, 43, 0.15);
+    animation: pulse-red 2s infinite;
+}
+
+/* Typography & Content */
+.order-modal-body .timeline-status {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: #202124;
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.order-modal-body .timeline-time {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.order-modal-body .timeline-note {
+    font-size: 0.9rem;
+    color: #555;
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    border-left: 3px solid #e9ecef;
+}
+
+/* Animations */
+@keyframes pulse-red {
+    0% {
+        box-shadow: 0 0 0 0 rgba(228, 0, 43, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px rgba(228, 0, 43, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(228, 0, 43, 0);
     }
 }

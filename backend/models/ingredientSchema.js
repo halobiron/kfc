@@ -10,7 +10,6 @@ const ingredientSchema = new Schema({
     },
     category: {
         type: String,
-        enum: ['thuc-pham-tuoi', 'gia-vi', 'dau-kem', 'do-uong', 'khac'],
         required: true
     },
     unit: {
@@ -35,6 +34,9 @@ const ingredientSchema = new Schema({
         required: true
     },
     supplier: {
+        type: String
+    },
+    supplierContact: {
         type: String
     },
     expiryDate: Date,

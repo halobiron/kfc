@@ -64,7 +64,7 @@ const Kitchen = () => {
         <div className="order-card-header">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h5 className="mb-0 fw-bold">{order.orderNumber || order._id.slice(0, 8).toUpperCase()}</h5>
+              <h5 className="mb-0 fw-bold" title={order.orderNumber || order._id}>{order.orderNumber || order._id.slice(0, 8).toUpperCase()}</h5>
               <small className="text-muted">{new Date(order.createdAt).toLocaleTimeString('vi-VN')}</small>
             </div>
             <span className={`badge badge-${config.color}`}>

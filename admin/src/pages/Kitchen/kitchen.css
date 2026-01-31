@@ -16,6 +16,22 @@
   border-bottom: 1px solid #f0f0f0;
 }
 
+.order-card-header .d-flex {
+  min-width: 0;
+}
+
+.order-card-header .d-flex>div:first-child {
+  min-width: 0;
+  flex: 1;
+}
+
+.order-card-header h5 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+}
+
 .order-card-body {
   padding: 12px;
 }

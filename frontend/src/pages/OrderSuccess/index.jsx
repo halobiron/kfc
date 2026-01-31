@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import axiosClient from '../../api/axiosClient';
+import { clearCart } from '../../redux/slices/cartSlice';
 import './OrderSuccess.css';
 
 const OrderSuccess = () => {
@@ -11,6 +12,7 @@ const OrderSuccess = () => {
     const status = searchParams.get('status');
     const [orderData, setOrderData] = useState(null);
     const { isAuthenticated } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
 
     const handleCopy = (text, label) => {
         navigator.clipboard.writeText(text);
@@ -20,6 +22,9 @@ const OrderSuccess = () => {
     useEffect(() => {
         // Scroll to top when loaded
         window.scrollTo(0, 0);
+
+        // Clear cart to ensure it's empty after success
+        dispatch(clearCart());
 
         const fetchOrder = async () => {
             if (orderId) {

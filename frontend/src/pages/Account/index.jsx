@@ -50,7 +50,16 @@ const Account = () => {
     const [cancelReason, setCancelReason] = useState('');
     const [loading, setLoading] = useState(true);
 
-    const statusOptions = ['All', 'Đang chuẩn bị', 'Đang giao', 'Hoàn thành', 'Đã hủy'];
+    const statusOptions = [
+        { value: 'All', label: 'Tất cả trạng thái' },
+        { value: 'pending', label: 'Chờ xác nhận' },
+        { value: 'confirmed', label: 'Đã xác nhận' },
+        { value: 'preparing', label: 'Đang chuẩn bị' },
+        { value: 'ready', label: 'Sẵn sàng giao' },
+        { value: 'shipping', label: 'Đang giao hàng' },
+        { value: 'delivered', label: 'Hoàn thành' },
+        { value: 'cancelled', label: 'Đã hủy' }
+    ];
 
     const cancellationReasons = [
         "Tôi muốn đổi món khác",
@@ -179,7 +188,7 @@ const Account = () => {
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 const { latitude, longitude } = position.coords;
-                
+
                 // Cập nhật tọa độ ngay lập tức
                 setAddressForm(prev => ({
                     ...prev,
@@ -196,7 +205,7 @@ const Account = () => {
                         setAddressForm(prev => ({
                             ...prev,
                             fullAddress: data.display_name,
-                            latitude, 
+                            latitude,
                             longitude
                         }));
                         toast.success('Đã lấy được địa chỉ!');
@@ -322,6 +331,19 @@ const Account = () => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     };
 
+    const getStatusLabel = (status) => {
+        const statuses = {
+            'pending': { text: 'Chờ xác nhận', color: '#ffc107', icon: 'bi-clock' },
+            'confirmed': { text: 'Đã xác nhận', color: '#007bff', icon: 'bi-check2-circle' },
+            'preparing': { text: 'Đang chuẩn bị', color: '#17a2b8', icon: 'bi-egg-fried' },
+            'shipping': { text: 'Đang giao hàng', color: '#fd7e14', icon: 'bi-truck' },
+            'ready': { text: 'Sẵn sàng giao', color: '#28a745', icon: 'bi-check-circle' },
+            'delivered': { text: 'Đã giao hàng', color: '#28a745', icon: 'bi-check-all' },
+            'cancelled': { text: 'Đã hủy', color: '#dc3545', icon: 'bi-x-circle' }
+        };
+        return statuses[status] || { text: status, color: '#6c757d', icon: 'bi-question-circle' };
+    };
+
     return (
         <div className="my-account-page">
             <section className="container page-wrapper">
@@ -330,9 +352,9 @@ const Account = () => {
                     <div className="block-left appear-left">
                         <div className="account-left page-with-bar medium-bar">
                             <div className="account-profile">
-                                <img 
-                                    src="https://static.kfcvietnam.com.vn/images/web/profile-circle.png?v=5.0" 
-                                    alt="Profile" 
+                                <img
+                                    src="https://static.kfcvietnam.com.vn/images/web/profile-circle.png?v=5.0"
+                                    alt="Profile"
                                     className="profile-avatar-img"
                                 />
                                 <div>
@@ -382,10 +404,7 @@ const Account = () => {
                                         <div className="filter-box">
                                             <CustomSelect
                                                 className="w-100"
-                                                options={statusOptions.map(status => ({
-                                                    value: status,
-                                                    label: status === 'All' ? 'Tất cả trạng thái' : status
-                                                }))}
+                                                options={statusOptions}
                                                 value={filterStatus}
                                                 onChange={setFilterStatus}
                                             />
@@ -404,12 +423,12 @@ const Account = () => {
                                         <div>
                                             <h2>Bắt đầu đặt món!</h2>
                                             <p>Bạn chưa có đơn hàng nào</p>
-                                            <button 
-                                                  className="btn btn-danger start-ordering-btn"
-                                                  onClick={() => navigate('/products')}
-                                              >
-                                                  Bắt đầu đặt hàng
-                                              </button>
+                                            <button
+                                                className="btn btn-danger start-ordering-btn"
+                                                onClick={() => navigate('/products')}
+                                            >
+                                                Bắt đầu đặt hàng
+                                            </button>
                                         </div>
                                     </div>
                                 ) : filteredOrders.length === 0 ? (
@@ -429,17 +448,19 @@ const Account = () => {
                                             <div key={order._id} className="order-card">
                                                 <div className="order-header">
                                                     <div className="order-info">
-                                                        <h5>Đơn hàng {order.orderNumber || order._id}</h5>
+                                                        <h5 title={order.orderNumber || order._id}>Đơn hàng {order.orderNumber || order._id}</h5>
                                                         <span className="order-date">
                                                             {new Date(order.createdAt).toLocaleString('vi-VN')}
                                                         </span>
                                                     </div>
                                                     <span className={`order-status status-${order.status}`}>
                                                         {order.status === 'pending' ? 'Đang chờ xử lý' :
-                                                         order.status === 'preparing' ? 'Đang chuẩn bị' :
-                                                         order.status === 'delivering' ? 'Đang giao hàng' :
-                                                         order.status === 'delivered' ? 'Giao hàng thành công' :
-                                                         order.status === 'cancelled' ? 'Đã hủy' : order.status}
+                                                            order.status === 'confirmed' ? 'Đã xác nhận' :
+                                                                order.status === 'preparing' ? 'Đang chuẩn bị' :
+                                                                    order.status === 'ready' ? 'Sẵn sàng giao' :
+                                                                        order.status === 'shipping' ? 'Đang giao hàng' :
+                                                                            order.status === 'delivered' ? 'Hoàn thành' :
+                                                                                order.status === 'cancelled' ? 'Đã hủy' : order.status}
                                                     </span>
                                                 </div>
                                                 <div className="order-body">
@@ -465,7 +486,13 @@ const Account = () => {
                                                     </div>
                                                 </div>
                                                 <div className="order-actions">
-                                                    {order.canCancel && (
+                                                    <button
+                                                        className="btn btn-view"
+                                                        onClick={() => setSelectedOrder(order)}
+                                                    >
+                                                        Xem chi tiết
+                                                    </button>
+                                                    {order.status === 'pending' && (
                                                         <button
                                                             className="btn btn-cancel"
                                                             onClick={() => handleCancelOrder(order)}
@@ -484,7 +511,7 @@ const Account = () => {
                         {activeTab === 'profile' && (
                             <div className="profile-content">
                                 <h3>Quản lý hồ sơ</h3>
-                                
+
                                 <div className="profile-section">
                                     <h4>Thông tin cá nhân</h4>
                                     <form onSubmit={handleUpdateInfo}>
@@ -599,7 +626,7 @@ const Account = () => {
                                                             {address.isDefault && <span className="badge-default">Mặc định</span>}
                                                         </h5>
                                                         <div className="address-actions">
-                                                            <button 
+                                                            <button
                                                                 className="btn-edit"
                                                                 onClick={() => handleEditAddress(address, idx)}
                                                                 title="Chỉnh sửa"
@@ -607,7 +634,7 @@ const Account = () => {
                                                                 <i className="bi bi-pencil"></i>
                                                             </button>
                                                             {!address.isDefault && (
-                                                                <button 
+                                                                <button
                                                                     className="btn-default"
                                                                     onClick={() => handleSetDefaultAddress(idx)}
                                                                     title="Đặt làm mặc định"
@@ -615,8 +642,8 @@ const Account = () => {
                                                                     Đặt làm mặc định
                                                                 </button>
                                                             )}
-                                                            <button 
-                                                                className="btn-delete" 
+                                                            <button
+                                                                className="btn-delete"
                                                                 onClick={() => handleDeleteAddress(idx)}
                                                                 title="Xóa"
                                                             >
@@ -666,7 +693,7 @@ const Account = () => {
                             <div className="form-group">
                                 <div className="label-with-button">
                                     <label>Địa chỉ đầy đủ <span className="text-danger">*</span></label>
-                                    <button 
+                                    <button
                                         type="button"
                                         className="btn-get-location"
                                         onClick={handleGetCurrentLocation}
@@ -729,20 +756,27 @@ const Account = () => {
                 <div className="order-modal-overlay" onClick={() => setSelectedOrder(null)}>
                     <div className="order-modal-content" onClick={(e) => e.stopPropagation()}>
                         <div className="order-modal-header">
-                            <h5>Chi tiết đơn hàng #{selectedOrder._id}</h5>
+                            <h5>Chi tiết đơn hàng #{selectedOrder.orderNumber || selectedOrder._id}</h5>
                             <button className="btn-close-custom" onClick={() => setSelectedOrder(null)}>×</button>
                         </div>
                         <div className="order-modal-body">
                             <div className="detail-grid">
                                 <div className="detail-card">
                                     <span>Trạng thái</span>
-                                    <span className={`order-status status-${selectedOrder.statusClass}`}>
-                                        {selectedOrder.status}
+                                    <span
+                                        className="order-status"
+                                        style={{
+                                            backgroundColor: getStatusLabel(selectedOrder.status).color,
+                                            color: '#fff',
+                                            display: 'inline-block'
+                                        }}
+                                    >
+                                        {getStatusLabel(selectedOrder.status).text}
                                     </span>
                                 </div>
                                 <div className="detail-card">
                                     <span>Thời gian đặt</span>
-                                    <p>{selectedOrder.date}</p>
+                                    <p>{new Date(selectedOrder.createdAt).toLocaleString('vi-VN')}</p>
                                 </div>
                             </div>
                             <div className="items-section">
@@ -759,8 +793,41 @@ const Account = () => {
                             </div>
                             <div className="modal-total">
                                 <span>Tổng thanh toán</span>
-                                <span className="total-amount">{formatCurrency(selectedOrder.total)}</span>
+                                <span className="total-amount">{formatCurrency(selectedOrder.totalAmount)}</span>
                             </div>
+
+                            {/* Timeline Section */}
+                            {selectedOrder.statusHistory && selectedOrder.statusHistory.length > 0 && (
+                                <div className="timeline-section">
+                                    <h6 className="mb-3 fw-bold text-uppercase text-secondary" style={{ fontSize: '0.9rem' }}>Lịch sử trạng thái</h6>
+                                    <ul className="timeline">
+                                        {[...selectedOrder.statusHistory]
+                                            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                                            .map((history, index) => {
+                                                const statusInfo = getStatusLabel(history.status);
+                                                const isLatest = index === 0;
+                                                return (
+                                                    <li key={index} className={`timeline-item ${isLatest ? 'latest' : 'completed'}`}>
+                                                        <div className="timeline-dot"></div>
+                                                        <div className="timeline-time">
+                                                            {new Date(history.timestamp).toLocaleString('vi-VN', {
+                                                                hour: '2-digit',
+                                                                minute: '2-digit',
+                                                                day: '2-digit',
+                                                                month: '2-digit',
+                                                                year: 'numeric'
+                                                            })}
+                                                        </div>
+                                                        <div className="timeline-status" style={{ color: isLatest ? statusInfo.color : '#333' }}>
+                                                            {statusInfo.text}
+                                                        </div>
+                                                        {history.note && <div className="timeline-note">{history.note}</div>}
+                                                    </li>
+                                                );
+                                            })}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
                         <div className="order-modal-footer">
                             <button className="btn btn-primary" onClick={() => setSelectedOrder(null)}>ĐÓNG</button>
@@ -796,19 +863,15 @@ const Account = () => {
                                 ))}
                                 <textarea
                                     placeholder="Lý do khác..."
-                                    rows="2"
-                                    value={cancelReason && !cancellationReasons.includes(cancelReason) ? cancelReason : ''}
+                                    rows="3"
+                                    value={cancelReason}
                                     onChange={(e) => setCancelReason(e.target.value)}
                                 ></textarea>
                             </div>
                         </div>
                         <div className="order-modal-footer">
-                            <button className="btn btn-secondary" onClick={() => setOrderToCancel(null)}>
-                                Quay lại
-                            </button>
-                            <button className="btn btn-danger" onClick={confirmCancelOrder}>
-                                Xác nhận hủy
-                            </button>
+                            <button className="btn btn-secondary" onClick={() => setOrderToCancel(null)}>Đóng</button>
+                            <button className="btn btn-danger" onClick={confirmCancelOrder}>Xác nhận hủy</button>
                         </div>
                     </div>
                 </div>

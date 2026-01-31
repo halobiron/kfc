@@ -148,11 +148,11 @@ const ProductDetails = () => {
             {/* Form & Recipe Layout */}
             <div className="row g-4">
                 <div className="col-lg-8">
-                    {/* Info Card */}
-                    <div className="card mb-4">
-                        <div className="card-header">Thông tin món ăn</div>
-                        <div className="card-body">
-                            <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
+                        {/* Info Card */}
+                        <div className="card mb-4">
+                            <div className="card-header">Thông tin món ăn</div>
+                            <div className="card-body">
                                 <div className="row g-3">
                                     <div className="col-md-6">
                                         <label htmlFor="title" className="form-label">Tên món ăn <span className="text-danger">*</span></label>
@@ -265,109 +265,107 @@ const ProductDetails = () => {
                                         <small className="text-muted">Để trống nếu không muốn thay đổi hình ảnh</small>
                                     </div>
 
-                                    <div className="col-12 d-flex gap-2">
-                                        <button type="submit" className="btn btn-primary d-flex align-items-center gap-2">
-                                            <FiSave size={18} /> Lưu thay đổi
-                                        </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Recipe Card */}
+                        <div className="card shadow-sm border-0">
+                            <div className="card-header py-3">
+                                <h5 className="mb-0 fw-bold d-flex align-items-center gap-2">
+                                    <FiActivity className="text-primary" /> Công thức chế biến (Định mức)
+                                </h5>
+                            </div>
+                            <div className="card-body">
+                                {/* Add Ingredient Row - Enhanced Aesthetics */}
+                                <div className="row g-2 mb-4 align-items-end p-3 rounded recipe-add-row">
+                                    <div className="col-md-6">
+                                        <label className="form-label">Chọn nguyên liệu từ kho</label>
+                                        <select
+                                            className="form-select"
+                                            value={selectedIngredientId}
+                                            onChange={(e) => setSelectedIngredientId(e.target.value)}
+                                        >
+                                            <option value="">-- Chọn nguyên liệu --</option>
+                                            {allIngredients?.map(ing => (
+                                                <option key={ing._id} value={ing._id}>
+                                                    {ing.name} ({ing.unit})
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label className="form-label">Số lượng tiêu hao</label>
+                                        <input
+                                            type="number"
+                                            className="form-control"
+                                            placeholder="Ví dụ: 0.5"
+                                            value={ingredientQty}
+                                            onChange={(e) => setIngredientQty(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-md-2">
                                         <button
                                             type="button"
-                                            className="btn btn-secondary d-flex align-items-center gap-2"
-                                            onClick={() => navigate('/products')}
+                                            className="btn btn-primary w-100"
+                                            onClick={addIngredientToRecipe}
                                         >
-                                            <FiX size={18} /> Hủy
+                                            <FiPlus size={20} className="me-1" /> Thêm
                                         </button>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
 
-                    {/* Recipe Card */}
-                    <div className="card shadow-sm border-0">
-                        <div className="card-header py-3">
-                            <h5 className="mb-0 fw-bold d-flex align-items-center gap-2">
-                                <FiActivity className="text-primary" /> Công thức chế biến (Định mức)
-                            </h5>
-                        </div>
-                        <div className="card-body">
-                            {/* Add Ingredient Row - Enhanced Aesthetics */}
-                            <div className="row g-2 mb-4 align-items-end p-3 rounded recipe-add-row">
-                                <div className="col-md-6">
-                                    <label className="form-label">Chọn nguyên liệu từ kho</label>
-                                    <select
-                                        className="form-select"
-                                        value={selectedIngredientId}
-                                        onChange={(e) => setSelectedIngredientId(e.target.value)}
-                                    >
-                                        <option value="">-- Chọn nguyên liệu --</option>
-                                        {allIngredients?.map(ing => (
-                                            <option key={ing._id} value={ing._id}>
-                                                {ing.name} ({ing.unit})
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="col-md-4">
-                                    <label className="form-label">Số lượng tiêu hao</label>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Ví dụ: 0.5"
-                                        value={ingredientQty}
-                                        onChange={(e) => setIngredientQty(e.target.value)}
-                                    />
-                                </div>
-                                <div className="col-md-2">
-                                    <button
-                                        type="button"
-                                        className="btn btn-primary w-100"
-                                        onClick={addIngredientToRecipe}
-                                    >
-                                        <FiPlus size={20} className="me-1" /> Thêm
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Ingredients Table - Enhanced Styling */}
-                            <div className="table-responsive">
-                                <table className="table table-hover align-middle mb-0 table-recipe">
-                                    <thead>
-                                        <tr>
-                                            <th>Tên nguyên liệu</th>
-                                            <th className="text-center">Số lượng</th>
-                                            <th className="text-center">Đơn vị</th>
-                                            <th className="text-end pe-3">Thao tác</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {recipe.length > 0 ? recipe.map((item, idx) => (
-                                            <tr key={idx}>
-                                                <td className="fw-medium">{item.name}</td>
-                                                <td className="text-center fw-bold text-danger">{item.quantity}</td>
-                                                <td className="text-center text-muted small">{item.unit}</td>
-                                                <td className="text-end pe-3">
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-sm btn-outline-danger"
-                                                        onClick={() => removeIngredientFromRecipe(item.ingredientId)}
-                                                        style={{ borderRadius: '4px', padding: '4px 8px' }}
-                                                    >
-                                                        <FiTrash2 size={14} />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )) : (
+                                {/* Ingredients Table - Enhanced Styling */}
+                                <div className="table-responsive">
+                                    <table className="table table-hover align-middle mb-0 table-recipe">
+                                        <thead>
                                             <tr>
-                                                <td colSpan="4" className="text-center py-4 text-muted">
-                                                    Chưa có nguyên liệu nào trong công thức.
-                                                </td>
+                                                <th>Tên nguyên liệu</th>
+                                                <th className="text-center">Số lượng</th>
+                                                <th className="text-center">Đơn vị</th>
+                                                <th className="text-end pe-3">Thao tác</th>
                                             </tr>
-                                        )}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            {recipe.length > 0 ? recipe.map((item, idx) => (
+                                                <tr key={idx}>
+                                                    <td className="fw-medium">{item.name}</td>
+                                                    <td className="text-center fw-bold text-danger">{item.quantity}</td>
+                                                    <td className="text-center text-muted small">{item.unit}</td>
+                                                    <td className="text-end pe-3">
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-sm btn-outline-danger"
+                                                            onClick={() => removeIngredientFromRecipe(item.ingredientId)}
+                                                            style={{ borderRadius: '4px', padding: '4px 8px' }}
+                                                        >
+                                                            <FiTrash2 size={14} />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            )) : (
+                                                <tr>
+                                                    <td colSpan="4" className="text-center py-4 text-muted">
+                                                        Chưa có nguyên liệu nào trong công thức.
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
+                        {/* Action Buttons - Moved to bottom for better flow */}
+                        <div className="d-flex gap-2 mt-4 mb-4 justify-content-end bg-white p-3 rounded shadow-sm border">
+                            <button type="button" className="btn btn-secondary d-flex align-items-center gap-2" onClick={() => navigate('/products')}>
+                                <FiX size={18} /> Hủy
+                            </button>
+                            <button type="submit" className="btn btn-primary d-flex align-items-center gap-2">
+                                <FiSave size={18} /> Lưu thay đổi
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 {/* Right Column - Preview (Stays at the top right) */}
@@ -408,8 +406,8 @@ const ProductDetails = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </div >
+        </main >
     );
 };
 

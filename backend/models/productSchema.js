@@ -25,7 +25,16 @@ const productSchema = new Schema({
     },
     productImage: {
         type: String
-    }
+    },
+    recipe: [{
+        ingredientId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Ingredient'
+        },
+        name: String,
+        quantity: Number,
+        unit: String
+    }]
 },
     {
         timestamps: true

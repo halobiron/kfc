@@ -104,14 +104,16 @@ const orderSchema = new Schema({
 });
 
 // Auto generate order number
-orderSchema.pre('save', async function() {
+orderSchema.pre('save', async function () {
     if (!this.isNew) return;
-    
+
     try {
         const count = await this.constructor.countDocuments();
         const date = new Date();
         const dateStr = date.getFullYear() + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
-        this.orderNumber = `ORD${dateStr}${String(count + 1).padStart(5, '0')}`;
+        // Add random suffix to prevent "Duplicate orderNumber" errors from simultaneous saves
+        const randomSuffix = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        this.orderNumber = `ORD${dateStr}${String(count + 1).padStart(5, '0')}${randomSuffix}`;
     } catch (error) {
         throw error;
     }

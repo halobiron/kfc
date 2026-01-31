@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from '../../utils/api';
 import { FiArrowLeft, FiPrinter, FiXCircle, FiCheckCircle, FiTruck, FiPackage, FiClock, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
+import './OrderDetails.css';
 
 const STATUS_LABELS = {
     pending: 'Chờ xác nhận',
@@ -180,6 +181,39 @@ const OrderDetails = () => {
                                 </span>
                                 <span className="ms-3 text-muted">Cập nhật lần cuối: {new Date(order.updatedAt).toLocaleString('vi-VN')}</span>
                             </div>
+
+                            {/* Timeline Section */}
+                            {order.statusHistory && order.statusHistory.length > 0 && (
+                                <div className="timeline-section">
+                                    <h6 className="mb-3 fw-bold text-uppercase text-secondary" style={{ fontSize: '0.8rem' }}>Lịch sử trạng thái</h6>
+                                    <ul className="timeline">
+                                        {[...order.statusHistory]
+                                            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                                            .map((history, index) => {
+                                                const label = STATUS_LABELS[history.status] || history.status;
+                                                const isLatest = index === 0;
+                                                return (
+                                                    <li key={index} className={`timeline-item ${isLatest ? 'latest' : 'completed'}`}>
+                                                        <div className="timeline-dot"></div>
+                                                        <div className="timeline-time">
+                                                            {new Date(history.timestamp).toLocaleString('vi-VN', {
+                                                                hour: '2-digit',
+                                                                minute: '2-digit',
+                                                                day: '2-digit',
+                                                                month: '2-digit',
+                                                                year: 'numeric'
+                                                            })}
+                                                        </div>
+                                                        <div className="timeline-status" style={{ color: isLatest ? '#007bff' : '#333' }}>
+                                                            {label}
+                                                        </div>
+                                                        {history.note && <div className="timeline-note">{history.note}</div>}
+                                                    </li>
+                                                );
+                                            })}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
