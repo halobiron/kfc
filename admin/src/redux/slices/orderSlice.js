@@ -17,6 +17,14 @@ export const updateOrderStatus = createAsyncThunk(
   }
 );
 
+export const deleteOrder = createAsyncThunk(
+  'orders/deleteOrder',
+  async (id) => {
+    const response = await api.delete(`/order/delete/${id}`);
+    return { id, message: response.data.message }; // Return id to remove from state
+  }
+);
+
 const orderSlice = createSlice({
   name: 'orders',
   initialState: {
@@ -46,6 +54,9 @@ const orderSlice = createSlice({
                    state.orders[index] = action.payload.data;
                }
            }
+        })
+        .addCase(deleteOrder.fulfilled, (state, action) => {
+            state.orders = state.orders.filter(order => order._id !== action.payload.id);
         });
   }
 });

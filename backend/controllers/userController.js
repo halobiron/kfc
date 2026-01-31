@@ -18,31 +18,11 @@ exports.getUserProfile = async (req, res, next) => {
 
         res.status(200).json({
             status: true,
-            user: { // Changed from 'data' to 'user' to match login response structure if needed, or keep 'data' but add fields. 
-                   // Wait, login response returns 'user' object directly. loadUser usually expects 'user' key or 'data' key?
-                   // authSlice: state.user = action.payload.user;
-                   // So API should return { user: ... } or { data: ... }?
-                   // Login response: { status: true, token, user: {...} }
-                   // UserProfile response (old): { status: true, data: user }
-                   // AuthSlice loadUser: return response.data
-                   // If response.data is the axios body.
-                   // If axios body has { user: ... }, then action.payload.user is correct.
-                   // If axios body has { data: ... }, then action.payload.user is Undefined?
-                   
-                   // Let's check authSlice again.
-                   // const response = await api.get('/auth/me');
-                   // return response.data;
-                   // .addCase(loadUser.fulfilled, (state, action) => { state.user = action.payload.user; })
-                   
-                   // So /auth/me MUST return { user: ... }. 
-                   // BUT currently getUserProfile returns { data: user }.
-                   // This implies loadUser might be BROKEN or I misread authSlice.
-                   // Let's re-read authSlice carefully.
-            
-            ...user._doc,
-            storeId,
-            position
-        }
+            data: {
+                ...user._doc,
+                storeId,
+                position
+            }
         });
     } catch (error) {
         next(error);

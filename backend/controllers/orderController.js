@@ -307,6 +307,27 @@ exports.getAllOrders = async (req, res, next) => {
     }
 };
 
+// DELETE ORDER (ADMIN)
+exports.deleteOrder = async (req, res, next) => {
+    try {
+        const order = await Order.findByIdAndDelete(req.params.id);
+
+        if (!order) {
+            return res.status(404).json({
+                status: false,
+                message: 'Đơn hàng không tìm thấy'
+            });
+        }
+
+        res.status(200).json({
+            status: true,
+            message: 'Xóa đơn hàng thành công'
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 // CANCEL ORDER (USER)
 exports.cancelOrder = async (req, res, next) => {
     try {

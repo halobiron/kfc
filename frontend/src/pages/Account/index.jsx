@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../redux/slices/authSlice';
+import { logout, updateUserSuccess } from '../../redux/slices/authSlice';
 import axiosClient from '../../api/axiosClient';
 import CustomSelect from '../../components/CustomSelect';
 import './Account.css';
@@ -63,8 +63,8 @@ const Account = () => {
     useEffect(() => {
         if (activeTab === 'orders') {
             fetchOrders();
-        } else if (activeTab === 'addresses') {
-            fetchAddresses();
+        } else {
+            fetchProfile();
         }
     }, [activeTab]);
 
@@ -76,7 +76,7 @@ const Account = () => {
         if (searchTerm) {
             const lowerTerm = searchTerm.toLowerCase();
             result = result.filter(order =>
-                order._id.toLowerCase().includes(lowerTerm) ||
+                (order.orderNumber || order._id).toLowerCase().includes(lowerTerm) ||
                 order.items.some(item => item.name.toLowerCase().includes(lowerTerm))
             );
         }
@@ -94,15 +94,22 @@ const Account = () => {
         }
     };
 
-    const fetchAddresses = async () => {
+    const fetchProfile = async () => {
         try {
             setLoadingAddresses(true);
             const response = await axiosClient.get('/users/profile');
             if (response.data?.status) {
-                setAddresses(response.data.data.addresses || []);
+                const userData = response.data.data;
+                setAddresses(userData.addresses || []);
+                setUserInfo({
+                    name: userData.name || '',
+                    email: userData.email || '',
+                    phone: userData.phone || '',
+                    birthdate: userData.birthdate ? userData.birthdate.split('T')[0] : ''
+                });
             }
         } catch (error) {
-            toast.error('Không thể tải danh sách địa chỉ. Vui lòng thử lại.');
+            toast.error('Không thể tải thông tin người dùng. Vui lòng thử lại.');
         } finally {
             setLoadingAddresses(false);
         }
@@ -117,7 +124,7 @@ const Account = () => {
             await axiosClient.post(`/order/${orderToCancel._id}/cancel`, {
                 reason: cancelReason
             });
-            toast.success(`Đơn hàng #${orderToCancel._id} đã được hủy thành công.`);
+            toast.success(`Đơn hàng #${orderToCancel.orderNumber || orderToCancel._id} đã được hủy thành công.`);
             setOrderToCancel(null);
             setCancelReason('');
             fetchOrders();
@@ -126,9 +133,22 @@ const Account = () => {
         }
     };
 
-    const handleUpdateInfo = (e) => {
+    const handleUpdateInfo = async (e) => {
         e.preventDefault();
-        toast.success('Cập nhật thông tin thành công!');
+        try {
+            const response = await axiosClient.put('/users/profile/update', {
+                name: userInfo.name,
+                phone: userInfo.phone,
+                birthdate: userInfo.birthdate
+            });
+
+            if (response.data?.status) {
+                toast.success('Cập nhật thông tin thành công!');
+                dispatch(updateUserSuccess(response.data.data));
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Không thể cập nhật thông tin.');
+        }
     };
 
     const handleAddAddress = () => {
@@ -218,7 +238,7 @@ const Account = () => {
                 if (response.data?.status) {
                     toast.success('Cập nhật địa chỉ thành công!');
                     setShowAddressForm(false);
-                    fetchAddresses();
+                    fetchProfile();
                 }
             } else {
                 const response = await axiosClient.post('/users/address/add', {
@@ -228,7 +248,7 @@ const Account = () => {
                 if (response.data?.status) {
                     toast.success('Thêm địa chỉ thành công!');
                     setShowAddressForm(false);
-                    fetchAddresses();
+                    fetchProfile();
                 }
             }
         } catch (error) {
@@ -248,7 +268,7 @@ const Account = () => {
             });
             if (response.data?.status) {
                 toast.success('Cập nhật địa chỉ mặc định thành công!');
-                fetchAddresses();
+                fetchProfile();
             }
         } catch (error) {
             toast.error('Không thể cập nhật địa chỉ mặc định.');
@@ -261,7 +281,7 @@ const Account = () => {
                 const response = await axiosClient.delete(`/users/address/delete/${idx}`);
                 if (response.data?.status) {
                     toast.success('Xóa địa chỉ thành công!');
-                    fetchAddresses();
+                    fetchProfile();
                 }
             } catch (error) {
                 toast.error('Không thể xóa địa chỉ. Vui lòng thử lại.');
@@ -269,14 +289,27 @@ const Account = () => {
         }
     };
 
-    const handleChangePassword = (e) => {
+    const handleChangePassword = async (e) => {
         e.preventDefault();
         if (passwordData.newPassword !== passwordData.confirmPassword) {
             toast.error('Mật khẩu xác nhận không khớp!');
             return;
         }
-        toast.success('Đổi mật khẩu thành công!');
-        setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+
+        try {
+            const response = await axiosClient.post('/users/change-password', {
+                currentPassword: passwordData.currentPassword,
+                newPassword: passwordData.newPassword,
+                confirmPassword: passwordData.confirmPassword
+            });
+
+            if (response.data?.status) {
+                toast.success('Đổi mật khẩu thành công!');
+                setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Không thể đổi mật khẩu.');
+        }
     };
 
     const handleLogout = () => {
@@ -396,16 +429,22 @@ const Account = () => {
                                             <div key={order._id} className="order-card">
                                                 <div className="order-header">
                                                     <div className="order-info">
-                                                        <h5>Đơn hàng {order._id}</h5>
-                                                        <span className="order-date">{order.date}</span>
+                                                        <h5>Đơn hàng {order.orderNumber || order._id}</h5>
+                                                        <span className="order-date">
+                                                            {new Date(order.createdAt).toLocaleString('vi-VN')}
+                                                        </span>
                                                     </div>
-                                                    <span className={`order-status status-${order.statusClass}`}>
-                                                        {order.status}
+                                                    <span className={`order-status status-${order.status}`}>
+                                                        {order.status === 'pending' ? 'Đang chờ xử lý' :
+                                                         order.status === 'preparing' ? 'Đang chuẩn bị' :
+                                                         order.status === 'delivering' ? 'Đang giao hàng' :
+                                                         order.status === 'delivered' ? 'Giao hàng thành công' :
+                                                         order.status === 'cancelled' ? 'Đã hủy' : order.status}
                                                     </span>
                                                 </div>
                                                 <div className="order-body">
                                                     <div className="order-items">
-                                                        {order.items.map((item, idx) => (
+                                                        {order.items.slice(0, 3).map((item, idx) => (
                                                             <div key={idx} className="order-item">
                                                                 <div>
                                                                     <span>{item.name}</span>
@@ -414,19 +453,18 @@ const Account = () => {
                                                                 <span className="price">{formatCurrency(item.price)}</span>
                                                             </div>
                                                         ))}
+                                                        {order.items.length > 3 && (
+                                                            <div className="order-item">
+                                                                <span className="text-muted">... và {order.items.length - 3} món khác</span>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                     <div className="order-total">
                                                         <span>Tổng cộng:</span>
-                                                        <span className="total-value">{formatCurrency(order.total)}</span>
+                                                        <span className="total-value">{formatCurrency(order.totalAmount)}</span>
                                                     </div>
                                                 </div>
                                                 <div className="order-actions">
-                                                    <button
-                                                        className="btn btn-view"
-                                                        onClick={() => setSelectedOrder(order)}
-                                                    >
-                                                        Xem chi tiết
-                                                    </button>
                                                     {order.canCancel && (
                                                         <button
                                                             className="btn btn-cancel"
@@ -741,7 +779,7 @@ const Account = () => {
                         </div>
                         <div className="order-modal-body">
                             <h6>Bạn có chắc chắn muốn hủy đơn hàng này?</h6>
-                            <p>Đơn hàng: #{orderToCancel._id} - Tổng tiền: {formatCurrency(orderToCancel.total)}</p>
+                            <p>Đơn hàng: #{orderToCancel.orderNumber || orderToCancel._id} - Tổng tiền: {formatCurrency(orderToCancel.totalAmount)}</p>
                             <div className="reason-section">
                                 <label>Lý do hủy đơn (Không bắt buộc)</label>
                                 {cancellationReasons.map((reason, index) => (

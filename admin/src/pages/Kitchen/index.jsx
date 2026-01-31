@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiClock, FiCheckCircle, FiAlertCircle, FiChevronRight } from 'react-icons/fi';
+import { FiClock, FiCheckCircle, FiAlertCircle, FiChevronRight, FiPackage } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import api from '../../utils/api';
 import StatCard from '../../components/StatCard';
@@ -11,6 +11,9 @@ const Kitchen = () => {
 
   useEffect(() => {
     fetchOrders();
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchOrders, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const fetchOrders = async () => {
@@ -26,15 +29,20 @@ const Kitchen = () => {
   };
 
   const statusConfig = {
-    pending: { label: 'Chờ xác nhận', color: 'warning', icon: FiClock },
+    confirmed: { label: 'Chờ chế biến', color: 'warning', icon: FiClock },
     preparing: { label: 'Đang chuẩn bị', color: 'info', icon: FiAlertCircle },
-    completed: { label: 'Hoàn thành', color: 'success', icon: FiCheckCircle }
+    ready: { label: 'Sẵn sàng giao', color: 'success', icon: FiCheckCircle }
   };
 
-  const handleStatusChange = (orderId, newStatus) => {
-    setOrders(orders.map(order =>
-      order._id === orderId ? { ...order, status: newStatus } : order
-    ));
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+        await api.put(`/order/update/${orderId}`, { status: newStatus });
+        toast.success('Cập nhật trạng thái thành công');
+        fetchOrders(); // Reload to sync
+    } catch (error) {
+        console.error('Lỗi cập nhật:', error);
+        toast.error('Không thể cập nhật trạng thái');
+    }
   };
 
   const getOrdersByStatus = (status) => {
@@ -47,6 +55,8 @@ const Kitchen = () => {
 
   const renderOrderCard = (order) => {
     const config = statusConfig[order.status];
+    if (!config) return null; // Don't show other statuses like pending/shipping/delivered
+    
     const StatusIcon = config.icon;
 
     return (
@@ -54,8 +64,8 @@ const Kitchen = () => {
         <div className="order-card-header">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h5 className="mb-0 fw-bold">{order.orderNumber}</h5>
-              <small className="text-muted">{order.createdAt}</small>
+              <h5 className="mb-0 fw-bold">{order.orderNumber || order._id.slice(0, 8).toUpperCase()}</h5>
+              <small className="text-muted">{new Date(order.createdAt).toLocaleTimeString('vi-VN')}</small>
             </div>
             <span className={`badge badge-${config.color}`}>
               <StatusIcon size={14} className="me-1" />
@@ -64,7 +74,7 @@ const Kitchen = () => {
           </div>
         </div>
         <div className="order-card-body">
-          <p className="mb-2"><strong>Khách hàng:</strong> {order.customerName}</p>
+          <p className="mb-2"><strong>Khách hàng:</strong> {order.deliveryInfo?.fullName}</p>
           <div className="mb-3">
             <strong>Món ăn:</strong>
             <ul className="order-items-list">
@@ -74,24 +84,29 @@ const Kitchen = () => {
                 </li>
               ))}
             </ul>
+             {order.deliveryInfo?.note && (
+                <div className="alert alert-light mt-2 mb-0 p-2 small">
+                    <small className="fw-bold">Ghi chú:</small> {order.deliveryInfo.note}
+                </div>
+            )}
           </div>
-          <div className="d-flex justify-content-between align-items-center">
-            <strong className="text-danger">{formatCurrency(order.totalAmount)}</strong>
+          <div className="d-flex justify-content-between align-items-center mt-auto">
+            <strong className="text-secondary">{formatCurrency(order.totalAmount)}</strong>
             <div className="btn-group btn-group-sm">
-              {order.status === 'pending' && (
+              {order.status === 'confirmed' && (
                 <button
                   className="btn btn-primary"
                   onClick={() => handleStatusChange(order._id, 'preparing')}
                 >
-                  Bắt đầu <FiChevronRight size={14} />
+                  Bắt đầu nấu <FiChevronRight size={14} />
                 </button>
               )}
               {order.status === 'preparing' && (
                 <button
                   className="btn btn-success"
-                  onClick={() => handleStatusChange(order._id, 'completed')}
+                  onClick={() => handleStatusChange(order._id, 'ready')}
                 >
-                  Hoàn thành <FiCheckCircle size={14} />
+                  Món đã xong <FiCheckCircle size={14} />
                 </button>
               )}
             </div>
@@ -103,24 +118,28 @@ const Kitchen = () => {
 
   return (
     <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-      <div className="page-header">
-        <h1 className="page-title">Bếp - Quản lý Đơn hàng</h1>
-        <p className="text-muted">Xem và cập nhật trạng thái chế biến món ăn</p>
+      <div className="page-header d-flex justify-content-between align-items-center">
+        <div>
+            <h1 className="page-title">Bếp - Quản lý Đơn hàng</h1>
+            <p className="text-muted">Tiếp nhận và chế biến món ăn</p>
+        </div>
+        <button className="btn btn-outline-primary btn-sm" onClick={fetchOrders}>
+            Làm mới
+        </button>
       </div>
 
-      {/* Stats Overview */}
       <div className="row mb-4 g-3">
         <div className="col-md-4">
           <StatCard
-            label="Chờ xác nhận"
-            value={getOrdersByStatus('pending').length}
+            label="Cần chế biến"
+            value={getOrdersByStatus('confirmed').length}
             icon={<FiClock size={24} />}
             color="warning"
           />
         </div>
         <div className="col-md-4">
           <StatCard
-            label="Đang chuẩn bị"
+            label="Đang nấu"
             value={getOrdersByStatus('preparing').length}
             icon={<FiAlertCircle size={24} />}
             color="info"
@@ -128,51 +147,50 @@ const Kitchen = () => {
         </div>
         <div className="col-md-4">
           <StatCard
-            label="Hoàn thành hôm nay"
-            value={getOrdersByStatus('completed').length}
+            label="Sẵn sàng (Chờ giao)"
+            value={getOrdersByStatus('ready').length}
             icon={<FiCheckCircle size={24} />}
             color="success"
           />
         </div>
       </div>
 
-      {/* Orders by Status */}
       <div className="row g-4">
-        {/* Pending Orders */}
+        {/* Confirmed Orders (To Cook) */}
         <div className="col-md-4">
-          <div className="card">
-            <div className="card-header bg-warning text-dark">
+          <div className="card h-100">
+            <div className="card-header bg-warning text-dark fw-bold">
               <FiClock className="me-2" />
-              Chờ xác nhận ({getOrdersByStatus('pending').length})
+              CHỜ CHẾ BIẾN ({getOrdersByStatus('confirmed').length})
             </div>
-            <div className="card-body p-2">
+            <div className="card-body p-2 bg-light">
               <div className="orders-column">
-                {getOrdersByStatus('pending').length === 0 ? (
-                  <div className="text-center text-muted py-4">
-                    <FiClock size={32} className="mb-2 opacity-50" />
-                    <p className="mb-0">Không có đơn mới</p>
+                {getOrdersByStatus('confirmed').length === 0 ? (
+                  <div className="text-center text-muted py-5">
+                    <FiClock size={40} className="mb-3 opacity-25" />
+                    <p className="mb-0">Không có đơn mới cần làm</p>
                   </div>
                 ) : (
-                  getOrdersByStatus('pending').map(order => renderOrderCard(order))
+                  getOrdersByStatus('confirmed').map(order => renderOrderCard(order))
                 )}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Preparing Orders */}
+        {/* Preparing Orders (Cooking) */}
         <div className="col-md-4">
-          <div className="card">
-            <div className="card-header bg-info text-white">
+          <div className="card h-100">
+            <div className="card-header bg-info text-dark fw-bold">
               <FiAlertCircle className="me-2" />
-              Đang chuẩn bị ({getOrdersByStatus('preparing').length})
+              ĐANG NẤU ({getOrdersByStatus('preparing').length})
             </div>
-            <div className="card-body p-2">
+            <div className="card-body p-2 bg-light">
               <div className="orders-column">
                 {getOrdersByStatus('preparing').length === 0 ? (
-                  <div className="text-center text-muted py-4">
-                    <FiAlertCircle size={32} className="mb-2 opacity-50" />
-                    <p className="mb-0">Chưa có đơn đang chế biến</p>
+                  <div className="text-center text-muted py-5">
+                    <FiAlertCircle size={40} className="mb-3 opacity-25" />
+                    <p className="mb-0">Bếp đang rảnh</p>
                   </div>
                 ) : (
                   getOrdersByStatus('preparing').map(order => renderOrderCard(order))
@@ -182,22 +200,22 @@ const Kitchen = () => {
           </div>
         </div>
 
-        {/* Completed Orders */}
+        {/* Ready Orders */}
         <div className="col-md-4">
-          <div className="card">
-            <div className="card-header bg-success text-white">
+          <div className="card h-100">
+            <div className="card-header bg-success text-white fw-bold">
               <FiCheckCircle className="me-2" />
-              Hoàn thành ({getOrdersByStatus('completed').length})
+              SẴN SÀNG GIAO ({getOrdersByStatus('ready').length})
             </div>
-            <div className="card-body p-2">
+            <div className="card-body p-2 bg-light">
               <div className="orders-column">
-                {getOrdersByStatus('completed').length === 0 ? (
-                  <div className="text-center text-muted py-4">
-                    <FiCheckCircle size={32} className="mb-2 opacity-50" />
-                    <p className="mb-0">Chưa có đơn hoàn thành</p>
+                {getOrdersByStatus('ready').length === 0 ? (
+                  <div className="text-center text-muted py-5">
+                    <FiPackage size={40} className="mb-3 opacity-25" />
+                    <p className="mb-0">Chưa có món chờ giao</p>
                   </div>
                 ) : (
-                  getOrdersByStatus('completed').map(order => renderOrderCard(order))
+                  getOrdersByStatus('ready').map(order => renderOrderCard(order))
                 )}
               </div>
             </div>

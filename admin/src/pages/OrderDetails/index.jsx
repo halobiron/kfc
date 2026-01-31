@@ -8,6 +8,7 @@ const STATUS_LABELS = {
     pending: 'Chờ xác nhận',
     confirmed: 'Đã xác nhận',
     preparing: 'Đang chuẩn bị',
+    ready: 'Sẵn sàng giao',
     shipping: 'Đang giao hàng',
     delivered: 'Hoàn thành',
     cancelled: 'Đã hủy'
@@ -17,6 +18,7 @@ const STATUS_BADGES = {
     pending: 'badge-warning',
     confirmed: 'badge-info',
     preparing: 'badge-info text-dark',
+    ready: 'badge-success',
     shipping: 'badge-primary',
     delivered: 'badge-success',
     cancelled: 'badge-danger'
@@ -96,6 +98,11 @@ const OrderDetails = () => {
                              </button>
                          )}
                          {status === 'preparing' && (
+                             <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => handleStatusChange('ready')}>
+                                <FiCheckCircle className="me-2" /> Xong món
+                             </button>
+                         )}
+                         {status === 'ready' && (
                              <button type="button" className="btn btn-sm btn-primary d-flex align-items-center" onClick={() => handleStatusChange('shipping')}>
                                 <FiTruck className="me-2" /> Giao hàng
                              </button>
@@ -207,8 +214,13 @@ const OrderDetails = () => {
                                     <span>{order.deliveryInfo?.phone}</span>
                                 </div>
                                 <div className="d-flex align-items-start mb-2">
-                                    <FiMapPin className="me-2 mt-1 text-muted" />
-                                    <span>{order.deliveryInfo?.address}, {order.deliveryInfo?.city}</span>
+                                    <FiMapPin className="me-2 mt-1 text-muted flex-shrink-0" />
+                                    <span>
+                                        {order.deliveryType === 'pickup' 
+                                            ? 'Nhận tại cửa hàng' 
+                                            : order.deliveryInfo?.address || 'Chưa cập nhật địa chỉ'}
+                                        {order.deliveryInfo?.city ? `, ${order.deliveryInfo?.city}` : ''}
+                                    </span>
                                 </div>
                             </div>
                             <div className="alert alert-info mb-0">

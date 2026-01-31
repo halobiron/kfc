@@ -87,13 +87,18 @@ const Checkout = () => {
         try {
             const response = await axiosClient.get('/users/profile');
             if (response.data?.status) {
-                setSavedAddresses(response.data.data.addresses || []);
-                // Auto-fill phone and name if available
-                if (response.data.data) {
+                const userData = response.data.data;
+                const addresses = userData.addresses || [];
+                setSavedAddresses(addresses);
+
+                // Auto-fill phone, name and default address if available
+                if (userData) {
+                    const defaultAddress = addresses.find(addr => addr.isDefault);
                     setFormData(prev => ({
                         ...prev,
-                        fullName: prev.fullName || response.data.data.name || '',
-                        phone: prev.phone || response.data.data.phone || ''
+                        fullName: prev.fullName || userData.name || '',
+                        phone: prev.phone || userData.phone || '',
+                        address: prev.address || (defaultAddress ? defaultAddress.fullAddress : '')
                     }));
                 }
             }

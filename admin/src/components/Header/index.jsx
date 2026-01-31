@@ -2,7 +2,20 @@ import React from 'react'
 import Nav from '../Nav'
 import { FiSearch, FiLogOut } from 'react-icons/fi';
 import kfcLogo from '@shared-assets/img/footer-logo.png';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
+
 const Header = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    dispatch(logout());
+    navigate('/');
+  };
+
   return (
     <>
       <header className="navbar navbar-dark sticky-top flex-md-nowrap p-0 shadow-sm" style={{ backgroundColor: 'var(--kfc-red)', borderBottom: 'none' }}>
@@ -18,7 +31,7 @@ const Header = () => {
         </div>
         <div className="navbar-nav">
           <div className="nav-item text-nowrap">
-            <a className="nav-link px-3 d-flex align-items-center" href="#" style={{ color: 'var(--kfc-white)' }}>
+            <a className="nav-link px-3 d-flex align-items-center" href="#" onClick={handleLogout} style={{ color: 'var(--kfc-white)' }}>
               <FiLogOut style={{ marginRight: '5px' }} />
               Đăng xuất
             </a>

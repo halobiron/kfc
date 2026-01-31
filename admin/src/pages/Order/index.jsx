@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import { FiEye } from 'react-icons/fi';
+import { FiEye, FiCheck, FiTrash2, FiMapPin } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllOrders } from '../../redux/slices/orderSlice';
+import { getAllOrders, updateOrderStatus, deleteOrder } from '../../redux/slices/orderSlice';
+import { toast } from 'react-toastify';
 
 const Order = () => {
   const dispatch = useDispatch();
@@ -12,11 +13,32 @@ const Order = () => {
     dispatch(getAllOrders());
   }, [dispatch]);
 
+  const handleApprove = async (id) => {
+    try {
+      await dispatch(updateOrderStatus({ id, status: 'confirmed' })).unwrap();
+      toast.success('Đã duyệt đơn hàng');
+    } catch (error) {
+      toast.error(error?.message || 'Có lỗi xảy ra khi duyệt đơn');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa đơn hàng này? Hành động này không thể hoàn tác.')) {
+      try {
+        await dispatch(deleteOrder(id)).unwrap();
+        toast.success('Đã xóa đơn hàng');
+      } catch (error) {
+        toast.error(error?.message || 'Có lỗi xảy ra khi xóa đơn');
+      }
+    }
+  };
+
   const getStatusBadge = (status) => {
     switch (status) {
       case 'pending': return <span className="badge badge-warning">Chờ xác nhận</span>;
       case 'confirmed': return <span className="badge badge-info">Đã xác nhận</span>;
       case 'preparing': return <span className="badge badge-info text-dark">Đang chuẩn bị</span>;
+      case 'ready': return <span className="badge badge-success">Sẵn sàng giao</span>;
       case 'shipping': return <span className="badge badge-primary">Đang giao</span>;
       case 'delivered': return <span className="badge badge-success">Hoàn thành</span>;
       case 'cancelled': return <span className="badge badge-danger">Đã hủy</span>;
@@ -57,7 +79,15 @@ const Order = () => {
                     <td className="fw-bold">{order.orderNumber || order._id.substring(0, 8).toUpperCase()}</td>
                     <td>
                         <div>{order.deliveryInfo?.fullName}</div>
-                        <small className="text-muted">{order.deliveryInfo?.phone}</small>
+                        <small className="text-muted d-block">{order.deliveryInfo?.phone}</small>
+                        <small className="text-muted d-block" style={{ fontSize: '0.8rem', maxWidth: '200px' }}>
+                          <FiMapPin className="me-1" size={12} />
+                          {order.deliveryType === 'pickup' 
+                            ? 'Tại cửa hàng' 
+                            : (order.deliveryInfo?.address && order.deliveryInfo.address.length > 30 
+                                ? order.deliveryInfo.address.substring(0, 30) + '...' 
+                                : order.deliveryInfo?.address)}
+                        </small>
                     </td>
                     <td>
                         <ul className="list-unstyled mb-0 small">
@@ -70,10 +100,31 @@ const Order = () => {
                     <td className="fw-bold text-danger">{formatPrice(order.totalAmount)}</td>
                     <td>{getStatusBadge(order.status)}</td>
                     <td>
-                      <Link to={`/orders/${order._id}`} className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
-                        <FiEye style={{ marginRight: '4px' }} />
-                        Xem
-                      </Link>
+                      <div className="btn-group">
+                        <Link 
+                            to={`/orders/${order._id}`} 
+                            className="btn btn-sm btn-outline-primary"
+                            title="Xem chi tiết"
+                        >
+                            <FiEye />
+                        </Link>
+                        {order.status === 'pending' && (
+                            <button
+                                className="btn btn-sm btn-outline-success"
+                                onClick={() => handleApprove(order._id)}
+                                title="Duyệt đơn"
+                            >
+                                <FiCheck />
+                            </button>
+                        )}
+                        <button 
+                            className="btn btn-sm btn-outline-danger"
+                            onClick={() => handleDelete(order._id)}
+                            title="Xóa đơn"
+                        >
+                            <FiTrash2 />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
