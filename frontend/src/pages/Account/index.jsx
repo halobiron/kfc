@@ -21,6 +21,17 @@ const Account = () => {
     });
 
     const [addresses, setAddresses] = useState([]);
+    const [editingAddress, setEditingAddress] = useState(null);
+    const [showAddressForm, setShowAddressForm] = useState(false);
+    const [addressForm, setAddressForm] = useState({
+        label: '',
+        fullAddress: '',
+        isDefault: false,
+        latitude: null,
+        longitude: null
+    });
+    const [loadingAddresses, setLoadingAddresses] = useState(false);
+    const [gettingLocation, setGettingLocation] = useState(false);
 
     const [passwordData, setPasswordData] = useState({
         currentPassword: '',
@@ -51,6 +62,8 @@ const Account = () => {
     useEffect(() => {
         if (activeTab === 'orders') {
             fetchOrders();
+        } else if (activeTab === 'addresses') {
+            fetchAddresses();
         }
     }, [activeTab]);
 
@@ -74,10 +87,23 @@ const Account = () => {
             const response = await axiosClient.get('/user/orders');
             setOrders(response.data.data || []);
         } catch (error) {
-            console.error('Lỗi khi tải đơn hàng:', error);
             toast.error('Không thể tải đơn hàng. Vui lòng thử lại.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchAddresses = async () => {
+        try {
+            setLoadingAddresses(true);
+            const response = await axiosClient.get('/users/profile');
+            if (response.data?.status) {
+                setAddresses(response.data.data.addresses || []);
+            }
+        } catch (error) {
+            toast.error('Không thể tải danh sách địa chỉ. Vui lòng thử lại.');
+        } finally {
+            setLoadingAddresses(false);
         }
     };
 
@@ -105,26 +131,116 @@ const Account = () => {
     };
 
     const handleAddAddress = () => {
-        const newAddress = {
-            id: addresses.length + 1,
-            label: 'Địa chỉ mới',
-            fullAddress: '',
-            isDefault: false
-        };
-        setAddresses([...addresses, newAddress]);
+        setEditingAddress(null);
+        setAddressForm({ label: '', fullAddress: '', isDefault: false, latitude: null, longitude: null });
+        setShowAddressForm(true);
     };
 
-    const handleSetDefaultAddress = (id) => {
-        setAddresses(addresses.map(addr => ({
-            ...addr,
-            isDefault: addr.id === id
-        })));
+    const handleEditAddress = (address, idx) => {
+        setEditingAddress(idx);
+        setAddressForm({
+            label: address.label || '',
+            fullAddress: address.fullAddress || '',
+            isDefault: address.isDefault || false,
+            latitude: address.latitude || null,
+            longitude: address.longitude || null
+        });
+        setShowAddressForm(true);
     };
 
-    const handleDeleteAddress = (id) => {
+    const handleGetCurrentLocation = () => {
+        if (!navigator.geolocation) {
+            toast.error('Trình duyệt không hỗ trợ Geolocation');
+            return;
+        }
+
+        setGettingLocation(true);
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                setAddressForm(prev => ({
+                    ...prev,
+                    latitude,
+                    longitude
+                }));
+                toast.success('Lấy vị trí thành công!');
+                setGettingLocation(false);
+            },
+            (error) => {
+                toast.error('Không thể lấy vị trí của bạn');
+                setGettingLocation(false);
+            }
+        );
+    };
+
+    const handleSaveAddress = async () => {
+        try {
+            if (!addressForm.label.trim() || !addressForm.fullAddress.trim()) {
+                toast.error('Vui lòng nhập đầy đủ tên và địa chỉ');
+                return;
+            }
+
+            const addressData = {
+                label: addressForm.label,
+                fullAddress: addressForm.fullAddress,
+                isDefault: addressForm.isDefault,
+                latitude: addressForm.latitude,
+                longitude: addressForm.longitude
+            };
+
+            if (editingAddress !== null) {
+                const response = await axiosClient.put(`/users/address/update/${editingAddress}`, addressData);
+                if (response.data?.status) {
+                    toast.success('Cập nhật địa chỉ thành công!');
+                    setShowAddressForm(false);
+                    fetchAddresses();
+                }
+            } else {
+                const response = await axiosClient.post('/users/address/add', {
+                    ...addressData,
+                    isDefault: addressForm.isDefault || addresses.length === 0
+                });
+                if (response.data?.status) {
+                    toast.success('Thêm địa chỉ thành công!');
+                    setShowAddressForm(false);
+                    fetchAddresses();
+                }
+            }
+        } catch (error) {
+            toast.error('Không thể lưu địa chỉ. Vui lòng thử lại.');
+        }
+    };
+
+    const handleSetDefaultAddress = async (idx) => {
+        try {
+            const address = addresses[idx];
+            const response = await axiosClient.put(`/users/address/update/${idx}`, {
+                label: address.label,
+                fullAddress: address.fullAddress,
+                isDefault: true,
+                latitude: address.latitude,
+                longitude: address.longitude
+            });
+            if (response.data?.status) {
+                toast.success('Cập nhật địa chỉ mặc định thành công!');
+                fetchAddresses();
+            }
+        } catch (error) {
+            toast.error('Không thể cập nhật địa chỉ mặc định.');
+        }
+    };
+
+    const handleDeleteAddress = async (idx) => {
         if (window.confirm('Bạn có chắc muốn xóa địa chỉ này?')) {
-            setAddresses(addresses.filter(addr => addr.id !== id));
-            toast.success('Đã xóa địa chỉ');
+            try {
+                const response = await axiosClient.delete(`/users/address/delete/${idx}`);
+                if (response.data?.status) {
+                    toast.success('Xóa địa chỉ thành công!');
+                    fetchAddresses();
+                }
+            } catch (error) {
+                toast.error('Không thể xóa địa chỉ. Vui lòng thử lại.');
+            }
         }
     };
 
@@ -233,7 +349,7 @@ const Account = () => {
                                             <p>Bạn chưa có đơn hàng nào</p>
                                             <button 
                                                   className="btn btn-danger start-ordering-btn"
-                                                  onClick={() => navigate('/menu')}
+                                                  onClick={() => navigate('/products')}
                                               >
                                                   Bắt đầu đặt hàng
                                               </button>
@@ -404,39 +520,147 @@ const Account = () => {
                                     </button>
                                 </div>
 
-                                <div className="addresses-list">
-                                    {addresses.map(address => (
-                                        <div key={address.id} className="address-card">
-                                            <div className="address-header">
-                                                <h5>
-                                                    {address.label}
-                                                    {address.isDefault && <span className="badge-default">Mặc định</span>}
-                                                </h5>
-                                                <div className="address-actions">
-                                                    {!address.isDefault && (
-                                                        <button onClick={() => handleSetDefaultAddress(address.id)}>
-                                                            Đặt làm mặc định
-                                                        </button>
-                                                    )}
-                                                    <button className="btn-delete" onClick={() => handleDeleteAddress(address.id)}>
-                                                        Xóa
-                                                    </button>
+                                {loadingAddresses ? (
+                                    <div className="text-center py-5">
+                                        <div className="spinner-border text-danger" role="status">
+                                            <span className="visually-hidden">Đang tải...</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="addresses-list">
+                                        {addresses && addresses.length > 0 ? (
+                                            addresses.map((address, idx) => (
+                                                <div key={idx} className="address-card">
+                                                    <div className="address-header">
+                                                        <h5>
+                                                            {address.label}
+                                                            {address.isDefault && <span className="badge-default">Mặc định</span>}
+                                                        </h5>
+                                                        <div className="address-actions">
+                                                            <button 
+                                                                className="btn-edit"
+                                                                onClick={() => handleEditAddress(address, idx)}
+                                                                title="Chỉnh sửa"
+                                                            >
+                                                                <i className="bi bi-pencil"></i>
+                                                            </button>
+                                                            {!address.isDefault && (
+                                                                <button 
+                                                                    className="btn-default"
+                                                                    onClick={() => handleSetDefaultAddress(idx)}
+                                                                    title="Đặt làm mặc định"
+                                                                >
+                                                                    Đặt làm mặc định
+                                                                </button>
+                                                            )}
+                                                            <button 
+                                                                className="btn-delete" 
+                                                                onClick={() => handleDeleteAddress(idx)}
+                                                                title="Xóa"
+                                                            >
+                                                                <i className="bi bi-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <p className="address-text">{address.fullAddress}</p>
                                                 </div>
+                                            ))
+                                        ) : (
+                                            <div className="empty-addresses">
+                                                <i className="bi bi-geo-alt" style={{ fontSize: '2rem', opacity: 0.7 }}></i>
+                                                <p>Chưa có địa chỉ nào.</p>
                                             </div>
-                                            <p className="address-text">{address.fullAddress || 'Chưa cập nhật địa chỉ'}</p>
-                                        </div>
-                                    ))}
-                                    {addresses.length === 0 && (
-                                        <div className="empty-addresses">
-                                            <p>Chưa có địa chỉ nào.</p>
-                                        </div>
-                                    )}
-                                </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
                 </div>
             </section>
+
+            {/* Modal Thêm/Sửa Địa Chỉ */}
+            {showAddressForm && (
+                <div className="address-modal-overlay" onClick={() => setShowAddressForm(false)}>
+                    <div className="address-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="address-modal-header">
+                            <h5>{editingAddress ? 'Chỉnh sửa địa chỉ' : 'Thêm địa chỉ'}</h5>
+                            <button className="btn-close-modal" onClick={() => setShowAddressForm(false)}>
+                                <i className="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        <div className="address-modal-body">
+                            <div className="form-group">
+                                <label>Tên địa chỉ <span className="text-danger">*</span></label>
+                                <input
+                                    type="text"
+                                    placeholder="VD: Nhà, Công ty, Nhà bạn..."
+                                    value={addressForm.label}
+                                    onChange={(e) => setAddressForm({ ...addressForm, label: e.target.value })}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <div className="label-with-button">
+                                    <label>Địa chỉ đầy đủ <span className="text-danger">*</span></label>
+                                    <button 
+                                        type="button"
+                                        className="btn-get-location"
+                                        onClick={handleGetCurrentLocation}
+                                        disabled={gettingLocation}
+                                        title="Lấy vị trí hiện tại"
+                                    >
+                                        {gettingLocation ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-1"></span>
+                                                Đang lấy...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i className="bi bi-geo-alt"></i> Lấy vị trí
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                                <textarea
+                                    placeholder="Nhập địa chỉ chi tiết (đường, quận, thành phố...)"
+                                    rows="3"
+                                    value={addressForm.fullAddress}
+                                    onChange={(e) => setAddressForm({ ...addressForm, fullAddress: e.target.value })}
+                                    required
+                                ></textarea>
+                            </div>
+
+                            {(addressForm.latitude || addressForm.longitude) && (
+                                <div className="location-info">
+                                    <small>
+                                        <i className="bi bi-pin-fill"></i> Tọa độ: {addressForm.latitude?.toFixed(4)}, {addressForm.longitude?.toFixed(4)}
+                                    </small>
+                                </div>
+                            )}
+
+                            <div className="form-group form-check">
+                                <input
+                                    type="checkbox"
+                                    id="addressDefault"
+                                    checked={addressForm.isDefault}
+                                    onChange={(e) => setAddressForm({ ...addressForm, isDefault: e.target.checked })}
+                                />
+                                <label htmlFor="addressDefault">Đặt làm địa chỉ mặc định</label>
+                            </div>
+                        </div>
+                        <div className="address-modal-footer">
+                            <button className="btn btn-outline-secondary" onClick={() => setShowAddressForm(false)}>
+                                Hủy
+                            </button>
+                            <button className="btn btn-primary" onClick={handleSaveAddress}>
+                                {editingAddress ? 'Cập nhật' : 'Thêm mới'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Modal chi tiết đơn hàng */}
             {selectedOrder && (

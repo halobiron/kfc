@@ -29,9 +29,10 @@ const userSchema = new Schema({
     },
     addresses: [
         {
-            _id: false,
             label: String,
             fullAddress: String,
+            latitude: Number,
+            longitude: Number,
             isDefault: {
                 type: Boolean,
                 default: false

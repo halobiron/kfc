@@ -77,7 +77,7 @@ exports.changePassword = async (req, res, next) => {
 
 // ADD ADDRESS
 exports.addAddress = async (req, res, next) => {
-    const { label, fullAddress, isDefault } = req.body;
+    const { label, fullAddress, isDefault, latitude, longitude } = req.body;
 
     try {
         const user = await User.findById(req.user.id);
@@ -92,6 +92,8 @@ exports.addAddress = async (req, res, next) => {
         user.addresses.push({
             label,
             fullAddress,
+            latitude,
+            longitude,
             isDefault: isDefault || user.addresses.length === 0
         });
 
@@ -110,13 +112,13 @@ exports.addAddress = async (req, res, next) => {
 // UPDATE ADDRESS
 exports.updateAddress = async (req, res, next) => {
     const { addressId } = req.params;
-    const { label, fullAddress, isDefault } = req.body;
+    const { label, fullAddress, isDefault, latitude, longitude } = req.body;
+    const idx = parseInt(addressId);
 
     try {
         const user = await User.findById(req.user.id);
-        const addressIndex = user.addresses.findIndex(addr => addr._id.toString() === addressId);
-
-        if (addressIndex === -1) {
+        
+        if (idx < 0 || idx >= user.addresses.length) {
             return res.status(404).json({
                 status: false,
                 message: 'Địa chỉ không tìm thấy'
@@ -124,12 +126,17 @@ exports.updateAddress = async (req, res, next) => {
         }
 
         if (isDefault) {
-            user.addresses.forEach((addr, idx) => {
-                addr.isDefault = idx === addressIndex;
+            user.addresses.forEach((addr, i) => {
+                addr.isDefault = i === idx;
             });
+        } else {
+            user.addresses[idx].isDefault = false;
         }
 
-        user.addresses[addressIndex] = { ...user.addresses[addressIndex], label, fullAddress };
+        user.addresses[idx].label = label;
+        user.addresses[idx].fullAddress = fullAddress;
+        user.addresses[idx].latitude = latitude;
+        user.addresses[idx].longitude = longitude;
         await user.save();
 
         res.status(200).json({
@@ -145,10 +152,25 @@ exports.updateAddress = async (req, res, next) => {
 // DELETE ADDRESS
 exports.deleteAddress = async (req, res, next) => {
     const { addressId } = req.params;
+    const idx = parseInt(addressId);
 
     try {
         const user = await User.findById(req.user.id);
-        user.addresses = user.addresses.filter(addr => addr._id.toString() !== addressId);
+        
+        if (idx < 0 || idx >= user.addresses.length) {
+            return res.status(404).json({
+                status: false,
+                message: 'Địa chỉ không tìm thấy'
+            });
+        }
+
+        user.addresses.splice(idx, 1);
+        
+        // Nếu xóa địa chỉ mặc định, đặt địa chỉ đầu tiên làm mặc định
+        if (user.addresses.length > 0 && !user.addresses.some(addr => addr.isDefault)) {
+            user.addresses[0].isDefault = true;
+        }
+
         await user.save();
 
         res.status(200).json({
