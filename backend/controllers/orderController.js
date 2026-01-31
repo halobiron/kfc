@@ -286,7 +286,18 @@ exports.updateOrderStatus = async (req, res, next) => {
 // GET ALL ORDERS (ADMIN)
 exports.getAllOrders = async (req, res, next) => {
     try {
-        const orders = await Order.find().sort({ createdAt: -1 });
+        const filter = {};
+        
+        // Filter by store if user is restricted to a store
+        if (req.user && req.user.storeId) {
+            filter['deliveryInfo.storeId'] = req.user.storeId;
+        } 
+        // Allow creating/switching filters if user is not restricted (e.g. Super Admin)
+        else if (req.query.storeId) {
+            filter['deliveryInfo.storeId'] = req.query.storeId;
+        }
+
+        const orders = await Order.find(filter).sort({ createdAt: -1 });
         res.status(200).json({
             status: true,
             data: orders

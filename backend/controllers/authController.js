@@ -1,10 +1,23 @@
 const User = require('../models/userSchema');
+const Staff = require('../models/staffSchema');
 const jwt = require('jsonwebtoken');
 
 // Create JWT Token
-const sendToken = (user, statusCode, res) => {
+const sendToken = async (user, statusCode, res) => {
+    let storeId = null;
+    let position = null;
+
+    // If user is staff/admin, get their store info
+    if (user.role !== 'customer') {
+        const staff = await Staff.findOne({ userId: user._id });
+        if (staff) {
+            storeId = staff.storeId;
+            position = staff.position;
+        }
+    }
+
     const token = jwt.sign(
-        { id: user._id, role: user.role },
+        { id: user._id, role: user.role, storeId },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRE }
     );
@@ -25,7 +38,9 @@ const sendToken = (user, statusCode, res) => {
             name: user.name,
             email: user.email,
             phone: user.phone,
-            role: user.role
+            role: user.role,
+            storeId,
+            position
         }
     });
 };
@@ -69,7 +84,7 @@ exports.registerUser = async (req, res, next) => {
         });
 
         // Send token
-        sendToken(user, 201, res);
+        await sendToken(user, 201, res);
     } catch (error) {
         next(error);
     }
@@ -111,7 +126,7 @@ exports.loginUser = async (req, res, next) => {
         await user.save();
 
         // Send token
-        sendToken(user, 200, res);
+        await sendToken(user, 200, res);
     } catch (error) {
         next(error);
     }
