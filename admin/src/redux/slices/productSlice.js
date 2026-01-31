@@ -9,6 +9,14 @@ export const getAllProducts = createAsyncThunk(
   }
 );
 
+export const getProductById = createAsyncThunk(
+  'products/getProductById',
+  async (id) => {
+    const response = await api.get(`/product/${id}`);
+    return response.data;
+  }
+);
+
 export const addNewProduct = createAsyncThunk(
   'products/addNewProduct',
   async (productData) => {
@@ -43,7 +51,14 @@ const productSlice = createSlice({
       })
       .addCase(getAllProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload;
+        state.products = action.payload.data || action.payload;
+      })
+      .addCase(getProductById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getProductById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentProduct = action.payload.data || action.payload;
       });
   },
 });

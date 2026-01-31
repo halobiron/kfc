@@ -1,0 +1,105 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from '../../utils/api';
+
+// Async thunk for login
+export const login = createAsyncThunk(
+    'auth/login',
+    async ({ email, password }, { rejectWithValue }) => {
+        try {
+            const response = await api.post('/auth/login', { email, password });
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data.message || 'Đăng nhập thất bại');
+        }
+    }
+);
+
+// Async thunk for loading user
+export const loadUser = createAsyncThunk(
+    'auth/loadUser',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await api.get('/auth/me');
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data.message || 'Không thể tải thông tin người dùng');
+        }
+    }
+);
+
+export const logout = createAsyncThunk(
+    'auth/logout',
+    async (_, { rejectWithValue }) => {
+        try {
+            await api.post('/auth/logout');
+        } catch (error) {
+            return rejectWithValue(error.response.data.message);
+        }
+    }
+);
+
+const initialState = {
+    user: null,
+    isAuthenticated: false,
+    loading: false,
+    error: null,
+    token: localStorage.getItem('token') || null
+};
+
+const authSlice = createSlice({
+    name: 'auth',
+    initialState,
+    reducers: {
+        clearErrors: (state) => {
+            state.error = null;
+        }
+    },
+    extraReducers: (builder) => {
+        builder
+            // Login
+            .addCase(login.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(login.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isAuthenticated = true;
+                state.user = action.payload.user;
+                state.token = action.payload.token;
+                localStorage.setItem('token', action.payload.token);
+            })
+            .addCase(login.rejected, (state, action) => {
+                state.loading = false;
+                state.isAuthenticated = false;
+                state.user = null;
+                state.error = action.payload;
+            })
+            // Load User
+            .addCase(loadUser.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(loadUser.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isAuthenticated = true;
+                state.user = action.payload.user;
+            })
+            .addCase(loadUser.rejected, (state, action) => {
+                state.loading = false;
+                state.isAuthenticated = false;
+                state.user = null;
+                // Don't set error here to avoid showing error on initial load if not logged in
+                localStorage.removeItem('token');
+            })
+            // Logout
+            .addCase(logout.fulfilled, (state) => {
+                state.loading = false;
+                state.isAuthenticated = false;
+                state.user = null;
+                state.token = null;
+                localStorage.removeItem('token');
+            });
+    }
+});
+
+export const { clearErrors } = authSlice.actions;
+export default authSlice.reducer;
