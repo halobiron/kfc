@@ -36,12 +36,12 @@ const Kitchen = () => {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-        await api.put(`/order/update/${orderId}`, { status: newStatus });
-        toast.success('Cập nhật trạng thái thành công');
-        fetchOrders(); // Reload to sync
+      await api.put(`/order/update/${orderId}`, { status: newStatus });
+      toast.success('Cập nhật trạng thái thành công');
+      fetchOrders(); // Reload to sync
     } catch (error) {
-        console.error('Lỗi cập nhật:', error);
-        toast.error('Không thể cập nhật trạng thái');
+      console.error('Lỗi cập nhật:', error);
+      toast.error('Không thể cập nhật trạng thái');
     }
   };
 
@@ -56,7 +56,7 @@ const Kitchen = () => {
   const renderOrderCard = (order) => {
     const config = statusConfig[order.status];
     if (!config) return null; // Don't show other statuses like pending/shipping/delivered
-    
+
     const StatusIcon = config.icon;
 
     return (
@@ -84,10 +84,10 @@ const Kitchen = () => {
                 </li>
               ))}
             </ul>
-             {order.deliveryInfo?.note && (
-                <div className="alert alert-light mt-2 mb-0 p-2 small">
-                    <small className="fw-bold">Ghi chú:</small> {order.deliveryInfo.note}
-                </div>
+            {order.deliveryInfo?.note && (
+              <div className="alert alert-light mt-2 mb-0 p-2 small">
+                <small className="fw-bold">Ghi chú:</small> {order.deliveryInfo.note}
+              </div>
             )}
           </div>
           <div className="d-flex justify-content-between align-items-center mt-auto">
@@ -120,11 +120,10 @@ const Kitchen = () => {
     <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
       <div className="page-header d-flex justify-content-between align-items-center">
         <div>
-            <h1 className="page-title">Bếp - Quản lý Đơn hàng</h1>
-            <p className="text-muted">Tiếp nhận và chế biến món ăn</p>
+          <h1 className="page-title">Điều phối Chế biến</h1>
         </div>
         <button className="btn btn-outline-primary btn-sm" onClick={fetchOrders}>
-            Làm mới
+          Làm mới
         </button>
       </div>
 

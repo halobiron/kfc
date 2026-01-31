@@ -77,7 +77,7 @@ const OrderDetails = () => {
                     </button>
                     <div>
                         <h1 className="h2 mb-0 font-weight-bold" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
-                            Đơn hàng {order.orderNumber || order._id.substring(0,8).toUpperCase()}
+                            Đơn hàng {order.orderNumber || order._id.substring(0, 8).toUpperCase()}
                         </h1>
                         <span className="text-muted small">
                             <FiClock className="me-1" /> {new Date(order.createdAt).toLocaleString('vi-VN')}
@@ -88,37 +88,28 @@ const OrderDetails = () => {
                     <div className="btn-group me-2">
                         {/* Status buttons */}
                         {status === 'pending' && (
-                             <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => handleStatusChange('confirmed')}>
+                            <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => handleStatusChange('confirmed')}>
                                 <FiCheckCircle className="me-2" /> Xác nhận
-                             </button>
-                         )}
-                         {status === 'confirmed' && (
-                             <button type="button" className="btn btn-sm btn-info d-flex align-items-center" onClick={() => handleStatusChange('preparing')}>
-                                <FiPackage className="me-2" /> Chuẩn bị
-                             </button>
-                         )}
-                         {status === 'preparing' && (
-                             <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => handleStatusChange('ready')}>
-                                <FiCheckCircle className="me-2" /> Xong món
-                             </button>
-                         )}
-                         {status === 'ready' && (
-                             <button type="button" className="btn btn-sm btn-primary d-flex align-items-center" onClick={() => handleStatusChange('shipping')}>
+                            </button>
+                        )}
+
+                        {status === 'ready' && (
+                            <button type="button" className="btn btn-sm btn-primary d-flex align-items-center" onClick={() => handleStatusChange('shipping')}>
                                 <FiTruck className="me-2" /> Giao hàng
-                             </button>
-                         )}
-                          {status === 'shipping' && (
-                             <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => handleStatusChange('delivered')}>
+                            </button>
+                        )}
+                        {status === 'shipping' && (
+                            <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => handleStatusChange('delivered')}>
                                 <FiCheckCircle className="me-2" /> Hoàn thành
-                             </button>
-                         )}
+                            </button>
+                        )}
                     </div>
                     {status !== 'cancelled' && status !== 'delivered' && (
                         <button
                             type="button"
                             className="btn btn-sm btn-danger d-flex align-items-center ms-2"
                             onClick={() => {
-                                if(window.confirm('Bạn có chắc muốn hủy đơn hàng này?')) handleStatusChange('cancelled');
+                                if (window.confirm('Bạn có chắc muốn hủy đơn hàng này?')) handleStatusChange('cancelled');
                             }}
                         >
                             <FiXCircle className="me-2" /> Hủy đơn
@@ -216,8 +207,8 @@ const OrderDetails = () => {
                                 <div className="d-flex align-items-start mb-2">
                                     <FiMapPin className="me-2 mt-1 text-muted flex-shrink-0" />
                                     <span>
-                                        {order.deliveryType === 'pickup' 
-                                            ? 'Nhận tại cửa hàng' 
+                                        {order.deliveryType === 'pickup'
+                                            ? 'Nhận tại cửa hàng'
                                             : order.deliveryInfo?.address || 'Chưa cập nhật địa chỉ'}
                                         {order.deliveryInfo?.city ? `, ${order.deliveryInfo?.city}` : ''}
                                     </span>

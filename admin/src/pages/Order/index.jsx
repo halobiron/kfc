@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { FiEye, FiCheck, FiTrash2, FiMapPin } from 'react-icons/fi';
+import { FiEye, FiCheck, FiTrash2, FiMapPin, FiXCircle, FiTruck, FiCheckCircle } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllOrders, updateOrderStatus, deleteOrder } from '../../redux/slices/orderSlice';
@@ -13,23 +13,18 @@ const Order = () => {
     dispatch(getAllOrders());
   }, [dispatch]);
 
-  const handleApprove = async (id) => {
+  const handleUpdateStatus = async (id, newStatus) => {
     try {
-      await dispatch(updateOrderStatus({ id, status: 'confirmed' })).unwrap();
-      toast.success('Đã duyệt đơn hàng');
+      await dispatch(updateOrderStatus({ id, status: newStatus })).unwrap();
+      toast.success('Cập nhật trạng thái thành công');
     } catch (error) {
-      toast.error(error?.message || 'Có lỗi xảy ra khi duyệt đơn');
+      toast.error(error?.message || 'Có lỗi xảy ra');
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa đơn hàng này? Hành động này không thể hoàn tác.')) {
-      try {
-        await dispatch(deleteOrder(id)).unwrap();
-        toast.success('Đã xóa đơn hàng');
-      } catch (error) {
-        toast.error(error?.message || 'Có lỗi xảy ra khi xóa đơn');
-      }
+  const handleCancel = async (id) => {
+    if (window.confirm('Bạn có chắc muốn hủy đơn hàng này?')) {
+      handleUpdateStatus(id, 'cancelled');
     }
   };
 
@@ -72,58 +67,78 @@ const Order = () => {
             </thead>
             <tbody>
               {loading ? (
-                 <tr><td colSpan="6" className="text-center">Đang tải...</td></tr>
+                <tr><td colSpan="6" className="text-center">Đang tải...</td></tr>
               ) : orders && orders.length > 0 ? (
                 orders.map(order => (
                   <tr key={order._id}>
                     <td className="fw-bold">{order.orderNumber || order._id.substring(0, 8).toUpperCase()}</td>
                     <td>
-                        <div>{order.deliveryInfo?.fullName}</div>
-                        <small className="text-muted d-block">{order.deliveryInfo?.phone}</small>
-                        <small className="text-muted d-block" style={{ fontSize: '0.8rem', maxWidth: '200px' }}>
-                          <FiMapPin className="me-1" size={12} />
-                          {order.deliveryType === 'pickup' 
-                            ? 'Tại cửa hàng' 
-                            : (order.deliveryInfo?.address && order.deliveryInfo.address.length > 30 
-                                ? order.deliveryInfo.address.substring(0, 30) + '...' 
-                                : order.deliveryInfo?.address)}
-                        </small>
+                      <div>{order.deliveryInfo?.fullName}</div>
+                      <small className="text-muted d-block">{order.deliveryInfo?.phone}</small>
+                      <small className="text-muted d-block" style={{ fontSize: '0.8rem', maxWidth: '200px' }}>
+                        <FiMapPin className="me-1" size={12} />
+                        {order.deliveryType === 'pickup'
+                          ? 'Tại cửa hàng'
+                          : (order.deliveryInfo?.address && order.deliveryInfo.address.length > 30
+                            ? order.deliveryInfo.address.substring(0, 30) + '...'
+                            : order.deliveryInfo?.address)}
+                      </small>
                     </td>
                     <td>
-                        <ul className="list-unstyled mb-0 small">
-                            {order.items.slice(0, 2).map((item, idx) => (
-                                <li key={idx}>- {item.name} (x{item.quantity})</li>
-                            ))}
-                            {order.items.length > 2 && <li>...</li>}
-                        </ul>
+                      <ul className="list-unstyled mb-0 small">
+                        {order.items.slice(0, 2).map((item, idx) => (
+                          <li key={idx}>- {item.name} (x{item.quantity})</li>
+                        ))}
+                        {order.items.length > 2 && <li>...</li>}
+                      </ul>
                     </td>
                     <td className="fw-bold text-danger">{formatPrice(order.totalAmount)}</td>
                     <td>{getStatusBadge(order.status)}</td>
                     <td>
                       <div className="btn-group">
-                        <Link 
-                            to={`/orders/${order._id}`} 
-                            className="btn btn-sm btn-outline-primary"
-                            title="Xem chi tiết"
+                        <Link
+                          to={`/orders/${order._id}`}
+                          className="btn btn-sm btn-outline-primary"
+                          title="Xem chi tiết"
                         >
-                            <FiEye />
+                          <FiEye />
                         </Link>
                         {order.status === 'pending' && (
-                            <button
-                                className="btn btn-sm btn-outline-success"
-                                onClick={() => handleApprove(order._id)}
-                                title="Duyệt đơn"
-                            >
-                                <FiCheck />
-                            </button>
+                          <button
+                            className="btn btn-sm btn-outline-success"
+                            onClick={() => handleUpdateStatus(order._id, 'confirmed')}
+                            title="Duyệt đơn"
+                          >
+                            <FiCheck />
+                          </button>
                         )}
-                        <button 
+                        {order.status === 'ready' && (
+                          <button
+                            className="btn btn-sm btn-outline-primary"
+                            onClick={() => handleUpdateStatus(order._id, 'shipping')}
+                            title="Giao hàng"
+                          >
+                            <FiTruck />
+                          </button>
+                        )}
+                        {order.status === 'shipping' && (
+                          <button
+                            className="btn btn-sm btn-outline-success"
+                            onClick={() => handleUpdateStatus(order._id, 'delivered')}
+                            title="Hoàn thành"
+                          >
+                            <FiCheckCircle />
+                          </button>
+                        )}
+                        {(order.status !== 'cancelled' && order.status !== 'delivered') && (
+                          <button
                             className="btn btn-sm btn-outline-danger"
-                            onClick={() => handleDelete(order._id)}
-                            title="Xóa đơn"
-                        >
-                            <FiTrash2 />
-                        </button>
+                            onClick={() => handleCancel(order._id)}
+                            title="Hủy đơn"
+                          >
+                            <FiXCircle />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
