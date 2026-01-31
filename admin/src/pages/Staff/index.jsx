@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllUsers, createUser, updateUser, deleteUser } from '../../redux/slices/userSlice';
 import { FiPlus, FiEdit2, FiTrash2, FiMail, FiPhone, FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { MdRestaurant } from 'react-icons/md';
@@ -6,90 +8,12 @@ import StatCard from '../../components/StatCard';
 import './staff.css';
 
 const Staff = () => {
-  // Mock data - sẽ thay bằng Redux sau
-  const [usersList, setUsersList] = useState([
-    {
-      _id: '1',
-      name: 'Nguyễn Văn An',
-      email: 'admin@kfc.vn',
-      phone: '0901234567',
-      role: 'admin',
-      isActive: true,
-      createdAt: '2024-01-15'
-    },
-    {
-      _id: '2',
-      name: 'Trần Thị Bình',
-      email: 'binh.tran@kfc.vn',
-      phone: '0912345678',
-      role: 'receptionist',
-      isActive: true,
-      createdAt: '2024-02-20'
-    },
-    {
-      _id: '3',
-      name: 'Lê Văn Cường',
-      email: 'cuong.le@kfc.vn',
-      phone: '0923456789',
-      role: 'chef',
-      isActive: true,
-      createdAt: '2024-03-10'
-    },
-    {
-      _id: '4',
-      name: 'Phạm Thị Dung',
-      email: 'dung.pham@kfc.vn',
-      phone: '0934567890',
-      role: 'receptionist',
-      isActive: true,
-      createdAt: '2024-04-05'
-    },
-    {
-      _id: '5',
-      name: 'Hoàng Văn Em',
-      email: 'em.hoang@kfc.vn',
-      phone: '0945678901',
-      role: 'chef',
-      isActive: false,
-      createdAt: '2024-05-12'
-    },
-    {
-      _id: '6',
-      name: 'Đặng Tuấn Tú',
-      email: 'tuantu@gmail.com',
-      phone: '0956781234',
-      role: 'customer',
-      isActive: true,
-      createdAt: '2024-06-01'
-    },
-    {
-      _id: '7',
-      name: 'Lê Thị Hoa',
-      email: 'hoale@gmail.com',
-      phone: '0967892345',
-      role: 'customer',
-      isActive: true,
-      createdAt: '2024-06-05'
-    },
-    {
-      _id: '8',
-      name: 'Trần Văn Hùng',
-      email: 'hung.tran@kfc.vn',
-      phone: '0967890123',
-      role: 'cashier',
-      isActive: true,
-      createdAt: '2024-07-20'
-    },
-    {
-      _id: '9',
-      name: 'Lê Văn Giang',
-      email: 'giang.le@kfc.vn',
-      phone: '0956789012',
-      role: 'warehouse',
-      isActive: true,
-      createdAt: '2024-06-15'
-    }
-  ]);
+  const dispatch = useDispatch();
+  const { users: usersList, loading } = useSelector((state) => state.users);
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [dispatch]);
 
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -131,39 +55,38 @@ const Staff = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editMode) {
-      setUsersList(usersList.map(user =>
-        user._id === currentUser._id ? { ...currentUser, password: undefined } : user
-      ));
-      toast.success('Cập nhật người dùng thành công!');
+      if (currentUser.password === '') {
+        // Removes password if empty so backend doesn't update it to empty string
+        const { password, ...dataWithoutPassword } = currentUser;
+        dispatch(updateUser({ id: currentUser._id, data: dataWithoutPassword }));
+      } else {
+        dispatch(updateUser({ id: currentUser._id, data: currentUser }));
+      }
     } else {
-      const newUser = {
-        ...currentUser,
-        _id: String(usersList.length + 1),
-        createdAt: new Date().toISOString().split('T')[0],
-        password: undefined
-      };
-      setUsersList([...usersList, newUser]);
-      toast.success('Thêm người dùng thành công!');
+      dispatch(createUser(currentUser));
     }
     handleCloseModal();
   };
 
   const handleDelete = (id) => {
     if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
-      setUsersList(usersList.filter(user => user._id !== id));
-      toast.success('Xóa người dùng thành công!');
+      dispatch(deleteUser(id));
     }
   };
 
   const handleToggleActive = (id) => {
     const userToToggle = usersList.find(u => u._id === id);
-    if (userToToggle && userToToggle.role === 'admin') {
+    if (!userToToggle) return;
+
+    if (userToToggle.role === 'admin') {
       alert("Không thể vô hiệu hóa tài khoản Quản trị viên!");
       return;
     }
-    setUsersList(usersList.map(user =>
-      user._id === id ? { ...user, isActive: !user.isActive } : user
-    ));
+
+    dispatch(updateUser({
+      id: id,
+      data: { isActive: !userToToggle.isActive }
+    }));
   };
 
   const getUserCountByRole = (role) => {
@@ -263,7 +186,7 @@ const Staff = () => {
                         </div>
                         <div>
                           <div className="fw-bold">{user.name}</div>
-                          <small className="text-muted">Tham gia: {user.createdAt}</small>
+                          <small className="text-muted">Tham gia: {new Date(user.createdAt).toLocaleDateString('vi-VN')}</small>
                         </div>
                       </div>
                     </td>

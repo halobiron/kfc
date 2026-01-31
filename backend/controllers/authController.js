@@ -112,6 +112,14 @@ exports.loginUser = async (req, res, next) => {
             });
         }
 
+        // Check if user is active
+        if (user.isActive === false) {
+            return res.status(403).json({
+                status: false,
+                message: 'Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.'
+            });
+        }
+
         // Check password
         const isPasswordMatched = await user.matchPassword(password);
         if (!isPasswordMatched) {
@@ -199,6 +207,14 @@ exports.googleLogin = async (req, res, next) => {
                 password: randomPassword,
                 role: 'customer'
             });
+        } else {
+            // If user exists, check if active
+            if (user.isActive === false) {
+                return res.status(403).json({
+                    status: false,
+                    message: 'Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.'
+                });
+            }
         }
 
         sendToken(user, 200, res);

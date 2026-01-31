@@ -133,7 +133,7 @@ exports.updateAddress = async (req, res, next) => {
 
     try {
         const user = await User.findById(req.user.id);
-        
+
         if (idx < 0 || idx >= user.addresses.length) {
             return res.status(404).json({
                 status: false,
@@ -172,7 +172,7 @@ exports.deleteAddress = async (req, res, next) => {
 
     try {
         const user = await User.findById(req.user.id);
-        
+
         if (idx < 0 || idx >= user.addresses.length) {
             return res.status(404).json({
                 status: false,
@@ -181,7 +181,7 @@ exports.deleteAddress = async (req, res, next) => {
         }
 
         user.addresses.splice(idx, 1);
-        
+
         // Nếu xóa địa chỉ mặc định, đặt địa chỉ đầu tiên làm mặc định
         if (user.addresses.length > 0 && !user.addresses.some(addr => addr.isDefault)) {
             user.addresses[0].isDefault = true;
@@ -202,7 +202,7 @@ exports.deleteAddress = async (req, res, next) => {
 // ADMIN: GET ALL USERS
 exports.getAllUsers = async (req, res, next) => {
     try {
-        const users = await User.find({ role: 'customer' });
+        const users = await User.find();
         res.status(200).json({
             status: true,
             data: users
@@ -231,6 +231,62 @@ exports.getUserById = async (req, res, next) => {
     }
 };
 
+// ADMIN: CREATE USER
+exports.createUser = async (req, res, next) => {
+    try {
+        const { name, email, password, role, phone } = req.body;
+        const user = await User.create({
+            name,
+            email,
+            password,
+            role,
+            phone
+        });
+
+        res.status(201).json({
+            status: true,
+            message: 'Tạo người dùng thành công',
+            data: user
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// ADMIN: UPDATE USER
+exports.updateUser = async (req, res, next) => {
+    try {
+        const newData = {
+            name: req.body.name,
+            email: req.body.email,
+            role: req.body.role,
+            phone: req.body.phone,
+            isActive: req.body.isActive
+        };
+
+        // Update password only if provided
+        if (req.body.password && req.body.password !== '') {
+            const user = await User.findById(req.params.id);
+            user.password = req.body.password;
+            await user.save();
+        }
+
+        const user = await User.findByIdAndUpdate(req.params.id, newData, {
+            new: true,
+            runValidators: true,
+            useFindAndModify: false
+        });
+
+        res.status(200).json({
+            status: true,
+            message: 'Cập nhật người dùng thành công',
+            data: user
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 // ADMIN: DELETE USER
 exports.deleteUser = async (req, res, next) => {
     try {
@@ -242,12 +298,11 @@ exports.deleteUser = async (req, res, next) => {
             });
         }
 
-        user.isActive = false;
-        await user.save();
+        await user.deleteOne();
 
         res.status(200).json({
             status: true,
-            message: 'Vô hiệu hóa người dùng thành công'
+            message: 'Xóa người dùng thành công'
         });
     } catch (error) {
         next(error);
