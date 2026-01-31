@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiPlus, FiEdit2, FiTrash2, FiTag } from 'react-icons/fi';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllCategories, addNewCategory, updateCategory, deleteCategory } from '../../redux/slices/categorySlice';
 import StatCard from '../../components/StatCard';
 import './categories.css';
 
 const Categories = () => {
-  // Mock data
-  const [categories, setCategories] = useState([
-    { _id: '1', name: 'Gà rán', description: 'Các món gà rán giòn tan', slug: 'ga-ran', productCount: 15, isActive: true },
-    { _id: '2', name: 'Burger', description: 'Burger nhiều loại với nhân thịt gà, bò', slug: 'burger', productCount: 12, isActive: true },
-    { _id: '3', name: 'Cơm', description: 'Các món cơm với gà giòn cay', slug: 'com', productCount: 8, isActive: true },
-  ]);
+  const dispatch = useDispatch();
+  const { categories, loading } = useSelector(state => state.categories);
 
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -18,8 +16,13 @@ const Categories = () => {
     name: '',
     description: '',
     slug: '',
+    icon: 'bi-tag',
     isActive: true
   });
+
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, [dispatch]);
 
   const handleOpenModal = (category = null) => {
     if (category) {
@@ -27,7 +30,7 @@ const Categories = () => {
       setCurrentCategory(category);
     } else {
       setEditMode(false);
-      setCurrentCategory({ name: '', description: '', slug: '', isActive: true });
+      setCurrentCategory({ name: '', description: '', slug: '', icon: 'bi-tag', isActive: true });
     }
     setShowModal(true);
   };
@@ -35,41 +38,47 @@ const Categories = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setEditMode(false);
-    setCurrentCategory({ name: '', description: '', slug: '', isActive: true });
+    setCurrentCategory({ name: '', description: '', slug: '', icon: 'bi-tag', isActive: true });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editMode) {
-      // Update category
-      setCategories(categories.map(cat =>
-        cat._id === currentCategory._id ? currentCategory : cat
-      ));
-      toast.success('Cập nhật danh mục thành công!');
-    } else {
-      // Add new category
-      const newCategory = {
-        ...currentCategory,
-        _id: String(categories.length + 1),
-        productCount: 0
-      };
-      setCategories([...categories, newCategory]);
-      toast.success('Thêm danh mục thành công!');
+    try {
+      if (editMode) {
+        await dispatch(updateCategory({ id: currentCategory._id, data: currentCategory })).unwrap();
+        toast.success('Cập nhật danh mục thành công!');
+      } else {
+        await dispatch(addNewCategory(currentCategory)).unwrap();
+        toast.success('Thêm danh mục thành công!');
+      }
+      handleCloseModal();
+      dispatch(getAllCategories());
+    } catch (error) {
+      toast.error(error.message || 'Có lỗi xảy ra!');
     }
-    handleCloseModal();
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Bạn có chắc muốn xóa danh mục này?')) {
-      setCategories(categories.filter(cat => cat._id !== id));
-      toast.success('Xóa danh mục thành công!');
+      try {
+        await dispatch(deleteCategory(id)).unwrap();
+        toast.success('Xóa danh mục thành công!');
+      } catch (error) {
+        toast.error(error);
+      }
     }
   };
 
-  const handleToggleActive = (id) => {
-    setCategories(categories.map(cat =>
-      cat._id === id ? { ...cat, isActive: !cat.isActive } : cat
-    ));
+  const handleToggleActive = async (category) => {
+    try {
+      await dispatch(updateCategory({
+        id: category._id,
+        data: { ...category, isActive: !category.isActive }
+      })).unwrap();
+      toast.success('Cập nhật trạng thái thành công!');
+    } catch (error) {
+      toast.error('Cập nhật trạng thái thất bại!');
+    }
   };
 
   return (
@@ -107,7 +116,7 @@ const Categories = () => {
           <div className="col-md-4">
             <StatCard
               label="Tổng sản phẩm"
-              value={categories.reduce((sum, cat) => sum + cat.productCount, 0)}
+              value={categories.reduce((sum, cat) => sum + (cat.productCount || 0), 0)}
               icon={<FiTag size={24} />}
               color="info"
             />
@@ -141,7 +150,7 @@ const Categories = () => {
                     </td>
                     <td className="text-muted">{category.description}</td>
                     <td className="text-center">
-                      <span className="badge bg-light text-dark">{category.productCount} món</span>
+                      <span className="badge bg-light text-dark">{category.productCount || 0} món</span>
                     </td>
                     <td className="text-center">
                       <div className="form-check form-switch d-flex justify-content-center">
@@ -149,7 +158,7 @@ const Categories = () => {
                           className="form-check-input"
                           type="checkbox"
                           checked={category.isActive}
-                          onChange={() => handleToggleActive(category._id)}
+                          onChange={() => handleToggleActive(category)}
                         />
                       </div>
                     </td>
@@ -221,6 +230,16 @@ const Categories = () => {
                       onChange={(e) => setCurrentCategory({ ...currentCategory, description: e.target.value })}
                       placeholder="Mô tả ngắn về danh mục này..."
                     ></textarea>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Biểu tượng (Bootstrap Icon class)</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={currentCategory.icon}
+                      onChange={(e) => setCurrentCategory({ ...currentCategory, icon: e.target.value })}
+                      placeholder="VD: bi-tag, bi-cup-hot..."
+                    />
                   </div>
                   <div className="form-check">
                     <input

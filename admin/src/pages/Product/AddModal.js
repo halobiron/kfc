@@ -1,13 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { addNewProduct } from '../../redux/slices/productSlice';
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 const AddModal = ({ setShowModal }) => {
 
   const dispatch = useDispatch();
+  const { categories } = useSelector(state => state.categories);
 
   const [preview, setPreview] = useState('');
 
@@ -17,7 +17,7 @@ const AddModal = ({ setShowModal }) => {
       description: '',
       price: '',
       stock: '',
-      category: 'combo', // Default value
+      category: categories.length > 0 ? categories[0].slug : '',
       productImage: ''
     },
     validationSchema: Yup.object({
@@ -32,16 +32,6 @@ const AddModal = ({ setShowModal }) => {
       setShowModal(false);
     }
   })
-
-  const categories = [
-    { id: 'combo', name: 'Combo' },
-    { id: 'ga-ran', name: 'Gà Rán' },
-    { id: 'burger', name: 'Burger' },
-    { id: 'com', name: 'Cơm' },
-    { id: 'nuoc-uong', name: 'Nước Uống' },
-    { id: 'mon-phu', name: 'Món Phụ' },
-    { id: 'trang-mieng', name: 'Tráng Miệng' },
-  ];
 
   return (
     <div className="modal-overlay-wrapper">
@@ -59,8 +49,8 @@ const AddModal = ({ setShowModal }) => {
           <div class="col-md-6">
             <label for="category" class="form-label">Danh mục</label>
             <select name="category" onChange={handleChange} onBlur={handleblur} value={values.category} class="form-select" id="category">
-              {categories.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
+              {categories && categories.map(cat => (
+                <option key={cat._id} value={cat.slug}>{cat.name}</option>
               ))}
             </select>
             {touched.category && errors.category && <div className="text-danger small">{errors.category}</div>}

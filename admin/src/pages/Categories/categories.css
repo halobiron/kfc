@@ -1,10 +1,27 @@
-
-.form-check-input:checked {
-  background-color: #198754;
-  border-color: #198754;
+/* Category specific styles */
+.badge {
+  padding: 0.5em 1em;
+  font-weight: 500;
+  border-radius: 20px;
 }
 
-.badge {
-  padding: 0.4em 0.8em;
-  font-weight: 500;
+.table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.modal-content {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--kfc-border-grey);
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  border-top: 1px solid var(--kfc-border-grey);
+  padding: 1.5rem;
 }

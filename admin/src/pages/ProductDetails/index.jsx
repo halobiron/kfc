@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { getProductById, updateProduct } from '../../redux/slices/productSlice';
 import { getAllIngredients } from '../../redux/slices/ingredientSlice';
+import { getAllCategories } from '../../redux/slices/categorySlice';
 import { toast } from 'react-toastify';
 import { FiArrowLeft, FiSave, FiX, FiImage, FiBox, FiPlus, FiTrash2, FiActivity } from 'react-icons/fi';
 import './productDetails.css';
@@ -14,6 +15,7 @@ const ProductDetails = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { currentProduct } = useSelector(state => state.products);
+    const { categories } = useSelector(state => state.categories);
     const [preview, setPreview] = useState('');
     const [loading, setLoading] = useState(true);
     const [recipe, setRecipe] = useState([]);
@@ -25,6 +27,7 @@ const ProductDetails = () => {
         const fetchData = async () => {
             setLoading(true);
             await dispatch(getAllIngredients());
+            await dispatch(getAllCategories());
             await dispatch(getProductById(id));
             setLoading(false);
         };
@@ -178,12 +181,9 @@ const ProductDetails = () => {
                                             id="category"
                                         >
                                             <option value="">Chọn danh mục</option>
-                                            <option value="Gà Rán">Gà Rán</option>
-                                            <option value="Burger">Burger</option>
-                                            <option value="Cơm">Cơm</option>
-                                            <option value="Món Phụ">Món Phụ</option>
-                                            <option value="Đồ Uống">Đồ Uống</option>
-                                            <option value="Combo">Combo</option>
+                                            {categories && categories.map(cat => (
+                                                <option key={cat._id} value={cat.slug}>{cat.name}</option>
+                                            ))}
                                         </select>
                                         {touched.category && errors.category && (
                                             <div className="invalid-feedback">{errors.category}</div>

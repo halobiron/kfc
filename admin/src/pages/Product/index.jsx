@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getAllProducts, deleteProduct } from '../../redux/slices/productSlice'
+import { getAllCategories } from '../../redux/slices/categorySlice'
 import AddModal from './AddModal';
 import './product.css';
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
@@ -18,6 +19,7 @@ const Product = () => {
 
   useEffect(() => {
     dispatch(getAllProducts());
+    dispatch(getAllCategories());
   }, [dispatch])
 
   return (

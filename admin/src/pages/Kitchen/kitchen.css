@@ -39,7 +39,7 @@
   display: inline-block;
   min-width: 30px;
   font-weight: bold;
-  color: #0d6efd;
+  color: var(--kfc-red);
 }
 
 .orders-column {
