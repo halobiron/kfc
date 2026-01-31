@@ -3,9 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import axiosClient from '../../api/axiosClient';
+import CustomSelect from '../../components/CustomSelect';
 
 import './Checkout.css';
 import { getAllCoupons, getCouponByCode } from '../../redux/slices/couponSlice';
+
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; 
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+};
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -13,10 +25,13 @@ const Checkout = () => {
     const { coupons } = useSelector((state) => state.coupons);
     const { items: cartItems } = useSelector((state) => state.cart);
     const [stores, setStores] = useState([]);
+    const [isLocating, setIsLocating] = useState(false);
+    const [showSavedAddressSelect, setShowSavedAddressSelect] = useState(false);
 
     useEffect(() => {
         dispatch(getAllCoupons());
         fetchStores();
+        fetchSavedAddresses();
     }, [dispatch]);
 
     const fetchStores = async () => {
@@ -40,6 +55,7 @@ const Checkout = () => {
     const [selectedStore, setSelectedStore] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('cod');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [savedAddresses, setSavedAddresses] = useState([]);
 
     // Promotion State
     const [couponCode, setCouponCode] = useState('');
@@ -48,6 +64,109 @@ const Checkout = () => {
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const deliveryFee = deliveryType === 'pickup' ? 0 : (subtotal > 200000 ? 0 : 15000);
+
+
+    const fetchSavedAddresses = async () => {
+        try {
+            const response = await axiosClient.get('/users/profile');
+            if (response.data?.status) {
+                setSavedAddresses(response.data.data.addresses || []);
+                // Auto-fill phone and name if available
+                if (response.data.data) {
+                    setFormData(prev => ({
+                        ...prev,
+                        fullName: prev.fullName || response.data.data.name || '',
+                        phone: prev.phone || response.data.data.phone || ''
+                    }));
+                }
+            }
+        } catch (error) {
+            console.log('User not logged in or no addresses');
+        }
+    };
+
+    const handleAddressSelect = (e) => {
+        const index = e.target.value;
+        if (index === "") return;
+
+        const selected = savedAddresses[index];
+        if (selected) {
+            setFormData(prev => ({
+                ...prev,
+                address: selected.fullAddress
+            }));
+            toast.info(`Đã chọn địa chỉ: ${selected.label}`, { autoClose: 2000 });
+        }
+    };
+
+    const handleFindNearestStore = async (sourceType, index = null) => {
+        setIsLocating(true);
+        let lat, lng;
+
+        try {
+            if (sourceType === 'current') {
+                if (!navigator.geolocation) {
+                    toast.error("Trình duyệt không hỗ trợ Geolocation.");
+                    setIsLocating(false);
+                    return;
+                }
+                
+                // Wrap geolocation in promise
+                const pos = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                });
+                
+                lat = pos.coords.latitude;
+                lng = pos.coords.longitude;
+                
+            } else if (sourceType === 'saved' && index !== null) {
+                const selected = savedAddresses[index];
+                if (!selected) return;
+
+                if (selected.latitude && selected.longitude) {
+                    lat = selected.latitude;
+                    lng = selected.longitude;
+                } else {
+                    // Fallback to nominatim search if coords missing
+                    toast.info("Đang tìm tọa độ cho địa chỉ này...");
+                    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(selected.fullAddress)}&countrycodes=vn&limit=1`);
+                    const data = await res.json();
+                    
+                    if (data?.length > 0) {
+                        lat = parseFloat(data[0].lat);
+                        lng = parseFloat(data[0].lon);
+                    } else {
+                        toast.error("Không tìm thấy tọa độ của địa chỉ này.");
+                        setIsLocating(false);
+                        return;
+                    }
+                }
+            } else {
+                return;
+            }
+
+            // Calculate & Sort
+            const storesWithDist = stores.map(store => ({
+                ...store,
+                distance: calculateDistance(lat, lng, store.latitude, store.longitude)
+            }));
+
+            storesWithDist.sort((a, b) => a.distance - b.distance);
+
+            setStores(storesWithDist);
+            if (storesWithDist.length > 0) {
+                const nearestId = storesWithDist[0].id || storesWithDist[0]._id;
+                setSelectedStore(nearestId);
+                toast.success(`Đã tìm thấy quán gần: ${storesWithDist[0].name} (${storesWithDist[0].distance.toFixed(1)}km)`);
+            }
+
+        } catch (error) {
+            console.error(error);
+            toast.error("Có lỗi khi xác định vị trí.");
+        } finally {
+            setIsLocating(false);
+        }
+    };
 
     const calculateDiscount = () => {
         if (!appliedCoupon) return 0;
@@ -98,6 +217,7 @@ const Checkout = () => {
         setCouponCode('');
         setCouponError('');
     };
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -271,6 +391,26 @@ const Checkout = () => {
 
                                 {deliveryType === 'delivery' ? (
                                     <>
+                                        {savedAddresses.length > 0 && (
+                                            <div className="col-12 form-group">
+                                                <label className="form-label">
+                                                    <i className="bi bi-journal-bookmark-fill me-1 text-danger"></i>
+                                                    Chọn từ sổ địa chỉ
+                                                </label>
+                                                <CustomSelect
+                                                    options={savedAddresses.map((addr, index) => ({
+                                                        value: index,
+                                                        label: `${addr.label} - ${addr.fullAddress}`
+                                                    }))}
+                                                    value=""
+                                                    onChange={(val) => {
+                                                        handleAddressSelect({ target: { value: val } });
+                                                    }}
+                                                    placeholder="-- Chọn địa chỉ đã lưu --"
+                                                />
+                                            </div>
+                                        )}
+
                                         <div className="col-12 form-group">
                                             <label className="form-label">Địa chỉ nhận hàng *</label>
                                             <input
@@ -298,21 +438,56 @@ const Checkout = () => {
                                 ) : (
                                     <>
                                         <div className="col-12 form-group">
-                                            <label className="form-label">Chọn cửa hàng KFC *</label>
-                                            <select
-                                                className="form-control-custom"
+                                            <div className="mb-2">
+                                                <label className="form-label mb-1">
+                                                    <i className="bi bi-geo-alt-fill me-1 text-danger"></i>
+                                                    Tìm quán gần bạn...
+                                                </label>
+                                                <div className="dropdown w-100">
+                                                    <button className="form-select text-start" type="button" data-bs-toggle="dropdown">
+                                                        <span>Chọn cách tìm kiếm...</span>
+                                                    </button>
+                                                    <ul className="dropdown-menu w-100">
+                                                        <li>
+                                                            <button className="dropdown-item" onClick={() => handleFindNearestStore('current')}>
+                                                                <i className="bi bi-crosshair me-2 text-danger"></i>Vị trí hiện tại (GPS)
+                                                            </button>
+                                                        </li>
+                                                        {savedAddresses.length > 0 && (
+                                                            <>
+                                                                <li><hr className="dropdown-divider" /></li>
+                                                                <li><h6 className="dropdown-header">Từ địa chỉ đã lưu</h6></li>
+                                                                {savedAddresses.map((addr, idx) => (
+                                                                    <li key={idx}>
+                                                                        <button className="dropdown-item small text-wrap" onClick={() => handleFindNearestStore('saved', idx)}>
+                                                                            <i className="bi bi-house me-2"></i><strong>{addr.label}</strong> - {addr.fullAddress}
+                                                                        </button>
+                                                                    </li>
+                                                                ))}
+                                                            </>
+                                                        )}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-12 form-group">
+                                            <label className="form-label">Chọn cửa hàng KFC gần nhất *</label>
+                                            
+                                            {isLocating && <div className="text-center small text-muted mb-2"><span className="spinner-border spinner-border-sm me-1"></span>Đang tìm kiếm...</div>}
+
+                                            <CustomSelect
+                                                options={[
+                                                    { value: '', label: '-- Chọn cửa hàng gần bạn --' },
+                                                    ...stores.map(store => ({
+                                                        value: store.id || store._id,
+                                                        label: `${store.name} - ${store.address}${store.distance !== undefined ? ` (${store.distance.toFixed(1)}km)` : ''}`
+                                                    }))
+                                                ]}
                                                 value={selectedStore}
-                                                onChange={(e) => setSelectedStore(e.target.value)}
-                                                required
-                                                style={{ padding: '12px' }}
-                                            >
-                                                <option value="">-- Chọn cửa hàng gần bạn --</option>
-                                                {stores.map(store => (
-                                                    <option key={store.id} value={store.id}>
-                                                        {store.name} - {store.address}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                                onChange={(val) => setSelectedStore(val)}
+                                                placeholder="Chọn cửa hàng"
+                                            />
                                             <small className="text-muted" style={{ display: 'block', marginTop: '8px' }}>
                                                 <i className="bi bi-info-circle"></i> Vui lòng đến cửa hàng trong vòng 30 phút sau khi đặt
                                             </small>

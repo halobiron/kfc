@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/slices/authSlice';
 import axiosClient from '../../api/axiosClient';
+import CustomSelect from '../../components/CustomSelect';
 import './Account.css';
 
 const Account = () => {
@@ -156,18 +157,42 @@ const Account = () => {
 
         setGettingLocation(true);
         navigator.geolocation.getCurrentPosition(
-            (position) => {
+            async (position) => {
                 const { latitude, longitude } = position.coords;
+                
+                // Cập nhật tọa độ ngay lập tức
                 setAddressForm(prev => ({
                     ...prev,
                     latitude,
                     longitude
                 }));
-                toast.success('Lấy vị trí thành công!');
-                setGettingLocation(false);
+
+                try {
+                    // Reverse Geocoding sử dụng OpenStreetMap Nominatim API (Miễn phí)
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`);
+                    const data = await response.json();
+
+                    if (data && data.display_name) {
+                        setAddressForm(prev => ({
+                            ...prev,
+                            fullAddress: data.display_name,
+                            latitude, 
+                            longitude
+                        }));
+                        toast.success('Đã lấy được địa chỉ!');
+                    } else {
+                        toast.warning('Lấy được tọa độ nhưng không tìm thấy tên đường.');
+                    }
+                } catch (error) {
+                    console.error("Reverse geocoding error:", error);
+                    toast.warning('Không thể lấy tên đường (Lỗi mạng hoặc API).');
+                } finally {
+                    setGettingLocation(false);
+                }
             },
             (error) => {
-                toast.error('Không thể lấy vị trí của bạn');
+                console.error("Geolocation error:", error);
+                toast.error('Không thể lấy vị trí của bạn. Hãy kiểm tra quyền truy cập.');
                 setGettingLocation(false);
             }
         );
@@ -322,16 +347,15 @@ const Account = () => {
                                             />
                                         </div>
                                         <div className="filter-box">
-                                            <select
+                                            <CustomSelect
+                                                className="w-100"
+                                                options={statusOptions.map(status => ({
+                                                    value: status,
+                                                    label: status === 'All' ? 'Tất cả trạng thái' : status
+                                                }))}
                                                 value={filterStatus}
-                                                onChange={(e) => setFilterStatus(e.target.value)}
-                                            >
-                                                {statusOptions.map(status => (
-                                                    <option key={status} value={status}>
-                                                        {status === 'All' ? 'Tất cả trạng thái' : status}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                                onChange={setFilterStatus}
+                                            />
                                         </div>
                                     </div>
                                 )}

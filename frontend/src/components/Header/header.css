@@ -95,54 +95,7 @@ a {
     text-decoration: none;
 }
 
-/* Dropdown Menu Styles */
-.dropdown-menu {
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    padding: 0.5rem 0;
-    margin-top: 0.5rem;
-    min-width: 200px;
-    z-index: 1050;
-}
-
-@media (max-width: 576px) {
-    .dropdown-menu {
-        min-width: 160px;
-        max-width: calc(100vw - 32px);
-        margin-left: 16px;
-        margin-right: 16px;
-    }
-}
-
-.dropdown-item {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--kfc-black);
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-}
-
-.dropdown-item:hover {
-    background-color: rgba(228, 0, 43, 0.1);
-    color: var(--kfc-red);
-    padding-left: 1.5rem;
-}
-
-.dropdown-item i {
-    transition: transform 0.2s ease;
-}
-
-.dropdown-item:hover i {
-    transform: translateX(2px);
-}
-
-.dropdown-divider {
-    margin: 0.5rem 0;
-    border-color: #f0f0f0;
-}
+/* Dropdown Menu Styles moved to index.css for global usage */
 
 /* User Icon Button */
 .btn:focus {

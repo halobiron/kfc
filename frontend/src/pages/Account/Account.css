@@ -239,15 +239,6 @@
     min-width: 200px;
 }
 
-.filter-box select {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    background: white;
-}
-
 /* Order Card */
 .order-card {
     background: #fff;

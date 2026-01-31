@@ -1,0 +1,107 @@
+import React, { useState, useRef, useEffect } from 'react';
+import './CustomSelect.css';
+
+const CustomSelect = ({ 
+  options = [], 
+  value, 
+  onChange, 
+  placeholder = 'Chọn',
+  className = '',
+  id,
+  icon
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const wrapperRef = useRef(null);
+
+  // Close when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef]);
+
+  // Find selected label
+  const getSelectedLabel = () => {
+    if (!value) return placeholder;
+    
+    // Search in flat options
+    let selected = options.find(opt => opt.value === value);
+    if (selected) return selected.label;
+
+    // Search in optgroups
+    for (const opt of options) {
+      if (opt.options) { // is Group
+        selected = opt.options.find(subOpt => subOpt.value === value);
+        if (selected) return selected.label;
+      }
+    }
+    
+    return value; // Fallback
+  };
+
+  const handleSelect = (val) => {
+    onChange(val);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className={`custom-select-wrapper ${className}`} ref={wrapperRef} id={id}>
+      <button 
+        type="button" 
+        className={`form-select text-start ${isOpen ? 'is-open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+      >
+        {icon && <i className={`${icon} me-2`}></i>}
+        <span className="text-truncate">{getSelectedLabel()}</span>
+      </button>
+
+      {isOpen && (
+        <ul className="dropdown-menu show w-100">
+          {options.map((opt, idx) => {
+            // Render Optgroup
+            if (opt.options) {
+              return (
+                <React.Fragment key={idx}>
+                  {idx > 0 && <li><hr className="dropdown-divider" /></li>}
+                  <li><h6 className="dropdown-header">{opt.label}</h6></li>
+                  {opt.options.map((subOpt, subIdx) => (
+                    <li key={`${idx}-${subIdx}`}>
+                      <button 
+                        className={`dropdown-item ${value === subOpt.value ? 'active' : ''}`}
+                        type="button"
+                        onClick={() => handleSelect(subOpt.value)}
+                      >
+                        {subOpt.label}
+                      </button>
+                    </li>
+                  ))}
+                </React.Fragment>
+              );
+            }
+            // Render Standard Option
+            return (
+              <li key={idx}>
+                <button 
+                  className={`dropdown-item ${value === opt.value ? 'active' : ''}`} 
+                  type="button"
+                  onClick={() => handleSelect(opt.value)}
+                >
+                  {opt.label}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default CustomSelect;

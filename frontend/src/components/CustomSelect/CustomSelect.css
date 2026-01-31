@@ -1,0 +1,29 @@
+.custom-select-wrapper {
+    position: relative;
+}
+
+.custom-select-wrapper .form-select {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Override padding-right manually because form-select has background-image arrow, 
+   but our button text might overlap or we want to use the background arrow.
+   Actually, .form-select class from index.css has the arrow. 
+   We just need to ensure the text doesn't hit it.
+*/
+
+.custom-select-wrapper .dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 5px;
+}
+
+.custom-select-wrapper .dropdown-item.active, 
+.custom-select-wrapper .dropdown-item:active {
+    background-color: transparent;
+    color: var(--kfc-red);
+    font-weight: 700;
+}

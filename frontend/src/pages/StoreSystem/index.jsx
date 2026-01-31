@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import storeApi from '../../api/storeApi';
+import axiosClient from '../../api/axiosClient';
+import CustomSelect from '../../components/CustomSelect';
 import './StoreSystem.css';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -81,6 +83,7 @@ const StoreSystem = () => {
     const [locationError, setLocationError] = useState(null);
     const [isSearching, setIsSearching] = useState(false);
     const [mapCenter, setMapCenter] = useState({ lat: 10.7718, lng: 106.6015 }); // Default HCM
+    const [savedAddresses, setSavedAddresses] = useState([]);
 
     useEffect(() => {
         const fetchStores = async () => {
@@ -97,7 +100,20 @@ const StoreSystem = () => {
                 console.error("Failed to fetch stores", error);
             }
         };
+
+        const fetchSavedAddresses = async () => {
+             try {
+                 const response = await axiosClient.get('/users/profile');
+                 if (response.data?.status) {
+                     setSavedAddresses(response.data.data.addresses || []);
+                 }
+             } catch (error) {
+                 // Ignore if not logged in
+             }
+        };
+
         fetchStores();
+        fetchSavedAddresses();
     }, []);
 
     const handleFindNearest = () => {
@@ -109,12 +125,24 @@ const StoreSystem = () => {
         setLoadingLocation(true);
         setLocationError(null);
         navigator.geolocation.getCurrentPosition(
-            (pos) => {
+            async (pos) => {
                 const { latitude: lat, longitude: lng } = pos.coords;
                 setUserLocation({ lat, lng });
                 setMapCenter({ lat, lng });
-                setSelectedCity('all');
+                setSelectedCity('all'); // Show all stores to find nearest across data
                 setSearchTerm('');
+                
+                // Reverse Geocoding to show address
+                try {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
+                    const data = await response.json();
+                    if (data && data.display_name) {
+                        setSearchTerm(data.display_name); // Fill search box with address
+                    }
+                } catch (err) {
+                    console.error("Reverse geocoding error", err);
+                }
+
                 setLoadingLocation(false);
             },
             (err) => {
@@ -123,6 +151,49 @@ const StoreSystem = () => {
                 setLoadingLocation(false);
             }
         );
+    };
+
+    const handleFindFromSaved = async (index) => {
+        if (index === 'current') {
+            handleFindNearest();
+            return;
+        }
+
+        const selected = savedAddresses[index];
+        if (!selected) return;
+
+        setLoadingLocation(true);
+        setIsSearching(true);
+        let lat, lng;
+
+        try {
+            if (selected.latitude && selected.longitude) {
+                lat = selected.latitude;
+                lng = selected.longitude;
+            } else {
+                 // Fallback fetch if no coords
+                 const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(selected.fullAddress)}&countrycodes=vn&limit=1`);
+                 const data = await res.json();
+                 if (data?.length > 0) {
+                     lat = parseFloat(data[0].lat);
+                     lng = parseFloat(data[0].lon);
+                 }
+            }
+
+            if (lat && lng) {
+                setUserLocation({ lat, lng });
+                setMapCenter({ lat, lng });
+                setSelectedCity('all');
+                setSearchTerm(selected.fullAddress);
+            } else {
+                setLocationError("Không tìm thấy tọa độ địa chỉ này.");
+            }
+        } catch(e) {
+            setLocationError("Lỗi khi tìm vị trí.");
+        } finally {
+            setLoadingLocation(false);
+            setIsSearching(false);
+        }
     };
 
     const handleSearch = async (e) => {
@@ -232,32 +303,40 @@ const StoreSystem = () => {
                         Nhấn Enter hoặc nút tìm kiếm để xem cửa hàng gần bạn nhất
                     </div>
 
-                    <div className="d-flex align-items-center gap-2 mb-3">
-                        <div className="flex-grow-1">
-                            <select
-                                className="form-select city-dropdown"
-                                value={selectedCity}
-                                onChange={(e) => setSelectedCity(e.target.value)}
-                            >
-                                {CITIES.map(city => (
-                                    <option key={city.id} value={city.id}>{city.name}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <button
-                            className="btn-location-neat"
-                            onClick={handleFindNearest}
-                            disabled={loadingLocation}
-                            title="Tìm cửa hàng gần vị trí của bạn"
-                        >
-                            {loadingLocation ? (
-                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            ) : (
-                                <i className="bi bi-crosshair me-1" style={{ fontSize: '1.2rem' }}></i>
-                            )}
-                            <span className="d-none d-sm-inline">Gần tôi</span>
-                        </button>
+                    <div className="filter-wrapper mb-3">
+                        <CustomSelect
+                            options={[
+                                { value: 'all', label: 'Tất cả khu vực' },
+                                { 
+                                    label: 'Tìm quanh vị trí', 
+                                    options: [
+                                        { value: 'current', label: 'Vị trí hiện tại (GPS)' },
+                                        ...savedAddresses.map((addr, idx) => ({
+                                            value: `saved_${idx}`,
+                                            label: `${addr.label} - ${addr.fullAddress}`
+                                        }))
+                                    ]
+                                },
+                                {
+                                    label: 'Lọc theo Thành phố',
+                                    options: CITIES.filter(c => c.id !== 'all').map(city => ({
+                                        value: city.id,
+                                        label: city.name
+                                    }))
+                                }
+                            ]}
+                            value={selectedCity}
+                            onChange={(val) => {
+                                if (val === 'all') setSelectedCity('all');
+                                else if (val === 'current') handleFindNearest();
+                                else if (val.startsWith('saved_')) handleFindFromSaved(parseInt(val.split('_')[1]));
+                                else setSelectedCity(val);
+                            }}
+                            placeholder="Chọn khu vực"
+                            icon="bi bi-geo-alt"
+                        />
                     </div>
+
                     {locationError && <div className="text-danger small mb-2 text-end">{locationError}</div>}
                 </div>
 
