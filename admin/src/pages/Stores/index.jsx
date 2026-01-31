@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import AddStoreModal from './AddStoreModal';
 import { toast } from 'react-toastify';
-import api from '../../utils/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllStores, deleteStore } from '../../redux/slices/storeSlice';
 import './stores.css';
 import { FiEdit2, FiTrash2, FiPlus, FiMapPin, FiPhone, FiClock } from 'react-icons/fi';
 
@@ -14,25 +15,24 @@ const CITY_LABELS = {
 };
 
 const Stores = () => {
+    const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false)
-    const [stores, setStores] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { stores, loading } = useSelector(state => state.stores);
 
     useEffect(() => {
-        fetchStores();
-    }, []);
+        dispatch(getAllStores());
+    }, [dispatch]);
 
-    const fetchStores = async () => {
-        try {
-            const { data } = await api.get('/stores');
-            setStores(data.data || []);
-        } catch (error) {
-            console.error('Lỗi khi tải cửa hàng:', error);
-            toast.error('Không thể tải danh sách cửa hàng.');
-        } finally {
-            setLoading(false);
+    const handleDelete = async (id) => {
+        if (window.confirm('Bạn có chắc chắn muốn xóa cửa hàng này?')) {
+            try {
+                await dispatch(deleteStore(id)).unwrap();
+                toast.success('Xóa cửa hàng thành công');
+            } catch (error) {
+                toast.error('Không thể xóa cửa hàng');
+            }
         }
-    };
+    }
 
     return (
         <>
@@ -98,9 +98,9 @@ const Stores = () => {
                                             </button>
                                             <button
                                                 className="btn-action btn-delete border-0 d-inline-flex align-items-center"
-                                                onClick={() => toast.info("Chức năng xóa sẽ được cập nhật sau")}
+                                                onClick={() => handleDelete(store._id)}
                                             >
-                                                <FiTrash2 className="me-1" /> Xóa
+                                                 <FiTrash2 className="me-1" /> Xóa
                                             </button>
                                         </td>
                                     </tr>

@@ -1,8 +1,9 @@
 import React from 'react'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-// import { addNewStore } from '../../redux/actions/storeActions'; // API action to be implemented
+import { createStore } from '../../redux/slices/storeSlice';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const CITIES = [
     { id: 'hcm', name: 'TP. Hồ Chí Minh' },
@@ -34,10 +35,25 @@ const AddStoreModal = ({ setShowModal }) => {
             phone: Yup.string().required('Số điện thoại là bắt buộc'),
             openTime: Yup.string().required('Giờ mở cửa là bắt buộc'),
         }),
-        onSubmit: (values) => {
-            console.log("Add Store Values:", values);
-            // dispatch(addNewStore(values));
-            setShowModal(false);
+        onSubmit: async (values) => {
+            try {
+                // Parse services string to array if needed or handle as is
+                const submissionValues = {
+                    ...values,
+                    services: values.services ? values.services.split(',').map(s => s.trim()) : []
+                };
+                
+                // If lat/lng are empty strings, remove them or set to null/0, otherwise backend CastError might occur
+                if(!submissionValues.lat) delete submissionValues.lat;
+                if(!submissionValues.lng) delete submissionValues.lng;
+
+                await dispatch(createStore(submissionValues)).unwrap();
+                toast.success('Thêm cửa hàng thành công');
+                setShowModal(false);
+            } catch (error) {
+                toast.error('Có lỗi xảy ra khi thêm cửa hàng');
+                console.error(error);
+            }
         }
     })
 

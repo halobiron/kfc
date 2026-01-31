@@ -1,8 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FiEye } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllOrders } from '../../redux/slices/orderSlice';
 
 const Order = () => {
+  const dispatch = useDispatch();
+  const { orders, loading } = useSelector(state => state.orders);
+
+  useEffect(() => {
+    dispatch(getAllOrders());
+  }, [dispatch]);
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'pending': return <span className="badge badge-warning">Chờ xác nhận</span>;
+      case 'confirmed': return <span className="badge badge-info">Đã xác nhận</span>;
+      case 'preparing': return <span className="badge badge-info text-dark">Đang chuẩn bị</span>;
+      case 'shipping': return <span className="badge badge-primary">Đang giao</span>;
+      case 'delivered': return <span className="badge badge-success">Hoàn thành</span>;
+      case 'cancelled': return <span className="badge badge-danger">Đã hủy</span>;
+      default: return <span className="badge badge-secondary">{status}</span>;
+    }
+  };
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+  }
+
   return (
     <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
       <div className="page-header">
@@ -10,9 +35,9 @@ const Order = () => {
       </div>
 
       <div className="card">
-        <div className="card-header">Đơn hàng gần đây</div>
+        <div className="card-header">Danh sách đơn hàng</div>
         <div className="table-responsive">
-          <table className="table">
+          <table className="table align-middle">
             <thead>
               <tr>
                 <th scope="col">Mã đơn hàng</th>
@@ -24,71 +49,37 @@ const Order = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="fw-bold">ORD1001</td>
-                <td>Nguyen Van A</td>
-                <td>Combo Gà Rán Truyền Thống (x2), Pepsi (L)</td>
-                <td>189.000 đ</td>
-                <td><span className="badge badge-success">Hoàn thành</span></td>
-                <td>
-                  <Link to="/orders/1001" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
-                    <FiEye style={{ marginRight: '4px' }} />
-                    Xem
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td className="fw-bold">ORD1002</td>
-                <td>Tran Thi B</td>
-                <td>Burger Tôm, Khoai tây chiên (M)</td>
-                <td>75.000 đ</td>
-                <td><span className="badge badge-warning">Đang xử lý</span></td>
-                <td>
-                  <Link to="/orders/1002" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
-                    <FiEye style={{ marginRight: '4px' }} />
-                    Xem
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td className="fw-bold">ORD1003</td>
-                <td>Le Van C</td>
-                <td>Cơm Gà Giòn Cay, 7Up (M)</td>
-                <td>55.000 đ</td>
-                <td><span className="badge badge-warning">Chờ xác nhận</span></td>
-                <td>
-                  <Link to="/orders/1003" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
-                    <FiEye style={{ marginRight: '4px' }} />
-                    Xem
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td className="fw-bold">ORD1004</td>
-                <td>Pham Thi D</td>
-                <td>Gà Rán (3 miếng), Salad Bắp Cải</td>
-                <td>120.000 đ</td>
-                <td><span className="badge badge-success">Hoàn thành</span></td>
-                <td>
-                  <Link to="/orders/1004" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
-                    <FiEye style={{ marginRight: '4px' }} />
-                    Xem
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td className="fw-bold">ORD1005</td>
-                <td>Hoang Van E</td>
-                <td>Combo Nhóm (4 người)</td>
-                <td>350.000 đ</td>
-                <td><span className="badge badge-danger">Đã hủy</span></td>
-                <td>
-                  <Link to="/orders/1005" className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
-                    <FiEye style={{ marginRight: '4px' }} />
-                    Xem
-                  </Link>
-                </td>
-              </tr>
+              {loading ? (
+                 <tr><td colSpan="6" className="text-center">Đang tải...</td></tr>
+              ) : orders && orders.length > 0 ? (
+                orders.map(order => (
+                  <tr key={order._id}>
+                    <td className="fw-bold">{order.orderNumber || order._id.substring(0, 8).toUpperCase()}</td>
+                    <td>
+                        <div>{order.deliveryInfo?.fullName}</div>
+                        <small className="text-muted">{order.deliveryInfo?.phone}</small>
+                    </td>
+                    <td>
+                        <ul className="list-unstyled mb-0 small">
+                            {order.items.slice(0, 2).map((item, idx) => (
+                                <li key={idx}>- {item.name} (x{item.quantity})</li>
+                            ))}
+                            {order.items.length > 2 && <li>...</li>}
+                        </ul>
+                    </td>
+                    <td className="fw-bold text-danger">{formatPrice(order.totalAmount)}</td>
+                    <td>{getStatusBadge(order.status)}</td>
+                    <td>
+                      <Link to={`/orders/${order._id}`} className="btn-action btn-edit text-decoration-none d-inline-flex align-items-center">
+                        <FiEye style={{ marginRight: '4px' }} />
+                        Xem
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr><td colSpan="6" className="text-center">Chưa có đơn hàng nào</td></tr>
+              )}
             </tbody>
           </table>
         </div>

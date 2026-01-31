@@ -38,7 +38,7 @@ const ProductDetails = () => {
             price: '',
             stock: '',
             category: '',
-            image: ''
+            productImage: ''
         },
         validationSchema: Yup.object({
             title: Yup.string().required('Tên món ăn là bắt buộc'),
@@ -52,7 +52,7 @@ const ProductDetails = () => {
                 ...values,
                 recipe
             };
-            await dispatch(updateProduct(id, productData));
+            await dispatch(updateProduct({ id, data: productData }));
             toast.success('Cập nhật sản phẩm thành công!');
             navigate('/products');
         }
@@ -66,9 +66,9 @@ const ProductDetails = () => {
                 price: currentProduct.price || '',
                 stock: currentProduct.stock || '',
                 category: currentProduct.category || '',
-                image: currentProduct.image || ''
+                productImage: currentProduct.productImage || currentProduct.image || ''
             });
-            setPreview(currentProduct.image || '');
+            setPreview(currentProduct.productImage || currentProduct.image || '');
             setRecipe(currentProduct.recipe || []);
         }
     }, [currentProduct, setValues]);
@@ -245,13 +245,13 @@ const ProductDetails = () => {
                                         </label>
                                         <input
                                             type="file"
-                                            name="image"
+                                            name="productImage"
                                             onChange={(event) => {
                                                 if (event.target.files && event.target.files[0]) {
                                                     let reader = new FileReader();
                                                     reader.onload = () => {
                                                         if (reader.readyState === 2) {
-                                                            setFieldValue('image', reader.result);
+                                                            setFieldValue('productImage', reader.result);
                                                             setPreview(reader.result);
                                                         }
                                                     }

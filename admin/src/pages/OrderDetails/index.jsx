@@ -1,9 +1,26 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from '../../utils/api';
 import { FiArrowLeft, FiPrinter, FiXCircle, FiCheckCircle, FiTruck, FiPackage, FiClock, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
+
+const STATUS_LABELS = {
+    pending: 'Chờ xác nhận',
+    confirmed: 'Đã xác nhận',
+    preparing: 'Đang chuẩn bị',
+    shipping: 'Đang giao hàng',
+    delivered: 'Hoàn thành',
+    cancelled: 'Đã hủy'
+};
+
+const STATUS_BADGES = {
+    pending: 'badge-warning',
+    confirmed: 'badge-info',
+    preparing: 'badge-info text-dark',
+    shipping: 'badge-primary',
+    delivered: 'badge-success',
+    cancelled: 'badge-danger'
+};
 
 const OrderDetails = () => {
     const { id } = useParams();
@@ -20,8 +37,9 @@ const OrderDetails = () => {
     const fetchOrderDetails = async () => {
         try {
             const response = await api.get(`/order/${id}`);
-            setOrder(response.data.data);
-            setStatus(response.data.data.status);
+            const orderData = response.data.data || response.data;
+            setOrder(orderData);
+            setStatus(orderData.status);
         } catch (error) {
             console.error('Lỗi khi tải chi tiết đơn hàng:', error);
             toast.error('Không thể tải chi tiết đơn hàng.');
@@ -35,7 +53,7 @@ const OrderDetails = () => {
         try {
             await api.put(`/order/update/${id}`, { status: newStatus });
             setStatus(newStatus);
-            toast.success(`Cập nhật trạng thái đơn hàng thành: ${newStatus}`);
+            toast.success(`Cập nhật trạng thái thành công`);
             fetchOrderDetails();
         } catch (error) {
             toast.error('Không thể cập nhật trạng thái đơn hàng.');
@@ -43,16 +61,9 @@ const OrderDetails = () => {
     };
 
     if (loading) return <div className="text-center p-5"><div className="spinner spinner-lg"></div></div>;
+    if (!order) return <div className="text-center p-5">Không tìm thấy đơn hàng</div>;
 
-    const getStatusBadge = (status) => {
-        switch (status) {
-            case 'Hoàn thành': return 'badge-success';
-            case 'Đang giao': return 'badge-info';
-            case 'Đang chuẩn bị': return 'badge-warning';
-            case 'Đã hủy': return 'badge-danger';
-            default: return 'badge-secondary';
-        }
-    };
+    const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 
     return (
         <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
@@ -64,22 +75,44 @@ const OrderDetails = () => {
                     </button>
                     <div>
                         <h1 className="h2 mb-0 font-weight-bold" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
-                            Đơn hàng {order.id}
+                            Đơn hàng {order.orderNumber || order._id.substring(0,8).toUpperCase()}
                         </h1>
-                        <span className="text-muted small"><FiClock className="me-1" /> {order.date}</span>
+                        <span className="text-muted small">
+                            <FiClock className="me-1" /> {new Date(order.createdAt).toLocaleString('vi-VN')}
+                        </span>
                     </div>
                 </div>
                 <div className="btn-toolbar mb-2 mb-md-0">
                     <div className="btn-group me-2">
-                        <button type="button" className="btn btn-sm btn-outline-secondary d-flex align-items-center">
-                            <FiPrinter className="me-2" /> In hóa đơn
-                        </button>
+                        {/* Status buttons */}
+                        {status === 'pending' && (
+                             <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => handleStatusChange('confirmed')}>
+                                <FiCheckCircle className="me-2" /> Xác nhận
+                             </button>
+                         )}
+                         {status === 'confirmed' && (
+                             <button type="button" className="btn btn-sm btn-info d-flex align-items-center" onClick={() => handleStatusChange('preparing')}>
+                                <FiPackage className="me-2" /> Chuẩn bị
+                             </button>
+                         )}
+                         {status === 'preparing' && (
+                             <button type="button" className="btn btn-sm btn-primary d-flex align-items-center" onClick={() => handleStatusChange('shipping')}>
+                                <FiTruck className="me-2" /> Giao hàng
+                             </button>
+                         )}
+                          {status === 'shipping' && (
+                             <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => handleStatusChange('delivered')}>
+                                <FiCheckCircle className="me-2" /> Hoàn thành
+                             </button>
+                         )}
                     </div>
-                    {status !== 'Đã hủy' && status !== 'Hoàn thành' && (
+                    {status !== 'cancelled' && status !== 'delivered' && (
                         <button
                             type="button"
-                            className="btn btn-sm btn-danger d-flex align-items-center"
-                            onClick={() => handleStatusChange('Đã hủy')}
+                            className="btn btn-sm btn-danger d-flex align-items-center ms-2"
+                            onClick={() => {
+                                if(window.confirm('Bạn có chắc muốn hủy đơn hàng này?')) handleStatusChange('cancelled');
+                            }}
                         >
                             <FiXCircle className="me-2" /> Hủy đơn
                         </button>
@@ -104,120 +137,82 @@ const OrderDetails = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {order.items.map(item => (
-                                        <tr key={item.id}>
+                                    {order.items.map((item, idx) => (
+                                        <tr key={idx}>
                                             <td>
                                                 <div className="fw-bold">{item.name}</div>
-                                                {item.note && <small className="text-muted fst-italic">Ghi chú: {item.note}</small>}
                                             </td>
                                             <td className="text-center">x{item.quantity}</td>
-                                            <td className="text-end">{item.price.toLocaleString()} đ</td>
-                                            <td className="text-end fw-bold">{item.total.toLocaleString()} đ</td>
+                                            <td className="text-end">{formatPrice(item.price)}</td>
+                                            <td className="text-end fw-bold">{formatPrice(item.price * item.quantity)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
-                                <tfoot className="bg-light">
+                                <tfoot>
                                     <tr>
-                                        <td colSpan="3" className="text-end">Tạm tính:</td>
-                                        <td className="text-end fw-bold">{order.subtotal.toLocaleString()} đ</td>
+                                        <td colSpan="3" className="text-end fw-bold">Tạm tính:</td>
+                                        <td className="text-end">{formatPrice(order.subtotal || order.totalAmount)}</td>
                                     </tr>
                                     <tr>
-                                        <td colSpan="3" className="text-end">Phí vận chuyển:</td>
-                                        <td className="text-end">{order.shippingFee.toLocaleString()} đ</td>
+                                        <td colSpan="3" className="text-end fw-bold">Phí vận chuyển:</td>
+                                        <td className="text-end">{formatPrice(order.shippingFee || 0)}</td>
                                     </tr>
+                                    {order.couponDiscount > 0 && (
+                                        <tr>
+                                            <td colSpan="3" className="text-end fw-bold text-success">Giảm giá:</td>
+                                            <td className="text-end text-success">-{formatPrice(order.couponDiscount)}</td>
+                                        </tr>
+                                    )}
                                     <tr>
-                                        <td colSpan="3" className="text-end border-0" style={{ fontSize: '16px' }}><strong>Tổng cộng:</strong></td>
-                                        <td className="text-end border-0" style={{ fontSize: '18px', color: 'var(--kfc-red)' }}><strong>{order.total.toLocaleString()} đ</strong></td>
+                                        <td colSpan="3" className="text-end fw-bold h5">Tổng cộng:</td>
+                                        <td className="text-end fw-bold h5 text-danger">{formatPrice(order.totalAmount)}</td>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
                     </div>
 
-                    {/* Order History / Timeline */}
-                    <div className="card">
-                        <div className="card-header">Lịch sử đơn hàng</div>
+                    {/* Order Status */}
+                    <div className="card mb-4">
+                        <div className="card-header">Trạng thái đơn hàng</div>
                         <div className="card-body">
-                            <div className="timeline">
-                                {order.history.map((h, idx) => (
-                                    <div className="d-flex mb-3" key={idx}>
-                                        <div className="me-3 d-flex flex-column align-items-center">
-                                            <div className={`rounded-circle d-flex align-items-center justify-content-center text-white ${idx === order.history.length - 1 ? 'bg-primary' : 'bg-secondary'}`} style={{ width: '30px', height: '30px', fontSize: '14px' }}>
-                                                {idx === order.history.length - 1 ? <FiCheckCircle /> : <FiClock />}
-                                            </div>
-                                            {idx !== order.history.length - 1 && <div className="h-99 bg-secondary opacity-25" style={{ width: '2px', minHeight: '30px', margin: '4px 0' }}></div>}
-                                        </div>
-                                        <div>
-                                            <h6 className="mb-0 fw-bold">{h.status}</h6>
-                                            <small className="text-muted">{h.time}</small>
-                                        </div>
-                                    </div>
-                                ))}
+                            <div className="d-flex align-items-center mb-3">
+                                <span className={`badge ${STATUS_BADGES[status] || 'badge-secondary'} p-2 fs-6`}>
+                                    {STATUS_LABELS[status] || status}
+                                </span>
+                                <span className="ms-3 text-muted">Cập nhật lần cuối: {new Date(order.updatedAt).toLocaleString('vi-VN')}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Right Column - Customer & Status */}
+                {/* Right Column - Customer Info */}
                 <div className="col-lg-4">
-                    {/* Status Update Card */}
-                    <div className="card mb-4">
-                        <div className="card-header">Trạng thái đơn hàng</div>
-                        <div className="card-body">
-                            <div className="mb-3 text-center">
-                                <span className={`badge ${getStatusBadge(status)} p-2 fs-6 mb-3`}>{status}</span>
-                            </div>
-                            <label className="form-label fw-bold">Cập nhật trạng thái:</label>
-                            <select
-                                className="form-select mb-3"
-                                value={status}
-                                onChange={(e) => handleStatusChange(e.target.value)}
-                                disabled={status === 'Đã hủy' || status === 'Hoàn thành'}
-                            >
-                                <option value="Chờ thanh toán">Chờ thanh toán</option>
-                                <option value="Đã xác nhận">Đã xác nhận</option>
-                                <option value="Đang chuẩn bị">Đang chuẩn bị</option>
-                                <option value="Đang giao">Đang giao</option>
-                                <option value="Hoàn thành">Hoàn thành</option>
-                                <option value="Đã hủy">Đã hủy</option>
-                            </select>
-                            <button className="btn btn-primary w-100" onClick={() => toast.success('Đã lưu trạng thái')}>
-                                <FiCheckCircle className="me-2" /> Cập nhật
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Customer Info Card */}
                     <div className="card mb-4">
                         <div className="card-header">Thông tin khách hàng</div>
-                        <div className="card-body pt-0">
-                            <div className="mb-3 d-flex align-items-start">
-                                <FiUser className="mt-1 me-3 text-muted" />
+                        <div className="card-body">
+                            <div className="d-flex align-items-center mb-3">
+                                <div className="bg-light rounded-circle p-3 me-3">
+                                    <FiUser size={24} className="text-primary" />
+                                </div>
                                 <div>
-                                    <small className="text-muted d-block uppercase">Khách hàng</small>
-                                    <span className="fw-bold">{order.customer.name}</span>
+                                    <h6 className="mb-0 fw-bold">{order.deliveryInfo?.fullName}</h6>
+                                    <small className="text-muted">Khách hàng</small>
                                 </div>
                             </div>
-                            <div className="mb-3 d-flex align-items-start">
-                                <FiMail className="mt-1 me-3 text-muted" />
-                                <div>
-                                    <small className="text-muted d-block">Email</small>
-                                    <span>{order.customer.email}</span>
+                            <hr />
+                            <div className="mb-3">
+                                <div className="d-flex align-items-start mb-2">
+                                    <FiPhone className="me-2 mt-1 text-muted" />
+                                    <span>{order.deliveryInfo?.phone}</span>
+                                </div>
+                                <div className="d-flex align-items-start mb-2">
+                                    <FiMapPin className="me-2 mt-1 text-muted" />
+                                    <span>{order.deliveryInfo?.address}, {order.deliveryInfo?.city}</span>
                                 </div>
                             </div>
-                            <div className="mb-3 d-flex align-items-start">
-                                <FiPhone className="mt-1 me-3 text-muted" />
-                                <div>
-                                    <small className="text-muted d-block">Số điện thoại</small>
-                                    <span>{order.customer.phone}</span>
-                                </div>
-                            </div>
-                            <div className="d-flex align-items-start">
-                                <FiMapPin className="mt-1 me-3 text-primary" />
-                                <div>
-                                    <small className="text-muted d-block">Địa chỉ giao hàng</small>
-                                    <span className="fw-bold">{order.customer.address}</span>
-                                </div>
+                            <div className="alert alert-info mb-0">
+                                <small><strong>Ghi chú:</strong> {order.deliveryInfo?.note || 'Không có ghi chú'}</small>
                             </div>
                         </div>
                     </div>
