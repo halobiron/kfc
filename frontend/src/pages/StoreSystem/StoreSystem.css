@@ -36,28 +36,33 @@
     margin-bottom: 15px;
 }
 
-.search-icon {
+.search-btn-trigger {
     position: absolute;
-    left: 15px;
+    right: 5px;
     top: 50%;
     transform: translateY(-50%);
-    color: #9aa0a6;
+    background: var(--kfc-red);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
     z-index: 5;
-    font-size: 16px;
 }
 
-.search-loading-spinner {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    width: 18px;
-    height: 18px;
-    margin-top: -9px;
-    border: 2px solid #e0e0e0;
-    border-top-color: var(--kfc-red);
-    border-radius: 50%;
-    animation: search-spin 0.8s linear infinite;
-    z-index: 5;
+.search-btn-trigger:hover {
+    background-color: #c40025;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.search-btn-trigger:disabled {
+    background-color: #eebdc5;
+    cursor: wait;
 }
 
 @keyframes search-spin {
@@ -68,7 +73,7 @@
 
 .store-search-input {
     width: 100%;
-    padding: 10px 15px 10px 40px;
+    padding: 10px 45px 10px 18px;
     border: 1px solid #e0e0e0;
     border-radius: 50px;
     font-size: 13px;
@@ -81,6 +86,16 @@
     border-color: var(--kfc-red);
     background-color: #fff;
     box-shadow: 0 0 0 3px rgba(228, 0, 43, 0.1);
+}
+
+.search-hint {
+    font-size: 11px;
+    color: #6c757d;
+    margin-bottom: 15px;
+    margin-top: -10px;
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
 }
 
 .city-dropdown {
@@ -154,45 +169,33 @@
 
 /* Popcorn Style Number */
 .store-index-popcorn {
-    width: 44px;
-    /* Increased size for better visibility */
-    height: 44px;
-    /* Use SVG background for genuine popcorn shape */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'%3E%3Cpath d='M25 2 C29 2 32 5 34 8 C38 6 43 9 44 14 C45 19 42 22 43 26 C47 28 47 34 43 38 C40 42 35 46 29 44 C26 47 20 47 16 43 C10 45 5 41 5 35 C5 31 8 28 6 24 C4 18 8 14 13 13 C14 7 19 2 25 2 Z' fill='%23fffbf0' stroke='%23e4002b' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E");
+    width: 28px;
+    height: 37px;
+    background-image: url("../../assets/img/sprite.png");
     background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+    background-position: -70px -59px;
     background-color: transparent;
-    /* Remove fallback color */
 
-    color: #e4002b;
+    color: #fff;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding-top: 2px;
-    /* Visual alignment for text */
+    align-items: flex-start;
+    padding-top: 4px;
 
-    font-weight: 800;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 13px;
     font-family: 'Oswald', sans-serif;
 
-    border: none;
-    /* Removed CSS border */
-    border-radius: 0;
-    /* Removed CSS radius */
-    box-shadow: none;
-    /* Shadow is in SVG or filter below */
-
     flex-shrink: 0;
-    filter: drop-shadow(2px 3px 0 rgba(228, 0, 43, 0.2));
-    /* External shadow for the whole shape */
-    transform: rotate(-5deg);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-right: -5px;
+    /* Adjust spacing since width changed */
 }
 
+/* Active/Expanded State - Icon to the right in the sprite */
+.store-item-card.expanded .store-index-popcorn,
 .store-item-card:hover .store-index-popcorn {
-    transform: rotate(10deg) scale(1.15);
-    filter: drop-shadow(3px 4px 0 rgba(228, 0, 43, 0.3));
+    transform: none;
+    filter: none;
 }
 
 .store-item-info {

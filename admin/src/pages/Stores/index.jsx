@@ -5,6 +5,14 @@ import api from '../../utils/api';
 import './stores.css';
 import { FiEdit2, FiTrash2, FiPlus, FiMapPin, FiPhone, FiClock } from 'react-icons/fi';
 
+const CITY_LABELS = {
+    hcm: 'TP.HCM',
+    hn: 'Hà Nội',
+    dn: 'Đà Nẵng',
+    hp: 'Hải Phòng',
+    ct: 'Cần Thơ'
+};
+
 const Stores = () => {
     const [showModal, setShowModal] = useState(false)
     const [stores, setStores] = useState([]);
@@ -16,8 +24,8 @@ const Stores = () => {
 
     const fetchStores = async () => {
         try {
-            const response = await api.get('/stores');
-            setStores(response.data.data || []);
+            const { data } = await api.get('/stores');
+            setStores(data.data || []);
         } catch (error) {
             console.error('Lỗi khi tải cửa hàng:', error);
             toast.error('Không thể tải danh sách cửa hàng.');
@@ -56,68 +64,53 @@ const Stores = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {
-                                    stores.map((store, i) => {
-                                        return (
-                                            <tr key={store._id}>
-                                                <td className="ps-4 fw-bold">STR{1000 + i + 1}</td>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-3">
-                                                        <div className="store-img-wrapper">
-                                                            <FiMapPin size={24} className="text-danger" />
-                                                        </div>
-                                                        <div className="fw-bold">{store.name}</div>
-                                                    </div>
-                                                </td>
-                                                <td className="text-muted small" style={{ maxWidth: '300px' }}>{store.address}</td>
-                                                <td>
-                                                    {store.city === 'hcm' && 'TP.HCM'}
-                                                    {store.city === 'hn' && 'Hà Nội'}
-                                                    {store.city === 'dn' && 'Đà Nẵng'}
-                                                    {store.city === 'hp' && 'Hải Phòng'}
-                                                    {store.city === 'ct' && 'Cần Thơ'}
-                                                </td>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-1">
-                                                        <FiPhone size={14} className="text-secondary" />
-                                                        <span>{store.phone}</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-1">
-                                                        <FiClock size={14} className="text-secondary" />
-                                                        <span>{store.openTime}</span>
-                                                    </div>
-                                                </td>
-                                                <td className="text-end pe-4">
-                                                    <button
-                                                        className="btn-action btn-edit border-0 d-inline-flex align-items-center"
-                                                        onClick={() => {
-                                                            // navigate(`/stores/${store._id}`)
-                                                            toast.info("Chức năng chỉnh sửa sẽ được cập nhật sau khi có API")
-                                                        }}
-                                                    >
-                                                        <FiEdit2 style={{ marginRight: '4px' }} />
-                                                        Sửa
-                                                    </button>
-                                                    <button
-                                                        className="btn-action btn-delete border-0 d-inline-flex align-items-center"
-                                                        onClick={() => toast.info("Chức năng xóa sẽ được cập nhật sau khi có API")}
-                                                    >
-                                                        <FiTrash2 style={{ marginRight: '4px' }} />
-                                                        Xóa
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    })
-                                }
+                                {stores.map((store, i) => (
+                                    <tr key={store._id}>
+                                        <td className="ps-4 fw-bold">STR{1000 + i + 1}</td>
+                                        <td>
+                                            <div className="d-flex align-items-center gap-3">
+                                                <div className="store-img-wrapper">
+                                                    <FiMapPin size={24} className="text-danger" />
+                                                </div>
+                                                <div className="fw-bold">{store.name}</div>
+                                            </div>
+                                        </td>
+                                        <td className="text-muted small" style={{ maxWidth: '300px' }}>{store.address}</td>
+                                        <td>{CITY_LABELS[store.city] || store.city}</td>
+                                        <td>
+                                            <div className="d-flex align-items-center gap-1">
+                                                <FiPhone size={14} className="text-secondary" />
+                                                <span>{store.phone}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="d-flex align-items-center gap-1">
+                                                <FiClock size={14} className="text-secondary" />
+                                                <span>{store.openTime}</span>
+                                            </div>
+                                        </td>
+                                        <td className="text-end pe-4">
+                                            <button
+                                                className="btn-action btn-edit border-0 d-inline-flex align-items-center"
+                                                onClick={() => toast.info("Chức năng chỉnh sửa sẽ được cập nhật sau")}
+                                            >
+                                                <FiEdit2 className="me-1" /> Sửa
+                                            </button>
+                                            <button
+                                                className="btn-action btn-delete border-0 d-inline-flex align-items-center"
+                                                onClick={() => toast.info("Chức năng xóa sẽ được cập nhật sau")}
+                                            >
+                                                <FiTrash2 className="me-1" /> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </main>
-            {showModal ? <AddStoreModal setShowModal={setShowModal} /> : null}
+            {showModal && <AddStoreModal setShowModal={setShowModal} />}
         </>
     )
 }

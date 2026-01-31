@@ -4,6 +4,14 @@ import * as Yup from 'yup';
 // import { addNewStore } from '../../redux/actions/storeActions'; // API action to be implemented
 import { useDispatch } from 'react-redux';
 
+const CITIES = [
+    { id: 'hcm', name: 'TP. Hồ Chí Minh' },
+    { id: 'hn', name: 'Hà Nội' },
+    { id: 'dn', name: 'Đà Nẵng' },
+    { id: 'hp', name: 'Hải Phòng' },
+    { id: 'ct', name: 'Cần Thơ' },
+];
+
 const AddStoreModal = ({ setShowModal }) => {
 
     const dispatch = useDispatch();
@@ -36,7 +44,7 @@ const AddStoreModal = ({ setShowModal }) => {
     return (
         <div className="modal-overlay-wrapper">
             <div className="modal-overlay-inner" style={{ maxWidth: '800px' }}>
-                <h3 className="mb-4">Thêm Cửa Hàng Mới</h3>
+                <h3 className="mb-4 text-center">Thêm Cửa Hàng Mới</h3>
                 <form className="row g-3" onSubmit={handleSubmit}>
                     <div className="col-md-6">
                         <label htmlFor="name" className="form-label">Tên cửa hàng</label>
@@ -61,11 +69,9 @@ const AddStoreModal = ({ setShowModal }) => {
                             className="form-select"
                             id="city"
                         >
-                            <option value="hcm">TP. Hồ Chí Minh</option>
-                            <option value="hn">Hà Nội</option>
-                            <option value="dn">Đà Nẵng</option>
-                            <option value="hp">Hải Phòng</option>
-                            <option value="ct">Cần Thơ</option>
+                            {CITIES.map(city => (
+                                <option key={city.id} value={city.id}>{city.name}</option>
+                            ))}
                         </select>
                     </div>
                     <div className="col-12">

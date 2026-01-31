@@ -13,8 +13,8 @@ import './Home.css'
 const Home = () => {
   const dispatch = useDispatch();
   const { products, loading: productsLoading } = useSelector((state) => state.products);
-  const { categories, loading: categoriesLoading } = useSelector((state) => state.categories);
-  const { coupons, loading: couponsLoading } = useSelector((state) => state.coupons);
+  const { categories } = useSelector((state) => state.categories);
+  useSelector((state) => state.coupons);
 
   useEffect(() => {
     dispatch(getAllProducts());

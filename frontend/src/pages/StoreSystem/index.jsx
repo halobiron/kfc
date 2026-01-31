@@ -1,89 +1,77 @@
 import React, { useState, useEffect } from 'react';
-
+import storeApi from '../../api/storeApi';
 import './StoreSystem.css';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
-const stores = [
-    {
-        id: 1,
-        name: 'KFC Nguyễn Trãi',
-        address: '123 Nguyễn Trãi, Quận 1, TP.HCM',
-        city: 'hcm',
-        phone: '1900 1166',
-        openTime: '08:00 - 22:00',
-        services: ['Giao hàng', 'Tại chỗ', 'Mang đi', 'Wifi'],
-        location: { lat: 10.7686, lng: 106.6832 }
-    },
-    {
-        id: 2,
-        name: 'KFC Hoàn Kiếm',
-        address: '456 Hoàng Diệu, Quận Hoàn Kiếm, Hà Nội',
-        city: 'hn',
-        phone: '1900 1166',
-        openTime: '08:00 - 22:00',
-        services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
-        location: { lat: 21.0285, lng: 105.8542 }
-    },
-    {
-        id: 3,
-        name: 'KFC Lê Lợi',
-        address: '789 Lê Lợi, Quận 1, TP.HCM',
-        city: 'hcm',
-        phone: '1900 1166',
-        openTime: '08:00 - 23:00',
-        services: ['Giao hàng', 'Tại chỗ', 'Mang đi', 'Trẻ em'],
-        location: { lat: 10.7712, lng: 106.7001 }
-    },
-    {
-        id: 4,
-        name: 'KFC Hải Phòng Center',
-        address: '321 Lê Thánh Tông, Quận Ngô Quyền, Hải Phòng',
-        city: 'hp',
-        phone: '1900 1166',
-        openTime: '08:00 - 22:00',
-        services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
-        location: { lat: 20.8449, lng: 106.6881 }
-    },
-    {
-        id: 5,
-        name: 'KFC Đà Nẵng',
-        address: '555 Trần Phú, Quận Hải Châu, Đà Nẵng',
-        city: 'dn',
-        phone: '1900 1166',
-        openTime: '08:00 - 22:00',
-        services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
-        location: { lat: 16.0544, lng: 108.2022 }
-    },
-    {
-        id: 6,
-        name: 'KFC Cần Thơ',
-        address: '999 Mậu Thân, Quận Ninh Kiều, Cần Thơ',
-        city: 'ct',
-        phone: '1900 1166',
-        openTime: '08:00 - 22:00',
-        services: ['Giao hàng', 'Tại chỗ', 'Mang đi'],
-        location: { lat: 10.0333, lng: 105.7833 }
-    },
+// Fix for default Leaflet marker icons in React
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
+
+// Constants
+const CITIES = [
+    { id: 'all', name: 'Tất cả thành phố' },
+    { id: 'hcm', name: 'TP. Hồ Chí Minh' },
+    { id: 'hn', name: 'Hà Nội' },
+    { id: 'dn', name: 'Đà Nẵng' },
+    { id: 'hp', name: 'Hải Phòng' },
+    { id: 'ct', name: 'Cần Thơ' },
 ];
 
-const deg2rad = (deg) => {
-    return deg * (Math.PI / 180);
+const SERVICE_MAP = {
+    'dine-in': 'Tại chỗ',
+    'takeaway': 'Mang đi',
+    'delivery': 'Giao hàng',
+    'drive-through': 'Drive-thru',
+    'wifi': 'Wifi',
+    'kids': 'Khu vui chơi trẻ em'
 };
 
-// Haversine formula to calculate distance (in km)
+// Helpers
+const deg2rad = (deg) => deg * (Math.PI / 180);
+
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // Radius of the earth in km
     const dLat = deg2rad(lat2 - lat1);
     const dLon = deg2rad(lon2 - lon1);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    const a = Math.sin(dLat / 2) ** 2 +
         Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c; // Distance in km
-    return d;
+        Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+};
+
+const createKfcIcon = (isActive) => L.divIcon({
+    className: 'custom-kfc-marker',
+    html: `<div style="
+            width: 50px;
+            height: 65px;
+            background-image: url('${require('../../assets/img/sprite.png')}');
+            background-repeat: no-repeat;
+            background-position: ${isActive ? '-120px -50px' : '-70px -50px'};
+            background-color: transparent;
+            transform: scale(1.1);
+            transform-origin: bottom center;
+        "></div>`,
+    iconSize: [50, 65],
+    iconAnchor: [25, 65],
+    popupAnchor: [0, -65]
+});
+
+const MapUpdater = ({ center }) => {
+    const map = useMap();
+    useEffect(() => {
+        if (center) map.flyTo([center.lat, center.lng], 15);
+    }, [center, map]);
+    return null;
 };
 
 const StoreSystem = () => {
+    const [stores, setStores] = useState([]);
     const [selectedCity, setSelectedCity] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [expandedStore, setExpandedStore] = useState(null);
@@ -92,108 +80,109 @@ const StoreSystem = () => {
     const [loadingLocation, setLoadingLocation] = useState(false);
     const [locationError, setLocationError] = useState(null);
     const [isSearching, setIsSearching] = useState(false);
+    const [mapCenter, setMapCenter] = useState({ lat: 10.7718, lng: 106.6015 }); // Default HCM
 
-    const cities = [
-        { id: 'all', name: 'Tất cả thành phố' },
-        { id: 'hcm', name: 'TP. Hồ Chí Minh' },
-        { id: 'hn', name: 'Hà Nội' },
-        { id: 'dn', name: 'Đà Nẵng' },
-        { id: 'hp', name: 'Hải Phòng' },
-        { id: 'ct', name: 'Cần Thơ' },
-    ];
+    useEffect(() => {
+        const fetchStores = async () => {
+            try {
+                const { data } = await storeApi.getAll();
+                if (data?.status) {
+                    setStores(data.data.map(store => ({
+                        ...store,
+                        id: store._id,
+                        location: { lat: store.latitude, lng: store.longitude }
+                    })));
+                }
+            } catch (error) {
+                console.error("Failed to fetch stores", error);
+            }
+        };
+        fetchStores();
+    }, []);
+
     const handleFindNearest = () => {
+        if (!navigator.geolocation) {
+            setLocationError("Trình duyệt không hỗ trợ Geolocation.");
+            return;
+        }
+
         setLoadingLocation(true);
         setLocationError(null);
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    setUserLocation({ lat: latitude, lng: longitude });
-                    setLoadingLocation(false);
-                    // Reset filters when searching by nearest
-                    setSelectedCity('all');
-                    setSearchTerm(''); // Clear text search if using GPS
-                },
-                (error) => {
-                    console.error("Error getting location:", error);
-                    setLocationError("Không thể lấy vị trí của bạn.");
-                    setLoadingLocation(false);
-                }
-            );
-        } else {
-            setLocationError("Trình duyệt không hỗ trợ Geolocation.");
-            setLoadingLocation(false);
-        }
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const { latitude: lat, longitude: lng } = pos.coords;
+                setUserLocation({ lat, lng });
+                setMapCenter({ lat, lng });
+                setSelectedCity('all');
+                setSearchTerm('');
+                setLoadingLocation(false);
+            },
+            (err) => {
+                console.error("Error getting location:", err);
+                setLocationError("Không thể lấy vị trí của bạn.");
+                setLoadingLocation(false);
+            }
+        );
     };
 
     const handleSearch = async (e) => {
-        if (e.key === 'Enter' || e.type === 'click') {
-            e.preventDefault(); // Prevent accidental form submit or page reload
+        if (e.key !== 'Enter' && e.type !== 'click') return;
+        
+        e.preventDefault();
+        if (!searchTerm.trim()) return;
 
-            if (!searchTerm.trim()) return;
+        setIsSearching(true);
+        setLocationError(null);
 
-            setIsSearching(true);
-            setLocationError(null);
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchTerm)}&countrycodes=vn&limit=1`);
+            const data = await res.json();
 
-            try {
-                // Using OpenStreetMap Nominatim API (Free)
-                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchTerm)}&countrycodes=vn&limit=1`);
-                const data = await response.json();
-
-                if (data && data.length > 0) {
-                    const { lat, lon } = data[0];
-                    setUserLocation({ lat: parseFloat(lat), lng: parseFloat(lon) });
-                    setSelectedCity('all'); // Show all cities to find true nearest
-                } else {
-                    setLocationError("Không tìm thấy địa chỉ này.");
-                    // Keep userLocation if it exists? Or reset? Logic says reset if searching new addy.
-                    // But if fallback to text search is desired, we might want to keep it null.
-                    setUserLocation(null);
-                }
-            } catch (error) {
-                console.error("Search error:", error);
-                setLocationError("Lỗi kết nối tìm kiếm.");
-            } finally {
-                setIsSearching(false);
+            if (data?.length > 0) {
+                const { lat, lon } = data[0];
+                const location = { lat: parseFloat(lat), lng: parseFloat(lon) };
+                setUserLocation(location);
+                setMapCenter(location);
+                setSelectedCity('all');
+            } else {
+                setLocationError("Không tìm thấy địa chỉ này.");
+                setUserLocation(null);
             }
+        } catch (error) {
+            console.error("Search error:", error);
+            setLocationError("Lỗi kết nối tìm kiếm.");
+        } finally {
+            setIsSearching(false);
         }
     };
 
     useEffect(() => {
-        let processedStores = stores.map(store => {
-            let distance = null;
-            if (userLocation) {
-                distance = calculateDistance(
-                    userLocation.lat,
-                    userLocation.lng,
-                    store.location.lat,
-                    store.location.lng
-                );
-            }
-            return { ...store, distance };
-        });
+        let results = stores.map(store => ({
+            ...store,
+            distance: userLocation ? calculateDistance(
+                userLocation.lat, userLocation.lng,
+                store.location.lat, store.location.lng
+            ) : null
+        }));
 
-        // Filter by City
         if (selectedCity !== 'all') {
-            processedStores = processedStores.filter(store => store.city === selectedCity);
+            results = results.filter(s => s.city === selectedCity);
         }
 
-        // If userLocation is NOT set, use searchTerm for local text filtering (fallback behavior)
         if (!userLocation && searchTerm) {
             const term = searchTerm.toLowerCase();
-            processedStores = processedStores.filter(store =>
-                store.name.toLowerCase().includes(term) ||
-                store.address.toLowerCase().includes(term)
+            results = results.filter(s => 
+                s.name.toLowerCase().includes(term) || 
+                s.address.toLowerCase().includes(term)
             );
         }
 
-        // Sort: If userLocation exists, sort by distance.
         if (userLocation) {
-            processedStores.sort((a, b) => a.distance - b.distance);
+            results.sort((a, b) => a.distance - b.distance);
         }
 
-        setSortedStores(processedStores);
-    }, [userLocation, selectedCity, searchTerm]);
+        setSortedStores(results);
+    }, [userLocation, selectedCity, searchTerm, stores]);
 
 
     const toggleStore = (id) => {
@@ -201,6 +190,10 @@ const StoreSystem = () => {
             setExpandedStore(null);
         } else {
             setExpandedStore(id);
+            const store = stores.find(s => s.id === id);
+            if (store && store.location) {
+                setMapCenter(store.location);
+            }
         }
     };
 
@@ -212,19 +205,31 @@ const StoreSystem = () => {
                     <h2 className="sidebar-title">HỆ THỐNG NHÀ HÀNG</h2>
 
                     <div className="search-wrapper">
-                        {isSearching ? (
-                            <div className="search-loading-spinner"></div>
-                        ) : (
-                            <i className="bi bi-search search-icon" onClick={handleSearch} style={{ cursor: 'pointer' }}></i>
-                        )}
                         <input
                             type="text"
-                            placeholder="Nhập địa chỉ (VD: 97 Tô Ngọc Vân)..."
+                            placeholder="Tìm theo địa chỉ, quận tên nhà hàng..."
                             className="store-search-input"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             onKeyDown={handleSearch}
                         />
+                        <button
+                            className="search-btn-trigger"
+                            onClick={handleSearch}
+                            disabled={isSearching}
+                            title="Tìm kiếm vị trí"
+                        >
+                            {isSearching ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : (
+                                <i className="bi bi-search"></i>
+                            )}
+                        </button>
+                    </div>
+
+                    <div className="search-hint">
+                        <i className="bi bi-info-circle me-1"></i>
+                        Nhấn Enter hoặc nút tìm kiếm để xem cửa hàng gần bạn nhất
                     </div>
 
                     <div className="d-flex align-items-center gap-2 mb-3">
@@ -234,7 +239,7 @@ const StoreSystem = () => {
                                 value={selectedCity}
                                 onChange={(e) => setSelectedCity(e.target.value)}
                             >
-                                {cities.map(city => (
+                                {CITIES.map(city => (
                                     <option key={city.id} value={city.id}>{city.name}</option>
                                 ))}
                             </select>
@@ -302,7 +307,7 @@ const StoreSystem = () => {
                                             <h6><i className="bi bi-gear me-2"></i>Dịch vụ</h6>
                                             <div className="service-icons">
                                                 {store.services.map((s, idx) => (
-                                                    <span key={idx} className="service-tag">{s}</span>
+                                                    <span key={idx} className="service-tag">{SERVICE_MAP[s] || s}</span>
                                                 ))}
                                             </div>
                                         </div>
@@ -326,21 +331,45 @@ const StoreSystem = () => {
 
             {/* Map View */}
             <div className="store-map-view">
-                <iframe
-                    title="KFC Map"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125424.47547514309!2d106.60155099309257!3d10.771804368936997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f1c06f4e1dd%3A0x19045145cd6a992!2sKFC!5e0!3m2!1svi!2s!4v1706240000000!5m2!1svi!2s"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
+                <MapContainer
+                    center={[mapCenter.lat, mapCenter.lng]}
+                    zoom={15}
+                    style={{ height: '100%', width: '100%' }}
+                    scrollWheelZoom={true}
+                >
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <MapUpdater center={mapCenter} />
+
+                    {/* User Location Marker */}
+                    {userLocation && (
+                        <Marker position={[userLocation.lat, userLocation.lng]}>
+                            <Popup>Vị trí của bạn</Popup>
+                        </Marker>
+                    )}
+
+                    {/* Store Markers */}
+                    {sortedStores.map(store => (
+                        <Marker
+                            key={store.id}
+                            position={[store.location.lat, store.location.lng]}
+                            icon={createKfcIcon(expandedStore === store.id)}
+                            eventHandlers={{
+                                click: () => toggleStore(store.id),
+                            }}
+                        >
+                            <Popup>
+                                <strong>{store.name}</strong><br />
+                                {store.address}
+                            </Popup>
+                        </Marker>
+                    ))}
+                </MapContainer>
             </div>
         </div>
     );
 };
 
-
 export default StoreSystem;
-
