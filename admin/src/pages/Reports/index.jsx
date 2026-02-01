@@ -1,42 +1,153 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiCalendar, FiDownload, FiTrendingUp, FiShoppingBag, FiUsers, FiDollarSign } from 'react-icons/fi';
 import StatCard from '../../components/StatCard';
+import api from '../../utils/api';
+import { toast } from 'react-toastify';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement
+} from 'chart.js';
+import { Line, Doughnut } from 'react-chartjs-2';
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement
+);
 
 const Reports = () => {
     const [dateRange, setDateRange] = useState('month');
+    const [loading, setLoading] = useState(false);
+    const [statsData, setStatsData] = useState({
+        revenue: 0,
+        orders: 0,
+        customers: 0,
+        avgOrderValue: 0,
+        chart: [],
+        topProducts: [],
+        categoryStats: []
+    });
 
-    // Mock statistics data
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                setLoading(true);
+                const response = await api.get(`/stats/dashboard?range=${dateRange}`);
+                if (response.data.status) {
+                    setStatsData(response.data.data);
+                }
+            } catch (error) {
+                console.error("Error fetching stats:", error);
+                toast.error("Không thể tải dữ liệu thống kê");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchStats();
+    }, [dateRange]);
+
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    };
+
+    // Transform backend data to stats card format
     const stats = [
         {
             label: 'Tổng doanh thu',
-            value: '1.250.000.000 đ',
+            value: formatCurrency(statsData.revenue),
             icon: <FiDollarSign size={24} />,
-            trend: '+12.5%',
+            trend: 'N/A',
             color: 'primary'
         },
         {
             label: 'Đơn hàng',
-            value: '3,450',
+            value: statsData.orders,
             icon: <FiShoppingBag size={24} />,
-            trend: '+5.2%',
+            trend: 'N/A',
             color: 'success'
         },
         {
             label: 'Khách hàng mới',
-            value: '890',
+            value: statsData.customers,
             icon: <FiUsers size={24} />,
-            trend: '+28.4%',
+            trend: 'N/A',
             color: 'warning'
         },
         {
             label: 'Trung bình đơn',
-            value: '362.000 đ',
+            value: formatCurrency(statsData.avgOrderValue),
             icon: <FiTrendingUp size={24} />,
-            trend: '-2.1%',
+            trend: 'N/A',
             color: 'info'
         }
     ];
+
+    // Chart Data Preparation
+    const lineChartData = {
+        labels: statsData.chart?.map(item => item._id) || [],
+        datasets: [
+            {
+                label: 'Doanh thu',
+                data: statsData.chart?.map(item => item.revenue) || [],
+                borderColor: 'rgb(53, 162, 235)',
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                tension: 0.3
+            }
+        ]
+    };
+
+    const pieChartData = {
+        labels: statsData.categoryStats?.map(item => item.name) || [],
+        datasets: [
+            {
+                data: statsData.categoryStats?.map(item => item.revenue) || [],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                ],
+                borderWidth: 1,
+            },
+        ],
+    };
+
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: false,
+            },
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function (value) {
+                        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumSignificantDigits: 3 }).format(value);
+                    }
+                }
+            }
+        }
+    };
 
     return (
         <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
@@ -63,97 +174,110 @@ const Reports = () => {
                             Năm
                         </button>
                     </div>
-                    <button className="btn btn-outline-primary btn-sm d-flex align-items-center gap-2">
-                        <FiDownload /> Xuất báo cáo
-                    </button>
                 </div>
             </div>
 
-            {/* Stats Cards */}
-            <div className="row mb-4 g-4">
-                {stats.map((stat, index) => (
-                    <div className="col-12 col-sm-6 col-xl-3" key={index}>
-                        <StatCard
-                            label={stat.label}
-                            value={stat.value}
-                            icon={stat.icon}
-                            trend={stat.trend}
-                            color={stat.color}
-                        />
+            {loading ? (
+                <div className="d-flex justify-content-center my-5">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
                     </div>
-                ))}
-            </div>
-            {/* Revenue Chart Placeholder */}
-            <div className="row mb-4">
-                <div className="col-12">
-                    <div className="card border">
-                        <div className="card-header">
-                            <h5 className="mb-0 fw-bold">Biểu đồ doanh thu <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
-                        </div>
-                        <div className="card-body">
-                            <div className="bg-light d-flex align-items-center justify-content-center text-muted rounded" style={{ height: '300px' }}>
-                                <div className="text-center">
-                                    <FiTrendingUp size={48} className="mb-3 opacity-50" />
-                                    <p>Biểu đồ doanh thu thị trường (Placeholder)</p>
-                                    <small>Chart.js hoặc Recharts sẽ được tích hợp tại đây</small>
+                </div>
+            ) : (
+                <>
+                    {/* Stats Cards */}
+                    <div className="row mb-4 g-4">
+                        {stats.map((stat, index) => (
+                            <div className="col-12 col-sm-6 col-xl-3" key={index}>
+                                <StatCard
+                                    label={stat.label}
+                                    value={stat.value}
+                                    icon={stat.icon}
+                                    trend={stat.trend}
+                                    color={stat.color}
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Revenue Chart */}
+                    <div className="row mb-4">
+                        <div className="col-12">
+                            <div className="card border">
+                                <div className="card-header">
+                                    <h5 className="mb-0 fw-bold">Biểu đồ doanh thu <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
+                                </div>
+                                <div className="card-body">
+                                    <div style={{ height: '300px', width: '100%' }}>
+                                        {statsData.chart && statsData.chart.length > 0 ? (
+                                            <Line options={{ ...chartOptions, maintainAspectRatio: false }} data={lineChartData} />
+                                        ) : (
+                                            <div className="d-flex align-items-center justify-content-center h-100 text-muted">
+                                                Chưa có dữ liệu cho khoảng thời gian này
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {/* Top Products & Recent Orders */}
-            <div className="row g-4">
-                <div className="col-lg-6">
-                    <div className="card h-100">
-                        <div className="card-header">
-                            <h5 className="mb-0 fw-bold">Sản phẩm bán chạy <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
+                    {/* Top Products & Category Overview */}
+                    <div className="row g-4">
+                        <div className="col-lg-6">
+                            <div className="card h-100">
+                                <div className="card-header">
+                                    <h5 className="mb-0 fw-bold">Sản phẩm bán chạy <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
+                                </div>
+                                <div className="table-responsive">
+                                    <table className="table align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Sản phẩm</th>
+                                                <th scope="col" className="text-end">Đã bán</th>
+                                                <th scope="col" className="text-end">Doanh thu</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {statsData.topProducts.length > 0 ? (
+                                                statsData.topProducts.map((product, idx) => (
+                                                    <tr key={idx}>
+                                                        <td className="fw-bold">{product.name}</td>
+                                                        <td className="text-end">{product.sold}</td>
+                                                        <td className="text-end fw-bold text-danger">{formatCurrency(product.revenue)}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="3" className="text-center text-muted py-3">Chưa có dữ liệu</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        <div className="table-responsive">
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Sản phẩm</th>
-                                        <th scope="col" className="text-end">Đã bán</th>
-                                        <th scope="col" className="text-end">Doanh thu</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {[
-                                        { name: 'Combo Gà Rán (2 miếng)', sold: 1245, revenue: '105.825.000 đ' },
-                                        { name: 'Burger Tôm', sold: 850, revenue: '59.500.000 đ' },
-                                        { name: 'Cơm Gà Giòn Cay', sold: 620, revenue: '31.000.000 đ' },
-                                        { name: 'Khoai tây chiên (L)', sold: 2100, revenue: '84.000.000 đ' },
-                                        { name: 'Pepsi (L)', sold: 3400, revenue: '68.000.000 đ' }
-                                    ].map((product, idx) => (
-                                        <tr key={idx}>
-                                            <td className="fw-bold">{product.name}</td>
-                                            <td className="text-end">{product.sold}</td>
-                                            <td className="text-end fw-bold text-danger">{product.revenue}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-lg-6">
-                    <div className="card border shadow-sm h-100">
-                        <div className="card-header">
-                            <h5 className="mb-0 fw-bold">Tổng quan theo danh mục <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
-                        </div>
-                        <div className="card-body">
-                            <div className="bg-light d-flex align-items-center justify-content-center text-muted rounded h-100" style={{ minHeight: '200px' }}>
-                                <div className="text-center">
-                                    <FiShoppingBag size={48} className="mb-3 opacity-50" />
-                                    <p>Biểu đồ tròn tỉ lệ danh mục (Placeholder)</p>
+                        <div className="col-lg-6">
+                            <div className="card border shadow-sm h-100">
+                                <div className="card-header">
+                                    <h5 className="mb-0 fw-bold">Doanh thu theo danh mục <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
+                                </div>
+                                <div className="card-body">
+                                    <div className="d-flex align-items-center justify-content-center h-100" style={{ minHeight: '300px' }}>
+                                        {statsData.categoryStats && statsData.categoryStats.length > 0 ? (
+                                            <div style={{ maxWidth: '350px', width: '100%' }}>
+                                                <Doughnut data={pieChartData} />
+                                            </div>
+                                        ) : (
+                                            <div className="text-muted">Chưa có dữ liệu</div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </>
+            )}
         </main>
     );
 };

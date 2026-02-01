@@ -16,6 +16,7 @@ const orderRoutes = require('./routes/orders');
 const storeRoutes = require('./routes/stores');
 const ingredientRoutes = require('./routes/ingredients');
 const roleRoutes = require('./routes/role');
+const statsRoutes = require('./routes/stats');
 
 connectDatabase();
 app.use(cors())
@@ -33,6 +34,7 @@ app.use('/api/v1', orderRoutes);
 app.use('/api/v1', storeRoutes);
 app.use('/api/v1', ingredientRoutes);
 app.use('/api/v1', roleRoutes);
+app.use('/api/v1', statsRoutes);
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
