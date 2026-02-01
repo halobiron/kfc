@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { createStore } from '../../redux/slices/storeSlice';
+import { createStore, updateStore } from '../../redux/slices/storeSlice';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -13,18 +13,18 @@ const CITIES = [
     { id: 'ct', name: 'Cần Thơ' },
 ];
 
-const AddStoreModal = ({ setShowModal }) => {
+const AddStoreModal = ({ setShowModal, initialStore }) => {
 
     const dispatch = useDispatch();
 
-    const { handleChange, handleSubmit, handleBlur, values, errors, touched } = useFormik({
+    const formik = useFormik({
         initialValues: {
             name: '',
             address: '',
             city: 'hcm',
             phone: '',
             openTime: '',
-            services: '', // Comma separated for now
+            services: '',
             lat: '',
             lng: ''
         },
@@ -37,30 +37,52 @@ const AddStoreModal = ({ setShowModal }) => {
         }),
         onSubmit: async (values) => {
             try {
-                // Parse services string to array if needed or handle as is
                 const submissionValues = {
                     ...values,
-                    services: values.services ? values.services.split(',').map(s => s.trim()) : []
+                    services: values.services ? values.services.split(',').map(s => s.trim()) : [],
+                    latitude: values.lat || undefined,
+                    longitude: values.lng || undefined
                 };
-                
-                // If lat/lng are empty strings, remove them or set to null/0, otherwise backend CastError might occur
-                if(!submissionValues.lat) delete submissionValues.lat;
-                if(!submissionValues.lng) delete submissionValues.lng;
 
-                await dispatch(createStore(submissionValues)).unwrap();
-                toast.success('Thêm cửa hàng thành công');
+                delete submissionValues.lat;
+                delete submissionValues.lng;
+
+                if (initialStore) {
+                    await dispatch(updateStore({ id: initialStore._id, data: submissionValues })).unwrap();
+                    toast.success('Cập nhật cửa hàng thành công');
+                } else {
+                    await dispatch(createStore(submissionValues)).unwrap();
+                    toast.success('Thêm cửa hàng thành công');
+                }
                 setShowModal(false);
             } catch (error) {
-                toast.error('Có lỗi xảy ra khi thêm cửa hàng');
+                toast.error(initialStore ? 'Có lỗi xảy ra khi cập nhật' : 'Có lỗi xảy ra khi thêm cửa hàng');
                 console.error(error);
             }
         }
-    })
+    });
+
+    const { handleChange, handleSubmit, handleBlur, values, errors, touched, setValues } = formik;
+
+    useEffect(() => {
+        if (initialStore) {
+            setValues({
+                name: initialStore.name || '',
+                address: initialStore.address || '',
+                city: initialStore.city || 'hcm',
+                phone: initialStore.phone || '',
+                openTime: initialStore.openTime || '',
+                services: initialStore.services ? initialStore.services.join(', ') : '',
+                lat: initialStore.latitude || '',
+                lng: initialStore.longitude || ''
+            });
+        }
+    }, [initialStore, setValues]);
 
     return (
         <div className="modal-overlay-wrapper">
             <div className="modal-overlay-inner" style={{ maxWidth: '800px' }}>
-                <h3 className="mb-4 text-center">Thêm Cửa Hàng Mới</h3>
+                <h3 className="mb-4 text-center">{initialStore ? 'Cập Nhật Cửa Hàng' : 'Thêm Cửa Hàng Mới'}</h3>
                 <form className="row g-3" onSubmit={handleSubmit}>
                     <div className="col-md-6">
                         <label htmlFor="name" className="form-label">Tên cửa hàng</label>
@@ -170,7 +192,7 @@ const AddStoreModal = ({ setShowModal }) => {
 
                     <div className="col-12 mt-4 text-end">
                         <button type="button" className="btn btn-secondary me-3" onClick={() => setShowModal(false)}>Hủy</button>
-                        <button type="submit" className="btn btn-primary">Lưu cửa hàng</button>
+                        <button type="submit" className="btn btn-primary">{initialStore ? 'Cập nhật' : 'Lưu cửa hàng'}</button>
                     </div>
                 </form>
             </div>

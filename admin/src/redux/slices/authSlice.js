@@ -38,6 +38,18 @@ export const logout = createAsyncThunk(
     }
 );
 
+export const changePassword = createAsyncThunk(
+    'auth/changePassword',
+    async (passwords, { rejectWithValue }) => {
+        try {
+            const response = await api.post('/users/change-password', passwords);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Đổi mật khẩu thất bại');
+        }
+    }
+);
+
 const initialState = {
     user: null,
     isAuthenticated: false,
@@ -102,6 +114,18 @@ const authSlice = createSlice({
                 state.loading = false;
             })
             .addCase(logout.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            // Change Password
+            .addCase(changePassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(changePassword.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(changePassword.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

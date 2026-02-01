@@ -43,40 +43,40 @@ const storeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-        .addCase(getAllStores.pending, (state) => {
-            state.loading = true;
-        })
-        .addCase(getAllStores.fulfilled, (state, action) => {
-            state.loading = false;
-            state.stores = action.payload.data || action.payload;
-        })
-        .addCase(getAllStores.rejected, (state, action) => {
-             state.loading = false;
-             state.error = action.error.message;
-        })
-        .addCase(createStore.fulfilled, (state, action) => {
-             state.loading = false;
-             // Ideally we should append or re-fetch.
-             // If payload.data is the new store:
-             if (action.payload.data && !Array.isArray(action.payload.data)) {
-                 state.stores.push(action.payload.data);
-             } else if (Array.isArray(action.payload.data)) {
-                 state.stores = action.payload.data;
-             }
-        })
-        .addCase(updateStore.fulfilled, (state, action) => {
-             state.loading = false;
-             // Optimistic update
-             const { id, data } = action.meta.arg;
-             const index = state.stores.findIndex(s => s._id === id);
-             if (index !== -1) {
-                 state.stores[index] = { ...state.stores[index], ...data };
-             }
-        })
-        .addCase(deleteStore.fulfilled, (state, action) => {
-             state.loading = false;
-             state.stores = state.stores.filter(s => s._id !== action.payload);
-        });
+      .addCase(getAllStores.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllStores.fulfilled, (state, action) => {
+        state.loading = false;
+        state.stores = action.payload.data || action.payload;
+      })
+      .addCase(getAllStores.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(createStore.fulfilled, (state, action) => {
+        state.loading = false;
+        // Ideally we should append or re-fetch.
+        // If payload.data is the new store:
+        if (action.payload.data && !Array.isArray(action.payload.data)) {
+          state.stores.push(action.payload.data);
+        } else if (Array.isArray(action.payload.data)) {
+          state.stores = action.payload.data;
+        }
+      })
+      .addCase(updateStore.fulfilled, (state, action) => {
+        state.loading = false;
+        state.loading = false;
+        const updatedStore = action.payload.data;
+        const index = state.stores.findIndex(s => s._id === updatedStore._id);
+        if (index !== -1) {
+          state.stores[index] = updatedStore;
+        }
+      })
+      .addCase(deleteStore.fulfilled, (state, action) => {
+        state.loading = false;
+        state.stores = state.stores.filter(s => s._id !== action.payload);
+      });
   }
 });
 

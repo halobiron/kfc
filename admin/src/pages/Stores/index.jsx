@@ -16,7 +16,8 @@ const CITY_LABELS = {
 
 const Stores = () => {
     const dispatch = useDispatch();
-    const [showModal, setShowModal] = useState(false)
+    const [showModal, setShowModal] = useState(false);
+    const [selectedStore, setSelectedStore] = useState(null);
     const { stores, loading } = useSelector(state => state.stores);
 
     useEffect(() => {
@@ -34,6 +35,16 @@ const Stores = () => {
         }
     }
 
+    const handleEdit = (store) => {
+        setSelectedStore(store);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedStore(null);
+    };
+
     return (
         <>
             <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
@@ -42,7 +53,10 @@ const Stores = () => {
                     <button
                         type="button"
                         className="btn btn-primary d-flex align-items-center gap-2 shadow-sm"
-                        onClick={() => setShowModal(true)}
+                        onClick={() => {
+                            setSelectedStore(null);
+                            setShowModal(true);
+                        }}
                     >
                         <FiPlus size={20} /> Thêm cửa hàng
                     </button>
@@ -92,7 +106,7 @@ const Stores = () => {
                                         <td className="text-end pe-4">
                                             <button
                                                 className="btn-action btn-edit border-0 d-inline-flex align-items-center"
-                                                onClick={() => toast.info("Chức năng chỉnh sửa sẽ được cập nhật sau")}
+                                                onClick={() => handleEdit(store)}
                                             >
                                                 <FiEdit2 className="me-1" /> Sửa
                                             </button>
@@ -100,7 +114,7 @@ const Stores = () => {
                                                 className="btn-action btn-delete border-0 d-inline-flex align-items-center"
                                                 onClick={() => handleDelete(store._id)}
                                             >
-                                                 <FiTrash2 className="me-1" /> Xóa
+                                                <FiTrash2 className="me-1" /> Xóa
                                             </button>
                                         </td>
                                     </tr>
@@ -110,7 +124,12 @@ const Stores = () => {
                     </div>
                 </div>
             </main>
-            {showModal && <AddStoreModal setShowModal={setShowModal} />}
+            {showModal && (
+                <AddStoreModal
+                    setShowModal={handleCloseModal}
+                    initialStore={selectedStore}
+                />
+            )}
         </>
     )
 }

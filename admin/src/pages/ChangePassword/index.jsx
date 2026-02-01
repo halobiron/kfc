@@ -1,9 +1,13 @@
 import React from 'react'
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
+import { changePassword } from '../../redux/slices/authSlice';
 
 const ChangePassword = () => {
+    const dispatch = useDispatch();
+
     const formik = useFormik({
         initialValues: {
             currentPassword: '',
@@ -18,12 +22,18 @@ const ChangePassword = () => {
                 .required('Bắt buộc'),
         }),
         onSubmit: (values, { setSubmitting, resetForm }) => {
-            // Simulate API call
-            setTimeout(() => {
-                toast.success('Đổi mật khẩu thành công!');
-                setSubmitting(false);
-                resetForm();
-            }, 500);
+            dispatch(changePassword(values))
+                .unwrap()
+                .then(() => {
+                    toast.success('Đổi mật khẩu thành công!');
+                    resetForm();
+                })
+                .catch((error) => {
+                    toast.error(error || 'Đổi mật khẩu thất bại');
+                })
+                .finally(() => {
+                    setSubmitting(false);
+                });
         },
     });
 

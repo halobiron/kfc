@@ -9,6 +9,7 @@ import categoryReducer from './slices/categorySlice';
 import userReducer from './slices/userSlice';
 import roleReducer from './slices/roleSlice';
 import couponReducer from './slices/couponSlice';
+import statsReducer from './slices/statsSlice';
 
 export const store = configureStore({
     reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
         categories: categoryReducer,
         users: userReducer,
         roles: roleReducer,
-        coupons: couponReducer
+        coupons: couponReducer,
+        stats: statsReducer
     },
 });
