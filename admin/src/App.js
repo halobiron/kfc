@@ -8,15 +8,16 @@ import Product from './pages/Product'
 import ProductDetails from './pages/ProductDetails'
 import Ingredient from './pages/Ingredient'
 import Order from './pages/Order'
-import Customers from './pages/Customers';
+import Users from './pages/Users';
 import Reports from './pages/Reports';
 import OrderDetails from './pages/OrderDetails';
 import Categories from './pages/Categories';
-import Staff from './pages/Staff';
+
 import Promotions from './pages/Promotions';
 import Kitchen from './pages/Kitchen';
 import Stores from './pages/Stores';
 import ChangePassword from './pages/ChangePassword';
+import Roles from './pages/Roles';
 
 import {
   BrowserRouter,
@@ -24,7 +25,20 @@ import {
   Route,
 } from "react-router-dom";
 
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUser } from './redux/slices/authSlice';
+
 function App() {
+  const dispatch = useDispatch();
+  const { token } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(loadUser());
+    }
+  }, [dispatch, token]);
+
   return (
     <>
       <BrowserRouter>
@@ -57,12 +71,12 @@ function App() {
                       <Route path="/orders" element={<Order />} />
                       <Route path="/orders/:id" element={<OrderDetails />} />
                       <Route path="/kitchen" element={<Kitchen />} />
-                      <Route path="/customers" element={<Customers />} />
-                      <Route path="/staff" element={<Staff />} />
+                      <Route path="/users" element={<Users />} />
                       <Route path="/promotions" element={<Promotions />} />
                       <Route path="/stores" element={<Stores />} />
                       <Route path="/reports" element={<Reports />} />
                       <Route path="/change-password" element={<ChangePassword />} />
+                      <Route path="/roles" element={<Roles />} />
                     </Routes>
                   </div>
                 </div>

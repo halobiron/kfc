@@ -1,23 +1,18 @@
 const User = require('../models/userSchema');
-const Staff = require('../models/staffSchema');
 const jwt = require('jsonwebtoken');
 
 // Create JWT Token
 const sendToken = async (user, statusCode, res) => {
-    let storeId = null;
-    let position = null;
-
-    // If user is staff/admin, get their store info
-    if (user.role !== 'customer') {
-        const staff = await Staff.findOne({ userId: user._id });
-        if (staff) {
-            storeId = staff.storeId;
-            position = staff.position;
-        }
+    // Populate role permissions if available
+    let permissions = [];
+    if (user.role && user.role.permissions) {
+        permissions = user.role.permissions;
     }
 
+    const roleName = user.role?.name || 'customer';
+
     const token = jwt.sign(
-        { id: user._id, role: user.role, storeId },
+        { id: user._id, role: roleName, storeId: user.storeId, permissions },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRE }
     );
@@ -38,9 +33,11 @@ const sendToken = async (user, statusCode, res) => {
             name: user.name,
             email: user.email,
             phone: user.phone,
-            role: user.role,
-            storeId,
-            position
+            role: roleName,
+            roleId: user.role, // keeping roleId for compatibility
+            permissions,
+            storeId: user.storeId,
+            position: user.position
         }
     });
 };
@@ -74,14 +71,20 @@ exports.registerUser = async (req, res, next) => {
             });
         }
 
+        const Role = require('../models/roleSchema');
+        const customerRole = await Role.findOne({ name: 'customer' });
+
         // Create user
         const user = await User.create({
             name,
             email,
             phone,
             password,
-            role: 'customer'
+            role: customerRole ? customerRole._id : null
         });
+
+        // Populate role for sendToken
+        if (customerRole) user.role = customerRole;
 
         // Send token
         await sendToken(user, 201, res);
@@ -104,7 +107,7 @@ exports.loginUser = async (req, res, next) => {
         }
 
         // Find user and select password
-        const user = await User.findOne({ email }).select('+password');
+        const user = await User.findOne({ email }).select('+password').populate('role');
         if (!user) {
             return res.status(401).json({
                 status: false,
@@ -160,10 +163,10 @@ exports.logoutUser = async (req, res, next) => {
 // GET CURRENT USER
 exports.getCurrentUser = async (req, res, next) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user.id).populate('role');
         res.status(200).json({
             status: true,
-            data: user
+            user: user
         });
     } catch (error) {
         next(error);
@@ -201,12 +204,16 @@ exports.googleLogin = async (req, res, next) => {
             // Generate a random password for google users
             const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
 
+            const Role = require('../models/roleSchema');
+            const customerRole = await Role.findOne({ name: 'customer' });
+
             user = await User.create({
                 name,
                 email,
                 password: randomPassword,
-                role: 'customer'
+                role: customerRole ? customerRole._id : null
             });
+            if (customerRole) user.role = customerRole;
         } else {
             // If user exists, check if active
             if (user.isActive === false) {

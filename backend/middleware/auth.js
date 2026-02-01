@@ -30,13 +30,39 @@ exports.isAuthenticatedUser = async (req, res, next) => {
 
 exports.authorizeRoles = (...roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
+        // Check if role is object (new) or string (old)
+        const userRole = req.user.role && req.user.role.name ? req.user.role.name : req.user.role;
+
+        if (!roles.includes(userRole)) {
             return res.status(403).json({
                 status: false,
                 message: `Chỉ có ${roles.join(', ')} mới có quyền truy cập`
             });
         }
         next();
+    };
+};
+
+exports.authorizePermission = (permission) => {
+    return (req, res, next) => {
+        const userRole = req.user.role; // This is the populated role object from authController.getCurrentUser / login
+        const roleName = userRole?.name || userRole; // Handle if it's just a string string (legacy)
+
+        // Admin always has access
+        if (roleName === 'admin') {
+            return next();
+        }
+
+        const userPermissions = userRole?.permissions || [];
+
+        if (userPermissions.includes(permission)) {
+            return next();
+        }
+
+        return res.status(403).json({
+            status: false,
+            message: `Bạn không có quyền thực hiện hành động này. Cần quyền: ${permission}`
+        });
     };
 };
 

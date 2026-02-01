@@ -1,28 +1,13 @@
 const User = require('../models/userSchema');
-const Staff = require('../models/staffSchema');
 
 // GET USER PROFILE
 exports.getUserProfile = async (req, res, next) => {
     try {
         const user = await User.findById(req.user.id);
-        let storeId = null;
-        let position = null;
-
-        if (user.role !== 'customer') {
-            const staff = await Staff.findOne({ userId: user._id });
-            if (staff) {
-                storeId = staff.storeId;
-                position = staff.position;
-            }
-        }
 
         res.status(200).json({
             status: true,
-            data: {
-                ...user._doc,
-                storeId,
-                position
-            }
+            data: user
         });
     } catch (error) {
         next(error);
@@ -202,7 +187,7 @@ exports.deleteAddress = async (req, res, next) => {
 // ADMIN: GET ALL USERS
 exports.getAllUsers = async (req, res, next) => {
     try {
-        const users = await User.find();
+        const users = await User.find().populate('role');
         res.status(200).json({
             status: true,
             data: users
@@ -215,7 +200,7 @@ exports.getAllUsers = async (req, res, next) => {
 // ADMIN: GET USER BY ID
 exports.getUserById = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).populate('role');
         if (!user) {
             return res.status(404).json({
                 status: false,
@@ -235,13 +220,21 @@ exports.getUserById = async (req, res, next) => {
 exports.createUser = async (req, res, next) => {
     try {
         const { name, email, password, role, phone } = req.body;
+        const Role = require('../models/roleSchema');
+        const roleObj = await Role.findOne({ name: role });
+
         const user = await User.create({
             name,
             email,
             password,
-            role,
+            role: roleObj ? roleObj._id : null,
             phone
         });
+
+        if (roleObj) {
+            // Populate custom field if needed for response
+            user.role = roleObj;
+        }
 
         res.status(201).json({
             status: true,
@@ -263,6 +256,17 @@ exports.updateUser = async (req, res, next) => {
             phone: req.body.phone,
             isActive: req.body.isActive
         };
+
+        // If role changed, find the role object
+        if (req.body.role) {
+            const Role = require('../models/roleSchema');
+            const roleObj = await Role.findOne({ name: req.body.role });
+            if (roleObj) {
+                newData.role = roleObj._id;
+            } else {
+                delete newData.role; // don't update if valid role not found or handle error
+            }
+        }
 
         // Update password only if provided
         if (req.body.password && req.body.password !== '') {

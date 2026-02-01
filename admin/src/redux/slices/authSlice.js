@@ -91,12 +91,19 @@ const authSlice = createSlice({
                 localStorage.removeItem('token');
             })
             // Logout
-            .addCase(logout.fulfilled, (state) => {
-                state.loading = false;
+            .addCase(logout.pending, (state) => {
+                state.loading = true;
                 state.isAuthenticated = false;
                 state.user = null;
                 state.token = null;
                 localStorage.removeItem('token');
+            })
+            .addCase(logout.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(logout.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
             });
     }
 });

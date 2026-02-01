@@ -43,9 +43,9 @@ const userSchema = new Schema({
         type: Date
     },
     role: {
-        type: String,
-        enum: ['customer', 'admin', 'staff', 'cashier', 'receptionist', 'chef', 'warehouse'],
-        default: 'customer'
+        type: Schema.Types.ObjectId,
+        ref: 'Role',
+        required: true
     },
     isActive: {
         type: Boolean,
@@ -61,6 +61,36 @@ const userSchema = new Schema({
     updatedAt: {
         type: Date,
         default: Date.now
+    },
+    // Staff related fields (optional for customers)
+    storeId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Store'
+    },
+    position: {
+        type: String,
+        enum: ['manager', 'cashier', 'kitchen', 'delivery', 'customer-service']
+    },
+    startDate: {
+        type: Date
+    },
+    endDate: Date,
+    salary: Number,
+    workSchedule: [
+        {
+            day: {
+                type: String,
+                enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+            },
+            startTime: String,
+            endTime: String,
+            _id: false
+        }
+    ],
+    performanceRating: {
+        type: Number,
+        min: 1,
+        max: 5
     }
 });
 
