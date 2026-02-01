@@ -8,6 +8,7 @@ import storeReducer from './slices/storeSlice';
 import categoryReducer from './slices/categorySlice';
 import userReducer from './slices/userSlice';
 import roleReducer from './slices/roleSlice';
+import couponReducer from './slices/couponSlice';
 
 export const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
         stores: storeReducer,
         categories: categoryReducer,
         users: userReducer,
-        roles: roleReducer
+        roles: roleReducer,
+        coupons: couponReducer
     },
 });

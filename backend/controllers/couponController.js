@@ -14,7 +14,7 @@ exports.createCoupon = async (req, res, next) => {
 
 exports.getAllCoupons = async (req, res, next) => {
     try {
-        const coupons = await Coupon.find({ isActive: true });
+        const coupons = await Coupon.find();
         res.json({
             status: true,
             data: coupons

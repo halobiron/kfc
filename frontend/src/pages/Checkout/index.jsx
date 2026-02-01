@@ -122,6 +122,31 @@ const Checkout = () => {
             return;
         }
 
+        if (!coupon.isActive) {
+            setCouponError('Mã khuyến mãi đã ngưng hoạt động!');
+            setAppliedCoupon(null);
+            return;
+        }
+
+        const now = new Date();
+        if (coupon.startDate && new Date(coupon.startDate) > now) {
+            setCouponError('Mã khuyến mãi chưa đến đợt sử dụng!');
+            setAppliedCoupon(null);
+            return;
+        }
+
+        if (coupon.expiryDate && new Date(coupon.expiryDate) < now) {
+            setCouponError('Mã khuyến mãi đã hết hạn!');
+            setAppliedCoupon(null);
+            return;
+        }
+
+        if (coupon.maxUsage <= coupon.usedCount) {
+            setCouponError('Mã khuyến mãi đã hết lượt sử dụng!');
+            setAppliedCoupon(null);
+            return;
+        }
+
         if (subtotal < coupon.minOrder) {
             setCouponError(`Đơn tối thiểu để áp dụng là ${formatCurrency(coupon.minOrder)}`);
             setAppliedCoupon(null);

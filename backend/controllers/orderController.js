@@ -64,6 +64,21 @@ exports.createOrder = async (req, res, next) => {
             if (!coupon.isActive) {
                 return res.status(400).json({
                     status: false,
+                    message: 'Mã khuyến mãi đã ngưng hoạt động'
+                });
+            }
+
+            const now = new Date();
+            if (coupon.startDate && new Date(coupon.startDate) > now) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'Mã khuyến mãi chưa đến đợt sử dụng'
+                });
+            }
+
+            if (coupon.expiryDate && new Date(coupon.expiryDate) < now) {
+                return res.status(400).json({
+                    status: false,
                     message: 'Mã khuyến mãi đã hết hạn'
                 });
             }

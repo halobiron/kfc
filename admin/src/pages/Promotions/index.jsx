@@ -1,101 +1,73 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { FiPlus, FiEdit2, FiTrash2, FiGift, FiPercent } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import StatCard from '../../components/StatCard';
+import { getAllCoupons, createCoupon, updateCoupon, deleteCoupon, clearErrors, resetSuccess } from '../../redux/slices/couponSlice';
 import './promotions.css';
 
 const Promotions = () => {
-  // Mock data - sẽ thay bằng Redux sau
-  const [promotions, setPromotions] = useState([
-    {
-      _id: '1',
-      code: 'KFCVIP50',
-      description: 'Giảm 50k cho đơn từ 200k',
-      discountType: 'fixed',
-      discountValue: 50000,
-      minOrderValue: 200000,
-      maxUsage: 100,
-      usedCount: 45,
-      startDate: '2024-01-01',
-      endDate: '2024-12-31',
-      isActive: true
-    },
-    {
-      _id: '2',
-      code: 'COMBO30',
-      description: 'Giảm 30% cho combo từ 300k',
-      discountType: 'percent',
-      discountValue: 30,
-      minOrderValue: 300000,
-      maxUsage: 200,
-      usedCount: 150,
-      startDate: '2024-06-01',
-      endDate: '2024-06-30',
-      isActive: true
-    },
-    {
-      _id: '3',
-      code: 'FREESHIP',
-      description: 'Miễn phí vận chuyển cho đơn từ 150k',
-      discountType: 'freeship',
-      discountValue: 0,
-      minOrderValue: 150000,
-      maxUsage: 500,
-      usedCount: 320,
-      startDate: '2024-01-01',
-      endDate: '2024-12-31',
-      isActive: true
-    },
-    {
-      _id: '4',
-      code: 'WEEKEND20',
-      description: 'Giảm 20% cuối tuần',
-      discountType: 'percent',
-      discountValue: 20,
-      minOrderValue: 100000,
-      maxUsage: 300,
-      usedCount: 280,
-      startDate: '2024-01-01',
-      endDate: '2024-03-31',
-      isActive: false
-    },
-  ]);
+  const dispatch = useDispatch();
+  const { coupons, loading, error, success } = useSelector((state) => state.coupons);
 
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentPromotion, setCurrentPromotion] = useState({
     code: '',
+    title: '',
     description: '',
-    discountType: 'percent',
-    discountValue: 0,
-    minOrderValue: 0,
+    type: 'percent', // fixed, percent, shipping
+    discount: 0,
+    minOrder: 0,
     maxUsage: 100,
     startDate: '',
-    endDate: '',
+    expiryDate: '',
     isActive: true
   });
+
+  useEffect(() => {
+    dispatch(getAllCoupons());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+    if (success) {
+      toast.success(editMode ? 'Cập nhật khuyến mãi thành công!' : 'Thêm khuyến mãi thành công!');
+      dispatch(resetSuccess());
+      setShowModal(false);
+      setEditMode(false);
+    }
+  }, [error, success, dispatch, editMode]);
 
   const discountTypeLabels = {
     percent: 'Giảm %',
     fixed: 'Giảm tiền',
-    freeship: 'Free ship'
+    shipping: 'Free ship'
   };
 
   const handleOpenModal = (promotion = null) => {
     if (promotion) {
       setEditMode(true);
-      setCurrentPromotion(promotion);
+      setCurrentPromotion({
+        ...promotion,
+        startDate: promotion.startDate ? promotion.startDate.split('T')[0] : '',
+        expiryDate: promotion.expiryDate ? promotion.expiryDate.split('T')[0] : ''
+      });
     } else {
       setEditMode(false);
       setCurrentPromotion({
         code: '',
+        title: '',
         description: '',
-        discountType: 'percent',
-        discountValue: 0,
-        minOrderValue: 0,
+        type: 'percent',
+        discount: 0,
+        minOrder: 0,
         maxUsage: 100,
         startDate: '',
-        endDate: '',
+        expiryDate: '',
         isActive: true
       });
     }
@@ -110,33 +82,24 @@ const Promotions = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editMode) {
-      setPromotions(promotions.map(promo =>
-        promo._id === currentPromotion._id ? { ...currentPromotion, usedCount: promo.usedCount } : promo
-      ));
-      toast.success('Cập nhật khuyến mãi thành công!');
+      dispatch(updateCoupon({ id: currentPromotion._id, couponData: currentPromotion }));
     } else {
-      const newPromotion = {
-        ...currentPromotion,
-        _id: String(promotions.length + 1),
-        usedCount: 0
-      };
-      setPromotions([...promotions, newPromotion]);
-      toast.success('Thêm khuyến mãi thành công!');
+      dispatch(createCoupon(currentPromotion));
     }
-    handleCloseModal();
   };
 
   const handleDelete = (id) => {
     if (window.confirm('Bạn có chắc muốn xóa khuyến mãi này?')) {
-      setPromotions(promotions.filter(promo => promo._id !== id));
-      toast.success('Xóa khuyến mãi thành công!');
+      dispatch(deleteCoupon(id));
+      toast.info('Đang xóa khuyến mãi...');
     }
   };
 
-  const handleToggleActive = (id) => {
-    setPromotions(promotions.map(promo =>
-      promo._id === id ? { ...promo, isActive: !promo.isActive } : promo
-    ));
+  const handleToggleActive = (promotion) => {
+    dispatch(updateCoupon({
+      id: promotion._id,
+      couponData: { isActive: !promotion.isActive }
+    }));
   };
 
   const formatCurrency = (amount) => {
@@ -145,6 +108,11 @@ const Promotions = () => {
 
   const getUsagePercentage = (used, max) => {
     return Math.round((used / max) * 100);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString('vi-VN');
   };
 
   return (
@@ -166,7 +134,7 @@ const Promotions = () => {
           <div className="col-md-4">
             <StatCard
               label="Tổng khuyến mãi"
-              value={promotions.length}
+              value={coupons.length}
               icon={<FiGift size={24} />}
               color="primary"
             />
@@ -174,7 +142,7 @@ const Promotions = () => {
           <div className="col-md-4">
             <StatCard
               label="Đang hoạt động"
-              value={promotions.filter(p => p.isActive).length}
+              value={coupons.filter(p => p.isActive).length}
               icon={<FiGift size={24} />}
               color="success"
             />
@@ -182,7 +150,7 @@ const Promotions = () => {
           <div className="col-md-4">
             <StatCard
               label="Lượt sử dụng"
-              value={promotions.reduce((sum, p) => sum + p.usedCount, 0)}
+              value={coupons.reduce((sum, p) => sum + (p.usedCount || 0), 0)}
               icon={<FiPercent size={24} />}
               color="info"
             />
@@ -198,7 +166,7 @@ const Promotions = () => {
                 <tr>
                   <th scope="col" className="ps-4">#</th>
                   <th scope="col">Mã khuyến mãi</th>
-                  <th scope="col">Mô tả</th>
+                  <th scope="col">Tiêu đề</th>
                   <th scope="col" className="text-center">Loại giảm giá</th>
                   <th scope="col" className="text-center">Giá trị</th>
                   <th scope="col" className="text-center">Lượt dùng</th>
@@ -208,74 +176,79 @@ const Promotions = () => {
                 </tr>
               </thead>
               <tbody>
-                {promotions.map((promotion, index) => {
-                  const usagePercent = getUsagePercentage(promotion.usedCount, promotion.maxUsage);
-                  return (
-                    <tr key={promotion._id}>
-                      <td className="ps-4 fw-bold">PRO{1000 + index + 1}</td>
-                      <td>
-                        <div className="d-flex align-items-center gap-2">
-                          <FiGift className="text-primary" />
-                          <span className="fw-bold">{promotion.code}</span>
-                        </div>
-                      </td>
-                      <td className="text-muted">{promotion.description}</td>
-                      <td className="text-center">
-                        <span className="badge bg-light text-dark">
-                          {discountTypeLabels[promotion.discountType]}
-                        </span>
-                      </td>
-                      <td className="text-center fw-bold text-danger">
-                        {promotion.discountType === 'percent' && `${promotion.discountValue}%`}
-                        {promotion.discountType === 'fixed' && formatCurrency(promotion.discountValue)}
-                        {promotion.discountType === 'freeship' && 'Free ship'}
-                      </td>
-                      <td className="text-center">
-                        <div className="d-flex flex-column align-items-center">
-                          <small className="text-muted">
-                            {promotion.usedCount}/{promotion.maxUsage}
-                          </small>
-                          <div className="progress" style={{ width: '80px', height: '6px' }}>
-                            <div
-                              className={`progress-bar ${usagePercent >= 80 ? 'bg-danger' : usagePercent >= 50 ? 'bg-warning' : 'bg-success'}`}
-                              style={{ width: `${usagePercent}%` }}
-                            ></div>
+                {loading ? (
+                  <tr><td colSpan="9" className="text-center py-4">Đang tải dữ liệu...</td></tr>
+                ) : coupons.length === 0 ? (
+                  <tr><td colSpan="9" className="text-center py-4">Chưa có khuyến mãi nào</td></tr>
+                ) : (
+                  coupons.map((promotion, index) => {
+                    const usagePercent = getUsagePercentage(promotion.usedCount || 0, promotion.maxUsage);
+                    return (
+                      <tr key={promotion._id}>
+                        <td className="ps-4 fw-bold">{index + 1}</td>
+                        <td>
+                          <div className="d-flex align-items-center gap-2">
+                            <FiGift className="text-primary" />
+                            <span className="fw-bold">{promotion.code}</span>
                           </div>
-                        </div>
-                      </td>
-                      <td className="text-center">
-                        <small className="text-muted d-block">{promotion.startDate}</small>
-                        <small className="text-muted">→ {promotion.endDate}</small>
-                      </td>
-                      <td className="text-center">
-                        <div className="form-check form-switch d-flex justify-content-center">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={promotion.isActive}
-                            onChange={() => handleToggleActive(promotion._id)}
-                          />
-                        </div>
-                      </td>
-                      <td className="text-end pe-4">
-                        <button
-                          className="btn-action btn-edit border-0 d-inline-flex align-items-center"
-                          onClick={() => handleOpenModal(promotion)}
-                        >
-                          <FiEdit2 style={{ marginRight: '4px' }} />
-                          Sửa
-                        </button>
-                        <button
-                          className="btn-action btn-delete border-0 d-inline-flex align-items-center"
-                          onClick={() => handleDelete(promotion._id)}
-                        >
-                          <FiTrash2 style={{ marginRight: '4px' }} />
-                          Xóa
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                        </td>
+                        <td className="text-muted">{promotion.title}</td>
+                        <td className="text-center">
+                          <span className="badge bg-light text-dark">
+                            {discountTypeLabels[promotion.type]}
+                          </span>
+                        </td>
+                        <td className="text-center fw-bold text-danger">
+                          {promotion.type === 'percent' && `${promotion.discount}%`}
+                          {promotion.type === 'fixed' && formatCurrency(promotion.discount)}
+                          {promotion.type === 'shipping' && 'Free ship'}
+                        </td>
+                        <td className="text-center">
+                          <div className="d-flex flex-column align-items-center">
+                            <small className="text-muted">
+                              {promotion.usedCount || 0}/{promotion.maxUsage}
+                            </small>
+                            <div className="progress" style={{ width: '80px', height: '6px' }}>
+                              <div
+                                className={`progress-bar ${usagePercent >= 80 ? 'bg-danger' : usagePercent >= 50 ? 'bg-warning' : 'bg-success'}`}
+                                style={{ width: `${usagePercent}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="text-center">
+                          <small className="text-muted d-block">{formatDate(promotion.startDate)}</small>
+                          <small className="text-muted">→ {formatDate(promotion.expiryDate)}</small>
+                        </td>
+                        <td className="text-center">
+                          <div className="form-check form-switch d-flex justify-content-center">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              checked={promotion.isActive}
+                              onChange={() => handleToggleActive(promotion)}
+                            />
+                          </div>
+                        </td>
+                        <td className="text-end pe-4">
+                          <button
+                            className="btn-action btn-edit border-0 d-inline-flex align-items-center"
+                            onClick={() => handleOpenModal(promotion)}
+                          >
+                            <FiEdit2 style={{ marginRight: '4px' }} />
+                            Sửa
+                          </button>
+                          <button
+                            className="btn-action btn-delete border-0 d-inline-flex align-items-center"
+                            onClick={() => handleDelete(promotion._id)}
+                          >
+                            <FiTrash2 style={{ marginRight: '4px' }} />
+                            Xóa
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  }))}
               </tbody>
             </table>
           </div>
@@ -305,19 +278,31 @@ const Promotions = () => {
                         onChange={(e) => setCurrentPromotion({ ...currentPromotion, code: e.target.value.toUpperCase() })}
                         required
                         placeholder="VD: KFCVIP50"
+                        disabled={editMode} // Code is typically unique/immutable
+                      />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">Tiêu đề <span className="text-danger">*</span></label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={currentPromotion.title}
+                        onChange={(e) => setCurrentPromotion({ ...currentPromotion, title: e.target.value })}
+                        required
+                        placeholder="VD: Ưu đãi mùa hè"
                       />
                     </div>
                     <div className="col-md-6 mb-3">
                       <label className="form-label">Loại giảm giá <span className="text-danger">*</span></label>
                       <select
                         className="form-select"
-                        value={currentPromotion.discountType}
-                        onChange={(e) => setCurrentPromotion({ ...currentPromotion, discountType: e.target.value })}
+                        value={currentPromotion.type}
+                        onChange={(e) => setCurrentPromotion({ ...currentPromotion, type: e.target.value })}
                         required
                       >
                         <option value="percent">Giảm theo %</option>
                         <option value="fixed">Giảm tiền cố định</option>
-                        <option value="freeship">Miễn phí vận chuyển</option>
+                        <option value="shipping">Miễn phí vận chuyển (Shipping)</option>
                       </select>
                     </div>
                   </div>
@@ -337,19 +322,19 @@ const Promotions = () => {
                   <div className="row">
                     <div className="col-md-6 mb-3">
                       <label className="form-label">
-                        Giá trị giảm {currentPromotion.discountType === 'percent' && '(%)'}
-                        {currentPromotion.discountType === 'fixed' && '(VNĐ)'}
-                        {currentPromotion.discountType !== 'freeship' && <span className="text-danger"> *</span>}
+                        Giá trị giảm {currentPromotion.type === 'percent' && '(%)'}
+                        {currentPromotion.type === 'fixed' && '(VNĐ)'}
+                        {currentPromotion.type !== 'shipping' && <span className="text-danger"> *</span>}
                       </label>
                       <input
                         type="number"
                         className="form-control"
-                        value={currentPromotion.discountValue}
-                        onChange={(e) => setCurrentPromotion({ ...currentPromotion, discountValue: Number(e.target.value) })}
-                        disabled={currentPromotion.discountType === 'freeship'}
-                        required={currentPromotion.discountType !== 'freeship'}
+                        value={currentPromotion.discount}
+                        onChange={(e) => setCurrentPromotion({ ...currentPromotion, discount: Number(e.target.value) })}
+                        disabled={currentPromotion.type === 'shipping'}
+                        required={currentPromotion.type !== 'shipping'}
                         min="0"
-                        max={currentPromotion.discountType === 'percent' ? 100 : undefined}
+                        max={currentPromotion.type === 'percent' ? 100 : undefined}
                       />
                     </div>
                     <div className="col-md-6 mb-3">
@@ -357,8 +342,8 @@ const Promotions = () => {
                       <input
                         type="number"
                         className="form-control"
-                        value={currentPromotion.minOrderValue}
-                        onChange={(e) => setCurrentPromotion({ ...currentPromotion, minOrderValue: Number(e.target.value) })}
+                        value={currentPromotion.minOrder}
+                        onChange={(e) => setCurrentPromotion({ ...currentPromotion, minOrder: Number(e.target.value) })}
                         required
                         min="0"
                       />
@@ -392,8 +377,8 @@ const Promotions = () => {
                       <input
                         type="date"
                         className="form-control"
-                        value={currentPromotion.endDate}
-                        onChange={(e) => setCurrentPromotion({ ...currentPromotion, endDate: e.target.value })}
+                        value={currentPromotion.expiryDate}
+                        onChange={(e) => setCurrentPromotion({ ...currentPromotion, expiryDate: e.target.value })}
                         required
                       />
                     </div>

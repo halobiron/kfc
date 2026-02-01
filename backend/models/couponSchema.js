@@ -46,6 +46,9 @@ const couponSchema = new Schema({
         type: Boolean,
         default: true
     },
+    startDate: {
+        type: Date
+    },
     expiryDate: {
         type: Date
     }
