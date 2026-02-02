@@ -1,6 +1,6 @@
 import React from 'react'
-import slide1 from '../../assets/images/slide1.png'
-import slide2 from '../../assets/images/slide2.png'
+import slide1 from '../../assets/images/banners/slide1.png'
+import slide2 from '../../assets/images/banners/slide2.png'
 
 const Slider = () => {
     return (

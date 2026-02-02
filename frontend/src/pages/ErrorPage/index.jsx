@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/Layout';
-import kfcerror from '../../assets/images/kfc-error.jpg';
+import kfcerror from '../../assets/images/common/kfc-error.jpg';
 import './ErrorPage.css';
 
 const ErrorPage = ({

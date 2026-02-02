@@ -52,7 +52,7 @@ const createKfcIcon = (isActive, index) => L.divIcon({
     html: `<div style="
             width: 50px;
             height: 65px;
-            background-image: url('${require('../../assets/images/sprite.png')}');
+            background-image: url('${require('../../assets/images/common/sprite.png')}');
             background-repeat: no-repeat;
             background-position: ${isActive ? '-120px -50px' : '-70px -50px'};
             background-color: transparent;

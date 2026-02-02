@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../../redux/slices/authSlice';
 import authApi from '../../api/authApi';
 import './register.css'
-import signinImg from '../../assets/images/signin.jpg'
+import signinImg from '../../assets/images/common/auth-bg.jpg'
 
 const Register = () => {
     const dispatch = useDispatch();

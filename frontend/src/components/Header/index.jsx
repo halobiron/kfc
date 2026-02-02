@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import logo from '../../assets/images/KFC-Logo.png';
+import logo from '../../assets/images/logos/kfc-logo.png';
 
 import './header.css';
 
