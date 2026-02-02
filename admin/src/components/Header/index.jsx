@@ -1,7 +1,7 @@
 import React from 'react'
 import Nav from '../Nav'
 import { FiSearch, FiLogOut } from 'react-icons/fi';
-import kfcLogo from '@shared-assets/img/footer-logo.png';
+import kfcLogo from '@shared-assets/images/footer-logo.png';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';

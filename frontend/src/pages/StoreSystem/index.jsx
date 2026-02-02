@@ -52,7 +52,7 @@ const createKfcIcon = (isActive, index) => L.divIcon({
     html: `<div style="
             width: 50px;
             height: 65px;
-            background-image: url('${require('../../assets/img/sprite.png')}');
+            background-image: url('${require('../../assets/images/sprite.png')}');
             background-repeat: no-repeat;
             background-position: ${isActive ? '-120px -50px' : '-70px -50px'};
             background-color: transparent;
@@ -113,14 +113,14 @@ const StoreSystem = () => {
         };
 
         const fetchSavedAddresses = async () => {
-             try {
-                 const response = await axiosClient.get('/users/profile');
-                 if (response.data?.status) {
-                     setSavedAddresses(response.data.data.addresses || []);
-                 }
-             } catch (error) {
-                 // Ignore if not logged in
-             }
+            try {
+                const response = await axiosClient.get('/users/profile');
+                if (response.data?.status) {
+                    setSavedAddresses(response.data.data.addresses || []);
+                }
+            } catch (error) {
+                // Ignore if not logged in
+            }
         };
 
         fetchStores();
@@ -142,7 +142,7 @@ const StoreSystem = () => {
                 setMapCenter({ lat, lng });
                 setSelectedCity('all'); // Show all stores to find nearest across data
                 setSearchTerm('');
-                
+
                 // Reverse Geocoding to show address
                 try {
                     const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
@@ -182,13 +182,13 @@ const StoreSystem = () => {
                 lat = selected.latitude;
                 lng = selected.longitude;
             } else {
-                 // Fallback fetch if no coords
-                 const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(selected.fullAddress)}&countrycodes=vn&limit=1`);
-                 const data = await res.json();
-                 if (data?.length > 0) {
-                     lat = parseFloat(data[0].lat);
-                     lng = parseFloat(data[0].lon);
-                 }
+                // Fallback fetch if no coords
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(selected.fullAddress)}&countrycodes=vn&limit=1`);
+                const data = await res.json();
+                if (data?.length > 0) {
+                    lat = parseFloat(data[0].lat);
+                    lng = parseFloat(data[0].lon);
+                }
             }
 
             if (lat && lng) {
@@ -199,7 +199,7 @@ const StoreSystem = () => {
             } else {
                 setLocationError("Không tìm thấy tọa độ địa chỉ này.");
             }
-        } catch(e) {
+        } catch (e) {
             setLocationError("Lỗi khi tìm vị trí.");
         } finally {
             setLoadingLocation(false);
@@ -209,7 +209,7 @@ const StoreSystem = () => {
 
     const handleSearch = async (e) => {
         if (e.key !== 'Enter' && e.type !== 'click') return;
-        
+
         e.preventDefault();
         if (!searchTerm.trim()) return;
 
@@ -253,8 +253,8 @@ const StoreSystem = () => {
 
         if (!userLocation && searchTerm) {
             const term = searchTerm.toLowerCase();
-            results = results.filter(s => 
-                s.name.toLowerCase().includes(term) || 
+            results = results.filter(s =>
+                s.name.toLowerCase().includes(term) ||
                 s.address.toLowerCase().includes(term)
             );
         }
@@ -318,8 +318,8 @@ const StoreSystem = () => {
                         <CustomSelect
                             options={[
                                 { value: 'all', label: 'Tất cả khu vực' },
-                                { 
-                                    label: 'Tìm quanh vị trí', 
+                                {
+                                    label: 'Tìm quanh vị trí',
                                     options: [
                                         { value: 'current', label: 'Vị trí hiện tại (GPS)' },
                                         ...savedAddresses.map((addr, idx) => ({
