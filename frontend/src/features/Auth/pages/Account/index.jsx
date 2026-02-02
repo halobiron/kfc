@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, updateUserSuccess } from '../../redux/slices/authSlice';
-import axiosClient from '../../api/axiosClient';
-import CustomSelect from '../../components/CustomSelect';
+import { logout, updateUserSuccess } from '../../authSlice';
+import axiosClient from '../../../../api/axiosClient';
+import CustomSelect from '../../../../components/CustomSelect';
 import './Account.css';
 
 const Account = () => {

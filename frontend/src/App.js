@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
 import './App.css';
 import Home from './pages/Home';
-import Product from './pages/Product';
-import ProductDetail from './pages/ProductDetail';
-import Cart from './pages/Cart';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Account from './pages/Account';
-import Checkout from './pages/Checkout';
-import StoreSystem from './pages/StoreSystem';
+import Product from './features/Product/pages/Product';
+import ProductDetail from './features/Product/pages/ProductDetail';
+import Cart from './features/Cart/pages/Cart';
+import Login from './features/Auth/pages/Login';
+import Register from './features/Auth/pages/Register';
+import Account from './features/Auth/pages/Account';
+import Checkout from './features/Cart/pages/Checkout';
+import StoreSystem from './features/Store/pages/StoreSystem';
 import TrackOrder from './pages/TrackOrder';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfUse from './pages/TermsOfUse';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorPage from './pages/ErrorPage';
-import OrderSuccess from './pages/OrderSuccess';
+import OrderSuccess from './features/Cart/pages/OrderSuccess';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -28,7 +28,7 @@ import { AnimatePresence } from 'framer-motion';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useDispatch } from 'react-redux';
-import { loadUserStart, loadUserSuccess, loadUserFailure } from './redux/slices/authSlice';
+import { loadUserStart, loadUserSuccess, loadUserFailure } from './features/Auth/authSlice';
 import authApi from './api/authApi';
 
 import AnimatedPage from './components/AnimatedPage';

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import storeApi from '../../api/storeApi';
-import axiosClient from '../../api/axiosClient';
-import CustomSelect from '../../components/CustomSelect';
+import storeApi from '../../../../api/storeApi';
+import axiosClient from '../../../../api/axiosClient';
+import CustomSelect from '../../../../components/CustomSelect';
 import './StoreSystem.css';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -52,7 +52,7 @@ const createKfcIcon = (isActive, index) => L.divIcon({
     html: `<div style="
             width: 50px;
             height: 65px;
-            background-image: url('${require('../../assets/images/common/sprite.png')}');
+            background-image: url("../../../../assets/images/common/sprite.png");
             background-repeat: no-repeat;
             background-position: ${isActive ? '-120px -50px' : '-70px -50px'};
             background-color: transparent;

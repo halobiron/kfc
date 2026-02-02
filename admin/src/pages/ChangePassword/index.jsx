@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-import { changePassword } from '../../redux/slices/authSlice';
+import { changePassword } from '../../features/Auth/authSlice';
 
 const ChangePassword = () => {
     const dispatch = useDispatch();

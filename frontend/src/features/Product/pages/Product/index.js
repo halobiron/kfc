@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import Card from '../../components/Card';
+import Card from '../../components/ProductCard';
 
 import './product.css';
-import AnimatedPage from '../../components/AnimatedPage';
-import { getAllProducts } from '../../redux/slices/productSlice';
-import { getAllCategories } from '../../redux/slices/categorySlice';
+import AnimatedPage from '../../../../components/AnimatedPage';
+import { getAllProducts } from '../../productSlice';
+import { getAllCategories } from '../../categorySlice';
 
 const Product = () => {
     const dispatch = useDispatch();

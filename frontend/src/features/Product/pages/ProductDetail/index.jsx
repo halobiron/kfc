@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import './product-detail.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../../redux/slices/cartSlice';
-import { getProductById } from '../../redux/slices/productSlice';
+import { addToCart } from '../../../Cart/cartSlice';
+import { getProductById } from '../../productSlice';
 import { useParams } from 'react-router-dom';
 
 const ProductDetail = () => {

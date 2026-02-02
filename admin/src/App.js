@@ -27,7 +27,7 @@ import {
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadUser } from './redux/slices/authSlice';
+import { loadUser } from './features/Auth/authSlice';
 
 function App() {
   const dispatch = useDispatch();

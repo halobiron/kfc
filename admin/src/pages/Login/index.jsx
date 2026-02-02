@@ -3,7 +3,7 @@ import './login.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, clearErrors } from '../../redux/slices/authSlice';
+import { login, clearErrors } from '../../features/Auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 

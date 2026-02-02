@@ -3,7 +3,7 @@ import Nav from '../Nav'
 import { FiSearch, FiLogOut } from 'react-icons/fi';
 import kfcLogo from '@shared-assets/images/logos/footer-logo.png';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../redux/slices/authSlice';
+import { logout } from '../../features/Auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {

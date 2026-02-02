@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import Card from '../../components/Card'
+import Card from '../../features/Product/components/ProductCard'
 
 import Slider from '../../components/Slider'
 
-import { getAllProducts } from '../../redux/slices/productSlice'
-import { getAllCategories } from '../../redux/slices/categorySlice'
-import { getAllCoupons } from '../../redux/slices/couponSlice'
+import { getAllProducts } from '../../features/Product/productSlice'
+import { getAllCategories } from '../../features/Product/categorySlice'
+import { getAllCoupons } from '../../features/Cart/couponSlice'
 import './Home.css'
 
 const Home = () => {

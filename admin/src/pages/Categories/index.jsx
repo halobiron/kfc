@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiPlus, FiEdit2, FiTrash2, FiTag } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllCategories, addNewCategory, updateCategory, deleteCategory } from '../../redux/slices/categorySlice';
+import { getAllCategories, addNewCategory, updateCategory, deleteCategory } from '../../features/Product/categorySlice';
 import StatCard from '../../components/StatCard';
 import './categories.css';
 

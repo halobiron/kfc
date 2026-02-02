@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import axiosClient from '../../api/axiosClient';
-import { clearCart } from '../../redux/slices/cartSlice';
+import axiosClient from '../../../../api/axiosClient';
+import { clearCart } from '../../cartSlice';
 import './OrderSuccess.css';
 
 const OrderSuccess = () => {

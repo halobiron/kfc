@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { addToCart } from '../../redux/slices/cartSlice';
+import { addToCart } from '../../../Cart/cartSlice';
 import './card.css';
 
 const Card = ({ product }) => {

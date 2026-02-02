@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { addNewProduct } from '../../redux/slices/productSlice';
+import { addNewProduct } from '../../features/Product/productSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
 const AddModal = ({ setShowModal }) => {

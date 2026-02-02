@@ -1,7 +1,7 @@
 import React from 'react'
 import './modal.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateQuantity, removeFromCart } from '../../redux/slices/cartSlice';
+import { updateQuantity, removeFromCart } from '../../features/Cart/cartSlice';
 
 const Modal = ({closeModal}) => {
   const { items, totalQuantity, totalPrice } = useSelector(state => state.cart);

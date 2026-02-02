@@ -2,12 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import axiosClient from '../../api/axiosClient';
-import CustomSelect from '../../components/CustomSelect';
+import axiosClient from '../../../../api/axiosClient';
+import CustomSelect from '../../../../components/CustomSelect';
 
 import './Checkout.css';
-import { getAllCoupons } from '../../redux/slices/couponSlice';
-import { clearCart } from '../../redux/slices/cartSlice';
+import { getAllCoupons } from '../../couponSlice';
+import { clearCart } from '../../cartSlice';
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
