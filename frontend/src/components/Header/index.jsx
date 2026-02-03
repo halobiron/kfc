@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/images/logos/kfc-logo.png';
+import { BsGeoAlt, BsPersonCircle, BsShop, BsTruck, BsBag } from 'react-icons/bs';
 
 import './header.css';
 
@@ -49,7 +50,7 @@ const Header = () => {
                   </li>
                   <li className="nav-item">
                     <Link className="nav-link text-danger mx-2" to="/track-order">
-                      <i className="bi bi-geo-alt me-1"></i>Tra cứu đơn
+                      <BsGeoAlt className="me-1" />Tra cứu đơn
                     </Link>
                   </li>
                 </ul>
@@ -62,7 +63,7 @@ const Header = () => {
                     className="btn user-acc-btn text-dark fw-bold d-flex align-items-center justify-content-center p-0 border-0"
                     style={{ width: '36px', height: '36px' }}
                   >
-                    <i className="bi bi-person-circle" style={{ fontSize: '28px', lineHeight: '1' }}></i>
+                    <BsPersonCircle style={{ fontSize: '28px', lineHeight: '1' }} />
                   </Link>
 
                   {/* Cart Icon */}
@@ -88,15 +89,15 @@ const Header = () => {
               {/* Order Type Toggle */}
               <div className="order-type-toggle d-flex gap-3">
                 <div className="order-type-item">
-                  <i className="bi bi-shop me-1"></i>
+                  <BsShop className="me-1" />
                   Đặt Ngay
                 </div>
                 <div className="order-type-item">
-                  <i className="bi bi-truck me-1"></i>
+                  <BsTruck className="me-1" />
                   Giao Hàng
                 </div>
                 <div className="order-type-item">
-                  <i className="bi bi-bag me-1"></i>
+                  <BsBag className="me-1" />
                   Mang đi
                 </div>
               </div>

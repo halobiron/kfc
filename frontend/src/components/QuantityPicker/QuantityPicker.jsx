@@ -1,5 +1,6 @@
 import React from 'react';
 import './QuantityPicker.css';
+import { BsDash, BsPlus } from 'react-icons/bs';
 
 const QuantityPicker = ({
     quantity,
@@ -17,7 +18,7 @@ const QuantityPicker = ({
                 disabled={quantity <= min}
                 aria-label="Decrease quantity"
             >
-                <i className="bi bi-dash"></i>
+                <BsDash />
             </button>
             <div className="quantity-picker-display">
                 <span>{quantity}</span>
@@ -28,7 +29,7 @@ const QuantityPicker = ({
                 disabled={quantity >= max}
                 aria-label="Increase quantity"
             >
-                <i className="bi bi-plus"></i>
+                <BsPlus />
             </button>
         </div>
     );

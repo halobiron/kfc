@@ -1,5 +1,6 @@
 import React from 'react';
 import './floating-chat.css';
+import { BsChatDotsFill, BsMessenger } from 'react-icons/bs';
 
 const FloatingChat = () => {
     return (
@@ -12,7 +13,7 @@ const FloatingChat = () => {
                 rel="noopener noreferrer"
                 aria-label="Chat qua Zalo"
             >
-                <i className="bi bi-chat-dots-fill"></i>
+                <BsChatDotsFill />
             </a>
 
             {/* Messenger Chat */}
@@ -23,7 +24,7 @@ const FloatingChat = () => {
                 rel="noopener noreferrer"
                 aria-label="Chat qua Messenger"
             >
-                <i className="bi bi-messenger"></i>
+                <BsMessenger />
             </a>
         </div>
     );
