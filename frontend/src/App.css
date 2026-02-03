@@ -1,18 +1,5 @@
-.lead-text {
-    text-align: center;
-    margin: 24px 0;
-    border: 1px solid #ddd;
-    padding: 8px 0;
-}
-
 .error {
     color: #f00;
-}
-
-/* --- Common Auth Styles (Login/Register) --- */
-.auth-wrapper {
-    min-height: calc(100vh - 200px);
-    padding: 0 !important;
 }
 
 .auth-container {

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import slide1 from '../../assets/images/banners/slide1.png'
 import slide2 from '../../assets/images/banners/slide2.png'
 
@@ -8,10 +9,14 @@ const Slider = () => {
             <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
                 <div className="carousel-inner">
                     <div className="carousel-item active">
-                        <img src={slide1} className="d-block w-100" alt="..." />
+                        <Link to="/products">
+                            <img src={slide1} className="d-block w-100" alt="..." />
+                        </Link>
                     </div>
                     <div className="carousel-item">
-                        <img src={slide2} className="d-block w-100" alt="..." />
+                        <Link to="/products">
+                            <img src={slide2} className="d-block w-100" alt="..." />
+                        </Link>
                     </div>
                 </div>
                 <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
