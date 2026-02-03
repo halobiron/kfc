@@ -17,6 +17,15 @@ const authApi = {
         const url = '/auth/google';
         return axiosClient.post(url, data);
     },
+    forgotPassword: (data) => {
+        const url = '/auth/forgot-password';
+        return axiosClient.post(url, data);
+    },
+    resetPassword: (token, data) => {
+        const url = `/auth/reset-password/${token}`;
+        return axiosClient.post(url, data);
+    },
 };
 
 export default authApi;
+

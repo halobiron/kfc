@@ -229,3 +229,137 @@ exports.googleLogin = async (req, res, next) => {
         next(error);
     }
 };
+
+// FORGOT PASSWORD
+exports.forgotPassword = async (req, res, next) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({
+                status: false,
+                message: 'Vui lòng nhập email'
+            });
+        }
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                status: false,
+                message: 'Không tìm thấy tài khoản với email này'
+            });
+        }
+
+        // Get reset token
+        const resetToken = user.getResetPasswordToken();
+        await user.save({ validateBeforeSave: false });
+
+        // Create reset URL
+        const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password/${resetToken}`;
+
+        const message = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #e4002b;">Đặt lại mật khẩu KFC</h2>
+                <p>Xin chào ${user.name},</p>
+                <p>Bạn đã yêu cầu đặt lại mật khẩu cho tài khoản KFC của mình.</p>
+                <p>Vui lòng nhấp vào nút bên dưới để đặt lại mật khẩu:</p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${resetUrl}" style="background-color: #e4002b; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Đặt lại mật khẩu</a>
+                </div>
+                <p>Hoặc sao chép và dán liên kết sau vào trình duyệt của bạn:</p>
+                <p style="color: #666; word-break: break-all;">${resetUrl}</p>
+                <p style="color: #999; font-size: 12px; margin-top: 30px;">
+                    Link này sẽ hết hạn sau 10 phút.<br>
+                    Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.
+                </p>
+            </div>
+        `;
+
+        try {
+            const sendEmail = require('../utils/sendEmail');
+            await sendEmail({
+                email: user.email,
+                subject: 'Đặt lại mật khẩu KFC',
+                message
+            });
+
+            res.status(200).json({
+                status: true,
+                message: 'Email đặt lại mật khẩu đã được gửi'
+            });
+        } catch (error) {
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpire = undefined;
+            await user.save({ validateBeforeSave: false });
+
+            return res.status(500).json({
+                status: false,
+                message: 'Không thể gửi email. Vui lòng thử lại sau.'
+            });
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
+// RESET PASSWORD
+exports.resetPassword = async (req, res, next) => {
+    try {
+        const crypto = require('crypto');
+
+        // Hash URL token
+        const resetPasswordToken = crypto
+            .createHash('sha256')
+            .update(req.params.token)
+            .digest('hex');
+
+        const user = await User.findOne({
+            resetPasswordToken,
+            resetPasswordExpire: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                status: false,
+                message: 'Link đặt lại mật khẩu không hợp lệ hoặc đã hết hạn'
+            });
+        }
+
+        const { password, confirmPassword } = req.body;
+
+        if (!password || !confirmPassword) {
+            return res.status(400).json({
+                status: false,
+                message: 'Vui lòng nhập mật khẩu mới'
+            });
+        }
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                status: false,
+                message: 'Mật khẩu không khớp'
+            });
+        }
+
+        if (password.length < 6) {
+            return res.status(400).json({
+                status: false,
+                message: 'Mật khẩu phải có ít nhất 6 ký tự'
+            });
+        }
+
+        // Set new password
+        user.password = password;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        await user.save();
+
+        res.status(200).json({
+            status: true,
+            message: 'Đặt lại mật khẩu thành công'
+        });
+    } catch (error) {
+        next(error);
+    }
+};

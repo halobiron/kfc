@@ -6,6 +6,8 @@ import ProductDetail from './features/Product/pages/ProductDetail';
 import Cart from './features/Cart/pages/Cart';
 import Login from './features/Auth/pages/Login';
 import Register from './features/Auth/pages/Register';
+import ForgotPassword from './features/Auth/pages/ForgotPassword';
+import ResetPassword from './features/Auth/pages/ResetPassword';
 import Account from './features/Auth/pages/Account';
 import Checkout from './features/Cart/pages/Checkout';
 import StoreSystem from './features/Store/pages/StoreSystem';
@@ -46,6 +48,8 @@ const AnimatedRoutes = () => {
         <Route path="/cart" element={<AnimatedPage><Cart /></AnimatedPage>} />
         <Route path="/login" element={<AnimatedPage><Login /></AnimatedPage>} />
         <Route path="/register" element={<AnimatedPage><Register /></AnimatedPage>} />
+        <Route path="/forgot-password" element={<AnimatedPage><ForgotPassword /></AnimatedPage>} />
+        <Route path="/reset-password/:token" element={<AnimatedPage><ResetPassword /></AnimatedPage>} />
         <Route path="/account" element={<ProtectedRoute><AnimatedPage><Account /></AnimatedPage></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><AnimatedPage><Account /></AnimatedPage></ProtectedRoute>} />
         <Route path="/my-orders" element={<ProtectedRoute><AnimatedPage><Account /></AnimatedPage></ProtectedRoute>} />
