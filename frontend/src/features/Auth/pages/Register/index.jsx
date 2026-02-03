@@ -80,19 +80,19 @@ const Register = () => {
     })
 
     return (
-        <div className='register-wrapper'>
-            <div className="register-container">
+        <div className='auth-wrapper'>
+            <div className="auth-container">
                 {/* Left promotional banner */}
-                <div className="register-banner">
-                    <img src={signinImg} alt="KFC Promotion" className="banner-image" />
+                <div className="auth-banner">
+                    <img src={signinImg} alt="KFC Promotion" className="auth-banner-image" />
                 </div>
 
                 {/* Right register form */}
-                <div className="register-form-section">
-                    <h2 className="register-title">TẠO TÀI KHOẢN</h2>
+                <div className="auth-form-section">
+                    <h2 className="auth-title">TẠO TÀI KHOẢN</h2>
 
-                    <form className="register-form" onSubmit={handleSubmit}>
-                        <div className="form-group">
+                    <form className="auth-form" onSubmit={handleSubmit}>
+                        <div className="auth-form-group">
                             <label htmlFor="lastName">Họ của bạn *</label>
                             <input
                                 type="text"
@@ -100,13 +100,13 @@ const Register = () => {
                                 value={values.lastName}
                                 onBlur={handleBlur}
                                 name="lastName"
-                                className="form-input"
+                                className="auth-input"
                                 id="lastName"
                             />
                             <p className='error'>{touched.lastName && errors.lastName ? errors.lastName : ''}</p>
                         </div>
 
-                        <div className="form-group">
+                        <div className="auth-form-group">
                             <label htmlFor="firstName">Tên của bạn *</label>
                             <input
                                 type="text"
@@ -114,13 +114,13 @@ const Register = () => {
                                 value={values.firstName}
                                 onBlur={handleBlur}
                                 name="firstName"
-                                className="form-input"
+                                className="auth-input"
                                 id="firstName"
                             />
                             <p className='error'>{touched.firstName && errors.firstName ? errors.firstName : ''}</p>
                         </div>
 
-                        <div className="form-group">
+                        <div className="auth-form-group">
                             <label htmlFor="phone">Số điện thoại *</label>
                             <input
                                 type="tel"
@@ -128,14 +128,14 @@ const Register = () => {
                                 value={values.phone}
                                 onBlur={handleBlur}
                                 name="phone"
-                                className="form-input"
+                                className="auth-input"
                                 id="phone"
                                 placeholder="0123456789"
                             />
                             <p className='error'>{touched.phone && errors.phone ? errors.phone : ''}</p>
                         </div>
 
-                        <div className="form-group">
+                        <div className="auth-form-group">
                             <label htmlFor="email">Địa chỉ email của bạn *</label>
                             <input
                                 type="email"
@@ -143,14 +143,14 @@ const Register = () => {
                                 value={values.email}
                                 onBlur={handleBlur}
                                 name="email"
-                                className="form-input"
+                                className="auth-input"
                                 id="email"
                                 placeholder="example@email.com"
                             />
                             <p className='error'>{touched.email && errors.email ? errors.email : ''}</p>
                         </div>
 
-                        <div className="form-group">
+                        <div className="auth-form-group">
                             <label htmlFor="password">Mật khẩu *</label>
                             <div className="password-wrapper">
                                 <input
@@ -159,7 +159,7 @@ const Register = () => {
                                     value={values.password}
                                     onBlur={handleBlur}
                                     name='password'
-                                    className="form-input"
+                                    className="auth-input"
                                     id="password"
                                     placeholder="••••••••"
                                 />
@@ -174,7 +174,7 @@ const Register = () => {
                             <p className='error'>{touched.password && errors.password ? errors.password : ''}</p>
                         </div>
 
-                        <div className="form-group">
+                        <div className="auth-form-group">
                             <label htmlFor="confirmPassword">Xác nhận mật khẩu *</label>
                             <div className="password-wrapper">
                                 <input
@@ -183,7 +183,7 @@ const Register = () => {
                                     value={values.confirmPassword}
                                     onBlur={handleBlur}
                                     name='confirmPassword'
-                                    className="form-input"
+                                    className="auth-input"
                                     id="confirmPassword"
                                     placeholder="••••••••"
                                 />
@@ -200,12 +200,12 @@ const Register = () => {
                                 />
                                 <span className="checkmark"></span>
                                 <span className="terms-text">
-                                    Tôi đồng ý với <Link to="/terms-of-use" target="_blank">Chính Sách Hoạt Động</Link> và <Link to="/privacy-policy" target="_blank">Chính Sách Bảo Mật</Link>
+                                    Tôi đồng ý với <Link to="/terms-of-use" target="_blank" className="auth-link">Chính Sách Hoạt Động</Link> và <Link to="/privacy-policy" target="_blank" className="auth-link">Chính Sách Bảo Mật</Link>
                                 </span>
                             </label>
                         </div>
 
-                        <button type="submit" className="btn-register" disabled={!isValid || !dirty || !agreedToTerms || loading}>
+                        <button type="submit" className="auth-btn auth-btn-primary" disabled={!isValid || !dirty || !agreedToTerms || loading}>
                             {loading ? 'Đang xử lý...' : 'Tạo tài khoản'}
                         </button>
                     </form>
@@ -224,8 +224,8 @@ const Register = () => {
                         </button>
                     </div>
 
-                    <div className="login-link">
-                        Bạn đã có tài khoản? <Link to="/login">Đăng nhập</Link>
+                    <div className="auth-footer-link">
+                        Bạn đã có tài khoản? <Link to="/login" className="auth-link">Đăng nhập</Link>
                     </div>
                 </div>
             </div>

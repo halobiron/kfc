@@ -11,10 +11,10 @@ const loadCartFromStorage = () => {
 };
 
 const initialState = loadCartFromStorage() || {
-    items: [],
-    totalQuantity: 0,
-    totalPrice: 0,
-  };
+  items: [],
+  totalQuantity: 0,
+  totalPrice: 0,
+};
 
 const cartSlice = createSlice({
   name: 'cart',

@@ -28,12 +28,12 @@ const Card = ({ product }) => {
                     {/* Single Add button */}
                     <motion.button
                         type="button"
-                        className="btn-add"
+                        className="btn-kfc"
+                        style={{ marginTop: 'auto', padding: '10px 20px', fontSize: '0.9rem', width: '100%' }}
                         onClick={(e) => {
                             e.stopPropagation();
                             dispatch(addToCart(product));
                         }}
-                        whileHover={{ backgroundColor: "#e4002b" }}
                         whileTap={{ scale: 0.95 }}
                     >
                         Thêm

@@ -84,19 +84,19 @@ const Login = () => {
     })
 
     return (
-        <div className='login-wrapper'>
-            <div className="login-container">
+        <div className='auth-wrapper'>
+            <div className="auth-container">
                 {/* Left promotional banner */}
-                <div className="login-banner">
-                    <img src={signinImg} alt="KFC Promotion" className="banner-image" />
+                <div className="auth-banner">
+                    <img src={signinImg} alt="KFC Promotion" className="auth-banner-image" />
                 </div>
 
                 {/* Right login form */}
-                <div className="login-form-section">
-                    <h2 className="login-title">ĐĂNG NHẬP</h2>
+                <div className="auth-form-section">
+                    <h2 className="auth-title">ĐĂNG NHẬP</h2>
 
-                    <form className="login-form" onSubmit={handleSubmit}>
-                        <div className="form-group">
+                    <form className="auth-form" onSubmit={handleSubmit}>
+                        <div className="auth-form-group">
                             <label htmlFor="email">Địa chỉ email của bạn *</label>
                             <input
                                 type="email"
@@ -104,14 +104,14 @@ const Login = () => {
                                 value={values.email}
                                 onBlur={handleBlur}
                                 name="email"
-                                className="form-input"
+                                className="auth-input"
                                 id="email"
                                 placeholder="example@email.com"
                             />
                             <p className='error'>{touched.email && errors.email ? errors.email : ''}</p>
                         </div>
 
-                        <div className="form-group">
+                        <div className="auth-form-group">
                             <label htmlFor="password">Mật khẩu *</label>
                             <div className="password-wrapper">
                                 <input
@@ -120,7 +120,7 @@ const Login = () => {
                                     value={values.password}
                                     onBlur={handleBlur}
                                     name='password'
-                                    className="form-input"
+                                    className="auth-input"
                                     id="password"
                                     placeholder="••••••••"
                                 />
@@ -135,11 +135,11 @@ const Login = () => {
                             <p className='error'>{touched.password && errors.password ? errors.password : ''}</p>
                         </div>
 
-                        <div className="forgot-password">
-                            <Link to="/forgot-password">Bạn quên mật khẩu?</Link>
+                        <div className="auth-forgot-password">
+                            <Link to="/forgot-password" className="auth-link">Bạn quên mật khẩu?</Link>
                         </div>
 
-                        <button type="submit" className="btn-login" disabled={loading}>
+                        <button type="submit" className="auth-btn auth-btn-green" disabled={loading}>
                             {loading ? 'Đang xử lý...' : 'Đăng nhập'}
                         </button>
                     </form>
@@ -158,13 +158,13 @@ const Login = () => {
                         </button>
                     </div>
 
-                    <div className="register-link">
-                        Bạn chưa có tài khoản? <Link to="/register">Đăng ký</Link>
+                    <div className="auth-footer-link">
+                        Bạn chưa có tài khoản? <Link to="/register" className="auth-link">Đăng ký</Link>
                     </div>
 
-                    <div className="auth-footer-policies">
+                    <div className="auth-policies">
                         Bằng cách đăng nhập, bạn đồng ý với <br />
-                        <Link to="/terms-of-use" target="_blank">Chính Sách Hoạt Động</Link> và <Link to="/privacy-policy" target="_blank">Chính Sách Bảo Mật</Link> của KFC.
+                        <Link to="/terms-of-use" target="_blank" className="auth-link">Chính Sách Hoạt Động</Link> và <Link to="/privacy-policy" target="_blank" className="auth-link">Chính Sách Bảo Mật</Link> của KFC.
                     </div>
                 </div>
             </div>

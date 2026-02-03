@@ -333,7 +333,7 @@ const Checkout = () => {
                     {/* Left Column: Information & Payment */}
                     <div className="checkout-form-section">
                         {/* Delivery Type Selection */}
-                        <div className="form-card">
+                        <div className="card-kfc">
                             <h3 className="form-title">
                                 <i className="bi bi-bicycle"></i>
                                 Hình Thức Nhận Hàng
@@ -397,7 +397,7 @@ const Checkout = () => {
                         </div>
 
                         {/* Delivery/Pickup Info */}
-                        <div className="form-card">
+                        <div className="card-kfc">
                             <h3 className="form-title">
                                 <i className="bi bi-geo-alt-fill"></i>
                                 {deliveryType === 'delivery' ? 'Thông Tin Giao Hàng' : 'Thông Tin Nhận Hàng'}
@@ -407,7 +407,7 @@ const Checkout = () => {
                                     <label className="form-label">Họ và tên *</label>
                                     <input
                                         type="text"
-                                        className="form-control-custom"
+                                        className="form-control-kfc"
                                         name="fullName"
                                         placeholder="Nhập họ tên"
                                         value={formData.fullName}
@@ -419,7 +419,7 @@ const Checkout = () => {
                                     <label className="form-label">Số điện thoại *</label>
                                     <input
                                         type="tel"
-                                        className="form-control-custom"
+                                        className="form-control-kfc"
                                         name="phone"
                                         placeholder="Nhập số điện thoại"
                                         value={formData.phone}
@@ -454,7 +454,7 @@ const Checkout = () => {
                                             <label className="form-label">Địa chỉ nhận hàng *</label>
                                             <input
                                                 type="text"
-                                                className="form-control-custom"
+                                                className="form-control-kfc"
                                                 name="address"
                                                 placeholder="Số nhà, tên đường, phường/xã..."
                                                 value={formData.address}
@@ -465,7 +465,7 @@ const Checkout = () => {
                                         <div className="col-12 form-group">
                                             <label className="form-label">Ghi chú cho tài xế</label>
                                             <textarea
-                                                className="form-control-custom"
+                                                className="form-control-kfc"
                                                 name="note"
                                                 rows="2"
                                                 placeholder="Ví dụ: Lấy nhiều tương ớt, không lấy đá, giao lên tận phòng..."
@@ -534,7 +534,7 @@ const Checkout = () => {
                                         <div className="col-12 form-group">
                                             <label className="form-label">Ghi chú cho cửa hàng</label>
                                             <textarea
-                                                className="form-control-custom"
+                                                className="form-control-kfc"
                                                 name="note"
                                                 rows="2"
                                                 placeholder="Ví dụ: Tôi sẽ đến lấy lúc 18h..."
@@ -548,7 +548,7 @@ const Checkout = () => {
                         </div>
 
                         {/* Payment Method */}
-                        <div className="form-card">
+                        <div className="card-kfc">
                             <h3 className="form-title">
                                 <i className="bi bi-credit-card-2-front-fill"></i>
                                 Phương Thức Thanh Toán
@@ -589,7 +589,7 @@ const Checkout = () => {
 
                     {/* Right Column: Order Summary */}
                     <div className="checkout-summary-section">
-                        <div className="checkout-summary-card">
+                        <div className="card-kfc" style={{ position: 'sticky', top: '100px' }}>
                             <h3 className="form-title" style={{ fontSize: '1.2rem', marginBottom: '15px' }}>
                                 Tóm Tắt Đơn Hàng
                             </h3>
@@ -670,7 +670,7 @@ const Checkout = () => {
                             </div>
 
                             <button
-                                className="place-order-btn"
+                                className="btn-kfc"
                                 onClick={handlePlaceOrder}
                                 disabled={isSubmitting}
                             >

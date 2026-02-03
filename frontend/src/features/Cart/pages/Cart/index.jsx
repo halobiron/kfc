@@ -50,7 +50,7 @@ const Cart = () => {
                     <div className="empty-bucket">
                         <div>
                             <h2>Giỏ hàng của bạn đang trống. Hãy đặt món ngay!</h2>
-                            <Link to="/products" className="start-order-btn">
+                            <Link to="/products" className="btn-kfc" style={{ maxWidth: '300px' }}>
                                 Bắt đầu đặt hàng
                             </Link>
                         </div>
@@ -63,7 +63,7 @@ const Cart = () => {
                                 const itemId = item._id;
 
                                 return (
-                                    <div key={itemId} className="cart-item-card">
+                                    <div key={itemId} className="card-kfc" style={{ display: 'flex', padding: '20px', marginBottom: '15px', position: 'relative' }}>
                                         <button
                                             className="remove-item-btn"
                                             onClick={() => handleRemoveItem(itemId)}
@@ -115,7 +115,7 @@ const Cart = () => {
 
                         {/* Order Summary */}
                         <div className="cart-summary-section">
-                            <div className="summary-card">
+                            <div className="card-kfc" style={{ position: 'sticky', top: '100px' }}>
                                 <h3 className="summary-title">Tóm Tắt Đơn Hàng</h3>
 
                                 <div className="summary-row">
@@ -140,7 +140,7 @@ const Cart = () => {
                                     <span className="total-amount">{formatCurrency(total)}</span>
                                 </div>
 
-                                <button className="checkout-btn" onClick={handleCheckout}>
+                                <button className="btn-kfc" onClick={handleCheckout}>
                                     Thanh Toán
                                 </button>
 

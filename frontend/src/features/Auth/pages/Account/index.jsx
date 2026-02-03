@@ -13,13 +13,15 @@ const Account = () => {
     const { user } = useSelector(state => state.auth);
     const [activeTab, setActiveTab] = useState('orders');
 
-    // User profile state
     const [userInfo, setUserInfo] = useState({
-        name: user?.name || '',
-        email: user?.email || '',
-        phone: user?.phone || '',
-        birthdate: user?.birthdate || ''
+        name: user?.name,
+        email: user?.email,
+        phone: user?.phone,
+        birthdate: user?.birthdate
     });
+
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const displayName = user?.name || storedUser?.name;
 
     const [addresses, setAddresses] = useState([]);
     const [editingAddress, setEditingAddress] = useState(null);
@@ -358,7 +360,7 @@ const Account = () => {
                                     className="profile-avatar-img"
                                 />
                                 <div>
-                                    <h2>{userInfo.name}</h2>
+                                    <h2>{displayName}</h2>
                                     <a href="#logout" className="link-underline" onClick={(e) => { e.preventDefault(); handleLogout(); }}>
                                         Đăng xuất
                                     </a>
@@ -387,7 +389,7 @@ const Account = () => {
                     {/* Right Content Area */}
                     <div className="block-right appear-right">
                         {activeTab === 'orders' && (
-                            <div className="orders-content">
+                            <div className="card-kfc">
                                 <h3>Các đơn hàng đã đặt</h3>
 
                                 {/* Search and Filter */}
@@ -396,6 +398,7 @@ const Account = () => {
                                         <div className="search-box">
                                             <input
                                                 type="text"
+                                                className="form-control-kfc"
                                                 placeholder="Tìm theo Mã đơn hàng hoặc Tên món..."
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -424,7 +427,8 @@ const Account = () => {
                                             <h2>Bắt đầu đặt món!</h2>
                                             <p>Bạn chưa có đơn hàng nào</p>
                                             <button
-                                                className="btn btn-danger start-ordering-btn"
+                                                className="btn-kfc"
+                                                style={{ maxWidth: '250px' }}
                                                 onClick={() => navigate('/products')}
                                             >
                                                 Bắt đầu đặt hàng
@@ -509,7 +513,7 @@ const Account = () => {
                         )}
 
                         {activeTab === 'profile' && (
-                            <div className="profile-content">
+                            <div className="card-kfc">
                                 <h3>Quản lý hồ sơ</h3>
 
                                 <div className="profile-section">
@@ -520,6 +524,7 @@ const Account = () => {
                                                 <label>Họ và tên</label>
                                                 <input
                                                     type="text"
+                                                    className="form-control-kfc"
                                                     value={userInfo.name}
                                                     onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
                                                     required
@@ -529,6 +534,7 @@ const Account = () => {
                                                 <label>Số điện thoại</label>
                                                 <input
                                                     type="tel"
+                                                    className="form-control-kfc"
                                                     value={userInfo.phone}
                                                     onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
                                                     required
@@ -540,6 +546,7 @@ const Account = () => {
                                                 <label>Email</label>
                                                 <input
                                                     type="email"
+                                                    className="form-control-kfc"
                                                     value={userInfo.email}
                                                     onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
                                                     disabled
@@ -549,12 +556,13 @@ const Account = () => {
                                                 <label>Ngày sinh</label>
                                                 <input
                                                     type="date"
+                                                    className="form-control-kfc"
                                                     value={userInfo.birthdate}
                                                     onChange={(e) => setUserInfo({ ...userInfo, birthdate: e.target.value })}
                                                 />
                                             </div>
                                         </div>
-                                        <button type="submit" className="btn btn-primary">Lưu thông tin</button>
+                                        <button type="submit" className="btn-kfc">Lưu thông tin</button>
                                     </form>
                                 </div>
 
@@ -566,6 +574,7 @@ const Account = () => {
                                                 <label>Mật khẩu hiện tại</label>
                                                 <input
                                                     type="password"
+                                                    className="form-control-kfc"
                                                     value={passwordData.currentPassword}
                                                     onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                                                     required
@@ -577,6 +586,7 @@ const Account = () => {
                                                 <label>Mật khẩu mới</label>
                                                 <input
                                                     type="password"
+                                                    className="form-control-kfc"
                                                     value={passwordData.newPassword}
                                                     onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                                                     required
@@ -587,6 +597,7 @@ const Account = () => {
                                                 <label>Xác nhận mật khẩu</label>
                                                 <input
                                                     type="password"
+                                                    className="form-control-kfc"
                                                     value={passwordData.confirmPassword}
                                                     onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                                                     required
@@ -594,17 +605,17 @@ const Account = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <button type="submit" className="btn btn-primary">Cập nhật mật khẩu</button>
+                                        <button type="submit" className="btn-kfc">Cập nhật mật khẩu</button>
                                     </form>
                                 </div>
                             </div>
                         )}
 
                         {activeTab === 'addresses' && (
-                            <div className="addresses-content">
+                            <div className="card-kfc">
                                 <div className="addresses-header">
                                     <h3>Sổ địa chỉ</h3>
-                                    <button className="btn btn-add-address" onClick={handleAddAddress}>
+                                    <button className="btn-kfc" onClick={handleAddAddress} style={{ width: 'auto', padding: '10px 20px', fontSize: '0.9rem' }}>
                                         <i className="bi bi-plus-lg"></i> Thêm địa chỉ
                                     </button>
                                 </div>
@@ -619,7 +630,7 @@ const Account = () => {
                                     <div className="addresses-list">
                                         {addresses && addresses.length > 0 ? (
                                             addresses.map((address, idx) => (
-                                                <div key={idx} className="address-card">
+                                                <div key={idx} className="card-kfc" style={{ border: '1px solid #e0e0e0', padding: '1.5rem', marginBottom: '1rem', boxShadow: 'none' }}>
                                                     <div className="address-header">
                                                         <h5>
                                                             {address.label}
@@ -683,6 +694,7 @@ const Account = () => {
                                 <label>Tên địa chỉ <span className="text-danger">*</span></label>
                                 <input
                                     type="text"
+                                    className="form-control-kfc"
                                     placeholder="VD: Nhà, Công ty, Nhà bạn..."
                                     value={addressForm.label}
                                     onChange={(e) => setAddressForm({ ...addressForm, label: e.target.value })}
@@ -713,6 +725,7 @@ const Account = () => {
                                     </button>
                                 </div>
                                 <textarea
+                                    className="form-control-kfc"
                                     placeholder="Nhập địa chỉ chi tiết (đường, quận, thành phố...)"
                                     rows="3"
                                     value={addressForm.fullAddress}
@@ -743,7 +756,7 @@ const Account = () => {
                             <button className="btn btn-outline-secondary" onClick={() => setShowAddressForm(false)}>
                                 Hủy
                             </button>
-                            <button className="btn btn-primary" onClick={handleSaveAddress}>
+                            <button className="btn-kfc" onClick={handleSaveAddress}>
                                 {editingAddress ? 'Cập nhật' : 'Thêm mới'}
                             </button>
                         </div>
