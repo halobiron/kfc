@@ -205,7 +205,7 @@ const Register = () => {
                             </label>
                         </div>
 
-                        <button type="submit" className="auth-btn auth-btn-primary" disabled={!isValid || !dirty || !agreedToTerms || loading}>
+                        <button type="submit" className="btn-kfc" disabled={!isValid || !dirty || !agreedToTerms || loading}>
                             {loading ? 'Đang xử lý...' : 'Tạo tài khoản'}
                         </button>
                     </form>

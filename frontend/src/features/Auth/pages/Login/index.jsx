@@ -139,7 +139,7 @@ const Login = () => {
                             <Link to="/forgot-password" className="auth-link">Bạn quên mật khẩu?</Link>
                         </div>
 
-                        <button type="submit" className="auth-btn auth-btn-green" disabled={loading}>
+                        <button type="submit" className="btn-kfc" disabled={loading}>
                             {loading ? 'Đang xử lý...' : 'Đăng nhập'}
                         </button>
                     </form>

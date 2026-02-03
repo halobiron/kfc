@@ -104,8 +104,12 @@ const Product = () => {
                                 {categories.map(category => (
                                     <li key={category._id}>
                                         <a
+                                            href={`#${category.slug}`}
                                             className={activeCategory === category.slug ? 'active' : ''}
-                                            onClick={() => scrollToCategory(category.slug)}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                scrollToCategory(category.slug);
+                                            }}
                                         >
                                             {category.name}
                                         </a>

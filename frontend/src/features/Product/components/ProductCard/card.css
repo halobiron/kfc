@@ -7,14 +7,17 @@
     background: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
 }
 
-
+.kfc-product-card:hover {
+    /* Subtle elevation only */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
 /* Product Image - Optimized for 480x390 aspect ratio */
 .product-image {
@@ -54,7 +57,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-height: 2.5em;
+    min-height: 2em;
 }
 
 .product-price {
@@ -79,9 +82,6 @@
     min-height: 2.8em;
     max-height: 2.8em;
 }
-
-/* Add Button */
-/* Add Button styles replaced by .btn-kfc in global scope */
 
 /* Responsive Design */
 @media (max-width: 991px) {

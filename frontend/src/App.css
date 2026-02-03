@@ -123,58 +123,38 @@
 }
 
 .auth-link:hover {
+    color: var(--kfc-black);
     text-decoration: underline;
-    opacity: 0.8;
 }
 
-.auth-btn {
+.btn-kfc {
+    display: inline-block;
     width: 100%;
-    padding: 14px;
+    background-color: var(--kfc-red, #E4002B);
     color: white;
-    border: none;
-    border-radius: 25px;
+    text-align: center;
+    padding: 14px 25px;
+    border-radius: 99px;
+    font-weight: 700;
     font-size: 1rem;
-    font-weight: 600;
+    text-transform: uppercase;
+    border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-transform: capitalize;
-    margin-bottom: 25px;
+    text-decoration: none;
+    margin-bottom: 15px;
 }
 
-.auth-btn-primary {
-    background: var(--kfc-red, #E4002B);
+.btn-kfc:hover:not(:disabled) {
+    background-color: #b00020;
+    color: white;
+    box-shadow: 0 2px 8px rgba(228, 0, 43, 0.3);
 }
 
-.auth-btn-primary:hover:not(:disabled) {
-    background: #c00024;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(228, 0, 43, 0.3);
-}
-
-.auth-btn-primary:active,
-.auth-btn-primary:focus {
-    background: #c00024;
-    box-shadow: 0 4px 12px rgba(228, 0, 43, 0.3);
-}
-
-.auth-btn-primary:disabled {
-    background: #ccc;
+.btn-kfc:disabled {
+    background-color: #ccc;
     cursor: not-allowed;
-}
-
-.auth-btn-green {
-    background: #0f9d58;
-}
-
-.auth-btn-green:hover:not(:disabled) {
-    background: #0d8a4d;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3);
-}
-
-.auth-btn-green:disabled {
-    background: #ccc;
-    cursor: not-allowed;
+    box-shadow: none;
 }
 
 .social-divider {
@@ -230,10 +210,10 @@
 .btn-social:hover {
     background: #f8f8f8;
     border-color: #999;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Auth Footer & Utils */
 .auth-footer-link {
     text-align: center;
     color: #666;
@@ -275,50 +255,19 @@
     }
 }
 
-/* --- Global Component Styles --- */
-/* 1. Buttons */
-.btn-kfc {
-    display: inline-block;
-    width: 100%;
-    background-color: var(--kfc-red, #E4002B);
-    color: white;
-    text-align: center;
-    padding: 14px 25px;
-    border-radius: 99px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    outline: none;
-}
-
-.btn-kfc:hover:not(:disabled) {
-    background-color: #b00020;
-    color: white;
-    box-shadow: 0 4px 12px rgba(228, 0, 43, 0.4);
-    transform: translateY(-2px);
-}
-
-.btn-kfc:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-
 /* 2. Cards */
 .card-kfc {
     background: white;
     border-radius: 12px;
     padding: 25px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* Lighter base shadow */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease;
 }
 
 .card-kfc:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* Subtle elevation only */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 3. Form Inputs (Boxed Style - e.g. Checkout) */
