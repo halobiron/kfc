@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import './product-detail.css';
+import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../../Cart/cartSlice';
 import { getProductById } from '../../productSlice';
-import { useParams } from 'react-router-dom';
+import { getAllCategories } from '../../categorySlice';
+import { useParams, Link } from 'react-router-dom';
 
 const ProductDetail = () => {
     const { id } = useParams();
     const [quantity, setQuantity] = useState(1);
     const dispatch = useDispatch();
     const { currentProduct: product, loading } = useSelector((state) => state.products);
+    const { categories } = useSelector((state) => state.categories);
+
+    useEffect(() => {
+        dispatch(getAllCategories());
+    }, [dispatch]);
 
     useEffect(() => {
         if (id) {
@@ -42,12 +49,18 @@ const ProductDetail = () => {
     }
 
     const price = product.price || 0;
+    const categoryName = categories.find(c => c.slug === product.category)?.name || product.category;
 
     return (
         <div className='product-detail-wrapper'>
             <div className="container py-5">
                 <div className="product-breadcrumb mb-4">
-                    <span>Trang chủ</span> <span className="separator">/</span> <span>Thực đơn</span> <span className="separator">/</span> <span>{product.category}</span> <span className="separator">/</span> <span className="current">{product.title}</span>
+                    <Link to="/">Trang chủ</Link> <span className="separator">/</span>
+                    <Link to="/products">Thực đơn</Link> <span className="separator">/</span>
+                    <Link to={`/products?category=${product.category}`}>
+                        {categoryName}
+                    </Link> <span className="separator">/</span>
+                    <span className="current">{product.title}</span>
                 </div>
 
                 <div className="row g-4 justify-content-center">
@@ -58,7 +71,7 @@ const ProductDetail = () => {
                     </div>
                     <div className="col-lg-5 col-md-6">
                         <div className="product-info-card">
-                            <div className="product-category-badge">{product.category}</div>
+                            <div className="product-category-badge">{categoryName}</div>
                             <h1 className="product-title">{product.title}</h1>
                             <p className="product-description">{product.description}</p>
 
@@ -68,32 +81,18 @@ const ProductDetail = () => {
 
                             <div className="quantity-section">
                                 <span className="section-label">Số lượng</span>
-                                <div className="quantity-selector">
-                                    <button className="quantity-btn" onClick={handleDecrease}>-</button>
-                                    <input
-                                        type="text"
-                                        className="quantity-input"
-                                        value={quantity}
-                                        readOnly
-                                    />
-                                    <button className="quantity-btn" onClick={handleIncrease}>+</button>
-                                </div>
+                                <QuantityPicker
+                                    quantity={quantity}
+                                    onIncrease={handleIncrease}
+                                    onDecrease={handleDecrease}
+                                />
                             </div>
 
                             <button className="btn-kfc" onClick={handleAddToCart}>
                                 Thêm vào giỏ hàng
                             </button>
 
-                            <div className="product-features">
-                                <div className="feature-item">
-                                    <span className="feature-icon">✓</span>
-                                    <span>Giao hàng nhanh</span>
-                                </div>
-                                <div className="feature-item">
-                                    <span className="feature-icon">✓</span>
-                                    <span>Đảm bảo chất lượng</span>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>

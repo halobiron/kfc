@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, updateQuantity } from '../../cartSlice';
 
 import './Cart.css';
+import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
 
 // Placeholder image if real ones aren't available
 const PLACEHOLDER_IMG = "https://static.kfcvietnam.com.vn/images/items/lg/D-C-Ga-Ran.jpg?v=gXQ2pg";
@@ -87,22 +88,11 @@ const Cart = () => {
                                             </div>
 
                                             <div className="cart-item-actions">
-                                                <div className="quantity-control">
-                                                    <button
-                                                        className="qty-btn"
-                                                        onClick={() => handleQuantityChange(itemId, item.quantity - 1)}
-                                                        disabled={item.quantity <= 1}
-                                                    >
-                                                        <i className="bi bi-dash"></i>
-                                                    </button>
-                                                    <span className="qty-display">{item.quantity}</span>
-                                                    <button
-                                                        className="qty-btn"
-                                                        onClick={() => handleQuantityChange(itemId, item.quantity + 1)}
-                                                    >
-                                                        <i className="bi bi-plus"></i>
-                                                    </button>
-                                                </div>
+                                                <QuantityPicker
+                                                    quantity={item.quantity}
+                                                    onIncrease={() => handleQuantityChange(itemId, item.quantity + 1)}
+                                                    onDecrease={() => handleQuantityChange(itemId, item.quantity - 1)}
+                                                />
                                                 <div className="cart-item-price">
                                                     {formatCurrency(item.price * item.quantity)}
                                                 </div>
