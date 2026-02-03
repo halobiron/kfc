@@ -2,22 +2,22 @@ import './App.css';
 import Header from './components/Header';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Login from './pages/Login';
-import Home from './pages/Home';
-import Product from './pages/Product'
-import ProductDetails from './pages/ProductDetails'
-import Ingredient from './pages/Ingredient'
-import Order from './pages/Order'
-import Users from './pages/Users';
-import Reports from './pages/Reports';
-import OrderDetails from './pages/OrderDetails';
-import Categories from './pages/Categories';
+import Login from './features/Auth/pages/Login';
+import Home from './features/Dashboard/pages/Home';
+import Product from './features/Product/pages/Product'
+import ProductDetails from './features/Product/pages/ProductDetails'
+import Ingredient from './features/Ingredient/pages/Ingredient'
+import Order from './features/Order/Order'
+import Users from './features/User/pages/Users';
+import Reports from './features/Dashboard/pages/Reports';
+import OrderDetails from './features/Order/OrderDetails';
+import Categories from './features/Category/pages/Categories';
 
-import Promotions from './pages/Promotions';
-import Kitchen from './pages/Kitchen';
-import Stores from './pages/Stores';
-import ChangePassword from './pages/ChangePassword';
-import Roles from './pages/Roles';
+import Promotions from './features/Promotion/pages/Promotions';
+import Kitchen from './features/Order/Kitchen';
+import Stores from './features/Store/pages/Stores';
+import ChangePassword from './features/Auth/pages/ChangePassword';
+import Roles from './features/Role/pages/Roles';
 
 import {
   BrowserRouter,
