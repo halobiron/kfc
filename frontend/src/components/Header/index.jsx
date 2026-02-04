@@ -5,6 +5,7 @@ import logo from '../../assets/images/logos/kfc-logo.png';
 import { BsGeoAlt, BsPersonCircle, BsShop, BsTruck, BsBag } from 'react-icons/bs';
 
 import './header.css';
+import Button from '../common/Button';
 
 const Header = () => {
 
@@ -103,9 +104,13 @@ const Header = () => {
               </div>
 
               {/* CTA Button */}
-              <button className="cta-button" onClick={() => navigate('/products')}>
+              <Button
+                variant="primary"
+                onClick={() => navigate('/products')}
+                className="cta-button"
+              >
                 Bắt đầu đặt hàng
-              </button>
+              </Button>
             </div>
           </div>
         </div>

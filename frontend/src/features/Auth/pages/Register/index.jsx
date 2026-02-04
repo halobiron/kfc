@@ -12,6 +12,7 @@ import './register.css'
 import signinImg from '../../../../assets/images/common/auth-bg.jpg'
 import { FcGoogle } from 'react-icons/fc';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import Button from '../../../../components/common/Button';
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -207,9 +208,15 @@ const Register = () => {
                         </label>
                     </div>
 
-                    <button type="submit" className="btn-kfc" disabled={!isValid || !dirty || !agreedToTerms || loading}>
-                        {loading ? 'Đang xử lý...' : 'Tạo tài khoản'}
-                    </button>
+                    <Button
+                        type="submit"
+                        variant="primary"
+                        disabled={!isValid || !dirty || !agreedToTerms || loading}
+                        loading={loading}
+                        fullWidth
+                    >
+                        Tạo tài khoản
+                    </Button>
                 </form>
 
                 <div className="social-divider">Hoặc tiếp tục với</div>

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
 import FormInput from '../../../../components/FormInput';
+import Button from '../../../../components/common/Button';
 
 import './Checkout.css';
 import { getAllCoupons } from '../../couponSlice';
@@ -670,13 +671,14 @@ const Checkout = () => {
                                 <span className="fw-bold fs-4 text-danger">{formatCurrency(total)}</span>
                             </div>
 
-                            <button
-                                className="btn-kfc"
+                            <Button
+                                variant="primary"
                                 onClick={handlePlaceOrder}
-                                disabled={isSubmitting}
+                                loading={isSubmitting}
+                                fullWidth
                             >
-                                {isSubmitting ? 'Đang xử lý...' : 'ĐẶT HÀNG'}
-                            </button>
+                                ĐẶT HÀNG
+                            </Button>
                         </div>
                     </div>
                 </div>

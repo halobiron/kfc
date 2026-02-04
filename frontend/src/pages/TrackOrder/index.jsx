@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axiosClient from '../../api/axiosClient';
 import { toast } from 'react-toastify';
 import FormInput from '../../components/FormInput';
+import Button from '../../components/common/Button';
 import './TrackOrder.css';
 
 const TrackOrder = () => {
@@ -73,13 +74,14 @@ const TrackOrder = () => {
                                         onChange={(e) => setPhone(e.target.value)}
                                     />
                                 </div>
-                                <button
+                                <Button
                                     type="submit"
-                                    className="btn btn-danger w-100 fw-bold"
-                                    disabled={loading}
+                                    variant="primary"
+                                    fullWidth
+                                    loading={loading}
                                 >
-                                    {loading ? 'ĐANG TÌM...' : 'TRA CỨU NGAY'}
-                                </button>
+                                    TRA CỨU NGAY
+                                </Button>
                             </form>
                         </div>
                     </div>

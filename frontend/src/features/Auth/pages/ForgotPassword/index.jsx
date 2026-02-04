@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import authApi from '../../../../api/authApi';
 import '../../auth.css';
 import authBg from '../../../../assets/images/common/auth-bg.jpg';
+import Button from '../../../../components/common/Button';
 
 const ForgotPassword = () => {
     const [emailSent, setEmailSent] = useState(false);
@@ -70,9 +71,14 @@ const ForgotPassword = () => {
                                 <p className='error'>{touched.email && errors.email ? errors.email : ''}</p>
                             </div>
 
-                            <button type="submit" className="btn-kfc" disabled={loading}>
-                                {loading ? 'Đang xử lý...' : 'Gửi email'}
-                            </button>
+                            <Button
+                                type="submit"
+                                variant="primary"
+                                loading={loading}
+                                fullWidth
+                            >
+                                Gửi email
+                            </Button>
                         </form>
 
                         <div className="auth-footer-link" style={{ marginTop: '20px' }}>
@@ -91,9 +97,13 @@ const ForgotPassword = () => {
                                 Vui lòng kiểm tra hộp thư đến của bạn và làm theo hướng dẫn trong email.
                                 Link sẽ hết hạn sau 10 phút.
                             </p>
-                            <Link to="/login" className="btn-kfc" style={{ display: 'inline-block', textDecoration: 'none' }}>
+                            <Button
+                                component={Link}
+                                to="/login"
+                                variant="primary"
+                            >
                                 Quay lại đăng nhập
-                            </Link>
+                            </Button>
                         </div>
                     </>
                 )}

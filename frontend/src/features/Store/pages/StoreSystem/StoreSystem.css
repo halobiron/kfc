@@ -167,14 +167,18 @@
     gap: 16px;
 }
 
+/* Sprite Base */
+.kfc-sprite {
+    background-image: url("../../../../assets/images/common/sprite.png");
+    background-repeat: no-repeat;
+    background-color: transparent;
+}
+
 /* Popcorn Style Number */
 .store-index-popcorn {
     width: 28px;
     height: 37px;
-    background-image: url("../../../../assets/images/common/sprite.png");
-    background-repeat: no-repeat;
     background-position: -70px -59px;
-    background-color: transparent;
 
     color: #fff;
     display: flex;

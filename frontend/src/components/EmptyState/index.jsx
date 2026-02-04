@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './EmptyState.css';
+import Button from '../common/Button';
 
 const EmptyState = ({
     title,
@@ -30,13 +31,13 @@ const EmptyState = ({
                 {description && <p className="empty-state-message">{description}</p>}
 
                 {actionText && (
-                    <button
-                        className="btn-kfc"
+                    <Button
+                        variant="primary"
                         onClick={handleAction}
                         style={{ maxWidth: '300px' }}
                     >
                         {actionText}
-                    </button>
+                    </Button>
                 )}
             </div>
         </div>

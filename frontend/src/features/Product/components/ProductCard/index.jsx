@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addToCart } from '../../../Cart/cartSlice';
+import Button from '../../../../components/common/Button';
 import './card.css';
 
 const Card = ({ product }) => {
@@ -26,10 +27,11 @@ const Card = ({ product }) => {
                     </div>
                     <p className="product-description">{product.description}</p>
                     {/* Single Add button */}
-                    <motion.button
-                        type="button"
-                        className="btn-kfc"
-                        style={{ marginTop: 'auto', padding: '10px 20px', fontSize: '0.9rem', width: '100%' }}
+                    <Button
+                        component={motion.button}
+                        variant="primary"
+                        className="w-100 mt-auto"
+                        style={{ padding: '10px 20px', fontSize: '0.9rem' }}
                         onClick={(e) => {
                             e.stopPropagation();
                             dispatch(addToCart(product));
@@ -37,7 +39,7 @@ const Card = ({ product }) => {
                         whileTap={{ scale: 0.95 }}
                     >
                         Thêm
-                    </motion.button>
+                    </Button>
                 </div>
             </motion.div>
         </div>

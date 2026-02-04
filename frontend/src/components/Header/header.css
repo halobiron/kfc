@@ -102,13 +102,11 @@ a {
     box-shadow: none;
 }
 
-.btn i.bi-person-circle {
+.user-acc-btn svg {
     transition: all 0.3s ease;
 }
 
-.user-acc-btn:hover i.bi-person-circle,
-.user-acc-btn:active i.bi-person-circle,
-.user-acc-btn:focus i.bi-person-circle {
+.user-acc-btn:hover svg {
     color: var(--kfc-red) !important;
     transform: scale(1.1);
 }
@@ -116,7 +114,6 @@ a {
 .user-acc-btn:active,
 .user-acc-btn:focus {
     background-color: transparent !important;
-    border-color: transparent !important;
     box-shadow: none !important;
 }
 

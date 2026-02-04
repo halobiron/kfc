@@ -72,23 +72,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/* Global Dropdown Menu Styles (Synchronized across app) */
-
-
-/* Global focus and active states - KFC Brand Overrides */
-/* Global focus and active states */
-*:focus {
-  outline: none;
-}
-
 .btn:focus,
 .btn:active:focus {
   box-shadow: 0 0 0 2px rgba(228, 0, 43, 0.25);
   background-color: #c40024;
-  border-color: #c40024;
 }
-
-
 
 /* Global Brand Utilities */
 .text-kfc-red {

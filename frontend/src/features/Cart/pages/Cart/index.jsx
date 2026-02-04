@@ -7,6 +7,7 @@ import { removeFromCart, updateQuantity } from '../../cartSlice';
 import './Cart.css';
 import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
 import EmptyState from '../../../../components/EmptyState';
+import Button from '../../../../components/common/Button';
 
 // Placeholder image if real ones aren't available
 const PLACEHOLDER_IMG = "https://static.kfcvietnam.com.vn/images/items/lg/D-C-Ga-Ran.jpg?v=gXQ2pg";
@@ -128,9 +129,13 @@ const Cart = () => {
                                     <span className="total-amount">{formatCurrency(total)}</span>
                                 </div>
 
-                                <button className="btn-kfc" onClick={handleCheckout}>
+                                <Button
+                                    variant="primary"
+                                    onClick={handleCheckout}
+                                    fullWidth
+                                >
                                     Thanh Toán
-                                </button>
+                                </Button>
 
                                 <Link to="/products" className="continue-shopping-link">
                                     Tiếp tục mua hàng

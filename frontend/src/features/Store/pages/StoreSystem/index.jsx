@@ -49,13 +49,10 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 
 const createKfcIcon = (isActive, index) => L.divIcon({
     className: 'custom-kfc-marker',
-    html: `<div style="
+    html: `<div class="kfc-sprite" style="
             width: 50px;
             height: 65px;
-            background-image: url("../../../../assets/images/common/sprite.png");
-            background-repeat: no-repeat;
             background-position: ${isActive ? '-120px -50px' : '-70px -50px'};
-            background-color: transparent;
             transform: scale(1.1);
             transform-origin: bottom center;
             position: relative;
@@ -364,7 +361,7 @@ const StoreSystem = () => {
                                 onClick={() => toggleStore(store.id)}
                             >
                                 <div className="store-item-main">
-                                    <div className="store-index-popcorn">
+                                    <div className="store-index-popcorn kfc-sprite">
                                         {index + 1}
                                     </div>
                                     <div className="store-item-info">

@@ -13,6 +13,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 import { useGoogleLogin } from '@react-oauth/google';
+import Button from '../../../../components/common/Button';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -140,9 +141,14 @@ const Login = () => {
                         <Link to="/forgot-password" className="auth-link">Bạn quên mật khẩu?</Link>
                     </div>
 
-                    <button type="submit" className="btn-kfc" disabled={loading}>
-                        {loading ? 'Đang xử lý...' : 'Đăng nhập'}
-                    </button>
+                    <Button
+                        type="submit"
+                        variant="primary"
+                        fullWidth
+                        loading={loading}
+                    >
+                        Đăng nhập
+                    </Button>
                 </form>
 
                 <div className="social-divider">Hoặc tiếp tục với</div>

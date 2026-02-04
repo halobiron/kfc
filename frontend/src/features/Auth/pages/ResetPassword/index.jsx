@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import authApi from '../../../../api/authApi';
 import '../../auth.css';
 import authBg from '../../../../assets/images/common/auth-bg.jpg';
+import Button from '../../../../components/common/Button';
 
 const ResetPassword = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -112,9 +113,14 @@ const ResetPassword = () => {
                         <p className='error'>{touched.confirmPassword && errors.confirmPassword ? errors.confirmPassword : ''}</p>
                     </div>
 
-                    <button type="submit" className="btn-kfc" disabled={loading}>
-                        {loading ? 'Đang xử lý...' : 'Đặt lại mật khẩu'}
-                    </button>
+                    <Button
+                        type="submit"
+                        variant="primary"
+                        loading={loading}
+                        fullWidth
+                    >
+                        Đặt lại mật khẩu
+                    </Button>
                 </form>
 
                 <div className="auth-footer-link" style={{ marginTop: '20px' }}>

@@ -7,6 +7,7 @@ import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
 import FormInput from '../../../../components/FormInput';
 import EmptyState from '../../../../components/EmptyState';
+import Button from '../../../../components/common/Button';
 import './Account.css';
 
 const Account = () => {
@@ -552,7 +553,7 @@ const Account = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <button type="submit" className="btn-kfc">Lưu thông tin</button>
+                                        <Button type="submit" variant="primary">Lưu thông tin</Button>
                                     </form>
                                 </div>
 
@@ -592,7 +593,7 @@ const Account = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <button type="submit" className="btn-kfc">Cập nhật mật khẩu</button>
+                                        <Button type="submit" variant="primary">Cập nhật mật khẩu</Button>
                                     </form>
                                 </div>
                             </div>
@@ -602,9 +603,14 @@ const Account = () => {
                             <div className="card-kfc">
                                 <div className="addresses-header">
                                     <h3>Sổ địa chỉ</h3>
-                                    <button className="btn-kfc" onClick={handleAddAddress} style={{ width: 'auto', padding: '10px 20px', fontSize: '0.9rem' }}>
-                                        <i className="bi bi-plus-lg"></i> Thêm địa chỉ
-                                    </button>
+                                    <Button
+                                        variant="primary"
+                                        onClick={handleAddAddress}
+                                        size="sm"
+                                        startIcon={<i className="bi bi-plus-lg"></i>}
+                                    >
+                                        Thêm địa chỉ
+                                    </Button>
                                 </div>
 
                                 {loadingAddresses ? (
@@ -742,9 +748,9 @@ const Account = () => {
                             <button className="btn btn-outline-secondary" onClick={() => setShowAddressForm(false)}>
                                 Hủy
                             </button>
-                            <button className="btn-kfc" onClick={handleSaveAddress}>
+                            <Button variant="primary" onClick={handleSaveAddress}>
                                 {editingAddress ? 'Cập nhật' : 'Thêm mới'}
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </div>
