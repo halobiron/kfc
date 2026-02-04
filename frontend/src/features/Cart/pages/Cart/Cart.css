@@ -34,66 +34,7 @@
 }
 
 /* Empty Cart */
-.empty-bucket {
-    display: flex;
-    align-items: center;
-    padding: 45px 55px;
-    background-color: #f8f7f5;
-    background-image: url("https://static.kfcvietnam.com.vn/images/web/empty-cart.png?v=5.0");
-    background-size: auto;
-    background-position: calc(100% - 20px) center;
-    background-repeat: no-repeat;
-    border-radius: 8px;
-    min-height: 450px;
-    max-width: 1170px;
-    margin: 20px auto;
-}
-
-.empty-bucket>div {
-    max-width: 500px;
-    text-align: left;
-    z-index: 1;
-}
-
-.empty-cart-title {
-    font-size: 1.5rem;
-    color: var(--kfc-black);
-    margin-bottom: 1rem;
-}
-
-.empty-bucket h2 {
-    font-size: 2.5rem;
-    color: var(--kfc-black);
-    margin-bottom: 2rem;
-    line-height: 1.1;
-}
-
-@media (max-width: 992px) {
-    .empty-bucket {
-        background-size: 50%;
-        background-position: right center;
-    }
-}
-
-@media (max-width: 768px) {
-    .empty-bucket {
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-        background-position: center bottom;
-        background-size: 60%;
-        padding: 3rem 1rem 15rem;
-        min-height: 600px;
-    }
-
-    .empty-bucket>div {
-        text-align: center;
-    }
-
-    .empty-bucket h2 {
-        font-size: 2rem;
-    }
-}
+/* Empty Cart - Moved to EmptyState component */
 
 /* Cart Layout */
 .cart-layout {

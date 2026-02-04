@@ -12,6 +12,7 @@
 body {
   margin: 0;
   font-family: var(--font-family);
+  color: var(--kfc-black);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -25,7 +26,7 @@ h6 {
   font-family: var(--font-heading);
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #000;
+  color: var(--kfc-black);
   margin-bottom: 1rem;
 }
 
@@ -71,7 +72,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/* Global Form Select Styling */
+.form-control,
 .form-select {
   display: block;
   width: 100%;
@@ -79,11 +80,14 @@ code {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #212529;
+  color: var(--kfc-black);
   background-color: #fff;
   border: 1px solid #dadce0;
   border-radius: 8px;
   transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-select {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 1rem center;
@@ -91,6 +95,7 @@ code {
   appearance: none;
 }
 
+.form-control:focus,
 .form-select:focus {
   border-color: var(--kfc-red, #e4002b);
   outline: 0;
@@ -168,4 +173,18 @@ code {
 .form-check-input:checked {
   background-color: var(--kfc-red);
   border-color: var(--kfc-red);
+}
+
+/* Global Brand Utilities */
+.text-kfc-red {
+  color: var(--kfc-red);
+}
+
+.text-kfc-black {
+  color: var(--kfc-black);
+}
+
+.bg-kfc-red {
+  background-color: var(--kfc-red);
+  color: white;
 }

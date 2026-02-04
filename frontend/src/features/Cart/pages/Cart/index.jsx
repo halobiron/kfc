@@ -6,6 +6,7 @@ import { removeFromCart, updateQuantity } from '../../cartSlice';
 
 import './Cart.css';
 import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
+import EmptyState from '../../../../components/EmptyState';
 
 // Placeholder image if real ones aren't available
 const PLACEHOLDER_IMG = "https://static.kfcvietnam.com.vn/images/items/lg/D-C-Ga-Ran.jpg?v=gXQ2pg";
@@ -48,14 +49,11 @@ const Cart = () => {
                 </div>
 
                 {cartItems.length === 0 ? (
-                    <div className="empty-bucket">
-                        <div>
-                            <h2>Giỏ hàng của bạn đang trống. Hãy đặt món ngay!</h2>
-                            <Link to="/products" className="btn-kfc" style={{ maxWidth: '300px' }}>
-                                Bắt đầu đặt hàng
-                            </Link>
-                        </div>
-                    </div>
+                    <EmptyState
+                        title="Giỏ hàng của bạn đang trống. Hãy đặt món ngay!"
+                        actionText="Bắt đầu đặt hàng"
+                        actionPath="/products"
+                    />
                 ) : (
                     <div className="cart-layout">
                         {/* Cart Items List */}

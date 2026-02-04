@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout, updateUserSuccess } from '../../authSlice';
 import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
+import EmptyState from '../../../../components/EmptyState';
 import './Account.css';
 
 const Account = () => {
@@ -398,7 +399,7 @@ const Account = () => {
                                         <div className="search-box">
                                             <input
                                                 type="text"
-                                                className="form-control-kfc"
+                                                className="form-control"
                                                 placeholder="Tìm theo Mã đơn hàng hoặc Tên món..."
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -422,19 +423,12 @@ const Account = () => {
                                         </div>
                                     </div>
                                 ) : orders.length === 0 ? (
-                                    <div className="empty-bucket">
-                                        <div>
-                                            <h2>Bắt đầu đặt món!</h2>
-                                            <p>Bạn chưa có đơn hàng nào</p>
-                                            <button
-                                                className="btn-kfc"
-                                                style={{ maxWidth: '250px' }}
-                                                onClick={() => navigate('/products')}
-                                            >
-                                                Bắt đầu đặt hàng
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <EmptyState
+                                        title="Bắt đầu đặt món!"
+                                        description="Bạn chưa có đơn hàng nào"
+                                        actionText="Bắt đầu đặt hàng"
+                                        actionPath="/products"
+                                    />
                                 ) : filteredOrders.length === 0 ? (
                                     <div className="empty-orders-search text-center py-5">
                                         <h4>Không tìm thấy đơn hàng nào</h4>
@@ -524,7 +518,7 @@ const Account = () => {
                                                 <label>Họ và tên</label>
                                                 <input
                                                     type="text"
-                                                    className="form-control-kfc"
+                                                    className="form-control"
                                                     value={userInfo.name}
                                                     onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
                                                     required
@@ -534,7 +528,7 @@ const Account = () => {
                                                 <label>Số điện thoại</label>
                                                 <input
                                                     type="tel"
-                                                    className="form-control-kfc"
+                                                    className="form-control"
                                                     value={userInfo.phone}
                                                     onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
                                                     required
@@ -546,7 +540,7 @@ const Account = () => {
                                                 <label>Email</label>
                                                 <input
                                                     type="email"
-                                                    className="form-control-kfc"
+                                                    className="form-control"
                                                     value={userInfo.email}
                                                     onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
                                                     disabled
@@ -556,7 +550,7 @@ const Account = () => {
                                                 <label>Ngày sinh</label>
                                                 <input
                                                     type="date"
-                                                    className="form-control-kfc"
+                                                    className="form-control"
                                                     value={userInfo.birthdate}
                                                     onChange={(e) => setUserInfo({ ...userInfo, birthdate: e.target.value })}
                                                 />
@@ -574,7 +568,7 @@ const Account = () => {
                                                 <label>Mật khẩu hiện tại</label>
                                                 <input
                                                     type="password"
-                                                    className="form-control-kfc"
+                                                    className="form-control"
                                                     value={passwordData.currentPassword}
                                                     onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                                                     required
@@ -586,7 +580,7 @@ const Account = () => {
                                                 <label>Mật khẩu mới</label>
                                                 <input
                                                     type="password"
-                                                    className="form-control-kfc"
+                                                    className="form-control"
                                                     value={passwordData.newPassword}
                                                     onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                                                     required
@@ -597,7 +591,7 @@ const Account = () => {
                                                 <label>Xác nhận mật khẩu</label>
                                                 <input
                                                     type="password"
-                                                    className="form-control-kfc"
+                                                    className="form-control"
                                                     value={passwordData.confirmPassword}
                                                     onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                                                     required
@@ -694,7 +688,7 @@ const Account = () => {
                                 <label>Tên địa chỉ <span className="text-danger">*</span></label>
                                 <input
                                     type="text"
-                                    className="form-control-kfc"
+                                    className="form-control"
                                     placeholder="VD: Nhà, Công ty, Nhà bạn..."
                                     value={addressForm.label}
                                     onChange={(e) => setAddressForm({ ...addressForm, label: e.target.value })}
@@ -725,7 +719,7 @@ const Account = () => {
                                     </button>
                                 </div>
                                 <textarea
-                                    className="form-control-kfc"
+                                    className="form-control"
                                     placeholder="Nhập địa chỉ chi tiết (đường, quận, thành phố...)"
                                     rows="3"
                                     value={addressForm.fullAddress}

@@ -407,7 +407,7 @@ const Checkout = () => {
                                     <label className="form-label">Họ và tên *</label>
                                     <input
                                         type="text"
-                                        className="form-control-kfc"
+                                        className="form-control"
                                         name="fullName"
                                         placeholder="Nhập họ tên"
                                         value={formData.fullName}
@@ -419,7 +419,7 @@ const Checkout = () => {
                                     <label className="form-label">Số điện thoại *</label>
                                     <input
                                         type="tel"
-                                        className="form-control-kfc"
+                                        className="form-control"
                                         name="phone"
                                         placeholder="Nhập số điện thoại"
                                         value={formData.phone}
@@ -454,7 +454,7 @@ const Checkout = () => {
                                             <label className="form-label">Địa chỉ nhận hàng *</label>
                                             <input
                                                 type="text"
-                                                className="form-control-kfc"
+                                                className="form-control"
                                                 name="address"
                                                 placeholder="Số nhà, tên đường, phường/xã..."
                                                 value={formData.address}
@@ -465,7 +465,7 @@ const Checkout = () => {
                                         <div className="col-12 form-group">
                                             <label className="form-label">Ghi chú cho tài xế</label>
                                             <textarea
-                                                className="form-control-kfc"
+                                                className="form-control"
                                                 name="note"
                                                 rows="2"
                                                 placeholder="Ví dụ: Lấy nhiều tương ớt, không lấy đá, giao lên tận phòng..."
@@ -534,7 +534,7 @@ const Checkout = () => {
                                         <div className="col-12 form-group">
                                             <label className="form-label">Ghi chú cho cửa hàng</label>
                                             <textarea
-                                                className="form-control-kfc"
+                                                className="form-control"
                                                 name="note"
                                                 rows="2"
                                                 placeholder="Ví dụ: Tôi sẽ đến lấy lúc 18h..."
