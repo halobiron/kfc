@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import authApi from '../../../../api/authApi';
-import '../Login/login.css';
+import '../../auth.css';
 import authBg from '../../../../assets/images/common/auth-bg.jpg';
 
 const ForgotPassword = () => {

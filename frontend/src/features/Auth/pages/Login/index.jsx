@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../../authSlice';
 import authApi from '../../../../api/authApi';
-import './login.css'
+import '../../auth.css'
 import signinImg from '../../../../assets/images/common/auth-bg.jpg'
 import { FcGoogle } from 'react-icons/fc';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
