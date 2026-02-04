@@ -37,7 +37,7 @@ const OrderSuccess = () => {
             }
         };
         fetchOrder();
-    }, [orderId, status]);
+    }, [orderId, status, dispatch]);
 
     return (
         <div className="order-success-wrapper">
