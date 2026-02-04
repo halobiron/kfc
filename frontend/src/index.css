@@ -68,10 +68,6 @@ h6 {
   font-weight: 500;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
 .btn:focus,
 .btn:active:focus {
   box-shadow: 0 0 0 2px rgba(228, 0, 43, 0.25);
@@ -79,7 +75,7 @@ code {
 }
 
 .error {
-    color: #f00;
+  color: #f00;
 }
 
 /* Global Brand Utilities */

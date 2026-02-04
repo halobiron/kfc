@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import './App.css';
 import Home from './pages/Home';
 import Product from './features/Product/pages/Product';
 import ProductDetail from './features/Product/pages/ProductDetail';
@@ -21,7 +20,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import {
-  BrowserRouter,
   Routes,
   Route,
   useLocation,
@@ -91,22 +89,20 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <BrowserRouter>
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-        <Layout>
-          <AnimatedRoutes />
-        </Layout>
-      </BrowserRouter>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <Layout>
+        <AnimatedRoutes />
+      </Layout>
     </ErrorBoundary>
   );
 }

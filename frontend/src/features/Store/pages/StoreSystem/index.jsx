@@ -87,7 +87,6 @@ const StoreSystem = () => {
     const [expandedStore, setExpandedStore] = useState(null);
     const [userLocation, setUserLocation] = useState(null);
     const [sortedStores, setSortedStores] = useState([]);
-    const [loadingLocation, setLoadingLocation] = useState(false);
     const [locationError, setLocationError] = useState(null);
     const [isSearching, setIsSearching] = useState(false);
     const [mapCenter, setMapCenter] = useState({ lat: 10.7718, lng: 106.6015 }); // Default HCM
@@ -130,7 +129,7 @@ const StoreSystem = () => {
             return;
         }
 
-        setLoadingLocation(true);
+        setIsSearching(true);
         setLocationError(null);
         navigator.geolocation.getCurrentPosition(
             async (pos) => {
@@ -149,14 +148,14 @@ const StoreSystem = () => {
                     }
                 } catch (err) {
                     console.error("Reverse geocoding error", err);
+                } finally {
+                    setIsSearching(false);
                 }
-
-                setLoadingLocation(false);
             },
             (err) => {
                 console.error("Error getting location:", err);
                 setLocationError("Không thể lấy vị trí của bạn.");
-                setLoadingLocation(false);
+                setIsSearching(false);
             }
         );
     };
@@ -170,7 +169,6 @@ const StoreSystem = () => {
         const selected = savedAddresses[index];
         if (!selected) return;
 
-        setLoadingLocation(true);
         setIsSearching(true);
         let lat, lng;
 
@@ -199,7 +197,6 @@ const StoreSystem = () => {
         } catch (e) {
             setLocationError("Lỗi khi tìm vị trí.");
         } finally {
-            setLoadingLocation(false);
             setIsSearching(false);
         }
     };

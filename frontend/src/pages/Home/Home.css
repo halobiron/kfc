@@ -3,26 +3,6 @@
     background-color: #f8f9fa;
 }
 
-.category-card {
-    background: white;
-    border-radius: 8px;
-    padding: 1.5rem;
-    text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.category-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
 .category-title {
     font-family: 'Oswald', sans-serif;
     margin-top: 1rem;
@@ -43,17 +23,10 @@
     font-size: 2.25rem;
 }
 
-/* Product Section */
 .home-product-section {
     background-color: #f8f9fa;
 }
 
-.home-product-section .row {
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 1.5rem;
-}
-
-/* Mock icons until real assets are available */
 .mock-icon {
     width: 60px;
     height: 60px;

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import Card from '../../features/Product/components/ProductCard'
+import ProductCard from '../../features/Product/components/ProductCard'
+import Card from '../../components/Card'
 
 import Slider from '../../components/Slider'
 
@@ -40,13 +41,13 @@ const Home = () => {
           <div className="row g-3">
             {categories.map((cat, index) => (
               <div key={index} className="col-6 col-md-4 col-lg-3">
-                <Link to={`/products?category=${cat.slug}`} className="text-decoration-none text-dark">
-                  <div className="category-card">
+                <Link to={`/products?category=${cat.slug}`} className="text-decoration-none text-dark h-100">
+                  <Card className="d-flex flex-column align-items-center justify-content-center text-center p-4">
                     <div className="mock-icon">
                       <i className={`bi ${cat.icon}`}></i>
                     </div>
                     <div className="category-title">{cat.name}</div>
-                  </div>
+                  </Card>
                 </Link>
               </div>
             ))}
@@ -72,7 +73,7 @@ const Home = () => {
             <div className="row">
               {featuredProducts.map(product => (
                 <div key={product._id} className="col-md-4">
-                  <Card product={product} />
+                  <ProductCard product={product} />
                 </div>
               ))}
             </div>
