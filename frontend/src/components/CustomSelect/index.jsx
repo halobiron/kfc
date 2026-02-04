@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './CustomSelect.css';
 
-const CustomSelect = ({ 
-  options = [], 
-  value, 
-  onChange, 
+const CustomSelect = ({
+  options = [],
+  value,
+  onChange,
   placeholder = 'Chọn',
   className = '',
   id,
@@ -29,7 +29,7 @@ const CustomSelect = ({
   // Find selected label
   const getSelectedLabel = () => {
     if (!value) return placeholder;
-    
+
     // Search in flat options
     let selected = options.find(opt => opt.value === value);
     if (selected) return selected.label;
@@ -41,7 +41,7 @@ const CustomSelect = ({
         if (selected) return selected.label;
       }
     }
-    
+
     return value; // Fallback
   };
 
@@ -52,9 +52,9 @@ const CustomSelect = ({
 
   return (
     <div className={`custom-select-wrapper ${className}`} ref={wrapperRef} id={id}>
-      <button 
-        type="button" 
-        className={`form-select text-start ${isOpen ? 'is-open' : ''}`}
+      <button
+        type="button"
+        className={`select-trigger text-start ${isOpen ? 'is-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
@@ -63,21 +63,22 @@ const CustomSelect = ({
       </button>
 
       {isOpen && (
-        <ul className="dropdown-menu show w-100">
+        <ul className="select-dropdown">
           {options.map((opt, idx) => {
             // Render Optgroup
             if (opt.options) {
               return (
                 <React.Fragment key={idx}>
-                  {idx > 0 && <li><hr className="dropdown-divider" /></li>}
-                  <li><h6 className="dropdown-header">{opt.label}</h6></li>
+                  {idx > 0 && <li><hr className="select-divider" /></li>}
+                  <li><h6 className="select-header">{opt.label}</h6></li>
                   {opt.options.map((subOpt, subIdx) => (
                     <li key={`${idx}-${subIdx}`}>
-                      <button 
-                        className={`dropdown-item ${value === subOpt.value ? 'active' : ''}`}
+                      <button
+                        className={`select-item ${value === subOpt.value ? 'active' : ''}`}
                         type="button"
                         onClick={() => handleSelect(subOpt.value)}
                       >
+                        {subOpt.icon && <i className={`${subOpt.icon} me-2`}></i>}
                         {subOpt.label}
                       </button>
                     </li>
@@ -88,11 +89,12 @@ const CustomSelect = ({
             // Render Standard Option
             return (
               <li key={idx}>
-                <button 
-                  className={`dropdown-item ${value === opt.value ? 'active' : ''}`} 
+                <button
+                  className={`select-item ${value === opt.value ? 'active' : ''}`}
                   type="button"
                   onClick={() => handleSelect(opt.value)}
                 >
+                  {opt.icon && <i className={`${opt.icon} me-2`}></i>}
                   {opt.label}
                 </button>
               </li>

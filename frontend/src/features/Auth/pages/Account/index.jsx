@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout, updateUserSuccess } from '../../authSlice';
 import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
+import FormInput from '../../../../components/FormInput';
 import EmptyState from '../../../../components/EmptyState';
 import './Account.css';
 
@@ -397,9 +398,8 @@ const Account = () => {
                                 {orders.length > 0 && (
                                     <div className="search-filter-section">
                                         <div className="search-box">
-                                            <input
+                                            <FormInput
                                                 type="text"
-                                                className="form-control"
                                                 placeholder="Tìm theo Mã đơn hàng hoặc Tên món..."
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -516,9 +516,8 @@ const Account = () => {
                                         <div className="form-row">
                                             <div className="form-group">
                                                 <label>Họ và tên</label>
-                                                <input
+                                                <FormInput
                                                     type="text"
-                                                    className="form-control"
                                                     value={userInfo.name}
                                                     onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
                                                     required
@@ -526,9 +525,8 @@ const Account = () => {
                                             </div>
                                             <div className="form-group">
                                                 <label>Số điện thoại</label>
-                                                <input
+                                                <FormInput
                                                     type="tel"
-                                                    className="form-control"
                                                     value={userInfo.phone}
                                                     onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
                                                     required
@@ -538,9 +536,8 @@ const Account = () => {
                                         <div className="form-row">
                                             <div className="form-group">
                                                 <label>Email</label>
-                                                <input
+                                                <FormInput
                                                     type="email"
-                                                    className="form-control"
                                                     value={userInfo.email}
                                                     onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
                                                     disabled
@@ -548,9 +545,8 @@ const Account = () => {
                                             </div>
                                             <div className="form-group">
                                                 <label>Ngày sinh</label>
-                                                <input
+                                                <FormInput
                                                     type="date"
-                                                    className="form-control"
                                                     value={userInfo.birthdate}
                                                     onChange={(e) => setUserInfo({ ...userInfo, birthdate: e.target.value })}
                                                 />
@@ -566,9 +562,8 @@ const Account = () => {
                                         <div className="form-row">
                                             <div className="form-group">
                                                 <label>Mật khẩu hiện tại</label>
-                                                <input
+                                                <FormInput
                                                     type="password"
-                                                    className="form-control"
                                                     value={passwordData.currentPassword}
                                                     onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                                                     required
@@ -578,9 +573,8 @@ const Account = () => {
                                         <div className="form-row">
                                             <div className="form-group">
                                                 <label>Mật khẩu mới</label>
-                                                <input
+                                                <FormInput
                                                     type="password"
-                                                    className="form-control"
                                                     value={passwordData.newPassword}
                                                     onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                                                     required
@@ -589,9 +583,8 @@ const Account = () => {
                                             </div>
                                             <div className="form-group">
                                                 <label>Xác nhận mật khẩu</label>
-                                                <input
+                                                <FormInput
                                                     type="password"
-                                                    className="form-control"
                                                     value={passwordData.confirmPassword}
                                                     onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                                                     required
@@ -686,9 +679,8 @@ const Account = () => {
                         <div className="address-modal-body">
                             <div className="form-group">
                                 <label>Tên địa chỉ <span className="text-danger">*</span></label>
-                                <input
+                                <FormInput
                                     type="text"
-                                    className="form-control"
                                     placeholder="VD: Nhà, Công ty, Nhà bạn..."
                                     value={addressForm.label}
                                     onChange={(e) => setAddressForm({ ...addressForm, label: e.target.value })}
@@ -719,7 +711,7 @@ const Account = () => {
                                     </button>
                                 </div>
                                 <textarea
-                                    className="form-control"
+                                    className="form-input-kfc"
                                     placeholder="Nhập địa chỉ chi tiết (đường, quận, thành phố...)"
                                     rows="3"
                                     value={addressForm.fullAddress}

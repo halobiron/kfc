@@ -11,13 +11,13 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.track-order-wrapper .form-control {
+.track-order-wrapper .form-input-kfc {
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 12px;
 }
 
-.track-order-wrapper .form-control:focus {
+.track-order-wrapper .form-input-kfc:focus {
     border-color: #e4002b;
     box-shadow: none;
 }

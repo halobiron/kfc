@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
+import FormInput from '../../../../components/FormInput';
 
 import './Checkout.css';
 import { getAllCoupons } from '../../couponSlice';
@@ -240,6 +241,29 @@ const Checkout = () => {
         }
     };
 
+    const searchLocationOptions = useMemo(() => [
+        { value: 'current', label: 'Vị trí hiện tại (GPS)', icon: 'bi bi-crosshair text-danger' },
+        ...(savedAddresses.length > 0 ? [
+            {
+                label: 'Từ địa chỉ đã lưu',
+                options: savedAddresses.map((addr, idx) => ({
+                    value: `saved-${idx}`,
+                    label: `${addr.label} - ${addr.fullAddress}`,
+                    icon: 'bi bi-house'
+                }))
+            }
+        ] : [])
+    ], [savedAddresses]);
+
+    const handleLocationSearchSelect = (val) => {
+        if (val === 'current') {
+            handleFindNearestStore('current');
+        } else if (val.startsWith('saved-')) {
+            const index = parseInt(val.split('-')[1]);
+            handleFindNearestStore('saved', index);
+        }
+    };
+
     const removeCoupon = () => {
         setAppliedCoupon(null);
         setCouponCode('');
@@ -405,9 +429,8 @@ const Checkout = () => {
                             <div className="row">
                                 <div className="col-md-6 form-group">
                                     <label className="form-label">Họ và tên *</label>
-                                    <input
+                                    <FormInput
                                         type="text"
-                                        className="form-control"
                                         name="fullName"
                                         placeholder="Nhập họ tên"
                                         value={formData.fullName}
@@ -417,9 +440,8 @@ const Checkout = () => {
                                 </div>
                                 <div className="col-md-6 form-group">
                                     <label className="form-label">Số điện thoại *</label>
-                                    <input
+                                    <FormInput
                                         type="tel"
-                                        className="form-control"
                                         name="phone"
                                         placeholder="Nhập số điện thoại"
                                         value={formData.phone}
@@ -452,9 +474,8 @@ const Checkout = () => {
 
                                         <div className="col-12 form-group">
                                             <label className="form-label">Địa chỉ nhận hàng *</label>
-                                            <input
+                                            <FormInput
                                                 type="text"
-                                                className="form-control"
                                                 name="address"
                                                 placeholder="Số nhà, tên đường, phường/xã..."
                                                 value={formData.address}
@@ -465,7 +486,7 @@ const Checkout = () => {
                                         <div className="col-12 form-group">
                                             <label className="form-label">Ghi chú cho tài xế</label>
                                             <textarea
-                                                className="form-control"
+                                                className="form-input-kfc"
                                                 name="note"
                                                 rows="2"
                                                 placeholder="Ví dụ: Lấy nhiều tương ớt, không lấy đá, giao lên tận phòng..."
@@ -482,31 +503,12 @@ const Checkout = () => {
                                                     <i className="bi bi-geo-alt-fill me-1 text-danger"></i>
                                                     Tìm quán gần bạn...
                                                 </label>
-                                                <div className="dropdown w-100">
-                                                    <button className="form-select text-start" type="button" data-bs-toggle="dropdown">
-                                                        <span>Chọn cách tìm kiếm...</span>
-                                                    </button>
-                                                    <ul className="dropdown-menu w-100">
-                                                        <li>
-                                                            <button className="dropdown-item" onClick={() => handleFindNearestStore('current')}>
-                                                                <i className="bi bi-crosshair me-2 text-danger"></i>Vị trí hiện tại (GPS)
-                                                            </button>
-                                                        </li>
-                                                        {savedAddresses.length > 0 && (
-                                                            <>
-                                                                <li><hr className="dropdown-divider" /></li>
-                                                                <li><h6 className="dropdown-header">Từ địa chỉ đã lưu</h6></li>
-                                                                {savedAddresses.map((addr, idx) => (
-                                                                    <li key={idx}>
-                                                                        <button className="dropdown-item small text-wrap" onClick={() => handleFindNearestStore('saved', idx)}>
-                                                                            <i className="bi bi-house me-2"></i><strong>{addr.label}</strong> - {addr.fullAddress}
-                                                                        </button>
-                                                                    </li>
-                                                                ))}
-                                                            </>
-                                                        )}
-                                                    </ul>
-                                                </div>
+                                                <CustomSelect
+                                                    options={searchLocationOptions}
+                                                    value=""
+                                                    onChange={handleLocationSearchSelect}
+                                                    placeholder="Chọn cách tìm kiếm..."
+                                                />
                                             </div>
                                         </div>
 
@@ -534,7 +536,7 @@ const Checkout = () => {
                                         <div className="col-12 form-group">
                                             <label className="form-label">Ghi chú cho cửa hàng</label>
                                             <textarea
-                                                className="form-control"
+                                                className="form-input-kfc"
                                                 name="note"
                                                 rows="2"
                                                 placeholder="Ví dụ: Tôi sẽ đến lấy lúc 18h..."
@@ -614,9 +616,8 @@ const Checkout = () => {
                                     <span className="fw-bold"><i className="bi bi-ticket-perforated-fill me-1 text-danger"></i>Mã khuyến mãi</span>
                                 </label>
                                 <div className="input-group">
-                                    <input
+                                    <FormInput
                                         type="text"
-                                        className="form-control"
                                         placeholder="Nhập mã voucher"
                                         value={couponCode}
                                         onChange={(e) => setCouponCode(e.target.value.toUpperCase())}

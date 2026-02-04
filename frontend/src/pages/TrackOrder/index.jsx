@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axiosClient from '../../api/axiosClient';
 import { toast } from 'react-toastify';
+import FormInput from '../../components/FormInput';
 import './TrackOrder.css';
 
 const TrackOrder = () => {
@@ -57,18 +58,16 @@ const TrackOrder = () => {
                             <h2 className="text-center fw-bold mb-4" style={{ color: '#e4002b' }}>TRA CỨU ĐƠN HÀNG</h2>
                             <form onSubmit={handleLookup}>
                                 <div className="mb-3">
-                                    <input
+                                    <FormInput
                                         type="text"
-                                        className="form-control"
                                         placeholder="Mã đơn hàng (Ví dụ: ORD...)"
                                         value={orderNumber}
                                         onChange={(e) => setOrderNumber(e.target.value)}
                                     />
                                 </div>
                                 <div className="mb-3">
-                                    <input
+                                    <FormInput
                                         type="tel"
-                                        className="form-control"
                                         placeholder="Số điện thoại đặt hàng"
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}
