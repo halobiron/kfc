@@ -7,7 +7,7 @@ import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
 import FormInput from '../../../../components/FormInput';
 import EmptyState from '../../../../components/EmptyState';
-import Button from '../../../../components/common/Button';
+import Button from '../../../../components/Button';
 import './Account.css';
 
 const Account = () => {
@@ -515,43 +515,35 @@ const Account = () => {
                                     <h4>Thông tin cá nhân</h4>
                                     <form onSubmit={handleUpdateInfo}>
                                         <div className="form-row">
-                                            <div className="form-group">
-                                                <label>Họ và tên</label>
-                                                <FormInput
-                                                    type="text"
-                                                    value={userInfo.name}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
-                                                    required
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Số điện thoại</label>
-                                                <FormInput
-                                                    type="tel"
-                                                    value={userInfo.phone}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
-                                                    required
-                                                />
-                                            </div>
+                                            <FormInput
+                                                label="Họ và tên"
+                                                type="text"
+                                                value={userInfo.name}
+                                                onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
+                                                required
+                                            />
+                                            <FormInput
+                                                label="Số điện thoại"
+                                                type="tel"
+                                                value={userInfo.phone}
+                                                onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
+                                                required
+                                            />
                                         </div>
                                         <div className="form-row">
-                                            <div className="form-group">
-                                                <label>Email</label>
-                                                <FormInput
-                                                    type="email"
-                                                    value={userInfo.email}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
-                                                    disabled
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Ngày sinh</label>
-                                                <FormInput
-                                                    type="date"
-                                                    value={userInfo.birthdate}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, birthdate: e.target.value })}
-                                                />
-                                            </div>
+                                            <FormInput
+                                                label="Email"
+                                                type="email"
+                                                value={userInfo.email}
+                                                onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
+                                                disabled
+                                            />
+                                            <FormInput
+                                                label="Ngày sinh"
+                                                type="date"
+                                                value={userInfo.birthdate}
+                                                onChange={(e) => setUserInfo({ ...userInfo, birthdate: e.target.value })}
+                                            />
                                         </div>
                                         <Button type="submit" variant="primary">Lưu thông tin</Button>
                                     </form>
@@ -561,37 +553,31 @@ const Account = () => {
                                     <h4>Đổi mật khẩu</h4>
                                     <form onSubmit={handleChangePassword}>
                                         <div className="form-row">
-                                            <div className="form-group">
-                                                <label>Mật khẩu hiện tại</label>
-                                                <FormInput
-                                                    type="password"
-                                                    value={passwordData.currentPassword}
-                                                    onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                                                    required
-                                                />
-                                            </div>
+                                            <FormInput
+                                                label="Mật khẩu hiện tại"
+                                                type="password"
+                                                value={passwordData.currentPassword}
+                                                onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                                                required
+                                            />
                                         </div>
                                         <div className="form-row">
-                                            <div className="form-group">
-                                                <label>Mật khẩu mới</label>
-                                                <FormInput
-                                                    type="password"
-                                                    value={passwordData.newPassword}
-                                                    onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                                                    required
-                                                    minLength="6"
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Xác nhận mật khẩu</label>
-                                                <FormInput
-                                                    type="password"
-                                                    value={passwordData.confirmPassword}
-                                                    onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                                                    required
-                                                    minLength="6"
-                                                />
-                                            </div>
+                                            <FormInput
+                                                label="Mật khẩu mới"
+                                                type="password"
+                                                value={passwordData.newPassword}
+                                                onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                                                required
+                                                minLength="6"
+                                            />
+                                            <FormInput
+                                                label="Xác nhận mật khẩu"
+                                                type="password"
+                                                value={passwordData.confirmPassword}
+                                                onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                                                required
+                                                minLength="6"
+                                            />
                                         </div>
                                         <Button type="submit" variant="primary">Cập nhật mật khẩu</Button>
                                     </form>
@@ -683,16 +669,14 @@ const Account = () => {
                             </button>
                         </div>
                         <div className="address-modal-body">
-                            <div className="form-group">
-                                <label>Tên địa chỉ <span className="text-danger">*</span></label>
-                                <FormInput
-                                    type="text"
-                                    placeholder="VD: Nhà, Công ty, Nhà bạn..."
-                                    value={addressForm.label}
-                                    onChange={(e) => setAddressForm({ ...addressForm, label: e.target.value })}
-                                    required
-                                />
-                            </div>
+                            <FormInput
+                                label={<>Tên địa chỉ <span className="text-danger">*</span></>}
+                                type="text"
+                                placeholder="VD: Nhà, Công ty, Nhà bạn..."
+                                value={addressForm.label}
+                                onChange={(e) => setAddressForm({ ...addressForm, label: e.target.value })}
+                                required
+                            />
 
                             <div className="form-group">
                                 <div className="label-with-button">

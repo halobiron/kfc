@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import './product-detail.css';
 import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
-import Button from '../../../../components/common/Button';
+import Button from '../../../../components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../../Cart/cartSlice';
 import { getProductById } from '../../productSlice';

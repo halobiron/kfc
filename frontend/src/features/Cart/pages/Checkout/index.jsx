@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
 import FormInput from '../../../../components/FormInput';
-import Button from '../../../../components/common/Button';
+import Button from '../../../../components/Button';
 
 import './Checkout.css';
 import { getAllCoupons } from '../../couponSlice';
@@ -428,28 +428,26 @@ const Checkout = () => {
                                 {deliveryType === 'delivery' ? 'Thông Tin Giao Hàng' : 'Thông Tin Nhận Hàng'}
                             </h3>
                             <div className="row">
-                                <div className="col-md-6 form-group">
-                                    <label className="form-label">Họ và tên *</label>
-                                    <FormInput
-                                        type="text"
-                                        name="fullName"
-                                        placeholder="Nhập họ tên"
-                                        value={formData.fullName}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="col-md-6 form-group">
-                                    <label className="form-label">Số điện thoại *</label>
-                                    <FormInput
-                                        type="tel"
-                                        name="phone"
-                                        placeholder="Nhập số điện thoại"
-                                        value={formData.phone}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
+                                <FormInput
+                                    containerClass="col-md-6"
+                                    label="Họ và tên *"
+                                    type="text"
+                                    name="fullName"
+                                    placeholder="Nhập họ tên"
+                                    value={formData.fullName}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                                <FormInput
+                                    containerClass="col-md-6"
+                                    label="Số điện thoại *"
+                                    type="tel"
+                                    name="phone"
+                                    placeholder="Nhập số điện thoại"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                    required
+                                />
 
                                 {deliveryType === 'delivery' ? (
                                     <>
@@ -473,17 +471,16 @@ const Checkout = () => {
                                             </div>
                                         )}
 
-                                        <div className="col-12 form-group">
-                                            <label className="form-label">Địa chỉ nhận hàng *</label>
-                                            <FormInput
-                                                type="text"
-                                                name="address"
-                                                placeholder="Số nhà, tên đường, phường/xã..."
-                                                value={formData.address}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </div>
+                                        <FormInput
+                                            containerClass="col-12"
+                                            label="Địa chỉ nhận hàng *"
+                                            type="text"
+                                            name="address"
+                                            placeholder="Số nhà, tên đường, phường/xã..."
+                                            value={formData.address}
+                                            onChange={handleInputChange}
+                                            required
+                                        />
                                         <div className="col-12 form-group">
                                             <label className="form-label">Ghi chú cho tài xế</label>
                                             <textarea

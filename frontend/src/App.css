@@ -2,31 +2,6 @@
     color: #f00;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: #666;
-    font-size: 0.95rem;
-    font-weight: 400;
-}
-
-.form-input {
-    width: 100%;
-    padding: 12px 0;
-    border: none;
-    border-bottom: 1px solid #ddd;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.form-input:focus {
-    border-bottom-color: var(--kfc-red, #E4002B);
-}
-
-.form-input::placeholder {
-    color: #999;
-}
-
 .card-kfc {
     background: white;
     border-radius: 12px;

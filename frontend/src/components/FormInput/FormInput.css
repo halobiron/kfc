@@ -1,3 +1,15 @@
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #5f6368;
+    margin-bottom: 5px;
+    display: block;
+}
+
 .form-input-kfc {
     display: block;
     width: 100%;
@@ -16,4 +28,14 @@
     border-color: var(--kfc-red, #e4002b);
     outline: 0;
     box-shadow: 0 0 0 2px rgba(228, 0, 43, 0.1);
+}
+
+.form-input-kfc:disabled {
+    background-color: #e9ecef;
+    opacity: 1;
+    cursor: not-allowed;
+}
+
+.form-input-kfc[type="file"] {
+    padding: 9px 15px;
 }

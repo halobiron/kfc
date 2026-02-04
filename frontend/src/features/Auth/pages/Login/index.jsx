@@ -13,7 +13,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 import { useGoogleLogin } from '@react-oauth/google';
-import Button from '../../../../components/common/Button';
+import Button from '../../../../components/Button';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './EmptyState.css';
-import Button from '../common/Button';
+import Button from '../Button';
 
 const EmptyState = ({
     title,

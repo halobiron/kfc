@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addToCart } from '../../../Cart/cartSlice';
-import Button from '../../../../components/common/Button';
+import Button from '../../../../components/Button';
 import './card.css';
 
 const Card = ({ product }) => {

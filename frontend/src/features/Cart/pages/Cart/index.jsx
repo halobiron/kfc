@@ -7,7 +7,7 @@ import { removeFromCart, updateQuantity } from '../../cartSlice';
 import './Cart.css';
 import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
 import EmptyState from '../../../../components/EmptyState';
-import Button from '../../../../components/common/Button';
+import Button from '../../../../components/Button';
 
 // Placeholder image if real ones aren't available
 const PLACEHOLDER_IMG = "https://static.kfcvietnam.com.vn/images/items/lg/D-C-Ga-Ran.jpg?v=gXQ2pg";

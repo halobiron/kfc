@@ -12,7 +12,7 @@ import './register.css'
 import signinImg from '../../../../assets/images/common/auth-bg.jpg'
 import { FcGoogle } from 'react-icons/fc';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import Button from '../../../../components/common/Button';
+import Button from '../../../../components/Button';
 
 const Register = () => {
     const dispatch = useDispatch();

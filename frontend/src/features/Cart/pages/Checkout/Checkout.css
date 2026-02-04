@@ -56,18 +56,6 @@
     color: #e4002b;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-label {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #5f6368;
-    margin-bottom: 5px;
-    display: block;
-}
-
 .payment-methods {
     display: flex;
     flex-direction: column;

@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import authApi from '../../../../api/authApi';
 import '../../auth.css';
 import authBg from '../../../../assets/images/common/auth-bg.jpg';
-import Button from '../../../../components/common/Button';
+import Button from '../../../../components/Button';
 
 const ResetPassword = () => {
     const [showPassword, setShowPassword] = useState(false);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axiosClient from '../../api/axiosClient';
 import { toast } from 'react-toastify';
 import FormInput from '../../components/FormInput';
-import Button from '../../components/common/Button';
+import Button from '../../components/Button';
 import './TrackOrder.css';
 
 const TrackOrder = () => {
@@ -58,22 +58,22 @@ const TrackOrder = () => {
                         <div className="track-order-card p-4 h-100">
                             <h2 className="text-center fw-bold mb-4" style={{ color: '#e4002b' }}>TRA CỨU ĐƠN HÀNG</h2>
                             <form onSubmit={handleLookup}>
-                                <div className="mb-3">
-                                    <FormInput
-                                        type="text"
-                                        placeholder="Mã đơn hàng (Ví dụ: ORD...)"
-                                        value={orderNumber}
-                                        onChange={(e) => setOrderNumber(e.target.value)}
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <FormInput
-                                        type="tel"
-                                        placeholder="Số điện thoại đặt hàng"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                    />
-                                </div>
+                                <FormInput
+                                    containerClass="mb-3"
+                                    label="Mã đơn hàng"
+                                    type="text"
+                                    placeholder="Ví dụ: ORD..."
+                                    value={orderNumber}
+                                    onChange={(e) => setOrderNumber(e.target.value)}
+                                />
+                                <FormInput
+                                    containerClass="mb-3"
+                                    label="Số điện thoại"
+                                    type="tel"
+                                    placeholder="Nhập số điện thoại"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                />
                                 <Button
                                     type="submit"
                                     variant="primary"
