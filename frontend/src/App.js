@@ -57,7 +57,7 @@ const AnimatedRoutes = () => {
         <Route path="/privacy-policy" element={<AnimatedPage><PrivacyPolicy /></AnimatedPage>} />
         <Route path="/terms-of-use" element={<AnimatedPage><TermsOfUse /></AnimatedPage>} />
         <Route path="/order-success" element={<AnimatedPage><OrderSuccess /></AnimatedPage>} />
-        <Route path="*" element={<AnimatedPage><ErrorPage showLayout={false} /></AnimatedPage>} />
+        <Route path="*" element={<AnimatedPage><ErrorPage /></AnimatedPage>} />
       </Routes>
     </AnimatePresence>
   );
