@@ -8,45 +8,39 @@ import Slider from '../../components/Slider'
 
 import { getAllProducts } from '../../features/Product/productSlice'
 import { getAllCategories } from '../../features/Product/categorySlice'
-import { getAllCoupons } from '../../features/Cart/couponSlice'
 import './Home.css'
 
 const Home = () => {
   const dispatch = useDispatch();
   const { products, loading: productsLoading } = useSelector((state) => state.products);
   const { categories } = useSelector((state) => state.categories);
-  useSelector((state) => state.coupons);
 
   useEffect(() => {
     dispatch(getAllProducts());
     dispatch(getAllCategories());
-    dispatch(getAllCoupons());
   }, [dispatch]);
 
-
-  // Get first 3 products from API
-  const featuredProducts = Array.isArray(products) ? products.slice(0, 3) : [];
+  const featuredProducts = products.slice(0, 3);
 
   return (
     <>
       <Slider />
 
-      {/* Category Grid Section */}
       <section className="home-category-section">
         <div className="container">
-          <div className="section-header text-center mt-4">
-            <h3>DANH MỤC MÓN ĂN</h3>
-            <hr className="w-25 mx-auto text-danger border-2 opacity-100" />
+          <div className="section-header">
+            <h2>DANH MỤC MÓN ĂN</h2>
+            <hr className="section-underline" />
           </div>
           <div className="row g-3">
             {categories.map((cat, index) => (
               <div key={index} className="col-6 col-md-4 col-lg-3">
-                <Link to={`/products?category=${cat.slug}`} className="text-decoration-none text-dark h-100">
-                  <Card className="d-flex flex-column align-items-center justify-content-center text-center p-4">
-                    <div className="mock-icon">
+                <Link to={`/products?category=${cat.slug}`} className="category-link">
+                  <Card className="category-card">
+                    <div className="category-icon">
                       <i className={`bi ${cat.icon}`}></i>
                     </div>
-                    <div className="category-title">{cat.name}</div>
+                    <h5 className="category-title">{cat.name}</h5>
                   </Card>
                 </Link>
               </div>
@@ -55,12 +49,11 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Hot Deals / Recommendations Section */}
-      <section className="home-product-section py-5">
+      <section className="home-product-section">
         <div className="container">
-          <div className="section-header text-center">
-            <h3>CÓ THỂ BẠN SẼ THÍCH</h3>
-            <hr className="w-25 mx-auto text-danger border-2 opacity-100" />
+          <div className="section-header">
+            <h2>CÓ THỂ BẠN SẼ THÍCH</h2>
+            <hr className="section-underline" />
           </div>
 
           {productsLoading ? (

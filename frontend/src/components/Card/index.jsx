@@ -3,9 +3,9 @@ import './Card.css';
 
 const Card = ({ children, className = '', style = {}, ...props }) => {
     return (
-        <div 
-            className={`card-kfc ${className}`} 
-            style={style} 
+        <div
+            className={`card-kfc ${className}`}
+            style={style}
             {...props}
         >
             {children}

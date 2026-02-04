@@ -350,9 +350,9 @@ const Checkout = () => {
     return (
         <div className="checkout-wrapper">
             <div className="container checkout-container py-5">
-                <div className="checkout-header">
-                    <h2 className="checkout-title">Thanh Toán</h2>
-                    <div className="cart-title-underline" style={{ width: '50px' }}></div>
+                <div className="section-header">
+                    <h2>Thanh Toán</h2>
+                    <hr className="section-underline" />
                 </div>
 
                 <div className="checkout-layout">

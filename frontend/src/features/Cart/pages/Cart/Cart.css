@@ -2,7 +2,7 @@
 
 /* Cart.css */
 /* 
- * Common styles migrated to App.css.
+ * Common styles migrated to App.css or index.css.
  * Keeping specific cart layout styles.
  */
 
@@ -13,28 +13,6 @@
 .cart-container {
     padding-bottom: 3rem;
 }
-
-.cart-title-section {
-    text-align: center;
-    position: relative;
-    margin-bottom: 2rem;
-}
-
-.cart-title {
-    font-size: 2rem;
-    color: var(--kfc-black);
-}
-
-.cart-title-underline {
-    width: 60px;
-    height: 4px;
-    background-color: var(--kfc-red);
-    margin: 10px auto 0;
-    border-radius: 2px;
-}
-
-/* Empty Cart */
-/* Empty Cart - Moved to EmptyState component */
 
 /* Cart Layout */
 .cart-layout {

@@ -45,9 +45,9 @@ const Cart = () => {
     return (
         <div className="cart-page-wrapper">
             <div className="container cart-container py-5">
-                <div className="cart-title-section">
-                    <h2 className="cart-title text-uppercase">Giỏ Hàng Của Bạn</h2>
-                    <div className="cart-title-underline"></div>
+                <div className="section-header">
+                    <h2>Giỏ Hàng Của Bạn</h2>
+                    <hr className="section-underline" />
                 </div>
 
                 {cartItems.length === 0 ? (
