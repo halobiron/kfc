@@ -6,6 +6,7 @@ import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
 import FormInput from '../../../../components/FormInput';
 import Button from '../../../../components/Button';
+import Card from '../../../../components/Card';
 
 import './Checkout.css';
 import { getAllCoupons } from '../../couponSlice';
@@ -358,7 +359,7 @@ const Checkout = () => {
                     {/* Left Column: Information & Payment */}
                     <div className="checkout-form-section">
                         {/* Delivery Type Selection */}
-                        <div className="card-kfc">
+                        <Card>
                             <h3 className="form-title">
                                 <i className="bi bi-bicycle"></i>
                                 Hình Thức Nhận Hàng
@@ -419,10 +420,10 @@ const Checkout = () => {
                                     <div style={{ fontSize: '0.85rem', color: '#28a745', fontWeight: 'bold' }}>Miễn phí ship</div>
                                 </div>
                             </div>
-                        </div>
+                        </Card>
 
                         {/* Delivery/Pickup Info */}
-                        <div className="card-kfc">
+                        <Card>
                             <h3 className="form-title">
                                 <i className="bi bi-geo-alt-fill"></i>
                                 {deliveryType === 'delivery' ? 'Thông Tin Giao Hàng' : 'Thông Tin Nhận Hàng'}
@@ -545,10 +546,10 @@ const Checkout = () => {
                                     </>
                                 )}
                             </div>
-                        </div>
+                        </Card>
 
                         {/* Payment Method */}
-                        <div className="card-kfc">
+                        <Card>
                             <h3 className="form-title">
                                 <i className="bi bi-credit-card-2-front-fill"></i>
                                 Phương Thức Thanh Toán
@@ -584,12 +585,12 @@ const Checkout = () => {
                                     <span className="payment-label">Thanh toán Online (QR Code/Thẻ/Ví)</span>
                                 </div>
                             </div>
-                        </div>
+                        </Card>
                     </div>
 
                     {/* Right Column: Order Summary */}
                     <div className="checkout-summary-section">
-                        <div className="card-kfc" style={{ position: 'sticky', top: '100px' }}>
+                        <Card style={{ position: 'sticky', top: '100px' }}>
                             <h3 className="form-title" style={{ fontSize: '1.2rem', marginBottom: '15px' }}>
                                 Tóm Tắt Đơn Hàng
                             </h3>
@@ -676,7 +677,7 @@ const Checkout = () => {
                             >
                                 ĐẶT HÀNG
                             </Button>
-                        </div>
+                        </Card>
                     </div>
                 </div>
             </div>

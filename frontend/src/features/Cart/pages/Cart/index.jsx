@@ -8,6 +8,7 @@ import './Cart.css';
 import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
 import EmptyState from '../../../../components/EmptyState';
 import Button from '../../../../components/Button';
+import Card from '../../../../components/Card';
 
 // Placeholder image if real ones aren't available
 const PLACEHOLDER_IMG = "https://static.kfcvietnam.com.vn/images/items/lg/D-C-Ga-Ran.jpg?v=gXQ2pg";
@@ -63,7 +64,7 @@ const Cart = () => {
                                 const itemId = item._id;
 
                                 return (
-                                    <div key={itemId} className="card-kfc" style={{ display: 'flex', padding: '20px', marginBottom: '15px', position: 'relative' }}>
+                                    <Card key={itemId} style={{ display: 'flex', padding: '20px', marginBottom: '15px', position: 'relative' }}>
                                         <button
                                             className="remove-item-btn"
                                             onClick={() => handleRemoveItem(itemId)}
@@ -97,14 +98,14 @@ const Cart = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </Card>
                                 )
                             })}
                         </div>
 
                         {/* Order Summary */}
                         <div className="cart-summary-section">
-                            <div className="card-kfc" style={{ position: 'sticky', top: '100px' }}>
+                            <Card style={{ position: 'sticky', top: '100px' }}>
                                 <h3 className="summary-title">Tóm Tắt Đơn Hàng</h3>
 
                                 <div className="summary-row">
@@ -140,7 +141,7 @@ const Cart = () => {
                                 <Link to="/products" className="continue-shopping-link">
                                     Tiếp tục mua hàng
                                 </Link>
-                            </div>
+                            </Card>
                         </div>
                     </div>
                 )}

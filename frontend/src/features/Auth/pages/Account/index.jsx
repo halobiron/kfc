@@ -8,6 +8,7 @@ import CustomSelect from '../../../../components/CustomSelect';
 import FormInput from '../../../../components/FormInput';
 import EmptyState from '../../../../components/EmptyState';
 import Button from '../../../../components/Button';
+import Card from '../../../../components/Card';
 import './Account.css';
 
 const Account = () => {
@@ -392,7 +393,7 @@ const Account = () => {
                     {/* Right Content Area */}
                     <div className="block-right appear-right">
                         {activeTab === 'orders' && (
-                            <div className="card-kfc">
+                            <Card>
                                 <h3>Các đơn hàng đã đặt</h3>
 
                                 {/* Search and Filter */}
@@ -504,11 +505,11 @@ const Account = () => {
                                         ))}
                                     </div>
                                 )}
-                            </div>
+                            </Card>
                         )}
 
                         {activeTab === 'profile' && (
-                            <div className="card-kfc">
+                            <Card>
                                 <h3>Quản lý hồ sơ</h3>
 
                                 <div className="profile-section">
@@ -582,11 +583,11 @@ const Account = () => {
                                         <Button type="submit" variant="primary">Cập nhật mật khẩu</Button>
                                     </form>
                                 </div>
-                            </div>
+                            </Card>
                         )}
 
                         {activeTab === 'addresses' && (
-                            <div className="card-kfc">
+                            <Card>
                                 <div className="addresses-header">
                                     <h3>Sổ địa chỉ</h3>
                                     <Button
@@ -609,7 +610,7 @@ const Account = () => {
                                     <div className="addresses-list">
                                         {addresses && addresses.length > 0 ? (
                                             addresses.map((address, idx) => (
-                                                <div key={idx} className="card-kfc" style={{ border: '1px solid #e0e0e0', padding: '1.5rem', marginBottom: '1rem', boxShadow: 'none' }}>
+                                                <Card key={idx} style={{ border: '1px solid #e0e0e0', padding: '1.5rem', marginBottom: '1rem', boxShadow: 'none' }}>
                                                     <div className="address-header">
                                                         <h5>
                                                             {address.label}
@@ -642,7 +643,7 @@ const Account = () => {
                                                         </div>
                                                     </div>
                                                     <p className="address-text">{address.fullAddress}</p>
-                                                </div>
+                                                </Card>
                                             ))
                                         ) : (
                                             <div className="empty-addresses">
@@ -652,7 +653,7 @@ const Account = () => {
                                         )}
                                     </div>
                                 )}
-                            </div>
+                            </Card>
                         )}
                     </div>
                 </div>

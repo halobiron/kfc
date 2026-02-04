@@ -352,6 +352,7 @@
 
 .btn-view:hover {
     background: #000;
+    color: #fff;
 }
 
 .btn-cancel {
@@ -362,6 +363,7 @@
 
 .btn-cancel:hover {
     background: #c40025;
+    color: #fff;
 }
 
 /* Profile Content */
