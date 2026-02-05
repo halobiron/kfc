@@ -11,11 +11,11 @@
     margin: 0;
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--account-black, #202124);
+    color: var(--kfc-black);
 }
 
 .btn-add-address {
-    background-color: var(--account-red, #e4002b);
+    background-color: var(--kfc-red);
     color: white;
     padding: 0.5rem 1rem;
     border: none;
@@ -40,7 +40,7 @@
 
 .address-card {
     background-color: #f9f9f9;
-    border: 1px solid var(--account-border, #e0e0e0);
+    border: 1px solid var(--kfc-border-color);
     border-radius: 6px;
     padding: 1.2rem;
 }
@@ -57,7 +57,7 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--account-black, #202124);
+    color: var(--kfc-black);
     display: flex;
     align-items: center;
     gap: 0.6rem;
@@ -65,7 +65,7 @@
 
 .badge-default {
     display: inline-block;
-    background-color: var(--account-red, #e4002b);
+    background-color: var(--kfc-red);
     color: white;
     padding: 0.2rem 0.6rem;
     border-radius: 3px;
@@ -85,7 +85,7 @@
     padding: 0.4rem 0.6rem;
     border: 1px solid #ddd;
     background-color: white;
-    color: var(--account-text-gray, #666);
+    color: var(--kfc-text-gray);
     border-radius: 3px;
     cursor: pointer;
     font-size: 0.8rem;
@@ -122,7 +122,7 @@
 }
 
 .address-text {
-    color: var(--account-text-gray, #666);
+    color: var(--kfc-text-gray);
     margin: 0;
     line-height: 1.5;
     font-size: 0.9rem;
@@ -133,7 +133,7 @@
     padding: 2.5rem 1rem;
     background-color: #f9f9f9;
     border-radius: 6px;
-    border: 1px solid var(--account-border, #e0e0e0);
+    border: 1px solid var(--kfc-border-color);
 }
 
 .empty-addresses i {

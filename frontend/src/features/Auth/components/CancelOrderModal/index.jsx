@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import FormInput from '../../../../components/FormInput';
 import { formatCurrency } from '../../../../utils/formatters';
 import '../AccountModal.css';
@@ -21,7 +22,7 @@ const CancelOrderModal = ({ order, onClose, onConfirm }) => {
 
     if (!order) return null;
 
-    return (
+    return ReactDOM.createPortal(
         <div className="order-modal-overlay" onClick={onClose}>
             <div className="order-modal-content cancel-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="order-modal-header">
@@ -60,7 +61,8 @@ const CancelOrderModal = ({ order, onClose, onConfirm }) => {
                     <button className="btn btn-danger" onClick={handleConfirm}>Xác nhận hủy</button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 

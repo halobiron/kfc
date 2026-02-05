@@ -15,7 +15,6 @@ const Card = ({ product }) => {
             <motion.div
                 className="kfc-product-card"
                 onClick={() => navigate(`/product-detail/${product._id}`)}
-                style={{ cursor: 'pointer' }}
                 whileHover={{ scale: 1.02, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
@@ -31,8 +30,7 @@ const Card = ({ product }) => {
                     <Button
                         component={motion.button}
                         variant="primary"
-                        className="w-100 mt-auto"
-                        style={{ padding: '10px 20px', fontSize: '0.9rem' }}
+                        className="w-100 mt-auto product-card-btn"
                         onClick={(e) => {
                             e.stopPropagation();
                             dispatch(addToCart(product));

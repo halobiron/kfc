@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import OrderStatusBadge, { STATUS_OPTIONS } from '../../../../components/OrderStatusBadge';
 import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
 import '../AccountModal.css';
@@ -7,7 +8,7 @@ import './OrderDetailModal.css';
 const OrderDetailModal = ({ order, onClose }) => {
     if (!order) return null;
 
-    return (
+    return ReactDOM.createPortal(
         <div className="order-modal-overlay" onClick={onClose}>
             <div className="order-modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="order-modal-header">
@@ -71,7 +72,8 @@ const OrderDetailModal = ({ order, onClose }) => {
                     <button className="btn btn-primary" onClick={onClose}>ĐÓNG</button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 

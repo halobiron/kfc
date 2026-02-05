@@ -33,7 +33,7 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--account-black, #202124);
+    color: var(--kfc-black);
 }
 
 .btn-close-modal {
@@ -70,7 +70,7 @@
 .label-with-button label {
     margin: 0;
     font-weight: 500;
-    color: var(--account-black, #202124);
+    color: var(--kfc-black);
     font-size: 0.9rem;
 }
 
@@ -138,7 +138,7 @@
 }
 
 .address-modal-footer .btn-primary {
-    background-color: var(--account-red, #e4002b);
+    background-color: var(--kfc-red);
     color: white;
 }
 
@@ -164,7 +164,7 @@
 .address-modal-body input[type="text"]:focus,
 .address-modal-body textarea:focus {
     outline: none;
-    border-color: var(--account-red, #e4002b);
+    border-color: var(--kfc-red);
 }
 
 .address-modal-body textarea {
@@ -182,7 +182,7 @@
     height: 16px;
     margin-right: 0.6rem;
     cursor: pointer;
-    accent-color: var(--account-red, #e4002b);
+    accent-color: var(--kfc-red);
 }
 
 .address-modal-body .form-check label {

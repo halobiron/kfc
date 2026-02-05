@@ -1,5 +1,5 @@
 .profile-section {
-    background: var(--account-bg-gray, #f8f7f5);
+    background: var(--kfc-gray-bg);
     padding: 1.5rem;
     border-radius: 8px;
     margin-bottom: 1.5rem;
@@ -8,8 +8,8 @@
 .profile-section h4 {
     margin-bottom: 1.5rem;
     font-size: 1.3rem;
-    color: var(--account-black, #202124);
-    border-bottom: 2px solid var(--account-red, #e4002b);
+    color: var(--kfc-black);
+    border-bottom: 2px solid var(--kfc-red);
     padding-bottom: 0.5rem;
     display: inline-block;
     min-width: 100px;

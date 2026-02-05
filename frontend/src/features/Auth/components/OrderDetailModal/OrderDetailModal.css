@@ -6,7 +6,7 @@
 }
 
 .detail-card {
-    background: var(--account-bg-gray, #f8f7f5);
+    background: var(--kfc-gray-bg);
     padding: 1rem;
     border-radius: 8px;
 }
@@ -14,7 +14,7 @@
 .detail-card span:first-child {
     display: block;
     font-size: 0.85rem;
-    color: var(--account-text-gray, #666);
+    color: var(--kfc-text-gray);
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     font-weight: 600;
@@ -27,7 +27,7 @@
 .items-section h6 {
     margin-bottom: 1rem;
     font-size: 1rem;
-    color: var(--account-black, #202124);
+    color: var(--kfc-black);
     font-weight: 600;
 }
 
@@ -35,7 +35,7 @@
     display: flex;
     justify-content: space-between;
     padding: 0.75rem 0;
-    border-bottom: 1px dashed var(--account-border, #e0e0e0);
+    border-bottom: 1px dashed var(--kfc-border-color);
 }
 
 .detail-item:last-child {
@@ -46,7 +46,7 @@
     display: flex;
     justify-content: space-between;
     padding: 1rem;
-    background: var(--account-bg-gray, #f8f7f5);
+    background: var(--kfc-gray-bg);
     border-radius: 8px;
     margin-top: 1rem;
     font-weight: 600;
@@ -54,7 +54,7 @@
 }
 
 .modal-total .total-amount {
-    color: var(--account-red, #e4002b);
+    color: var(--kfc-red);
     font-size: 1.4rem;
 }
 
@@ -62,7 +62,7 @@
 .timeline-section {
     margin-top: 2rem;
     padding-top: 2rem;
-    border-top: 1px dashed var(--account-border, #e0e0e0);
+    border-top: 1px dashed var(--kfc-border-color);
 }
 
 .timeline {
@@ -105,7 +105,7 @@
     height: 20px;
     border-radius: 50%;
     background: #fff;
-    border: 2px solid var(--account-border, #e0e0e0);
+    border: 2px solid var(--kfc-border-color);
     z-index: 2;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -121,8 +121,8 @@
 }
 
 .timeline-item.latest .timeline-dot {
-    background: var(--account-red, #e4002b);
-    border-color: var(--account-red, #e4002b);
+    background: var(--kfc-red);
+    border-color: var(--kfc-red);
     width: 22px;
     height: 22px;
     left: -1px;
@@ -134,7 +134,7 @@
 .timeline-status {
     font-weight: 700;
     margin-bottom: 0.25rem;
-    color: var(--account-black, #202124);
+    color: var(--kfc-black);
     font-size: 1rem;
     line-height: 1.2;
 }

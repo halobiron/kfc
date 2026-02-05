@@ -28,7 +28,7 @@ const Account = () => {
             <section className="container page-wrapper">
                 <div className="page-block">
                     {/* Left Sidebar */}
-                    <div className="block-left appear-left">
+                    <div className="block-left">
                         <div className="account-left page-with-bar medium-bar">
                             <div className="account-profile">
                                 <img
@@ -64,7 +64,7 @@ const Account = () => {
                     </div>
 
                     {/* Right Content Area */}
-                    <div className="block-right appear-right">
+                    <div className="block-right">
                         {activeTab === 'orders' && <AccountOrders />}
                         {activeTab === 'profile' && <AccountProfile />}
                         {activeTab === 'addresses' && <AccountAddress />}
