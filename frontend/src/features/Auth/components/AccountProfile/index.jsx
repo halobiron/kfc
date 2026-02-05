@@ -26,11 +26,6 @@ const AccountProfile = () => {
     });
 
     useEffect(() => {
-        // Fetch up-to-date profile on mount needed?
-        // Actually Account/index.jsx had a fetchProfile() that updated setUserInfo.
-        // We should probably fetch it here or rely on Redux.
-        // The original code fetched /users/profile and updated local state.
-        // Let's implement fetchProfile to be consistent.
         fetchProfile();
     }, []);
 

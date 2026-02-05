@@ -5,16 +5,6 @@
     margin-bottom: 1.5rem;
 }
 
-.profile-section h4 {
-    margin-bottom: 1.5rem;
-    font-size: 1.3rem;
-    color: var(--kfc-black);
-    border-bottom: 2px solid var(--kfc-red);
-    padding-bottom: 0.5rem;
-    display: inline-block;
-    min-width: 100px;
-}
-
 .form-row {
     display: flex;
     gap: 1rem;

@@ -113,7 +113,8 @@ const AccountAddress = () => {
 
     return (
         <>
-            <Card className="account-address-card">
+            <Card>
+
                 <div className="addresses-header">
                     <h3>Sổ địa chỉ</h3>
                     <Button
@@ -140,7 +141,7 @@ const AccountAddress = () => {
                                     <div className="address-item-header">
                                         <h5 className="address-label">
                                             {address.label}
-                                            {address.isDefault && <span className="badge badge-default bg-kfc-red">Mặc định</span>}
+                                            {address.isDefault && <span className="badge bg-kfc-red">Mặc định</span>}
                                         </h5>
                                         <div className="address-actions">
                                             <button
