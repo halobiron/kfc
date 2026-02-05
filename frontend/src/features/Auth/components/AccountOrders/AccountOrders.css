@@ -1,0 +1,134 @@
+.search-filter-section {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 250px;
+}
+
+.filter-box {
+    min-width: 200px;
+}
+
+.order-card {
+    background: #fff;
+    border: 1px solid var(--account-border, #e0e0e0);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--account-bg-gray, #f8f7f5);
+    border-bottom: 1px solid var(--account-border, #e0e0e0);
+}
+
+.order-info h5 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.order-date {
+    font-size: 0.875rem;
+    color: var(--account-text-gray, #666);
+}
+
+.order-body {
+    padding: 1.5rem;
+}
+
+.order-items {
+    margin-bottom: 1rem;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--account-border, #e0e0e0);
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item .quantity {
+    margin-left: 0.5rem;
+    color: var(--account-text-gray, #666);
+}
+
+.order-item .price {
+    font-weight: 600;
+    color: var(--account-red, #e4002b);
+}
+
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--account-border, #e0e0e0);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.order-total .total-value {
+    color: var(--account-red, #e4002b);
+    font-size: 1.3rem;
+}
+
+.order-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: var(--account-bg-gray, #f8f7f5);
+    border-top: 1px solid var(--account-border, #e0e0e0);
+}
+
+.btn-view {
+    background: var(--account-black, #202124);
+    color: #fff;
+    flex: 1;
+}
+
+.btn-view:hover {
+    background: #000;
+    color: #fff;
+}
+
+.btn-cancel {
+    background: var(--account-red, #e4002b);
+    color: #fff;
+    flex: 1;
+}
+
+.btn-cancel:hover {
+    background: #c40025;
+    color: #fff;
+}
+
+@media (max-width: 560px) {
+    .order-actions {
+        flex-direction: column;
+    }
+
+    .search-filter-section {
+        flex-direction: column;
+    }
+
+    .search-box,
+    .filter-box {
+        width: 100%;
+        min-width: 100%;
+    }
+}

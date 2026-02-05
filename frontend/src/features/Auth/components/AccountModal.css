@@ -1,0 +1,70 @@
+/* Shared Modal Styles */
+.order-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.order-modal-content {
+    background: #fff;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.order-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--account-border, #e0e0e0);
+    background: var(--account-bg-gray, #f8f7f5);
+}
+
+.order-modal-header h5 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.btn-close-custom {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--account-text-gray, #666);
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-close-custom:hover {
+    color: var(--account-black, #202124);
+}
+
+.order-modal-body {
+    padding: 1.5rem;
+}
+
+.order-modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--account-border, #e0e0e0);
+}
+
+.order-modal-footer .btn {
+    width: 100%;
+}

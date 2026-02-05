@@ -4,6 +4,7 @@ import axiosClient from '../../../../api/axiosClient';
 import Card from '../../../../components/Card';
 import Button from '../../../../components/Button';
 import AddressModal from '../AddressModal';
+import './AccountAddress.css';
 
 const AccountAddress = () => {
     const [addresses, setAddresses] = useState([]);

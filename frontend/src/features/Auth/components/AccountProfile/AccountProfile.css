@@ -1,0 +1,38 @@
+.profile-section {
+    background: var(--account-bg-gray, #f8f7f5);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.profile-section h4 {
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    color: var(--account-black, #202124);
+    border-bottom: 2px solid var(--account-red, #e4002b);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+    min-width: 100px;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 250px;
+}
+
+@media (max-width: 991px) {
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-group {
+        min-width: 100%;
+    }
+}

@@ -6,6 +6,7 @@ import axiosClient from '../../../../api/axiosClient';
 import FormInput from '../../../../components/FormInput';
 import Button from '../../../../components/Button';
 import Card from '../../../../components/Card';
+import './AccountProfile.css';
 
 const AccountProfile = () => {
     const dispatch = useDispatch();

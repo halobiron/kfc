@@ -1,0 +1,176 @@
+.addresses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.addresses-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--account-black, #202124);
+}
+
+.btn-add-address {
+    background-color: var(--account-red, #e4002b);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.btn-add-address:hover {
+    background-color: #c41e3a;
+}
+
+.addresses-list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.address-card {
+    background-color: #f9f9f9;
+    border: 1px solid var(--account-border, #e0e0e0);
+    border-radius: 6px;
+    padding: 1.2rem;
+}
+
+.address-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.8rem;
+    gap: 1rem;
+}
+
+.address-header h5 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--account-black, #202124);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.badge-default {
+    display: inline-block;
+    background-color: var(--account-red, #e4002b);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.address-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.address-actions button {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #ddd;
+    background-color: white;
+    color: var(--account-text-gray, #666);
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.address-actions button:hover {
+    background-color: #f5f5f5;
+    border-color: #999;
+}
+
+.btn-edit {
+    color: #007bff;
+    border-color: #007bff !important;
+}
+
+.btn-edit:hover {
+    background-color: #007bff !important;
+    color: white !important;
+}
+
+.btn-delete {
+    color: #dc3545;
+    border-color: #dc3545 !important;
+}
+
+.btn-delete:hover {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+.address-text {
+    color: var(--account-text-gray, #666);
+    margin: 0;
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+.empty-addresses {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    border: 1px solid var(--account-border, #e0e0e0);
+}
+
+.empty-addresses i {
+    color: #ddd;
+    margin-bottom: 0.8rem;
+}
+
+.empty-addresses p {
+    color: #999;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 560px) {
+    .addresses-header {
+        flex-direction: column;
+    }
+
+    .addresses-header h3 {
+        width: 100%;
+    }
+
+    .btn-add-address {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .address-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .address-actions {
+        width: 100%;
+    }
+
+    .address-card {
+        padding: 1rem;
+    }
+}

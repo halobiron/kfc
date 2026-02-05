@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import FormInput from '../../../../components/FormInput';
 import { formatCurrency } from '../../../../utils/formatters';
+import '../AccountModal.css';
+import './CancelOrderModal.css';
 
 const CANCELLATION_REASONS = [
     "Tôi muốn đổi món khác",

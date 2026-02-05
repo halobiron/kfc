@@ -1,7 +1,8 @@
 import React from 'react';
 import OrderStatusBadge, { STATUS_OPTIONS } from '../../../../components/OrderStatusBadge';
 import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
-import Button from '../../../../components/Button'; // Assuming we might use Button, but based on code it uses <button> tags mostly for close
+import '../AccountModal.css';
+import './OrderDetailModal.css';
 
 const OrderDetailModal = ({ order, onClose }) => {
     if (!order) return null;

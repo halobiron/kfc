@@ -9,6 +9,7 @@ import OrderStatusBadge, { STATUS_OPTIONS } from '../../../../components/OrderSt
 import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
 import OrderDetailModal from '../OrderDetailModal';
 import CancelOrderModal from '../CancelOrderModal';
+import './AccountOrders.css';
 
 const AccountOrders = () => {
     const [orders, setOrders] = useState([]);

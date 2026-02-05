@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import FormInput from '../../../../components/FormInput';
 import Button from '../../../../components/Button';
+import './AddressModal.css';
 
 const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
     const [addressForm, setAddressForm] = useState({

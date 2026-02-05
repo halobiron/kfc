@@ -1,0 +1,223 @@
+.address-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+.address-modal-content {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 420px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.address-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.address-modal-header h5 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--account-black, #202124);
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.btn-close-modal:hover {
+    color: #333;
+}
+
+.address-modal-body {
+    padding: 1.2rem;
+}
+
+.label-with-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.label-with-button label {
+    margin: 0;
+    font-weight: 500;
+    color: var(--account-black, #202124);
+    font-size: 0.9rem;
+}
+
+.btn-get-location {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.35rem 0.7rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-weight: 500;
+}
+
+.btn-get-location:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.btn-get-location:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.location-info {
+    background-color: #f0f4f8;
+    border-left: 3px solid #007bff;
+    padding: 0.7rem;
+    border-radius: 3px;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    color: #0056b3;
+}
+
+.address-modal-footer {
+    display: flex;
+    gap: 0.8rem;
+    padding: 1rem 1.2rem;
+    border-top: 1px solid #eee;
+    justify-content: flex-end;
+}
+
+.address-modal-footer .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    border: none;
+    min-width: 90px;
+}
+
+.address-modal-footer .btn-outline-secondary {
+    background-color: white;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.address-modal-footer .btn-outline-secondary:hover {
+    background-color: #f9f9f9;
+    border-color: #999;
+}
+
+.address-modal-footer .btn-primary {
+    background-color: var(--account-red, #e4002b);
+    color: white;
+}
+
+.address-modal-footer .btn-primary:hover {
+    background-color: #c41e3a;
+}
+
+.address-modal-body .form-group {
+    margin-bottom: 1rem;
+}
+
+.address-modal-body input[type="text"],
+.address-modal-body textarea {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.address-modal-body input[type="text"]:focus,
+.address-modal-body textarea:focus {
+    outline: none;
+    border-color: var(--account-red, #e4002b);
+}
+
+.address-modal-body textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+.address-modal-body .form-check {
+    display: flex;
+    align-items: center;
+}
+
+.address-modal-body .form-check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-right: 0.6rem;
+    cursor: pointer;
+    accent-color: var(--account-red, #e4002b);
+}
+
+.address-modal-body .form-check label {
+    margin-bottom: 0;
+    cursor: pointer;
+    font-weight: 400;
+    color: #333;
+}
+
+@media (max-width: 560px) {
+    .address-modal-content {
+        width: 95%;
+    }
+
+    .label-with-button {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-get-location {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .address-modal-body {
+        padding: 1rem;
+    }
+
+    .address-modal-footer {
+        padding: 0.8rem 1rem;
+        flex-direction: column-reverse;
+    }
+
+    .address-modal-footer .btn {
+        width: 100%;
+        min-width: unset;
+    }
+}
