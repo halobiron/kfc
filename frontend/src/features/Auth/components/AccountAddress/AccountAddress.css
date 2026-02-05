@@ -3,174 +3,102 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
-    gap: 1rem;
-    flex-wrap: wrap;
 }
 
 .addresses-header h3 {
     margin: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--kfc-black);
-}
-
-.btn-add-address {
-    background-color: var(--kfc-red);
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    white-space: nowrap;
-}
-
-.btn-add-address:hover {
-    background-color: #c41e3a;
 }
 
 .addresses-list {
     display: grid;
-    gap: 1rem;
+    gap: 1.5rem;
     margin-top: 1rem;
 }
 
-.address-card {
-    background-color: #f9f9f9;
-    border: 1px solid var(--kfc-border-color);
-    border-radius: 6px;
-    padding: 1.2rem;
+.address-item {
+    border: 1px solid var(--kfc-border-color) !important;
+    padding: 1.2rem !important;
+    box-shadow: none !important;
+    margin-bottom: 0 !important;
+    cursor: default !important;
+    transform: none !important;
 }
 
-.address-header {
+.address-item-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
     margin-bottom: 0.8rem;
-    gap: 1rem;
 }
 
-.address-header h5 {
+.address-label {
     margin: 0;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--kfc-black);
     display: flex;
     align-items: center;
     gap: 0.6rem;
-}
-
-.badge-default {
-    display: inline-block;
-    background-color: var(--kfc-red);
-    color: white;
-    padding: 0.2rem 0.6rem;
-    border-radius: 3px;
-    font-size: 0.65rem;
-    font-weight: 600;
-    text-transform: uppercase;
 }
 
 .address-actions {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    flex-wrap: wrap;
 }
 
-.address-actions button {
+.action-btn {
     padding: 0.4rem 0.6rem;
     border: 1px solid #ddd;
     background-color: white;
-    color: var(--kfc-text-gray);
-    border-radius: 3px;
     cursor: pointer;
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    white-space: nowrap;
+    font-size: 1rem;
     transition: all 0.2s;
 }
 
-.address-actions button:hover {
-    background-color: #f5f5f5;
+.action-btn--edit:hover {
+    background-color: #f0f0f0;
     border-color: #999;
 }
 
-.btn-edit {
-    color: #007bff;
-    border-color: #007bff !important;
+.action-btn--default {
+    border-color: var(--kfc-red);
+    color: var(--kfc-red);
 }
 
-.btn-edit:hover {
-    background-color: #007bff !important;
-    color: white !important;
+.action-btn--default:hover {
+    background-color: var(--kfc-red);
+    color: white;
 }
 
-.btn-delete {
-    color: #dc3545;
-    border-color: #dc3545 !important;
+.action-btn--delete {
+    color: #cc0000;
 }
 
-.btn-delete:hover {
-    background-color: #dc3545 !important;
-    color: white !important;
+.action-btn--delete:hover {
+    background-color: #cc0000;
+    color: white;
+    border-color: #cc0000;
 }
 
 .address-text {
     color: var(--kfc-text-gray);
-    margin: 0;
-    line-height: 1.5;
-    font-size: 0.9rem;
 }
 
-.empty-addresses {
-    text-align: center;
-    padding: 2.5rem 1rem;
-    background-color: #f9f9f9;
-    border-radius: 6px;
-    border: 1px solid var(--kfc-border-color);
-}
-
-.empty-addresses i {
-    color: #ddd;
-    margin-bottom: 0.8rem;
-}
-
-.empty-addresses p {
-    color: #999;
-    margin: 0;
-    font-size: 0.9rem;
+.address-empty {
+    min-height: 275px !important;
+    background-size: 275px !important;
 }
 
 @media (max-width: 560px) {
     .addresses-header {
         flex-direction: column;
+        align-items: stretch;
     }
 
-    .addresses-header h3 {
-        width: 100%;
-    }
-
-    .btn-add-address {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .address-header {
+    .address-item-header {
         flex-direction: column;
         align-items: flex-start;
     }
 
     .address-actions {
         width: 100%;
-    }
-
-    .address-card {
-        padding: 1rem;
+        margin-top: 0.5rem;
     }
 }

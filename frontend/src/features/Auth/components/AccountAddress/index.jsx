@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import axiosClient from '../../../../api/axiosClient';
 import Card from '../../../../components/Card';
 import Button from '../../../../components/Button';
+import EmptyState from '../../../../components/EmptyState';
 import AddressModal from '../AddressModal';
 import './AccountAddress.css';
 
@@ -111,80 +112,83 @@ const AccountAddress = () => {
     };
 
     return (
-        <Card>
-            <div className="addresses-header">
-                <h3>Sổ địa chỉ</h3>
-                <Button
-                    variant="primary"
-                    onClick={handleAddAddress}
-                    size="sm"
-                    startIcon={<i className="bi bi-plus-lg"></i>}
-                >
-                    Thêm địa chỉ
-                </Button>
-            </div>
-
-            {loadingAddresses ? (
-                <div className="text-center py-5">
-                    <div className="spinner-border text-danger" role="status">
-                        <span className="visually-hidden">Đang tải...</span>
-                    </div>
+        <>
+            <Card className="account-address-card">
+                <div className="addresses-header">
+                    <h3>Sổ địa chỉ</h3>
+                    <Button
+                        variant="primary"
+                        onClick={handleAddAddress}
+                        size="sm"
+                        startIcon={<i className="bi bi-plus-lg"></i>}
+                    >
+                        Thêm địa chỉ
+                    </Button>
                 </div>
-            ) : (
-                <div className="addresses-list">
-                    {addresses && addresses.length > 0 ? (
-                        addresses.map((address, idx) => (
-                            <Card key={idx} style={{ border: '1px solid #e0e0e0', padding: '1.5rem', marginBottom: '1rem', boxShadow: 'none' }}>
-                                <div className="address-header">
-                                    <h5>
-                                        {address.label}
-                                        {address.isDefault && <span className="badge-default">Mặc định</span>}
-                                    </h5>
-                                    <div className="address-actions">
-                                        <button
-                                            className="btn-edit"
-                                            onClick={() => handleEditAddress(address, idx)}
-                                            title="Chỉnh sửa"
-                                        >
-                                            <i className="bi bi-pencil"></i>
-                                        </button>
-                                        {!address.isDefault && (
-                                            <button
-                                                className="btn-default"
-                                                onClick={() => handleSetDefaultAddress(idx)}
-                                                title="Đặt làm mặc định"
-                                            >
-                                                Đặt làm mặc định
-                                            </button>
-                                        )}
-                                        <button
-                                            className="btn-delete"
-                                            onClick={() => handleDeleteAddress(idx)}
-                                            title="Xóa"
-                                        >
-                                            <i className="bi bi-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <p className="address-text">{address.fullAddress}</p>
-                            </Card>
-                        ))
-                    ) : (
-                        <div className="empty-addresses">
-                            <i className="bi bi-geo-alt" style={{ fontSize: '2rem', opacity: 0.7 }}></i>
-                            <p>Chưa có địa chỉ nào.</p>
+
+                {loadingAddresses ? (
+                    <div className="text-center py-5">
+                        <div className="spinner-border text-danger" role="status">
+                            <span className="visually-hidden">Đang tải...</span>
                         </div>
-                    )}
-                </div>
-            )}
+                    </div>
+                ) : (
+                    <div className="addresses-list">
+                        {addresses && addresses.length > 0 ? (
+                            addresses.map((address, idx) => (
+                                <Card key={idx} className="address-item">
+                                    <div className="address-item-header">
+                                        <h5 className="address-label">
+                                            {address.label}
+                                            {address.isDefault && <span className="badge badge-default bg-kfc-red">Mặc định</span>}
+                                        </h5>
+                                        <div className="address-actions">
+                                            <button
+                                                className="action-btn action-btn--edit"
+                                                onClick={() => handleEditAddress(address, idx)}
+                                                title="Chỉnh sửa"
+                                            >
+                                                <i className="bi bi-pencil"></i>
+                                            </button>
+                                            {!address.isDefault && (
+                                                <button
+                                                    className="action-btn action-btn--default"
+                                                    onClick={() => handleSetDefaultAddress(idx)}
+                                                    title="Đặt làm mặc định"
+                                                >
+                                                    Đặt làm mặc định
+                                                </button>
+                                            )}
+                                            <button
+                                                className="action-btn action-btn--delete"
+                                                onClick={() => handleDeleteAddress(idx)}
+                                                title="Xóa"
+                                            >
+                                                <i className="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p className="address-text">{address.fullAddress}</p>
+                                </Card>
+                            ))
+                        ) : (
+                            <EmptyState
+                                title="Sổ địa chỉ trống"
+                                description="Bạn chưa có địa chỉ nào được lưu. Thêm địa chỉ mới để đặt hàng nhanh hơn!"
+                                className="address-empty"
+                            />
+                        )}
+                    </div>
+                )}
 
+            </Card>
             <AddressModal
                 show={showAddressForm}
                 onClose={() => setShowAddressForm(false)}
                 onSubmit={handleSaveAddress}
                 initialData={editingAddressData}
             />
-        </Card>
+        </>
     );
 };
 
