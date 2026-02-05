@@ -10,6 +10,7 @@ import EmptyState from '../../../../components/EmptyState';
 import Button from '../../../../components/Button';
 import Card from '../../../../components/Card';
 import './Account.css';
+import OrderStatusBadge, { STATUS_OPTIONS } from '../../../../components/OrderStatusBadge';
 
 const Account = () => {
     const navigate = useNavigate();
@@ -56,16 +57,7 @@ const Account = () => {
     const [cancelReason, setCancelReason] = useState('');
     const [loading, setLoading] = useState(true);
 
-    const statusOptions = [
-        { value: 'All', label: 'Tất cả trạng thái' },
-        { value: 'pending', label: 'Chờ xác nhận' },
-        { value: 'confirmed', label: 'Đã xác nhận' },
-        { value: 'preparing', label: 'Đang chuẩn bị' },
-        { value: 'ready', label: 'Sẵn sàng giao' },
-        { value: 'shipping', label: 'Đang giao hàng' },
-        { value: 'delivered', label: 'Hoàn thành' },
-        { value: 'cancelled', label: 'Đã hủy' }
-    ];
+    const statusOptions = STATUS_OPTIONS;
 
     const cancellationReasons = [
         "Tôi muốn đổi món khác",
@@ -337,18 +329,7 @@ const Account = () => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     };
 
-    const getStatusLabel = (status) => {
-        const statuses = {
-            'pending': { text: 'Chờ xác nhận', color: '#ffc107', icon: 'bi-clock' },
-            'confirmed': { text: 'Đã xác nhận', color: '#007bff', icon: 'bi-check2-circle' },
-            'preparing': { text: 'Đang chuẩn bị', color: '#17a2b8', icon: 'bi-egg-fried' },
-            'shipping': { text: 'Đang giao hàng', color: '#fd7e14', icon: 'bi-truck' },
-            'ready': { text: 'Sẵn sàng giao', color: '#28a745', icon: 'bi-check-circle' },
-            'delivered': { text: 'Đã giao hàng', color: '#28a745', icon: 'bi-check-all' },
-            'cancelled': { text: 'Đã hủy', color: '#dc3545', icon: 'bi-x-circle' }
-        };
-        return statuses[status] || { text: status, color: '#6c757d', icon: 'bi-question-circle' };
-    };
+
 
     return (
         <div className="my-account-page">
@@ -453,15 +434,7 @@ const Account = () => {
                                                             {new Date(order.createdAt).toLocaleString('vi-VN')}
                                                         </span>
                                                     </div>
-                                                    <span className={`order-status status-${order.status}`}>
-                                                        {order.status === 'pending' ? 'Đang chờ xử lý' :
-                                                            order.status === 'confirmed' ? 'Đã xác nhận' :
-                                                                order.status === 'preparing' ? 'Đang chuẩn bị' :
-                                                                    order.status === 'ready' ? 'Sẵn sàng giao' :
-                                                                        order.status === 'shipping' ? 'Đang giao hàng' :
-                                                                            order.status === 'delivered' ? 'Hoàn thành' :
-                                                                                order.status === 'cancelled' ? 'Đã hủy' : order.status}
-                                                    </span>
+                                                    <OrderStatusBadge status={order.status} />
                                                 </div>
                                                 <div className="order-body">
                                                     <div className="order-items">
@@ -753,16 +726,7 @@ const Account = () => {
                             <div className="detail-grid">
                                 <div className="detail-card">
                                     <span>Trạng thái</span>
-                                    <span
-                                        className="order-status"
-                                        style={{
-                                            backgroundColor: getStatusLabel(selectedOrder.status).color,
-                                            color: '#fff',
-                                            display: 'inline-block'
-                                        }}
-                                    >
-                                        {getStatusLabel(selectedOrder.status).text}
-                                    </span>
+                                    <OrderStatusBadge status={selectedOrder.status} />
                                 </div>
                                 <div className="detail-card">
                                     <span>Thời gian đặt</span>
@@ -794,7 +758,7 @@ const Account = () => {
                                         {[...selectedOrder.statusHistory]
                                             .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
                                             .map((history, index) => {
-                                                const statusInfo = getStatusLabel(history.status);
+                                                const statusInfo = STATUS_OPTIONS.find(opt => opt.value === history.status) || { label: history.status };
                                                 const isLatest = index === 0;
                                                 return (
                                                     <li key={index} className={`timeline-item ${isLatest ? 'latest' : 'completed'}`}>
@@ -808,9 +772,7 @@ const Account = () => {
                                                                 year: 'numeric'
                                                             })}
                                                         </div>
-                                                        <div className="timeline-status" style={{ color: isLatest ? statusInfo.color : '#333' }}>
-                                                            {statusInfo.text}
-                                                        </div>
+                                                        {statusInfo.label}
                                                         {history.note && <div className="timeline-note">{history.note}</div>}
                                                     </li>
                                                 );

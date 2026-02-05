@@ -1,0 +1,42 @@
+/* Global Status Badges */
+.status-badge,
+.order-status {
+    padding: 0.35rem 1rem;
+    border-radius: 50rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fff;
+    display: inline-block;
+    line-height: normal;
+    border: none !important;
+    /* Override potential borders */
+}
+
+/* Status Colors */
+.status-pending {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}
+
+.status-confirmed,
+.status-preparing {
+    background-color: #0d6efd !important;
+    color: #fff !important;
+}
+
+.status-shipping {
+    background-color: #fd7e14 !important;
+    color: #fff !important;
+}
+
+.status-ready,
+.status-delivered {
+    background-color: #198754 !important;
+    color: #fff !important;
+}
+
+.status-cancelled {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+}

@@ -3,7 +3,9 @@ import axiosClient from '../../api/axiosClient';
 import { toast } from 'react-toastify';
 import FormInput from '../../components/FormInput';
 import Button from '../../components/Button';
+import Card from '../../components/Card';
 import './TrackOrder.css';
+import OrderStatusBadge, { STATUS_OPTIONS } from '../../components/OrderStatusBadge';
 
 const TrackOrder = () => {
     const [orderNumber, setOrderNumber] = useState('');
@@ -36,27 +38,19 @@ const TrackOrder = () => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     };
 
-    const getStatusLabel = (status) => {
-        const statuses = {
-            'pending': { text: 'Chờ xác nhận', color: '#ffc107', icon: 'bi-clock' },
-            'confirmed': { text: 'Đã xác nhận', color: '#007bff', icon: 'bi-check2-circle' },
-            'preparing': { text: 'Đang chuẩn bị', color: '#17a2b8', icon: 'bi-egg-fried' },
-            'shipping': { text: 'Đang giao hàng', color: '#fd7e14', icon: 'bi-truck' },
-            'ready': { text: 'Sẵn sàng giao', color: '#28a745', icon: 'bi-check-circle' },
-            'delivered': { text: 'Đã giao hàng', color: '#28a745', icon: 'bi-check-all' },
-            'cancelled': { text: 'Đã hủy', color: '#dc3545', icon: 'bi-x-circle' }
-        };
-        return statuses[status] || { text: status, color: '#6c757d', icon: 'bi-question-circle' };
-    };
+
 
     return (
-        <div className="track-order-wrapper py-5 min-vh-100 d-flex align-items-center">
-            <div className="container">
-                <div className={`row ${order ? 'justify-content-center align-items-start' : 'justify-content-center'}`}>
+        <div className="track-order-wrapper">
+            <div className="track-order-container">
+                <div className={`track-order-row ${order ? 'has-order' : ''}`}>
                     {/* Search Form Column */}
-                    <div className={order ? "col-lg-4 mb-4" : "col-md-6 col-lg-5"}>
-                        <div className="track-order-card p-4 h-100">
-                            <h2 className="text-center fw-bold mb-4" style={{ color: '#e4002b' }}>TRA CỨU ĐƠN HÀNG</h2>
+                    <div className={`search-column ${order ? 'side-mode' : 'center-mode'}`}>
+                        <Card className="track-order-card">
+                            <div className="section-header">
+                                <h2 className="section-title">TRA CỨU ĐƠN HÀNG</h2>
+                                <hr className="section-underline" />
+                            </div>
                             <form onSubmit={handleLookup}>
                                 <FormInput
                                     containerClass="mb-3"
@@ -83,81 +77,76 @@ const TrackOrder = () => {
                                     TRA CỨU NGAY
                                 </Button>
                             </form>
-                        </div>
+                        </Card>
                     </div>
 
                     {/* Result Column - Only visible when order exists */}
                     {order && (
-                        <div className="col-lg-8 animate__animated animate__fadeIn">
-                            <div className="order-result-card shadow p-4">
-                                <div className="row">
+                        <div className="result-column animate__animated animate__fadeIn">
+                            <Card className="order-result-card shadow">
+                                <div className="result-card-row">
                                     {/* Left Side: Order Details */}
-                                    <div className="col-md-7 mb-4 mb-md-0 pe-md-4 border-end-md">
-                                        <div className="d-flex justify-content-between align-items-center mb-3">
-                                            <span className="fw-bold fs-5">#{order.orderNumber}</span>
-                                            <span
-                                                className="status-badge text-white"
-                                                style={{ backgroundColor: getStatusLabel(order.status).color }}
-                                            >
-                                                {getStatusLabel(order.status).text}
-                                            </span>
+                                    <div className="order-details-col">
+                                        <div className="order-header-row">
+                                            <span className="order-id-text">#{order.orderNumber}</span>
+                                            <OrderStatusBadge status={order.status} />
                                         </div>
 
-                                        <div className="card bg-light border-0 p-3 mb-3">
-                                            <p className="small mb-1"><i className="bi bi-person-circle me-2"></i><strong>Khách hàng:</strong> {order.deliveryInfo?.fullName}</p>
-                                            <p className="small mb-0"><i className="bi bi-geo-alt-fill me-2"></i><strong>Địa chỉ:</strong> {order.deliveryInfo?.address || 'Tại cửa hàng'}</p>
+                                        <div className="customer-info-box">
+                                            <p className="customer-detail-row"><i className="bi bi-person-circle me-2 text-secondary"></i><strong>Khách hàng:</strong> {order.deliveryInfo?.fullName}</p>
+                                            <p className="customer-detail-row"><i className="bi bi-geo-alt-fill me-2 text-secondary"></i><strong>Địa chỉ:</strong> {order.deliveryInfo?.address || 'Tại cửa hàng'}</p>
                                             {order.deliveryInfo?.note && (
-                                                <p className="small mb-0 mt-1 text-muted fst-italic"><i className="bi bi-sticky me-2"></i>Ghi chú: {order.deliveryInfo.note}</p>
+                                                <p className="customer-note"><i className="bi bi-sticky me-2 text-secondary"></i>Ghi chú: {order.deliveryInfo.note}</p>
                                             )}
                                         </div>
 
-                                        <div className="mb-3 border-top border-bottom py-2">
-                                            <h6 className="fw-bold text-secondary text-uppercase small mb-2">Chi tiết món ăn</h6>
+                                        <div className="item-list-container">
+                                            <h6 className="order-items-heading">Chi tiết món ăn</h6>
                                             {order.items.map((item, idx) => (
-                                                <div key={idx} className="item-row small text-muted d-flex justify-content-between py-2 border-bottom-dashed">
+                                                <div key={idx} className="order-item-row">
                                                     <div>
-                                                        <span className="fw-bold me-2 text-dark">{item.quantity}x</span>
+                                                        <span className="item-quantity">{item.quantity}x</span>
                                                         <span>{item.name}</span>
                                                     </div>
-                                                    <span className="fw-bold text-dark">{formatCurrency(item.price * item.quantity)}</span>
+                                                    <span className="item-price">{formatCurrency(item.price * item.quantity)}</span>
                                                 </div>
                                             ))}
-                                            <div className="d-flex justify-content-between pt-2">
+                                            <div className="order-summary-row">
                                                 <span>Phí giao hàng</span>
                                                 <span>{formatCurrency(order.shippingFee || 0)}</span>
                                             </div>
                                             {order.couponDiscount > 0 && (
-                                                <div className="d-flex justify-content-between text-success">
+                                                <div className="order-summary-row discount-row">
                                                     <span>Giảm giá</span>
                                                     <span>-{formatCurrency(order.couponDiscount)}</span>
                                                 </div>
                                             )}
                                         </div>
 
-                                        <div className="d-flex justify-content-between fw-bold fs-5 align-items-center">
+                                        <div className="total-row">
                                             <span>TỔNG CỘNG</span>
-                                            <span className="text-danger fs-4">{formatCurrency(order.totalAmount)}</span>
+                                            <span className="total-amount">{formatCurrency(order.totalAmount)}</span>
                                         </div>
                                     </div>
 
                                     {/* Right Side: Timeline */}
-                                    <div className="col-md-5 ps-md-4 mt-4 mt-md-0">
-                                        <h6 className="mb-4 fw-bold text-uppercase text-secondary border-bottom pb-2" style={{ letterSpacing: '1px' }}>
+                                    <div className="timeline-col">
+                                        <h6 className="timeline-title">
                                             <i className="bi bi-clock-history me-2"></i>Hành trình đơn
                                         </h6>
 
                                         {order.statusHistory && order.statusHistory.length > 0 ? (
-                                            <div className="timeline-wrapper" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                                                <ul className="timeline ps-0">
+                                            <div className="timeline-wrapper">
+                                                <ul className="timeline timeline-list">
                                                     {[...order.statusHistory]
                                                         .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
                                                         .map((history, index) => {
-                                                            const statusInfo = getStatusLabel(history.status);
+                                                            const statusInfo = STATUS_OPTIONS.find(opt => opt.value === history.status) || { label: history.status };
                                                             const isLatest = index === 0;
                                                             return (
                                                                 <li key={index} className={`timeline-item ${isLatest ? 'latest' : 'completed'}`}>
                                                                     <div className="timeline-dot"></div>
-                                                                    <div className="timeline-time">
+                                                                    <div className="timeline-date">
                                                                         {new Date(history.timestamp).toLocaleString('vi-VN', {
                                                                             hour: '2-digit',
                                                                             minute: '2-digit',
@@ -166,29 +155,29 @@ const TrackOrder = () => {
                                                                             year: 'numeric'
                                                                         })}
                                                                     </div>
-                                                                    <div className="timeline-status" style={{ color: isLatest ? statusInfo.color : '#333' }}>
-                                                                        {statusInfo.text}
+                                                                    <div className={`timeline-status-text ${isLatest ? 'latest' : ''}`}>
+                                                                        {statusInfo.label}
                                                                     </div>
-                                                                    {history.note && <div className="timeline-note small text-muted">{history.note}</div>}
+                                                                    {history.note && <div className="timeline-note">{history.note}</div>}
                                                                 </li>
                                                             );
                                                         })}
                                                 </ul>
                                             </div>
                                         ) : (
-                                            <div className="text-center py-5 text-muted">
+                                            <div className="timeline-empty-state">
                                                 <i className="bi bi-inbox fs-1 d-block mb-2"></i>
                                                 <p>Chưa có cập nhật trạng thái</p>
                                             </div>
                                         )}
                                     </div>
                                 </div>
-                            </div>
+                            </Card>
                         </div>
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

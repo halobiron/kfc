@@ -1,89 +1,227 @@
+/* Track Order Page - Minimalist & Semantic */
 .track-order-wrapper {
     background: url('https://static.kfcvietnam.com.vn/images/web/store-selection/lg/localization-bg.jpg?v=5.0') no-repeat center center fixed;
     background-size: cover;
-    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 3rem 0;
 }
 
-.track-order-card {
-    background: rgba(255, 255, 255, 0.95);
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+.track-order-container {
+    width: 100%;
+    padding: 0 15px;
+    margin: 0 auto;
+    max-width: 1140px;
 }
 
-.track-order-wrapper .form-input-kfc {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 12px;
+.track-order-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 -15px;
 }
 
-.track-order-wrapper .form-input-kfc:focus {
-    border-color: #e4002b;
-    box-shadow: none;
+/* Columns */
+.search-column,
+.result-column,
+.order-details-col,
+.timeline-col {
+    position: relative;
+    width: 100%;
+    padding: 0 15px;
 }
 
-.track-order-wrapper .btn-danger {
-    background-color: #e4002b;
-    border: none;
-    padding: 12px;
-    text-transform: uppercase;
+.search-column.center-mode {
+    flex: 0 0 100%;
+    max-width: 500px;
 }
 
+.search-column.side-mode {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 992px) {
+    .search-column.side-mode {
+        flex: 0 0 35%;
+        max-width: 35%;
+        margin-bottom: 0;
+    }
+
+    .result-column {
+        flex: 0 0 65%;
+        max-width: 65%;
+    }
+}
+
+/* Cards */
+.track-order-card,
 .order-result-card {
-    background: white;
-    border-radius: 8px;
-    border-left: 5px solid #e4002b;
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    padding: 2rem;
+    height: 100%;
+    border: none;
 }
 
-.item-row {
+/* Order Details */
+.result-card-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+}
+
+.order-details-col {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .order-details-col {
+        flex: 0 0 60%;
+        max-width: 60%;
+        border-bottom: none;
+        border-right: 1px solid #dee2e6;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .timeline-col {
+        flex: 0 0 40%;
+        max-width: 40%;
+    }
+}
+
+.order-header-row {
     display: flex;
     justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px dashed #eee;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
-.status-badge {
-    padding: 5px 15px;
-    border-radius: 20px;
+.order-id-text {
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+
+
+/* Info Box */
+.customer-info-box {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.customer-detail-row {
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+.customer-note {
+    font-style: italic;
+    color: #6c757d;
+    margin-top: 0.5rem;
+}
+
+/* Item List */
+.item-list-container {
+    border-top: 1px dashed #dee2e6;
+    border-bottom: 1px dashed #dee2e6;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+}
+
+.order-items-heading {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.order-item-row,
+.order-summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.item-quantity {
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
+.item-price,
+.total-row {
+    font-weight: 700;
+}
+
+.discount-row {
+    color: #198754;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.25rem;
+    margin-top: 1rem;
+}
+
+.total-amount {
+    color: var(--kfc-red);
+}
+
+/* Timeline */
+.timeline-title {
     font-size: 0.85rem;
-    font-weight: bold;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #6c757d;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
 }
 
-/* Timeline Styles - Scoped */
-.track-order-wrapper .timeline-section {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
+.timeline-wrapper {
+    max-height: 400px;
+    overflow-y: auto;
 }
 
-.track-order-wrapper .timeline {
-    position: relative;
-    padding-left: 20px;
+.timeline-list {
+    padding-left: 0;
     list-style: none;
-    margin-bottom: 0;
+    position: relative;
 }
 
-.track-order-wrapper .timeline::before {
+.timeline-list::before {
     content: '';
     position: absolute;
     left: 7px;
     top: 5px;
-    bottom: 20px;
+    bottom: 0;
     width: 2px;
     background: #e9ecef;
 }
 
-.track-order-wrapper .timeline-item {
+.timeline-item {
     position: relative;
-    padding-bottom: 25px;
     padding-left: 25px;
+    padding-bottom: 1.5rem;
 }
 
-.track-order-wrapper .timeline-item:last-child {
+.timeline-item:last-child {
     padding-bottom: 0;
 }
 
-.track-order-wrapper .timeline-dot {
+.timeline-dot {
     position: absolute;
     left: 0;
     top: 5px;
@@ -92,57 +230,36 @@
     border-radius: 50%;
     background: #fff;
     border: 3px solid #dee2e6;
-    z-index: 1;
 }
 
-.track-order-wrapper .timeline-item.latest .timeline-dot {
-    background: #e4002b;
-    border-color: #e4002b;
-    box-shadow: 0 0 0 3px rgba(228, 0, 43, 0.2);
+.timeline-item.latest .timeline-dot {
+    background: var(--kfc-red);
+    border-color: var(--kfc-red);
 }
 
-.track-order-wrapper .timeline-item.completed .timeline-dot {
-    border-color: #28a745;
-    background: #28a745;
+.timeline-item.completed .timeline-dot {
+    background: #198754;
+    border-color: #198754;
 }
 
-.track-order-wrapper .timeline-time {
+.timeline-date {
     font-size: 0.8rem;
     color: #6c757d;
-    margin-bottom: 2px;
 }
 
-.track-order-wrapper .timeline-status {
+.timeline-status-text {
     font-weight: 700;
-    margin-bottom: 2px;
-    color: #333;
-}
-
-.track-order-wrapper .timeline-note {
     font-size: 0.9rem;
-    color: #666;
+}
+
+.timeline-note {
+    font-size: 0.8rem;
     font-style: italic;
+    color: #6c757d;
 }
 
-@media (min-width: 768px) {
-    .border-end-md {
-        border-right: 1px solid #dee2e6;
-    }
-}
-
-.border-bottom-dashed {
-    border-bottom: 1px dashed #eee;
-}
-
-.track-order-wrapper .timeline-wrapper::-webkit-scrollbar {
-    width: 6px;
-}
-
-.track-order-wrapper .timeline-wrapper::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
-}
-
-.track-order-wrapper .timeline-wrapper::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
+.timeline-empty-state {
+    text-align: center;
+    color: #6c757d;
+    padding: 2rem 0;
 }

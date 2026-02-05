@@ -253,34 +253,6 @@
     color: #666;
 }
 
-.order-status {
-    padding: 0.35rem 1rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-}
-
-.order-status.status-pending {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.order-status.status-processing {
-    background: #cfe2ff;
-    color: #084298;
-}
-
-.order-status.status-completed {
-    background: #d1e7dd;
-    color: #0f5132;
-}
-
-.order-status.status-cancelled {
-    background: #f8d7da;
-    color: #842029;
-}
-
 .order-body {
     padding: 1.5rem;
 }
