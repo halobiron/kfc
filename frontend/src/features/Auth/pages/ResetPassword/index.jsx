@@ -7,10 +7,9 @@ import authApi from '../../../../api/authApi';
 import '../../auth.css';
 import authBg from '../../../../assets/images/common/auth-bg.jpg';
 import Button from '../../../../components/Button';
+import FormInput from '../../../../components/FormInput';
 
 const ResetPassword = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const { token } = useParams();
@@ -60,58 +59,36 @@ const ResetPassword = () => {
             {/* Right form section */}
             <div className="auth-form-section">
                 <h2 className="auth-title">ĐẶT LẠI MẬT KHẨU</h2>
-                <p style={{ color: '#666', marginBottom: '20px' }}>
+                <p className="auth-description">
                     Nhập mật khẩu mới cho tài khoản của bạn.
                 </p>
 
                 <form className="auth-form" onSubmit={handleSubmit}>
-                    <div className="auth-form-group">
-                        <label htmlFor="password">Mật khẩu mới *</label>
-                        <div className="password-wrapper">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                onChange={handleChange}
-                                value={values.password}
-                                onBlur={handleBlur}
-                                name='password'
-                                className="auth-input"
-                                id="password"
-                                placeholder="••••••••"
-                            />
-                            <button
-                                type="button"
-                                className="password-toggle"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? '👁️' : '👁️‍🗨️'}
-                            </button>
-                        </div>
-                        <p className='error'>{touched.password && errors.password ? errors.password : ''}</p>
-                    </div>
+                    <FormInput
+                        label="Mật khẩu mới *"
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.password && errors.password}
+                        variant="underlined"
+                        placeholder="••••••••"
+                    />
 
-                    <div className="auth-form-group">
-                        <label htmlFor="confirmPassword">Xác nhận mật khẩu *</label>
-                        <div className="password-wrapper">
-                            <input
-                                type={showConfirmPassword ? "text" : "password"}
-                                onChange={handleChange}
-                                value={values.confirmPassword}
-                                onBlur={handleBlur}
-                                name='confirmPassword'
-                                className="auth-input"
-                                id="confirmPassword"
-                                placeholder="••••••••"
-                            />
-                            <button
-                                type="button"
-                                className="password-toggle"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            >
-                                {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
-                            </button>
-                        </div>
-                        <p className='error'>{touched.confirmPassword && errors.confirmPassword ? errors.confirmPassword : ''}</p>
-                    </div>
+                    <FormInput
+                        label="Xác nhận mật khẩu *"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        value={values.confirmPassword}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.confirmPassword && errors.confirmPassword}
+                        variant="underlined"
+                        placeholder="••••••••"
+                    />
 
                     <Button
                         type="submit"
@@ -123,7 +100,7 @@ const ResetPassword = () => {
                     </Button>
                 </form>
 
-                <div className="auth-footer-link" style={{ marginTop: '20px' }}>
+                <div className="auth-footer-link">
                     <Link to="/login" className="auth-link">← Quay lại đăng nhập</Link>
                 </div>
             </div>

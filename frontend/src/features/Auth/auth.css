@@ -1,81 +1,44 @@
+/* Main Layout */
 .auth-container {
     display: flex;
     max-width: 1200px;
     margin: 0 auto;
+    min-height: calc(100vh - 100px);
 }
 
 .auth-banner {
-    flex: 1;
+    flex: 1.5;
     background-color: var(--kfc-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .auth-banner-image {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: center;
 }
 
 .auth-form-section {
     flex: 1;
-    padding: 30px 50px;
+    padding: 40px 60px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    background: white;
 }
 
+/* Typography & Content */
 .auth-title {
-    margin-bottom: 30px;
+    font-size: 2rem;
+    margin-bottom: 25px;
+    font-weight: 800;
 }
 
-.auth-form-group {
-    margin-bottom: 30px;
-    position: relative;
-}
-
-.auth-form-group label {
-    display: block;
-    margin-bottom: 8px;
+.auth-description {
     color: #666;
-    font-size: 0.95rem;
-    font-weight: 400;
-}
-
-.auth-input {
-    width: 100%;
-    padding: 12px 0;
-    border: none;
-    border-bottom: 1px solid #ddd;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.auth-input:focus {
-    border-bottom-color: var(--kfc-red, #E4002B);
-}
-
-.auth-input::placeholder {
-    color: #999;
-}
-
-.password-wrapper {
-    position: relative;
-}
-
-.password-toggle {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #666;
-    font-size: 1.2rem;
-    padding: 5px;
-}
-
-.password-toggle:hover {
-    color: var(--kfc-red);
+    margin-bottom: 30px;
+    line-height: 1.5;
 }
 
 .auth-link {
@@ -90,35 +53,22 @@
     text-decoration: underline;
 }
 
+/* Social Login Section */
 .social-divider {
-    text-align: center;
-    margin: 30px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 35px 0 25px;
     color: #666;
     font-size: 0.9rem;
-    position: relative;
 }
 
 .social-divider::before,
 .social-divider::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 35%;
+    content: "";
+    flex: 1;
     height: 1px;
-    background: #ddd;
-}
-
-.social-divider::before {
-    left: 0;
-}
-
-.social-divider::after {
-    right: 0;
-}
-
-.social-login {
-    gap: 12px;
-    margin-bottom: 25px;
+    background: #eee;
 }
 
 .btn-social {
@@ -128,49 +78,81 @@
     border-radius: 25px;
     font-size: 0.95rem;
     font-weight: 500;
+    background: white;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: white;
-    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .btn-social:hover {
-    background: #f8f8f8;
-    border-color: #999;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Footer & Helpers */
+.auth-forgot-password {
+    text-align: right;
+    margin: -10px 0 25px;
+    font-size: 0.9rem;
 }
 
 .auth-footer-link {
     text-align: center;
+    margin-top: 25px;
     color: #666;
-    font-size: 0.95rem;
-}
-
-.auth-forgot-password {
-    text-align: right;
-    margin: -20px 0 25px;
-    font-size: 0.9rem;
 }
 
 .auth-policies {
-    margin-top: 20px;
+    margin-top: 30px;
     text-align: center;
     font-size: 0.85rem;
-    color: #666;
+    color: #888;
     line-height: 1.6;
 }
 
-/* responsive */
+/* Success State (for Forgot Password) */
+.auth-success-container {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.auth-success-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.auth-success-text {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.auth-success-subtext {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Responsive */
 @media (max-width: 992px) {
     .auth-container {
         flex-direction: column;
     }
 
     .auth-banner {
-        min-height: 250px;
+        min-height: 200px;
     }
 
     .auth-form-section {
-        padding: 30px 20px;
+        padding: 40px 25px;
+    }
+}
+
+@media (max-width: 576px) {
+    .auth-title {
+        font-size: 1.5rem;
     }
 }

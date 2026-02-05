@@ -7,6 +7,7 @@ import authApi from '../../../../api/authApi';
 import '../../auth.css';
 import authBg from '../../../../assets/images/common/auth-bg.jpg';
 import Button from '../../../../components/Button';
+import FormInput from '../../../../components/FormInput';
 
 const ForgotPassword = () => {
     const [emailSent, setEmailSent] = useState(false);
@@ -51,25 +52,23 @@ const ForgotPassword = () => {
                 {!emailSent ? (
                     <>
                         <h2 className="auth-title">QUÊN MẬT KHẨU</h2>
-                        <p style={{ color: '#666', marginBottom: '20px' }}>
+                        <p className="auth-description">
                             Nhập email của bạn và chúng tôi sẽ gửi cho bạn hướng dẫn đặt lại mật khẩu.
                         </p>
 
-                        <form className="auth-form" onSubmit={handleSubmit}>
-                            <div className="auth-form-group">
-                                <label htmlFor="email">Địa chỉ email của bạn *</label>
-                                <input
-                                    type="email"
-                                    onChange={handleChange}
-                                    value={values.email}
-                                    onBlur={handleBlur}
-                                    name="email"
-                                    className="auth-input"
-                                    id="email"
-                                    placeholder="example@email.com"
-                                />
-                                <p className='error'>{touched.email && errors.email ? errors.email : ''}</p>
-                            </div>
+                        <form onSubmit={handleSubmit}>
+                            <FormInput
+                                id="email"
+                                name="email"
+                                type="email"
+                                label="Địa chỉ email của bạn *"
+                                placeholder="example@email.com"
+                                value={values.email}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                error={touched.email && errors.email}
+                                variant="underlined"
+                            />
 
                             <Button
                                 type="submit"
@@ -81,19 +80,19 @@ const ForgotPassword = () => {
                             </Button>
                         </form>
 
-                        <div className="auth-footer-link" style={{ marginTop: '20px' }}>
+                        <div className="auth-footer-link">
                             <Link to="/login" className="auth-link">← Quay lại đăng nhập</Link>
                         </div>
                     </>
                 ) : (
                     <>
                         <h2 className="auth-title">KIỂM TRA EMAIL CỦA BẠN</h2>
-                        <div style={{ textAlign: 'center', padding: '20px 0' }}>
-                            <div style={{ fontSize: '48px', marginBottom: '20px' }}>📧</div>
-                            <p style={{ color: '#666', marginBottom: '20px' }}>
+                        <div className="auth-success-container">
+                            <div className="auth-success-icon">📧</div>
+                            <p className="auth-success-text">
                                 Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến email <strong>{values.email}</strong>
                             </p>
-                            <p style={{ color: '#999', fontSize: '14px', marginBottom: '30px' }}>
+                            <p className="auth-success-subtext">
                                 Vui lòng kiểm tra hộp thư đến của bạn và làm theo hướng dẫn trong email.
                                 Link sẽ hết hạn sau 10 phút.
                             </p>

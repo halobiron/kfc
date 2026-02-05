@@ -55,6 +55,7 @@ const TrackOrder = () => {
                                     placeholder="Ví dụ: ORD..."
                                     value={orderNumber}
                                     onChange={(e) => setOrderNumber(e.target.value)}
+                                    required
                                 />
                                 <FormInput
                                     containerClass="mb-3"
@@ -63,6 +64,7 @@ const TrackOrder = () => {
                                     placeholder="Nhập số điện thoại"
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
+                                    required
                                 />
                                 <Button
                                     type="submit"

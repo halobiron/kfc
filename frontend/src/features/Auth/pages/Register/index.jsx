@@ -11,14 +11,13 @@ import '../../auth.css'
 import './register.css'
 import signinImg from '../../../../assets/images/common/auth-bg.jpg'
 import { FcGoogle } from 'react-icons/fc';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Button from '../../../../components/Button';
+import FormInput from '../../../../components/FormInput';
 
 const Register = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isAuthenticated, loading } = useSelector((state) => state.auth);
-    const [showPassword, setShowPassword] = useState(false);
     const [agreedToTerms, setAgreedToTerms] = useState(false);
 
     useEffect(() => {
@@ -49,10 +48,6 @@ const Register = () => {
                 .required('Vui lòng xác nhận mật khẩu')
         }),
         onSubmit: async (values) => {
-            if (!agreedToTerms) {
-                toast.warn('Vui lòng đồng ý với Chính Sách Hoạt Động và Chính Sách Bảo Mật');
-                return;
-            }
             try {
                 dispatch(loginStart());
                 const registerData = {
@@ -85,114 +80,87 @@ const Register = () => {
 
     return (
         <div className="auth-container">
-            {/* Left promotional banner */}
             <div className="auth-banner">
                 <img src={signinImg} alt="KFC Promotion" className="auth-banner-image" />
             </div>
 
-            {/* Right register form */}
             <div className="auth-form-section">
                 <h2 className="auth-title">TẠO TÀI KHOẢN</h2>
 
-                <form className="auth-form" onSubmit={handleSubmit}>
-                    <div className="auth-form-group">
-                        <label htmlFor="lastName">Họ của bạn *</label>
-                        <input
-                            type="text"
-                            onChange={handleChange}
-                            value={values.lastName}
-                            onBlur={handleBlur}
-                            name="lastName"
-                            className="auth-input"
-                            id="lastName"
-                        />
-                        <p className='error'>{touched.lastName && errors.lastName ? errors.lastName : ''}</p>
-                    </div>
+                <form onSubmit={handleSubmit}>
+                    <FormInput
+                        label="Họ của bạn *"
+                        id="lastName"
+                        name="lastName"
+                        value={values.lastName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.lastName && errors.lastName}
+                        variant="underlined"
+                    />
 
-                    <div className="auth-form-group">
-                        <label htmlFor="firstName">Tên của bạn *</label>
-                        <input
-                            type="text"
-                            onChange={handleChange}
-                            value={values.firstName}
-                            onBlur={handleBlur}
-                            name="firstName"
-                            className="auth-input"
-                            id="firstName"
-                        />
-                        <p className='error'>{touched.firstName && errors.firstName ? errors.firstName : ''}</p>
-                    </div>
+                    <FormInput
+                        label="Tên của bạn *"
+                        id="firstName"
+                        name="firstName"
+                        value={values.firstName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.firstName && errors.firstName}
+                        variant="underlined"
+                    />
 
-                    <div className="auth-form-group">
-                        <label htmlFor="phone">Số điện thoại *</label>
-                        <input
-                            type="tel"
-                            onChange={handleChange}
-                            value={values.phone}
-                            onBlur={handleBlur}
-                            name="phone"
-                            className="auth-input"
-                            id="phone"
-                            placeholder="0123456789"
-                        />
-                        <p className='error'>{touched.phone && errors.phone ? errors.phone : ''}</p>
-                    </div>
+                    <FormInput
+                        label="Số điện thoại *"
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        value={values.phone}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.phone && errors.phone}
+                        variant="underlined"
+                        placeholder="0123456789"
+                    />
 
-                    <div className="auth-form-group">
-                        <label htmlFor="email">Địa chỉ email của bạn *</label>
-                        <input
-                            type="email"
-                            onChange={handleChange}
-                            value={values.email}
-                            onBlur={handleBlur}
-                            name="email"
-                            className="auth-input"
-                            id="email"
-                            placeholder="example@email.com"
-                        />
-                        <p className='error'>{touched.email && errors.email ? errors.email : ''}</p>
-                    </div>
+                    <FormInput
+                        label="Địa chỉ email của bạn *"
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.email && errors.email}
+                        variant="underlined"
+                        placeholder="example@email.com"
+                    />
 
-                    <div className="auth-form-group">
-                        <label htmlFor="password">Mật khẩu *</label>
-                        <div className="password-wrapper">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                onChange={handleChange}
-                                value={values.password}
-                                onBlur={handleBlur}
-                                name='password'
-                                className="auth-input"
-                                id="password"
-                                placeholder="••••••••"
-                            />
-                            <button
-                                type="button"
-                                className="password-toggle"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? <FaEyeSlash /> : <FaEye />}
-                            </button>
-                        </div>
-                        <p className='error'>{touched.password && errors.password ? errors.password : ''}</p>
-                    </div>
+                    <FormInput
+                        label="Mật khẩu *"
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.password && errors.password}
+                        variant="underlined"
+                        placeholder="••••••••"
+                    />
 
-                    <div className="auth-form-group">
-                        <label htmlFor="confirmPassword">Xác nhận mật khẩu *</label>
-                        <div className="password-wrapper">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                onChange={handleChange}
-                                value={values.confirmPassword}
-                                onBlur={handleBlur}
-                                name='confirmPassword'
-                                className="auth-input"
-                                id="confirmPassword"
-                                placeholder="••••••••"
-                            />
-                        </div>
-                        <p className='error'>{touched.confirmPassword && errors.confirmPassword ? errors.confirmPassword : ''}</p>
-                    </div>
+                    <FormInput
+                        label="Xác nhận mật khẩu *"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        value={values.confirmPassword}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.confirmPassword && errors.confirmPassword}
+                        variant="underlined"
+                        placeholder="••••••••"
+                    />
 
                     <div className="terms-group">
                         <label className="terms-checkbox">
@@ -222,8 +190,8 @@ const Register = () => {
                 <div className="social-divider">Hoặc tiếp tục với</div>
 
                 <div className="social-login">
-                    <button className="btn-social btn-google">
-                        <FcGoogle style={{ fontSize: '24px', marginRight: '8px' }} />
+                    <button className="btn-social">
+                        <FcGoogle />
                         Đăng ký bằng Google
                     </button>
                 </div>

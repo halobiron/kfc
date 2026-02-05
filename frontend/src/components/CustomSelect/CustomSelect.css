@@ -1,5 +1,7 @@
 .custom-select-wrapper {
     position: relative;
+    user-select: none;
+    margin-bottom: 20px;
 }
 
 .select-trigger {
@@ -59,6 +61,15 @@
 .select-item:hover,
 .select-item:focus {
     background-color: #f8f9fa;
+    color: var(--kfc-red);
+}
+
+.select-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #5f6368;
+    margin-bottom: 8px;
+    display: block;
 }
 
 .select-item.active {

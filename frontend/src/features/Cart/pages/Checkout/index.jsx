@@ -452,23 +452,19 @@ const Checkout = () => {
                                 {deliveryType === 'delivery' ? (
                                     <>
                                         {savedAddresses.length > 0 && (
-                                            <div className="col-12 form-group">
-                                                <label className="form-label">
-                                                    <i className="bi bi-journal-bookmark-fill me-1 text-danger"></i>
-                                                    Chọn từ sổ địa chỉ
-                                                </label>
-                                                <CustomSelect
-                                                    options={savedAddresses.map((addr, index) => ({
-                                                        value: index,
-                                                        label: `${addr.label} - ${addr.fullAddress}`
-                                                    }))}
-                                                    value=""
-                                                    onChange={(val) => {
-                                                        handleAddressSelect({ target: { value: val } });
-                                                    }}
-                                                    placeholder="-- Chọn địa chỉ đã lưu --"
-                                                />
-                                            </div>
+                                            <CustomSelect
+                                                className="col-12 mb-3"
+                                                label={<><i className="bi bi-journal-bookmark-fill me-1 text-danger"></i>Chọn từ sổ địa chỉ</>}
+                                                options={savedAddresses.map((addr, index) => ({
+                                                    value: index,
+                                                    label: `${addr.label} - ${addr.fullAddress}`
+                                                }))}
+                                                value=""
+                                                onChange={(val) => {
+                                                    handleAddressSelect({ target: { value: val } });
+                                                }}
+                                                placeholder="-- Chọn địa chỉ đã lưu --"
+                                            />
                                         )}
 
                                         <FormInput
@@ -481,41 +477,34 @@ const Checkout = () => {
                                             onChange={handleInputChange}
                                             required
                                         />
-                                        <div className="col-12 form-group">
-                                            <label className="form-label">Ghi chú cho tài xế</label>
-                                            <textarea
-                                                className="form-input-kfc"
-                                                name="note"
-                                                rows="2"
-                                                placeholder="Ví dụ: Lấy nhiều tương ớt, không lấy đá, giao lên tận phòng..."
-                                                value={formData.note}
-                                                onChange={handleInputChange}
-                                            ></textarea>
-                                        </div>
+                                        <FormInput
+                                            containerClass="col-12"
+                                            label="Ghi chú cho tài xế"
+                                            type="textarea"
+                                            name="note"
+                                            rows="2"
+                                            placeholder="Ví dụ: Lấy nhiều tương ớt, không lấy đá, giao lên tận phòng..."
+                                            value={formData.note}
+                                            onChange={handleInputChange}
+                                        />
                                     </>
                                 ) : (
                                     <>
-                                        <div className="col-12 form-group">
-                                            <div className="mb-2">
-                                                <label className="form-label mb-1">
-                                                    <i className="bi bi-geo-alt-fill me-1 text-danger"></i>
-                                                    Tìm quán gần bạn...
-                                                </label>
-                                                <CustomSelect
-                                                    options={searchLocationOptions}
-                                                    value=""
-                                                    onChange={handleLocationSearchSelect}
-                                                    placeholder="Chọn cách tìm kiếm..."
-                                                />
-                                            </div>
-                                        </div>
+                                        <CustomSelect
+                                            className="col-12 mb-3"
+                                            label={<><i className="bi bi-geo-alt-fill me-1 text-danger"></i>Tìm quán gần bạn...</>}
+                                            options={searchLocationOptions}
+                                            value=""
+                                            onChange={handleLocationSearchSelect}
+                                            placeholder="Chọn cách tìm kiếm..."
+                                        />
 
-                                        <div className="col-12 form-group">
-                                            <label className="form-label">Chọn cửa hàng KFC gần nhất *</label>
-
+                                        <div className="col-12">
                                             {isLocating && <div className="text-center small text-muted mb-2"><span className="spinner-border spinner-border-sm me-1"></span>Đang tìm kiếm...</div>}
 
                                             <CustomSelect
+                                                className="mb-3"
+                                                label="Chọn cửa hàng KFC gần nhất *"
                                                 options={[
                                                     { value: '', label: '-- Chọn cửa hàng gần bạn --' },
                                                     ...stores.map(store => ({
@@ -527,21 +516,20 @@ const Checkout = () => {
                                                 onChange={(val) => setSelectedStore(val)}
                                                 placeholder="Chọn cửa hàng"
                                             />
-                                            <small className="text-muted" style={{ display: 'block', marginTop: '8px' }}>
+                                            <small className="text-muted" style={{ display: 'block', marginTop: '-10px', marginBottom: '15px' }}>
                                                 <i className="bi bi-info-circle"></i> Vui lòng đến cửa hàng trong vòng 30 phút sau khi đặt
                                             </small>
                                         </div>
-                                        <div className="col-12 form-group">
-                                            <label className="form-label">Ghi chú cho cửa hàng</label>
-                                            <textarea
-                                                className="form-input-kfc"
-                                                name="note"
-                                                rows="2"
-                                                placeholder="Ví dụ: Tôi sẽ đến lấy lúc 18h..."
-                                                value={formData.note}
-                                                onChange={handleInputChange}
-                                            ></textarea>
-                                        </div>
+                                        <FormInput
+                                            containerClass="col-12"
+                                            label="Ghi chú cho cửa hàng"
+                                            type="textarea"
+                                            name="note"
+                                            rows="2"
+                                            placeholder="Ví dụ: Tôi sẽ đến lấy lúc 18h..."
+                                            value={formData.note}
+                                            onChange={handleInputChange}
+                                        />
                                     </>
                                 )}
                             </div>

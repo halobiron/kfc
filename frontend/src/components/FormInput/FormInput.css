@@ -1,15 +1,18 @@
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    position: relative;
+    text-align: left;
 }
 
 .form-label {
     font-weight: 600;
     font-size: 0.9rem;
     color: #5f6368;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     display: block;
 }
 
+/* Default Outlined Style */
 .form-input-kfc {
     display: block;
     width: 100%;
@@ -17,7 +20,7 @@
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: var(--kfc-black);
+    color: var(--kfc-black, #202124);
     background-color: #fff;
     border: 1px solid #dadce0;
     border-radius: 8px;
@@ -38,4 +41,69 @@
 
 .form-input-kfc[type="file"] {
     padding: 9px 15px;
+}
+
+/* Underlined Style (for Auth pages) */
+.form-input-kfc.underlined {
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #ddd;
+    padding: 12px 0;
+    background-color: transparent;
+}
+
+.form-input-kfc.underlined:focus {
+    border-bottom-color: var(--kfc-red, #E4002B);
+    box-shadow: none;
+}
+
+/* Error State */
+.form-input-kfc.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-input-kfc.underlined.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-error-message {
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Password Toggle */
+.password-input-wrapper {
+    position: relative;
+}
+
+.btn-password-toggle {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    font-size: 1.2rem;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.btn-password-toggle:hover {
+    color: var(--kfc-red, #E4002B);
+}
+
+.form-input-kfc.underlined+.btn-password-toggle {
+    right: 0;
+}
+
+/* Adjust padding for outlined inputs with toggle */
+.form-input-kfc:not(.underlined)[type="password"] {
+    padding-right: 40px;
 }

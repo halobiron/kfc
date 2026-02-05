@@ -393,6 +393,7 @@ const Account = () => {
                                                 options={statusOptions}
                                                 value={filterStatus}
                                                 onChange={setFilterStatus}
+                                                placeholder="Lọc theo trạng thái"
                                             />
                                         </div>
                                     </div>
@@ -651,7 +652,7 @@ const Account = () => {
                                 required
                             />
 
-                            <div className="form-group">
+                            <div>
                                 <div className="label-with-button">
                                     <label>Địa chỉ đầy đủ <span className="text-danger">*</span></label>
                                     <button
@@ -673,14 +674,14 @@ const Account = () => {
                                         )}
                                     </button>
                                 </div>
-                                <textarea
-                                    className="form-input-kfc"
+                                <FormInput
+                                    type="textarea"
                                     placeholder="Nhập địa chỉ chi tiết (đường, quận, thành phố...)"
                                     rows="3"
                                     value={addressForm.fullAddress}
                                     onChange={(e) => setAddressForm({ ...addressForm, fullAddress: e.target.value })}
                                     required
-                                ></textarea>
+                                />
                             </div>
 
                             {(addressForm.latitude || addressForm.longitude) && (
@@ -806,12 +807,13 @@ const Account = () => {
                                         <label htmlFor={`reason-${index}`}>{reason}</label>
                                     </div>
                                 ))}
-                                <textarea
+                                <FormInput
+                                    type="textarea"
                                     placeholder="Lý do khác..."
                                     rows="3"
                                     value={cancelReason}
                                     onChange={(e) => setCancelReason(e.target.value)}
-                                ></textarea>
+                                />
                             </div>
                         </div>
                         <div className="order-modal-footer">

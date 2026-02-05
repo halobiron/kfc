@@ -10,13 +10,11 @@ import authApi from '../../../../api/authApi';
 import '../../auth.css'
 import signinImg from '../../../../assets/images/common/auth-bg.jpg'
 import { FcGoogle } from 'react-icons/fc';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-
 import { useGoogleLogin } from '@react-oauth/google';
 import Button from '../../../../components/Button';
+import FormInput from '../../../../components/FormInput';
 
 const Login = () => {
-    const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -88,54 +86,39 @@ const Login = () => {
 
     return (
         <div className="auth-container">
-            {/* Left promotional banner */}
             <div className="auth-banner">
                 <img src={signinImg} alt="KFC Promotion" className="auth-banner-image" />
             </div>
 
-            {/* Right login form */}
             <div className="auth-form-section">
                 <h2 className="auth-title">ĐĂNG NHẬP</h2>
 
-                <form className="auth-form" onSubmit={handleSubmit}>
-                    <div className="auth-form-group">
-                        <label htmlFor="email">Địa chỉ email của bạn *</label>
-                        <input
-                            type="email"
-                            onChange={handleChange}
-                            value={values.email}
-                            onBlur={handleBlur}
-                            name="email"
-                            className="auth-input"
-                            id="email"
-                            placeholder="example@email.com"
-                        />
-                        <p className='error'>{touched.email && errors.email ? errors.email : ''}</p>
-                    </div>
+                <form onSubmit={handleSubmit}>
+                    <FormInput
+                        label="Địa chỉ email của bạn *"
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.email && errors.email}
+                        variant="underlined"
+                        placeholder="example@email.com"
+                    />
 
-                    <div className="auth-form-group">
-                        <label htmlFor="password">Mật khẩu *</label>
-                        <div className="password-wrapper">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                onChange={handleChange}
-                                value={values.password}
-                                onBlur={handleBlur}
-                                name='password'
-                                className="auth-input"
-                                id="password"
-                                placeholder="••••••••"
-                            />
-                            <button
-                                type="button"
-                                className="password-toggle"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? <FaEyeSlash /> : <FaEye />}
-                            </button>
-                        </div>
-                        <p className='error'>{touched.password && errors.password ? errors.password : ''}</p>
-                    </div>
+                    <FormInput
+                        label="Mật khẩu *"
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.password && errors.password}
+                        variant="underlined"
+                        placeholder="••••••••"
+                    />
 
                     <div className="auth-forgot-password">
                         <Link to="/forgot-password" className="auth-link">Bạn quên mật khẩu?</Link>
@@ -154,8 +137,8 @@ const Login = () => {
                 <div className="social-divider">Hoặc tiếp tục với</div>
 
                 <div className="social-login">
-                    <button className="btn-social btn-google" onClick={() => handleGoogleLogin()}>
-                        <FcGoogle style={{ fontSize: '24px', marginRight: '8px' }} />
+                    <button className="btn-social" onClick={() => handleGoogleLogin()}>
+                        <FcGoogle />
                         Đăng nhập bằng Google
                     </button>
                 </div>

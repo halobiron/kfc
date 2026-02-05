@@ -8,7 +8,9 @@ const CustomSelect = ({
   placeholder = 'Chọn',
   className = '',
   id,
-  icon
+  icon,
+  label,
+  error
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef(null);
@@ -52,9 +54,10 @@ const CustomSelect = ({
 
   return (
     <div className={`custom-select-wrapper ${className}`} ref={wrapperRef} id={id}>
+      {label && <label className="select-label">{label}</label>}
       <button
         type="button"
-        className={`select-trigger text-start ${isOpen ? 'is-open' : ''}`}
+        className={`select-trigger text-start ${isOpen ? 'is-open' : ''} ${error ? 'is-invalid' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
@@ -102,6 +105,7 @@ const CustomSelect = ({
           })}
         </ul>
       )}
+      {error && <span className="select-error-message">{error}</span>}
     </div>
   );
 };
