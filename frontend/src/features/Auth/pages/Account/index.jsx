@@ -11,6 +11,7 @@ import Button from '../../../../components/Button';
 import Card from '../../../../components/Card';
 import './Account.css';
 import OrderStatusBadge, { STATUS_OPTIONS } from '../../../../components/OrderStatusBadge';
+import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
 
 const Account = () => {
     const navigate = useNavigate();
@@ -325,9 +326,7 @@ const Account = () => {
         toast.success('Đăng xuất thành công!');
     };
 
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-    };
+
 
 
 
@@ -431,7 +430,7 @@ const Account = () => {
                                                     <div className="order-info">
                                                         <h5 title={order.orderNumber || order._id}>Đơn hàng {order.orderNumber || order._id}</h5>
                                                         <span className="order-date">
-                                                            {new Date(order.createdAt).toLocaleString('vi-VN')}
+                                                            {formatDateTime(order.createdAt)}
                                                         </span>
                                                     </div>
                                                     <OrderStatusBadge status={order.status} />
@@ -730,7 +729,7 @@ const Account = () => {
                                 </div>
                                 <div className="detail-card">
                                     <span>Thời gian đặt</span>
-                                    <p>{new Date(selectedOrder.createdAt).toLocaleString('vi-VN')}</p>
+                                    <p>{formatDateTime(selectedOrder.createdAt)}</p>
                                 </div>
                             </div>
                             <div className="items-section">
@@ -764,13 +763,7 @@ const Account = () => {
                                                     <li key={index} className={`timeline-item ${isLatest ? 'latest' : 'completed'}`}>
                                                         <div className="timeline-dot"></div>
                                                         <div className="timeline-time">
-                                                            {new Date(history.timestamp).toLocaleString('vi-VN', {
-                                                                hour: '2-digit',
-                                                                minute: '2-digit',
-                                                                day: '2-digit',
-                                                                month: '2-digit',
-                                                                year: 'numeric'
-                                                            })}
+                                                            {formatDateTime(history.timestamp)}
                                                         </div>
                                                         {statusInfo.label}
                                                         {history.note && <div className="timeline-note">{history.note}</div>}

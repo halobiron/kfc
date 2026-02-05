@@ -1,42 +1,37 @@
-/* Global Status Badges */
-.status-badge,
-.order-status {
-    padding: 0.35rem 1rem;
-    border-radius: 50rem;
-    font-size: 0.75rem;
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
     color: #fff;
-    display: inline-block;
-    line-height: normal;
-    border: none !important;
-    /* Override potential borders */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
 }
 
-/* Status Colors */
 .status-pending {
-    background-color: #ffc107 !important;
-    color: #000 !important;
+    background-color: #ffc107;
+    color: #000;
 }
 
 .status-confirmed,
 .status-preparing {
-    background-color: #0d6efd !important;
-    color: #fff !important;
+    background-color: #0d6efd;
 }
 
 .status-shipping {
-    background-color: #fd7e14 !important;
-    color: #fff !important;
+    background-color: #fd7e14;
 }
 
 .status-ready,
 .status-delivered {
-    background-color: #198754 !important;
-    color: #fff !important;
+    background-color: #198754;
 }
 
 .status-cancelled {
-    background-color: #dc3545 !important;
-    color: #fff !important;
+    background-color: #dc3545;
 }

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addToCart } from '../../../Cart/cartSlice';
 import Button from '../../../../components/Button';
+import { formatCurrency } from '../../../../utils/formatters';
 import './card.css';
 
 const Card = ({ product }) => {
@@ -23,7 +24,7 @@ const Card = ({ product }) => {
                     {/* Title and Price on same row */}
                     <div className="title-price-row">
                         <h5 className="product-title">{product.title}</h5>
-                        <span className="product-price">{product.price.toLocaleString('vi-VN')}₫</span>
+                        <span className="product-price">{formatCurrency(product.price)}</span>
                     </div>
                     <p className="product-description">{product.description}</p>
                     {/* Single Add button */}

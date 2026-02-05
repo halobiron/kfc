@@ -11,6 +11,7 @@ import Card from '../../../../components/Card';
 import './Checkout.css';
 import { getAllCoupons } from '../../couponSlice';
 import { clearCart } from '../../cartSlice';
+import { formatCurrency } from '../../../../utils/formatters';
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
@@ -23,9 +24,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return R * c;
 };
 
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-};
+
 
 const Checkout = () => {
     const navigate = useNavigate();

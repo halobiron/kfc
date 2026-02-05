@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import './product-detail.css';
+import { formatCurrency } from '../../../../utils/formatters';
 import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
 import Button from '../../../../components/Button';
 import { useDispatch, useSelector } from 'react-redux';
@@ -77,7 +78,7 @@ const ProductDetail = () => {
                             <p className="product-description">{product.description}</p>
 
                             <div className="product-price-section">
-                                <span className="product-price">{price.toLocaleString('vi-VN')}₫</span>
+                                <span className="product-price">{formatCurrency(price)}</span>
                             </div>
 
                             <div className="quantity-section">

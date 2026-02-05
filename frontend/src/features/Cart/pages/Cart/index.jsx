@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, updateQuantity } from '../../cartSlice';
+import { formatCurrency } from '../../../../utils/formatters';
 
 import './Cart.css';
 import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
@@ -34,9 +35,7 @@ const Cart = () => {
     const deliveryFee = subtotal > 200000 ? 0 : 15000; // Free shipping for orders > 200k
     const total = subtotal + deliveryFee;
 
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-    };
+
 
     const handleCheckout = () => {
         navigate('/checkout');

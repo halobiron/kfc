@@ -6,6 +6,7 @@ import Button from '../../components/Button';
 import Card from '../../components/Card';
 import './TrackOrder.css';
 import OrderStatusBadge, { STATUS_OPTIONS } from '../../components/OrderStatusBadge';
+import { formatCurrency, formatDateTime } from '../../utils/formatters';
 
 const TrackOrder = () => {
     const [orderNumber, setOrderNumber] = useState('');
@@ -34,17 +35,12 @@ const TrackOrder = () => {
         }
     };
 
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-    };
-
 
 
     return (
         <div className="track-order-wrapper">
             <div className="track-order-container">
                 <div className={`track-order-row ${order ? 'has-order' : ''}`}>
-                    {/* Search Form Column */}
                     <div className={`search-column ${order ? 'side-mode' : 'center-mode'}`}>
                         <Card className="track-order-card">
                             <div className="section-header">
@@ -80,12 +76,10 @@ const TrackOrder = () => {
                         </Card>
                     </div>
 
-                    {/* Result Column - Only visible when order exists */}
                     {order && (
                         <div className="result-column animate__animated animate__fadeIn">
                             <Card className="order-result-card shadow">
                                 <div className="result-card-row">
-                                    {/* Left Side: Order Details */}
                                     <div className="order-details-col">
                                         <div className="order-header-row">
                                             <span className="order-id-text">#{order.orderNumber}</span>
@@ -129,7 +123,6 @@ const TrackOrder = () => {
                                         </div>
                                     </div>
 
-                                    {/* Right Side: Timeline */}
                                     <div className="timeline-col">
                                         <h6 className="timeline-title">
                                             <i className="bi bi-clock-history me-2"></i>Hành trình đơn
@@ -147,13 +140,7 @@ const TrackOrder = () => {
                                                                 <li key={index} className={`timeline-item ${isLatest ? 'latest' : 'completed'}`}>
                                                                     <div className="timeline-dot"></div>
                                                                     <div className="timeline-date">
-                                                                        {new Date(history.timestamp).toLocaleString('vi-VN', {
-                                                                            hour: '2-digit',
-                                                                            minute: '2-digit',
-                                                                            day: '2-digit',
-                                                                            month: '2-digit',
-                                                                            year: 'numeric'
-                                                                        })}
+                                                                        {formatDateTime(history.timestamp)}
                                                                     </div>
                                                                     <div className={`timeline-status-text ${isLatest ? 'latest' : ''}`}>
                                                                         {statusInfo.label}
