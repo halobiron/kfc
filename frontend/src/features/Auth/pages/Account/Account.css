@@ -24,89 +24,31 @@
 
 .account-left {
     background: var(--kfc-black);
-    color: #fff;
     padding: 3.2rem 1rem 1rem;
     position: relative;
     border-radius: 10px;
 }
 
 @media (min-width: 992px) {
-    .account-left {
-        padding: 4.3rem 1.8rem 1.8rem;
-    }
-}
-
-@media (min-width: 1200px) {
-    .account-left {
-        padding: 5rem 4rem 4rem;
-    }
-}
-
-/* Right Content */
-.block-right {
-    flex: 1;
-    margin-bottom: 2rem;
-}
-
-@media (min-width: 1580px) {
     .block-right {
-        flex: 0 0 65%;
+        flex: 0 0 70%;
     }
-}
-
-.block-right h3 {
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-}
-
-@media (min-width: 992px) {
-    .block-right h3 {
-        font-size: 2.3rem;
-    }
-}
-
-/* ==========================================================================
-   Sidebar Components
-   ========================================================================== */
-
-/* Page decoration (Sidebar Bar) */
-.page-with-bar {
-    position: relative;
-    padding-top: 2.5rem;
 }
 
 .page-with-bar.medium-bar::before {
     content: "";
     position: absolute;
     top: 0;
-    left: 52px;
+    left: 85px;
     width: 12px;
     height: 30px;
     box-shadow: inset 0 0 0 32px var(--kfc-red), -22px 0 var(--kfc-red), 22px 0 var(--kfc-red);
 }
 
 @media (min-width: 992px) {
-    .page-with-bar.medium-bar::before {
-        left: 64px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .page-with-bar.medium-bar::before {
-        left: 96px;
-    }
-}
-
-/* Sidebar Profile Info */
-.account-profile {
-    display: flex;
-    align-items: center;
-    margin-bottom: 2.2rem;
-}
-
-@media (min-width: 992px) {
     .account-profile {
         display: block;
+        padding-left: 35px;
     }
 }
 
@@ -142,26 +84,13 @@
 }
 
 /* Account Navigation Menu */
-.account-left ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 2rem;
-}
 
 .account-left ul li {
     margin: 1.3rem 0;
 }
 
-.account-left ul li:last-child {
-    margin-bottom: 0;
-}
-
 .account-left ul li a {
     color: hsla(0, 0%, 100%, 0.5);
-    text-decoration: none;
-    display: block;
-    transition: color 0.3s;
-    font-size: 1rem;
 }
 
 .account-left ul li.active a,
@@ -176,6 +105,7 @@
         overflow-x: auto;
         white-space: nowrap;
         margin: 0 -1rem;
+        padding-top: 20px;
         padding-bottom: 0.5rem;
     }
 
@@ -184,14 +114,7 @@
         margin: 0 1rem;
     }
 
-    .account-left ul li a {
-        padding: 0.7rem 0;
-        border-bottom: 3px solid var(--kfc-black);
-    }
-
-    .account-left ul li.active a {
-        border-color: var(--kfc-red);
+    .account-profile {
+        padding-left: 30px;
     }
 }
-
-/* Animation Removed */

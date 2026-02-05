@@ -69,7 +69,7 @@ const AccountOrders = () => {
 
     return (
         <Card>
-            <h3>Các đơn hàng đã đặt</h3>
+            <h2>Các đơn hàng đã đặt</h2>
 
             {/* Search and Filter */}
             {orders.length > 0 && (

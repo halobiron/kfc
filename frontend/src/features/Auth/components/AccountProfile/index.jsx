@@ -13,10 +13,10 @@ const AccountProfile = () => {
     const { user } = useSelector(state => state.auth);
 
     const [userInfo, setUserInfo] = useState({
-        name: user?.name,
-        email: user?.email,
-        phone: user?.phone,
-        birthdate: user?.birthdate
+        name: user?.name || '',
+        email: user?.email || '',
+        phone: user?.phone || '',
+        birthdate: user?.birthdate ? user.birthdate.split('T')[0] : ''
     });
 
     const [passwordData, setPasswordData] = useState({
