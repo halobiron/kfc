@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import authApi from '../../../../api/authApi';
 import '../../auth.css';
+import './forgotPassword.css';
 import authBg from '../../../../assets/images/common/auth-bg.jpg';
 import Button from '../../../../components/Button';
 import FormInput from '../../../../components/FormInput';

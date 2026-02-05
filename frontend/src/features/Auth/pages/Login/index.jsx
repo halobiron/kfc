@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../../authSlice';
 import authApi from '../../../../api/authApi';
 import '../../auth.css'
+import './login.css'
 import signinImg from '../../../../assets/images/common/auth-bg.jpg'
 import { FcGoogle } from 'react-icons/fc';
 import { useGoogleLogin } from '@react-oauth/google';
