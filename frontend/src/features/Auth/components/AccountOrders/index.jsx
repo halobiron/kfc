@@ -27,17 +27,18 @@ const AccountOrders = () => {
     }, []);
 
     useEffect(() => {
-        let result = orders;
-        if (filterStatus !== 'All') {
-            result = result.filter(order => order.status === filterStatus);
-        }
-        if (searchTerm) {
-            const lowerTerm = searchTerm.toLowerCase();
-            result = result.filter(order =>
-                (order.orderNumber || order._id).toLowerCase().includes(lowerTerm) ||
-                order.items.some(item => item.name.toLowerCase().includes(lowerTerm))
-            );
-        }
+        const lowerTerm = searchTerm.toLowerCase();
+        const result = orders.filter(order => {
+            const matchesStatus = ['All', order.status].includes(filterStatus);
+
+            const searchableText = [
+                order.orderNumber,
+                order._id,
+                ...order.items.map(item => item.name)
+            ].join(' ').toLowerCase();
+
+            return matchesStatus && searchableText.includes(lowerTerm);
+        });
         setFilteredOrders(result);
     }, [searchTerm, filterStatus, orders]);
 
@@ -71,7 +72,6 @@ const AccountOrders = () => {
         <Card>
             <h2>Các đơn hàng đã đặt</h2>
 
-            {/* Search and Filter */}
             {orders.length > 0 && (
                 <div className="search-filter-section">
                     <div className="search-box">
@@ -174,7 +174,6 @@ const AccountOrders = () => {
                 </div>
             )}
 
-            {/* Modals */}
             <OrderDetailModal
                 order={selectedOrder}
                 onClose={() => setSelectedOrder(null)}
