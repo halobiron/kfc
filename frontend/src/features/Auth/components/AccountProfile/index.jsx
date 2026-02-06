@@ -35,11 +35,12 @@ const AccountProfile = () => {
             if (response.data?.status) {
                 const userData = response.data.data;
                 setUserInfo({
-                    name: userData.name || '',
-                    email: userData.email || '',
-                    phone: userData.phone || '',
+                    name: userData.name,
+                    email: userData.email,
+                    phone: userData.phone,
                     birthdate: userData.birthdate ? userData.birthdate.split('T')[0] : ''
                 });
+                dispatch(updateUserSuccess(userData));
             }
         } catch (error) {
             toast.error('Không thể tải thông tin người dùng.');

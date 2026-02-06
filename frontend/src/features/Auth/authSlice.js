@@ -51,22 +51,22 @@ const authSlice = createSlice({
         },
         updateUserSuccess: (state, action) => {
             if (state.user) {
-                state.user.user = { ...state.user.user, ...action.payload };
+                state.user = { ...state.user, ...action.payload };
                 localStorage.setItem('user', JSON.stringify(state.user));
             }
         },
     },
 });
 
-export const { 
-    loginStart, 
-    loginSuccess, 
-    loginFailure, 
-    logout, 
-    loadUserStart, 
-    loadUserSuccess, 
+export const {
+    loginStart,
+    loginSuccess,
+    loginFailure,
+    logout,
+    loadUserStart,
+    loadUserSuccess,
     loadUserFailure,
-    updateUserSuccess 
+    updateUserSuccess
 } = authSlice.actions;
 
 export default authSlice.reducer;
