@@ -12,6 +12,7 @@ import './Checkout.css';
 import { getAllCoupons } from '../../couponSlice';
 import { clearCart } from '../../cartSlice';
 import { formatCurrency } from '../../../../utils/formatters';
+import { calculateDeliveryFee, DEFAULT_SHIPPING_CONFIG } from '../../../../utils/shipping';
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
@@ -33,11 +34,13 @@ const Checkout = () => {
     const { items: cartItems } = useSelector((state) => state.cart);
     const [stores, setStores] = useState([]);
     const [isLocating, setIsLocating] = useState(false);
+    const [shippingConfig, setShippingConfig] = useState(DEFAULT_SHIPPING_CONFIG);
 
     useEffect(() => {
         dispatch(getAllCoupons());
         fetchStores();
         fetchSavedAddresses();
+        fetchShippingConfig();
     }, [dispatch]);
 
     const fetchStores = async () => {
@@ -47,6 +50,17 @@ const Checkout = () => {
         } catch (error) {
             console.error('Lỗi khi tải cửa hàng:', error);
             toast.error('Không thể tải danh sách cửa hàng.');
+        }
+    };
+
+    const fetchShippingConfig = async () => {
+        try {
+            const response = await axiosClient.get('/config/shipping');
+            if (response.data?.status && response.data?.data) {
+                setShippingConfig(response.data.data);
+            }
+        } catch (error) {
+            // Fallback to defaults on error
         }
     };
 
@@ -69,7 +83,10 @@ const Checkout = () => {
     const [couponError, setCouponError] = useState('');
 
     const subtotal = useMemo(() => cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0), [cartItems]);
-    const deliveryFee = useMemo(() => deliveryType === 'pickup' ? 0 : (subtotal > 200000 ? 0 : 15000), [deliveryType, subtotal]);
+    const deliveryFee = useMemo(
+        () => calculateDeliveryFee({ subtotal, deliveryType, config: shippingConfig }),
+        [deliveryType, subtotal, shippingConfig]
+    );
 
     const discountAmount = useMemo(() => {
         if (!appliedCoupon) return 0;

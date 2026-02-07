@@ -3,6 +3,7 @@ const Product = require('../models/productSchema');
 const Coupon = require('../models/couponSchema');
 const Ingredient = require('../models/ingredientSchema');
 const payos = require('../utils/payosClient');
+const { calculateShippingFee } = require('../utils/shipping');
 
 // CREATE ORDER
 exports.createOrder = async (req, res, next) => {
@@ -49,6 +50,9 @@ exports.createOrder = async (req, res, next) => {
             product.stock -= item.quantity;
             await product.save();
         }
+
+        // Calculate shipping fee
+        const shippingFee = calculateShippingFee({ deliveryType, subtotal });
 
         // Apply coupon if provided
         let couponDiscount = 0;
@@ -100,6 +104,8 @@ exports.createOrder = async (req, res, next) => {
             // Calculate discount
             if (coupon.type === 'percent') {
                 couponDiscount = Math.floor(subtotal * (coupon.discount / 100));
+            } else if (coupon.type === 'shipping') {
+                couponDiscount = shippingFee;
             } else {
                 couponDiscount = coupon.discount;
             }
@@ -109,8 +115,6 @@ exports.createOrder = async (req, res, next) => {
             await coupon.save();
         }
 
-        // Calculate total
-        const shippingFee = deliveryType === 'delivery' ? 30000 : 0;
         const totalAmount = Math.max(0, subtotal - couponDiscount + shippingFee);
 
         // Create order

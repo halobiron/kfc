@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, updateQuantity } from '../../cartSlice';
 import { formatCurrency } from '../../../../utils/formatters';
+import axiosClient from '../../../../api/axiosClient';
+import { calculateDeliveryFee, DEFAULT_SHIPPING_CONFIG } from '../../../../utils/shipping';
 
 import './Cart.css';
 import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
@@ -11,8 +13,6 @@ import EmptyState from '../../../../components/EmptyState';
 import Button from '../../../../components/Button';
 import Card from '../../../../components/Card';
 
-// Placeholder image if real ones aren't available
-const PLACEHOLDER_IMG = "https://static.kfcvietnam.com.vn/images/items/lg/D-C-Ga-Ran.jpg?v=gXQ2pg";
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -20,6 +20,23 @@ const Cart = () => {
 
     // Get cart data from Redux
     const { items: cartItems, totalPrice: subtotal } = useSelector((state) => state.cart);
+
+    const [shippingConfig, setShippingConfig] = useState(DEFAULT_SHIPPING_CONFIG);
+
+    useEffect(() => {
+        const fetchShippingConfig = async () => {
+            try {
+                const response = await axiosClient.get('/config/shipping');
+                if (response.data?.status && response.data?.data) {
+                    setShippingConfig(response.data.data);
+                }
+            } catch (error) {
+                // Fallback to defaults on error
+            }
+        };
+
+        fetchShippingConfig();
+    }, []);
 
     const handleQuantityChange = (id, newQuantity) => { // id passed here is actually _id or id
         dispatch(updateQuantity({ productId: id, quantity: newQuantity }));
@@ -32,7 +49,10 @@ const Cart = () => {
         }
     };
 
-    const deliveryFee = subtotal > 200000 ? 0 : 15000; // Free shipping for orders > 200k
+    const deliveryFee = useMemo(
+        () => calculateDeliveryFee({ subtotal, deliveryType: 'delivery', config: shippingConfig }),
+        [subtotal, shippingConfig]
+    );
     const total = subtotal + deliveryFee;
 
 
@@ -74,9 +94,8 @@ const Cart = () => {
 
                                         <div className="cart-item-image">
                                             <img
-                                                src={item.productImage || PLACEHOLDER_IMG}
+                                                src={item.productImage}
                                                 alt={item.title}
-                                                onError={(e) => { e.target.src = PLACEHOLDER_IMG }}
                                             />
                                         </div>
 
@@ -118,7 +137,7 @@ const Cart = () => {
                                 {deliveryFee === 0 && (
                                     <div className="text-success small mb-2">
                                         <i className="bi bi-check-circle-fill me-1"></i>
-                                        Đơn hàng trên 200k được miễn phí giao hàng!
+                                        Đơn hàng trên {formatCurrency(shippingConfig.freeShippingThreshold)} được miễn phí giao hàng!
                                     </div>
                                 )}
 

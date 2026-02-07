@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axiosClient from '../../api/axiosClient';
+import { formatCurrency } from '../../utils/formatters';
+import { DEFAULT_SHIPPING_CONFIG } from '../../utils/shipping';
 
 import './TermsOfUse.css';
 
 const TermsOfUse = () => {
+    const [shippingConfig, setShippingConfig] = useState(DEFAULT_SHIPPING_CONFIG);
+
+    useEffect(() => {
+        const fetchShippingConfig = async () => {
+            try {
+                const response = await axiosClient.get('/config/shipping');
+                if (response.data?.status && response.data?.data) {
+                    setShippingConfig(response.data.data);
+                }
+            } catch (error) {
+                // Fallback to defaults on error
+            }
+        };
+
+        fetchShippingConfig();
+    }, []);
+
     return (
         <div className="policy-page">
             <div className="container py-5">
@@ -73,67 +93,30 @@ const TermsOfUse = () => {
                     <h2>3. PHÍ VẬN CHUYỂN</h2>
 
                     <div className="policy-subsection">
-                        <h3>Khu vực 1-2 (Hà Nội, TP.HCM, Đà Nẵng...)</h3>
+                        <h3>Phí giao hàng tiêu chuẩn</h3>
                         <div className="shipping-table">
                             <table className="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Giá trị đơn hàng</th>
-                                        <th>Khoảng cách</th>
                                         <th>Phí vận chuyển</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Dưới 80.000đ</td>
-                                        <td>-</td>
-                                        <td className="text-danger"><strong>Không giao hàng</strong></td>
+                                        <td>Dưới {formatCurrency(shippingConfig.freeShippingThreshold)}</td>
+                                        <td>{formatCurrency(shippingConfig.shippingFee)}</td>
                                     </tr>
                                     <tr>
-                                        <td>80.000đ - 180.000đ</td>
-                                        <td>Dưới 3km</td>
-                                        <td>10.000đ</td>
-                                    </tr>
-                                    <tr>
-                                        <td>80.000đ - 180.000đ</td>
-                                        <td>3km - 8km</td>
-                                        <td>20.000đ</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Trên 180.000đ</td>
-                                        <td>Trong 8km</td>
+                                        <td>Từ {formatCurrency(shippingConfig.freeShippingThreshold)} trở lên</td>
                                         <td className="text-success"><strong>Miễn phí</strong></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-
-                    <div className="policy-subsection">
-                        <h3>Khu vực 3-4 (Các tỉnh thành khác)</h3>
-                        <div className="shipping-table">
-                            <table className="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Giá trị đơn hàng</th>
-                                        <th>Khoảng cách</th>
-                                        <th>Phí vận chuyển</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Từ 50.000đ</td>
-                                        <td>Trong 8km</td>
-                                        <td className="text-success"><strong>Miễn phí</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Từ 50.000đ</td>
-                                        <td>Trên 8km</td>
-                                        <td>Liên hệ tổng đài</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <p className="text-muted">
+                            <em>Phí giao hàng có thể thay đổi theo từng thời điểm. Hệ thống sẽ hiển thị phí chính xác tại bước thanh toán.</em>
+                        </p>
                     </div>
                 </section>
 
