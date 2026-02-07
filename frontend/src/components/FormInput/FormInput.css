@@ -1,55 +1,123 @@
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     position: relative;
     text-align: left;
 }
 
 .form-label {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #5f6368;
-    margin-bottom: 8px;
     display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-/* Default Outlined Style */
 .form-input-kfc {
     display: block;
     width: 100%;
-    padding: 12px 15px;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
+    padding: 14px 16px;
+    font-size: 0.95rem;
     color: var(--kfc-black, #202124);
-    background-color: #fff;
-    border: 1px solid #dadce0;
+    background: #fff;
+    border: 1.5px solid #e0e0e0;
     border-radius: 8px;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition: all 0.2s;
 }
 
 .form-input-kfc:focus {
     border-color: var(--kfc-red, #e4002b);
     outline: 0;
-    box-shadow: 0 0 0 2px rgba(228, 0, 43, 0.1);
+    box-shadow: 0 4px 12px rgba(228, 0, 43, 0.08);
+}
+
+.form-input-kfc:hover:not(:focus):not(:disabled) {
+    border-color: #ccc;
 }
 
 .form-input-kfc:disabled {
-    background-color: #e9ecef;
-    opacity: 1;
+    background: #f5f5f5;
+    border-color: #eee;
     cursor: not-allowed;
 }
 
-.form-input-kfc[type="file"] {
-    padding: 9px 15px;
+/* Custom Checkbox */
+.form-check {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 12px;
+    min-height: 24px;
 }
 
-/* Underlined Style (for Auth pages) */
+.form-check input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.form-check label {
+    position: relative;
+    padding-left: 28px;
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+}
+
+.form-check label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+.form-check:hover input~label::before {
+    border-color: #999;
+}
+
+.form-check input:checked~label::before {
+    background: var(--kfc-red, #e4002b);
+    border-color: var(--kfc-red, #e4002b);
+}
+
+.form-check label::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 11px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.form-check input:checked~label::after {
+    display: block;
+}
+
+.form-check input:focus~label::before {
+    box-shadow: 0 0 0 3px rgba(228, 0, 43, 0.15);
+}
+
+/* Underlined Style */
 .form-input-kfc.underlined {
-    border: none;
-    border-radius: 0;
-    border-bottom: 1px solid #ddd;
     padding: 12px 0;
-    background-color: transparent;
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid #ddd;
+    border-radius: 0;
 }
 
 .form-input-kfc.underlined:focus {
@@ -57,42 +125,43 @@
     box-shadow: none;
 }
 
-/* Error State */
-.form-input-kfc.is-invalid {
-    border-color: #dc3545;
-}
-
-.form-input-kfc.underlined.is-invalid {
+/* Common Error Styles */
+.form-input-kfc.is-invalid,
+.form-check.is-invalid label::before {
     border-color: #dc3545;
 }
 
 .form-error-message {
-    color: #dc3545;
-    font-size: 0.85rem;
-    margin-top: 5px;
     display: block;
+    margin-top: 6px;
+    color: #dc3545;
+    font-size: 0.8rem;
+    font-weight: 500;
 }
 
-/* Password Toggle */
+.form-check+.form-error-message {
+    margin-top: -8px;
+    margin-bottom: 16px;
+}
+
+/* Password Utility */
 .password-input-wrapper {
     position: relative;
 }
 
 .btn-password-toggle {
     position: absolute;
-    right: 0;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
+    color: #999;
+    font-size: 1.1rem;
     cursor: pointer;
-    color: #666;
-    font-size: 1.2rem;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 4px;
     z-index: 2;
+    transition: color 0.2s;
 }
 
 .btn-password-toggle:hover {
@@ -103,7 +172,6 @@
     right: 0;
 }
 
-/* Adjust padding for outlined inputs with toggle */
 .form-input-kfc:not(.underlined)[type="password"] {
-    padding-right: 40px;
+    padding-right: 44px;
 }

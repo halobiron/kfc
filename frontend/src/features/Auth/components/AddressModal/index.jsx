@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import FormInput from '../../../../components/FormInput';
 import Button from '../../../../components/Button';
+import Modal from '../../../../components/Modal';
 import './AddressModal.css';
 
 const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
@@ -92,87 +93,84 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
         onSubmit(addressForm);
     };
 
-    if (!show) return null;
+    // Footer buttons for the Modal
+    const modalFooter = (
+        <>
+            <button className="btn btn-outline-secondary" onClick={onClose}>
+                Hủy
+            </button>
+            <Button variant="primary" onClick={handleSave}>
+                {initialData ? 'Cập nhật' : 'Thêm mới'}
+            </Button>
+        </>
+    );
 
     return (
-        <div className="address-modal-overlay" onClick={onClose}>
-            <div className="address-modal-content" onClick={(e) => e.stopPropagation()}>
-                <div className="address-modal-header">
-                    <h5>{initialData ? 'Chỉnh sửa địa chỉ' : 'Thêm địa chỉ'}</h5>
-                    <button className="btn-close-modal" onClick={onClose}>
-                        <i className="bi bi-x-lg"></i>
+        <Modal
+            show={show}
+            onClose={onClose}
+            title={initialData ? 'Chỉnh sửa địa chỉ' : 'Thêm địa chỉ'}
+            footer={modalFooter}
+        >
+            <FormInput
+                label={<>Tên địa chỉ <span className="text-danger">*</span></>}
+                type="text"
+                placeholder="VD: Nhà, Công ty, Nhà bạn..."
+                value={addressForm.label}
+                onChange={(e) => setAddressForm({ ...addressForm, label: e.target.value })}
+                required
+            />
+
+            <div>
+                <div className="label-with-button">
+                    <label>Địa chỉ đầy đủ <span className="text-danger">*</span></label>
+                    <button
+                        type="button"
+                        className="btn-get-location"
+                        onClick={handleGetCurrentLocation}
+                        disabled={gettingLocation}
+                        title="Lấy vị trí hiện tại"
+                    >
+                        {gettingLocation ? (
+                            <>
+                                <span className="spinner-border spinner-border-sm me-1"></span>
+                                Đang lấy...
+                            </>
+                        ) : (
+                            <>
+                                <i className="bi bi-geo-alt"></i> Lấy vị trí
+                            </>
+                        )}
                     </button>
                 </div>
-                <div className="address-modal-body">
-                    <FormInput
-                        label={<>Tên địa chỉ <span className="text-danger">*</span></>}
-                        type="text"
-                        placeholder="VD: Nhà, Công ty, Nhà bạn..."
-                        value={addressForm.label}
-                        onChange={(e) => setAddressForm({ ...addressForm, label: e.target.value })}
-                        required
-                    />
-
-                    <div>
-                        <div className="label-with-button">
-                            <label>Địa chỉ đầy đủ <span className="text-danger">*</span></label>
-                            <button
-                                type="button"
-                                className="btn-get-location"
-                                onClick={handleGetCurrentLocation}
-                                disabled={gettingLocation}
-                                title="Lấy vị trí hiện tại"
-                            >
-                                {gettingLocation ? (
-                                    <>
-                                        <span className="spinner-border spinner-border-sm me-1"></span>
-                                        Đang lấy...
-                                    </>
-                                ) : (
-                                    <>
-                                        <i className="bi bi-geo-alt"></i> Lấy vị trí
-                                    </>
-                                )}
-                            </button>
-                        </div>
-                        <FormInput
-                            type="textarea"
-                            placeholder="Nhập địa chỉ chi tiết (đường, quận, thành phố...)"
-                            rows="3"
-                            value={addressForm.fullAddress}
-                            onChange={(e) => setAddressForm({ ...addressForm, fullAddress: e.target.value })}
-                            required
-                        />
-                    </div>
-
-                    {(addressForm.latitude || addressForm.longitude) && (
-                        <div className="location-info">
-                            <small>
-                                <i className="bi bi-pin-fill"></i> Tọa độ: {addressForm.latitude?.toFixed(4)}, {addressForm.longitude?.toFixed(4)}
-                            </small>
-                        </div>
-                    )}
-
-                    <div className="form-group form-check">
-                        <input
-                            type="checkbox"
-                            id="addressDefault"
-                            checked={addressForm.isDefault}
-                            onChange={(e) => setAddressForm({ ...addressForm, isDefault: e.target.checked })}
-                        />
-                        <label htmlFor="addressDefault">Đặt làm địa chỉ mặc định</label>
-                    </div>
-                </div>
-                <div className="address-modal-footer">
-                    <button className="btn btn-outline-secondary" onClick={onClose}>
-                        Hủy
-                    </button>
-                    <Button variant="primary" onClick={handleSave}>
-                        {initialData ? 'Cập nhật' : 'Thêm mới'}
-                    </Button>
-                </div>
+                <FormInput
+                    type="textarea"
+                    placeholder="Nhập địa chỉ chi tiết (đường, quận, thành phố...)"
+                    rows="3"
+                    value={addressForm.fullAddress}
+                    onChange={(e) => setAddressForm({ ...addressForm, fullAddress: e.target.value })}
+                    required
+                />
             </div>
-        </div>
+
+            {(addressForm.latitude || addressForm.longitude) && (
+                <div className="location-info">
+                    <small>
+                        <i className="bi bi-pin-fill"></i> Tọa độ: {addressForm.latitude?.toFixed(4)}, {addressForm.longitude?.toFixed(4)}
+                    </small>
+                </div>
+            )}
+
+            <div className="form-group form-check">
+                <input
+                    type="checkbox"
+                    id="addressDefault"
+                    checked={addressForm.isDefault}
+                    onChange={(e) => setAddressForm({ ...addressForm, isDefault: e.target.checked })}
+                />
+                <label htmlFor="addressDefault">Đặt làm địa chỉ mặc định</label>
+            </div>
+        </Modal>
     );
 };
 

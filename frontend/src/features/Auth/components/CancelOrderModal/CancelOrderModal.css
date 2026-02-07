@@ -1,15 +1,13 @@
-.cancel-modal .order-modal-body {
-    text-align: center;
-}
-
 .cancel-modal h6 {
     margin-bottom: 1rem;
     color: var(--kfc-black);
+    text-align: center;
 }
 
 .cancel-modal p {
     color: var(--kfc-text-gray);
     margin-bottom: 1.5rem;
+    text-align: center;
 }
 
 .reason-section {
@@ -60,13 +58,4 @@
     border-radius: 5px;
     font-size: 1rem;
     resize: vertical;
-}
-
-.cancel-modal .order-modal-footer {
-    display: flex;
-    gap: 1rem;
-}
-
-.cancel-modal .order-modal-footer .btn {
-    flex: 1;
 }
