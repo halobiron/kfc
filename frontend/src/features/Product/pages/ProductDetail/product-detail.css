@@ -145,13 +145,6 @@
     border-top: 1px solid #eee;
 }
 
-.product-price {
-    font-family: 'Oswald', sans-serif;
-    font-size: 32px;
-    font-weight: 700;
-    color: #e4002b;
-}
-
 /* Quantity Section */
 .quantity-section {
     margin-bottom: 30px;

@@ -92,7 +92,7 @@ const Cart = () => {
                                                     onIncrease={() => handleQuantityChange(itemId, item.quantity + 1)}
                                                     onDecrease={() => handleQuantityChange(itemId, item.quantity - 1)}
                                                 />
-                                                <div className="cart-item-price">
+                                                <div className="kfc-price price-md">
                                                     {formatCurrency(item.price * item.quantity)}
                                                 </div>
                                             </div>
@@ -109,11 +109,11 @@ const Cart = () => {
 
                                 <div className="summary-row">
                                     <span>Tạm tính</span>
-                                    <span>{formatCurrency(subtotal)}</span>
+                                    <span className="kfc-price">{formatCurrency(subtotal)}</span>
                                 </div>
                                 <div className="summary-row">
                                     <span>Phí giao hàng</span>
-                                    <span>{deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}</span>
+                                    <span className="kfc-price">{deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}</span>
                                 </div>
                                 {deliveryFee === 0 && (
                                     <div className="text-success small mb-2">
@@ -126,7 +126,7 @@ const Cart = () => {
 
                                 <div className="total-row">
                                     <span className="total-label">TỔNG CỘNG</span>
-                                    <span className="total-amount">{formatCurrency(total)}</span>
+                                    <span className="kfc-price price-lg">{formatCurrency(total)}</span>
                                 </div>
 
                                 <Button

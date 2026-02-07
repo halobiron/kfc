@@ -22,12 +22,16 @@ const OrderDetailModal = ({ order, onClose }) => {
         >
             <div className="detail-grid">
                 <div className="detail-card">
-                    <span>Trạng thái</span>
-                    <OrderStatusBadge status={order.status} />
+                    <span className="detail-label">Trạng thái</span>
+                    <div className="detail-value">
+                        <OrderStatusBadge status={order.status} />
+                    </div>
                 </div>
                 <div className="detail-card">
-                    <span>Thời gian đặt</span>
-                    <p>{formatDateTime(order.createdAt)}</p>
+                    <span className="detail-label">Thời gian đặt</span>
+                    <div className="detail-value">
+                        {formatDateTime(order.createdAt)}
+                    </div>
                 </div>
             </div>
             <div className="items-section">
@@ -38,13 +42,13 @@ const OrderDetailModal = ({ order, onClose }) => {
                             <span>{item.name}</span>
                             <span className="quantity">x{item.quantity}</span>
                         </div>
-                        <span className="price">{formatCurrency(item.price)}</span>
+                        <span className="kfc-price">{formatCurrency(item.price)}</span>
                     </div>
                 ))}
             </div>
             <div className="modal-total">
                 <span>Tổng thanh toán</span>
-                <span className="total-amount">{formatCurrency(order.totalAmount)}</span>
+                <span className="kfc-price price-lg">{formatCurrency(order.totalAmount)}</span>
             </div>
 
             {/* Timeline Section */}

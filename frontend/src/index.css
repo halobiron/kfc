@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Outfit:wght@500;700;800&display=swap');
+
 :root {
   --kfc-red: #e4002b;
   --kfc-black: #202124;
@@ -113,4 +115,29 @@ h6 {
   border: none;
   border-top: 3px solid var(--kfc-red);
   opacity: 1;
+}
+
+
+/* Global Price Utilities */
+.kfc-price {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: var(--kfc-red);
+  white-space: nowrap;
+}
+
+.kfc-price.price-xl {
+  font-size: 2rem;
+}
+
+.kfc-price.price-lg {
+  font-size: 1.5rem;
+}
+
+.kfc-price.price-md {
+  font-size: 1.25rem;
+}
+
+.kfc-price.price-sm {
+  font-size: 0.9rem;
 }

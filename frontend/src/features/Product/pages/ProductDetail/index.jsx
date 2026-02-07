@@ -78,7 +78,7 @@ const ProductDetail = () => {
                             <p className="product-description">{product.description}</p>
 
                             <div className="product-price-section">
-                                <span className="product-price">{formatCurrency(price)}</span>
+                                <span className="kfc-price price-xl">{formatCurrency(price)}</span>
                             </div>
 
                             <div className="quantity-section">

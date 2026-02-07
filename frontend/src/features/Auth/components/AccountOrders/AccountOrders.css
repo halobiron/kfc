@@ -65,11 +65,6 @@
     color: var(--kfc-text-gray);
 }
 
-.order-item .price {
-    font-weight: 700;
-    color: var(--kfc-red);
-}
-
 .order-total {
     display: flex;
     justify-content: space-between;
@@ -77,11 +72,6 @@
     border-top: 1px solid var(--kfc-border-color);
     font-size: 1.1rem;
     font-weight: 700;
-}
-
-.order-total .total-value {
-    color: var(--kfc-red);
-    font-size: 1.3rem;
 }
 
 .order-actions {

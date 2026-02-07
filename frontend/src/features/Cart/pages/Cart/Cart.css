@@ -76,11 +76,6 @@
 
 
 
-.cart-item-price {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #e4002b;
-}
 
 .remove-item-btn {
     position: absolute;
@@ -136,12 +131,6 @@
     font-weight: 700;
     font-size: 1.1rem;
     color: #202124;
-}
-
-.total-amount {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: #e4002b;
 }
 
 .continue-shopping-link {

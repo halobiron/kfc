@@ -23,7 +23,7 @@ const Card = ({ product }) => {
                     {/* Title and Price on same row */}
                     <div className="title-price-row">
                         <h5 className="product-title">{product.title}</h5>
-                        <span className="product-price">{formatCurrency(product.price)}</span>
+                        <span className="kfc-price price-xl">{formatCurrency(product.price)}</span>
                     </div>
                     <p className="product-description">{product.description}</p>
                     {/* Single Add button */}

@@ -1,5 +1,5 @@
 import React from 'react';
-import Layout from '../../components/Layout';
+
 import kfcerror from '../../assets/images/common/kfc-error.jpg';
 import Button from '../../components/Button';
 import './ErrorPage.css';
@@ -13,7 +13,7 @@ const ErrorPage = ({
 }) => {
     return (
         <div className="not-found-container">
-            <img src={kfcerror} />
+            <img src={kfcerror} alt="KFC Error" />
             <h2>{title}</h2>
             <p>{message}</p>
 

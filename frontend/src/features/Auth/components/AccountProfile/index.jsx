@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { updateUserSuccess } from '../../authSlice';
@@ -25,11 +25,7 @@ const AccountProfile = () => {
         confirmPassword: ''
     });
 
-    useEffect(() => {
-        fetchProfile();
-    }, []);
-
-    const fetchProfile = async () => {
+    const fetchProfile = useCallback(async () => {
         try {
             const response = await axiosClient.get('/users/profile');
             if (response.data?.status) {
@@ -45,7 +41,11 @@ const AccountProfile = () => {
         } catch (error) {
             toast.error('Không thể tải thông tin người dùng.');
         }
-    };
+    }, [dispatch]);
+
+    useEffect(() => {
+        fetchProfile();
+    }, [fetchProfile]);
 
     const handleUpdateInfo = async (e) => {
         e.preventDefault();

@@ -139,7 +139,7 @@ const AccountOrders = () => {
                                                 <span>{item.name}</span>
                                                 <span className="quantity">x{item.quantity}</span>
                                             </div>
-                                            <span className="price">{formatCurrency(item.price)}</span>
+                                            <span className="kfc-price">{formatCurrency(item.price)}</span>
                                         </div>
                                     ))}
                                     {order.items.length > 3 && (
@@ -150,7 +150,7 @@ const AccountOrders = () => {
                                 </div>
                                 <div className="order-total">
                                     <span>Tổng cộng:</span>
-                                    <span className="total-value">{formatCurrency(order.totalAmount)}</span>
+                                    <span className="kfc-price price-lg">{formatCurrency(order.totalAmount)}</span>
                                 </div>
                             </div>
                             <div className="order-actions">
