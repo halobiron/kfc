@@ -1,10 +1,7 @@
-/* Address Modal Specific Styles */
-
 .label-with-button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 0.8rem;
     margin-bottom: 0.5rem;
 }
 
@@ -24,30 +21,12 @@
     border-radius: 4px;
     font-size: 0.75rem;
     cursor: pointer;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
     gap: 0.3rem;
-    font-weight: 500;
-}
-
-.btn-get-location:hover:not(:disabled) {
-    background-color: #0056b3;
 }
 
 .btn-get-location:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-}
-
-.location-info {
-    background-color: #f0f4f8;
-    border-left: 3px solid #007bff;
-    padding: 0.7rem;
-    border-radius: 3px;
-    margin-bottom: 1rem;
-    font-size: 0.8rem;
-    color: #0056b3;
 }
 
 @media (max-width: 560px) {

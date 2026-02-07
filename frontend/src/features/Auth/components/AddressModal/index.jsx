@@ -25,7 +25,6 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
                 longitude: initialData.longitude || null
             });
         } else if (show) {
-            // Reset form when opening for create new
             setAddressForm({
                 label: '',
                 fullAddress: '',
@@ -37,17 +36,11 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
     }, [show, initialData]);
 
     const handleGetCurrentLocation = () => {
-        if (!navigator.geolocation) {
-            toast.error('Trình duyệt không hỗ trợ Geolocation');
-            return;
-        }
-
         setGettingLocation(true);
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 const { latitude, longitude } = position.coords;
 
-                // Cập nhật tọa độ ngay lập tức
                 setAddressForm(prev => ({
                     ...prev,
                     latitude,
@@ -93,7 +86,6 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
         onSubmit(addressForm);
     };
 
-    // Footer buttons for the Modal
     const modalFooter = (
         <>
             <button className="btn btn-outline-secondary" onClick={onClose}>
@@ -148,18 +140,15 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
                     placeholder="Nhập địa chỉ chi tiết (đường, quận, thành phố...)"
                     rows="3"
                     value={addressForm.fullAddress}
-                    onChange={(e) => setAddressForm({ ...addressForm, fullAddress: e.target.value })}
+                    onChange={(e) => setAddressForm({
+                        ...addressForm,
+                        fullAddress: e.target.value,
+                        latitude: null,
+                        longitude: null
+                    })}
                     required
                 />
             </div>
-
-            {(addressForm.latitude || addressForm.longitude) && (
-                <div className="location-info">
-                    <small>
-                        <i className="bi bi-pin-fill"></i> Tọa độ: {addressForm.latitude?.toFixed(4)}, {addressForm.longitude?.toFixed(4)}
-                    </small>
-                </div>
-            )}
 
             <div className="form-group form-check">
                 <input
