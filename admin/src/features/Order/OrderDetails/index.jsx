@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from '../../../utils/api';
 import { FiArrowLeft, FiPrinter, FiXCircle, FiCheckCircle, FiTruck, FiPackage, FiClock, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
+import StatusModal from '../../../components/StatusModal';
 import './OrderDetails.css';
 
 const STATUS_LABELS = {
@@ -33,6 +34,11 @@ const OrderDetails = () => {
     const [status, setStatus] = useState('');
     const [loading, setLoading] = useState(true);
 
+    // Modal State
+    const [showModal, setShowModal] = useState(false);
+    const [targetStatus, setTargetStatus] = useState('');
+    const [updating, setUpdating] = useState(false);
+
     useEffect(() => {
         fetchOrderDetails();
     }, [id]);
@@ -52,14 +58,24 @@ const OrderDetails = () => {
         }
     };
 
-    const handleStatusChange = async (newStatus) => {
+    const openStatusModal = (newStatus) => {
+        setTargetStatus(newStatus);
+        setShowModal(true);
+    };
+
+    const handleConfirmStatusChange = async (note) => {
+        setUpdating(true);
         try {
-            await api.put(`/order/update/${id}`, { status: newStatus });
-            setStatus(newStatus);
+            await api.put(`/order/update/${id}`, { status: targetStatus, note });
+            setStatus(targetStatus);
             toast.success(`Cập nhật trạng thái thành công`);
+            setShowModal(false);
             fetchOrderDetails();
         } catch (error) {
+            console.error(error);
             toast.error('Không thể cập nhật trạng thái đơn hàng.');
+        } finally {
+            setUpdating(false);
         }
     };
 
@@ -89,18 +105,18 @@ const OrderDetails = () => {
                     <div className="btn-group me-2">
                         {/* Status buttons */}
                         {status === 'pending' && (
-                            <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => handleStatusChange('confirmed')}>
+                            <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => openStatusModal('confirmed')}>
                                 <FiCheckCircle className="me-2" /> Xác nhận
                             </button>
                         )}
 
                         {status === 'ready' && (
-                            <button type="button" className="btn btn-sm btn-primary d-flex align-items-center" onClick={() => handleStatusChange('shipping')}>
+                            <button type="button" className="btn btn-sm btn-primary d-flex align-items-center" onClick={() => openStatusModal('shipping')}>
                                 <FiTruck className="me-2" /> Giao hàng
                             </button>
                         )}
                         {status === 'shipping' && (
-                            <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => handleStatusChange('delivered')}>
+                            <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => openStatusModal('delivered')}>
                                 <FiCheckCircle className="me-2" /> Hoàn thành
                             </button>
                         )}
@@ -110,7 +126,7 @@ const OrderDetails = () => {
                             type="button"
                             className="btn btn-sm btn-danger d-flex align-items-center ms-2"
                             onClick={() => {
-                                if (window.confirm('Bạn có chắc muốn hủy đơn hàng này?')) handleStatusChange('cancelled');
+                                openStatusModal('cancelled');
                             }}
                         >
                             <FiXCircle className="me-2" /> Hủy đơn
@@ -255,7 +271,16 @@ const OrderDetails = () => {
                     </div>
                 </div>
             </div>
-        </main>
+
+            <StatusModal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                onConfirm={handleConfirmStatusChange}
+                status={targetStatus}
+                loading={updating}
+                title={targetStatus === 'cancelled' ? 'Xác nhận Hủy đơn hàng' : 'Cập nhật trạng thái'}
+            />
+        </main >
     );
 };
 

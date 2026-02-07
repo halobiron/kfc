@@ -3,11 +3,18 @@ import { FiClock, FiCheckCircle, FiAlertCircle, FiChevronRight, FiPackage } from
 import { toast } from 'react-toastify';
 import api from '../../../utils/api';
 import StatCard from '../../../components/StatCard';
+import StatusModal from '../../../components/StatusModal';
 import './kitchen.css';
 
 const Kitchen = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Modal State
+  const [showModal, setShowModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [targetStatus, setTargetStatus] = useState('');
+  const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     fetchOrders();
@@ -34,14 +41,26 @@ const Kitchen = () => {
     ready: { label: 'Sẵn sàng giao', color: 'success', icon: FiCheckCircle }
   };
 
-  const handleStatusChange = async (orderId, newStatus) => {
+  const openStatusModal = (orderId, status) => {
+    setSelectedOrder(orderId);
+    setTargetStatus(status);
+    setShowModal(true);
+  };
+
+  const handleConfirmStatusChange = async (note) => {
+    if (!selectedOrder) return;
+
+    setUpdating(true);
     try {
-      await api.put(`/order/update/${orderId}`, { status: newStatus });
+      await api.put(`/order/update/${selectedOrder}`, { status: targetStatus, note });
       toast.success('Cập nhật trạng thái thành công');
+      setShowModal(false);
       fetchOrders(); // Reload to sync
     } catch (error) {
       console.error('Lỗi cập nhật:', error);
       toast.error('Không thể cập nhật trạng thái');
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -96,7 +115,7 @@ const Kitchen = () => {
               {order.status === 'confirmed' && (
                 <button
                   className="btn btn-primary"
-                  onClick={() => handleStatusChange(order._id, 'preparing')}
+                  onClick={() => openStatusModal(order._id, 'preparing')}
                 >
                   Bắt đầu nấu <FiChevronRight size={14} />
                 </button>
@@ -104,7 +123,7 @@ const Kitchen = () => {
               {order.status === 'preparing' && (
                 <button
                   className="btn btn-success"
-                  onClick={() => handleStatusChange(order._id, 'ready')}
+                  onClick={() => openStatusModal(order._id, 'ready')}
                 >
                   Món đã xong <FiCheckCircle size={14} />
                 </button>
@@ -221,6 +240,14 @@ const Kitchen = () => {
           </div>
         </div>
       </div>
+      <StatusModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        onConfirm={handleConfirmStatusChange}
+        status={targetStatus}
+        loading={updating}
+        title="Cập nhật tiến độ nấu"
+      />
     </main>
   );
 };
