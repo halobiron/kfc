@@ -9,16 +9,11 @@ import './OrderDetailModal.css';
 const OrderDetailModal = ({ order, onClose }) => {
     if (!order) return null;
 
-    const modalFooter = (
-        <button className="btn btn-primary" onClick={onClose}>ĐÓNG</button>
-    );
-
     return (
         <Modal
             show={!!order}
             onClose={onClose}
             title={`Chi tiết đơn hàng #${order.orderNumber || order._id}`}
-            footer={modalFooter}
             size="lg"
         >
             <div className="detail-grid">
@@ -52,14 +47,15 @@ const OrderDetailModal = ({ order, onClose }) => {
                 <span className="kfc-price price-lg">{formatCurrency(order.totalAmount)}</span>
             </div>
 
-            {/* Timeline Section */}
-            {order.statusHistory && order.statusHistory.length > 0 && (
-                <div className="timeline-section">
-                    <h6 className="mb-3 fw-bold text-uppercase text-secondary" style={{ fontSize: '0.9rem' }}>Lịch sử trạng thái</h6>
-                    <OrderTimeline statusHistory={order.statusHistory} />
-                </div>
-            )}
-        </Modal>
+            {
+                order.statusHistory && order.statusHistory.length > 0 && (
+                    <div className="timeline-section">
+                        <h6>Lịch sử trạng thái</h6>
+                        <OrderTimeline statusHistory={order.statusHistory} />
+                    </div>
+                )
+            }
+        </Modal >
     );
 };
 

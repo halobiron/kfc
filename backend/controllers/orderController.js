@@ -396,6 +396,7 @@ exports.deleteOrder = async (req, res, next) => {
 // CANCEL ORDER (USER)
 exports.cancelOrder = async (req, res, next) => {
     try {
+        const reason = typeof req.body?.reason === 'string' ? req.body.reason.trim() : '';
         const order = await Order.findById(req.params.id);
 
         if (!order) {
@@ -432,7 +433,7 @@ exports.cancelOrder = async (req, res, next) => {
         order.statusHistory.push({
             status: 'cancelled',
             timestamp: new Date(),
-            note: 'Khách hàng hủy đơn hàng'
+            note: reason ? `Khách hàng hủy đơn hàng - Lý do: ${reason}` : 'Khách hàng hủy đơn hàng'
         });
 
         await order.save();

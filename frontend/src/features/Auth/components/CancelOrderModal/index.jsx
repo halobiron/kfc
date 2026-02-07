@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import FormInput from '../../../../components/FormInput';
-import { formatCurrency } from '../../../../utils/formatters';
 import Modal from '../../../../components/Modal';
+import OrderStatusBadge from '../../../../components/OrderStatusBadge';
+import { formatDateTime } from '../../../../utils/formatters';
 import './CancelOrderModal.css';
+import '../OrderDetailModal/OrderDetailModal.css';
 
 const CANCELLATION_REASONS = [
     "Tôi muốn đổi món khác",
@@ -32,12 +34,24 @@ const CancelOrderModal = ({ order, onClose, onConfirm }) => {
         <Modal
             show={!!order}
             onClose={onClose}
-            title="Hủy Đơn Hàng"
+            title={`Hủy Đơn Hàng #${order.orderNumber || order._id}`}
             footer={modalFooter}
+            className="cancel-modal"
         >
             <div className="cancel-modal-body">
+                <div className="detail-grid">
+                    <div className="detail-card">
+                        <span className="detail-label">Trạng thái</span>
+                        <div className="detail-value">
+                            <OrderStatusBadge status={order.status} />
+                        </div>
+                    </div>
+                    <div className="detail-card">
+                        <span className="detail-label">Thời gian đặt</span>
+                        <div className="detail-value">{formatDateTime(order.createdAt)}</div>
+                    </div>
+                </div>
                 <h6>Bạn có chắc chắn muốn hủy đơn hàng này?</h6>
-                <p>Đơn hàng: #{order.orderNumber || order._id} - Tổng tiền: {formatCurrency(order.totalAmount)}</p>
                 <div className="reason-section">
                     <label>Lý do hủy đơn (Không bắt buộc)</label>
                     {CANCELLATION_REASONS.map((reason, index) => (

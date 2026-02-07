@@ -1,31 +1,12 @@
-.cancel-modal h6 {
-    margin-bottom: 1rem;
-    color: var(--kfc-black);
-    text-align: center;
-}
-
-.cancel-modal p {
-    color: var(--kfc-text-gray);
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-.reason-section {
-    text-align: left;
-    margin-top: 1.5rem;
-}
-
 .reason-section label {
-    display: block;
     margin-bottom: 0.75rem;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     text-transform: uppercase;
 }
 
 .reason-item {
     display: flex;
-    align-items: center;
     padding: 0.75rem;
     border: 1px solid var(--kfc-border-color);
     border-radius: 5px;
@@ -49,13 +30,4 @@
     flex: 1;
     font-weight: normal;
     text-transform: none;
-}
-
-.reason-section textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    resize: vertical;
 }
