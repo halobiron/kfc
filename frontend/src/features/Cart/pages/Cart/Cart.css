@@ -21,6 +21,11 @@
     flex: 2;
 }
 
+.cart-item-card {
+    display: flex;
+    margin-bottom: 15px;
+}
+
 .cart-item-image {
     width: 120px;
     border-radius: 8px;

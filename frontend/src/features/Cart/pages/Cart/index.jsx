@@ -38,8 +38,8 @@ const Cart = () => {
         fetchShippingConfig();
     }, []);
 
-    const handleQuantityChange = (id, newQuantity) => { // id passed here is actually _id or id
-        dispatch(updateQuantity({ productId: id, quantity: newQuantity }));
+    const handleQuantityChange = (productId, newQuantity) => {
+        dispatch(updateQuantity({ productId, quantity: newQuantity }));
     };
 
     const handleRemoveItem = (id) => {
@@ -80,10 +80,10 @@ const Cart = () => {
                         {/* Cart Items List */}
                         <div className="cart-items-section">
                             {cartItems.map((item) => {
-                                const itemId = item._id;
+                                const itemId = item._id ?? item.id;
 
                                 return (
-                                    <Card key={itemId} style={{ display: 'flex', padding: '20px', marginBottom: '15px', position: 'relative' }}>
+                                    <Card key={itemId} className="cart-item-card">
                                         <button
                                             className="remove-item-btn"
                                             onClick={() => handleRemoveItem(itemId)}
@@ -121,9 +121,8 @@ const Cart = () => {
                             })}
                         </div>
 
-                        {/* Order Summary */}
                         <div className="cart-summary-section">
-                            <Card style={{ position: 'sticky', top: '100px' }}>
+                            <Card className="cart-summary-card">
                                 <h3 className="summary-title">Tóm Tắt Đơn Hàng</h3>
 
                                 <div className="summary-row">
