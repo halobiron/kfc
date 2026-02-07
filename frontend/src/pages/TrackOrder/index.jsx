@@ -6,7 +6,8 @@ import Button from '../../components/Button';
 import Card from '../../components/Card';
 import './TrackOrder.css';
 import OrderStatusBadge, { STATUS_OPTIONS } from '../../components/OrderStatusBadge';
-import { formatCurrency, formatDateTime } from '../../utils/formatters';
+import { formatCurrency } from '../../utils/formatters';
+import OrderTimeline from '../../components/OrderTimeline';
 
 const TrackOrder = () => {
     const [orderNumber, setOrderNumber] = useState('');
@@ -131,28 +132,7 @@ const TrackOrder = () => {
                                         </h6>
 
                                         {order.statusHistory && order.statusHistory.length > 0 ? (
-                                            <div className="timeline-wrapper">
-                                                <ul className="timeline timeline-list">
-                                                    {[...order.statusHistory]
-                                                        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                                                        .map((history, index) => {
-                                                            const statusInfo = STATUS_OPTIONS.find(opt => opt.value === history.status) || { label: history.status };
-                                                            const isLatest = index === 0;
-                                                            return (
-                                                                <li key={index} className={`timeline-item ${isLatest ? 'latest' : 'completed'}`}>
-                                                                    <div className="timeline-dot"></div>
-                                                                    <div className="timeline-date">
-                                                                        {formatDateTime(history.timestamp)}
-                                                                    </div>
-                                                                    <div className={`timeline-status-text ${isLatest ? 'latest' : ''}`}>
-                                                                        {statusInfo.label}
-                                                                    </div>
-                                                                    {history.note && <div className="timeline-note">{history.note}</div>}
-                                                                </li>
-                                                            );
-                                                        })}
-                                                </ul>
-                                            </div>
+                                            <OrderTimeline statusHistory={order.statusHistory} />
                                         ) : (
                                             <div className="timeline-empty-state">
                                                 <i className="bi bi-inbox fs-1 d-block mb-2"></i>

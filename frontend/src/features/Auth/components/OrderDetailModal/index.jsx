@@ -1,5 +1,6 @@
 import React from 'react';
-import OrderStatusBadge, { STATUS_OPTIONS } from '../../../../components/OrderStatusBadge';
+import OrderStatusBadge from '../../../../components/OrderStatusBadge';
+import OrderTimeline from '../../../../components/OrderTimeline';
 import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
 import Modal from '../../../../components/Modal';
 
@@ -55,24 +56,7 @@ const OrderDetailModal = ({ order, onClose }) => {
             {order.statusHistory && order.statusHistory.length > 0 && (
                 <div className="timeline-section">
                     <h6 className="mb-3 fw-bold text-uppercase text-secondary" style={{ fontSize: '0.9rem' }}>Lịch sử trạng thái</h6>
-                    <ul className="timeline">
-                        {[...order.statusHistory]
-                            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                            .map((history, index) => {
-                                const statusInfo = STATUS_OPTIONS.find(opt => opt.value === history.status) || { label: history.status };
-                                const isLatest = index === 0;
-                                return (
-                                    <li key={index} className={`timeline-item ${isLatest ? 'latest' : 'completed'}`}>
-                                        <div className="timeline-dot"></div>
-                                        <div className="timeline-time">
-                                            {formatDateTime(history.timestamp)}
-                                        </div>
-                                        {statusInfo.label}
-                                        {history.note && <div className="timeline-note">{history.note}</div>}
-                                    </li>
-                                );
-                            })}
-                    </ul>
+                    <OrderTimeline statusHistory={order.statusHistory} />
                 </div>
             )}
         </Modal>

@@ -38,11 +38,6 @@
     padding: 0.75rem 0;
 }
 
-.detail-item:not(:last-child) {
-    border-bottom: 1px dashed var(--kfc-border-color);
-}
-
-
 .detail-item .quantity {
     margin-left: 0.5rem;
     color: var(--kfc-text-gray);
@@ -61,55 +56,4 @@
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px dashed var(--kfc-border-color);
-}
-
-.timeline {
-    position: relative;
-    padding-left: 15px;
-    list-style: none;
-}
-
-.timeline-item:not(:last-child)::before {
-    content: '';
-    position: absolute;
-    left: 7px;
-    top: 24px;
-    bottom: -5px;
-    width: 2px;
-    background: #f0f0f0;
-}
-
-.timeline-dot {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #fff;
-    border: 2px solid var(--kfc-border-color);
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.timeline-item.completed .timeline-dot {
-    border-color: #28a745;
-    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2328a745'%3E%3Cpath d='M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E") center/12px no-repeat;
-}
-
-.timeline-item.latest .timeline-dot {
-    background: var(--kfc-red);
-    border-color: var(--kfc-red);
-    width: 20px;
-    height: 20px;
-    left: -2px;
-    top: -1px;
-    box-shadow: 0 0 0 4px rgba(228, 0, 43, 0.15);
-}
-
-.timeline-time {
-    font-size: 0.85rem;
-    color: #888;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
 }

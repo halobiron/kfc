@@ -11,7 +11,7 @@
     width: 100%;
     padding: 0 15px;
     margin: 0 auto;
-    max-width: 1140px;
+    max-width: 1320px;
 }
 
 .track-order-row {
@@ -44,14 +44,14 @@
 
 @media (min-width: 992px) {
     .search-column.side-mode {
-        flex: 0 0 35%;
-        max-width: 35%;
+        flex: 0 0 28%;
+        max-width: 28%;
         margin-bottom: 0;
     }
 
     .result-column {
-        flex: 0 0 65%;
-        max-width: 65%;
+        flex: 0 0 72%;
+        max-width: 72%;
     }
 }
 
@@ -81,8 +81,8 @@
 
 @media (min-width: 768px) {
     .order-details-col {
-        flex: 0 0 60%;
-        max-width: 60%;
+        flex: 0 0 55%;
+        max-width: 55%;
         border-bottom: none;
         border-right: 1px solid #dee2e6;
         margin-bottom: 0;
@@ -90,8 +90,8 @@
     }
 
     .timeline-col {
-        flex: 0 0 40%;
-        max-width: 40%;
+        flex: 0 0 45%;
+        max-width: 45%;
     }
 }
 
@@ -196,89 +196,4 @@
 
 .total-amount {
     color: var(--kfc-red);
-}
-
-/* Timeline */
-.timeline-title {
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #6c757d;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #dee2e6;
-}
-
-.timeline-wrapper {
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.timeline-list {
-    padding-left: 0;
-    list-style: none;
-    position: relative;
-}
-
-.timeline-list::before {
-    content: '';
-    position: absolute;
-    left: 7px;
-    top: 5px;
-    bottom: 0;
-    width: 2px;
-    background: #e9ecef;
-}
-
-.timeline-item {
-    position: relative;
-    padding-left: 25px;
-    padding-bottom: 1.5rem;
-}
-
-.timeline-item:last-child {
-    padding-bottom: 0;
-}
-
-.timeline-dot {
-    position: absolute;
-    left: 0;
-    top: 5px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #fff;
-    border: 3px solid #dee2e6;
-}
-
-.timeline-item.latest .timeline-dot {
-    background: var(--kfc-red);
-    border-color: var(--kfc-red);
-}
-
-.timeline-item.completed .timeline-dot {
-    background: #198754;
-    border-color: #198754;
-}
-
-.timeline-date {
-    font-size: 0.8rem;
-    color: #6c757d;
-}
-
-.timeline-status-text {
-    font-weight: 700;
-    font-size: 0.9rem;
-}
-
-.timeline-note {
-    font-size: 0.85rem;
-    font-style: italic;
-    color: #6c757d;
-}
-
-.timeline-empty-state {
-    text-align: center;
-    color: #6c757d;
-    padding: 2rem 0;
 }
