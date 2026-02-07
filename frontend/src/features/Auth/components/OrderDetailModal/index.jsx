@@ -30,7 +30,7 @@ const OrderDetailModal = ({ order, onClose }) => {
                     </div>
                 </div>
             </div>
-            <div className="items-section">
+            <div>
                 <h6>Danh sách món</h6>
                 {order.items.map((item, idx) => (
                     <div key={idx} className="detail-item">

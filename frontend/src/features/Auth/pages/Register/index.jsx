@@ -189,7 +189,7 @@ const Register = () => {
 
                 <div className="social-divider">Hoặc tiếp tục với</div>
 
-                <div className="social-login">
+                <div>
                     <button className="btn-social">
                         <FcGoogle />
                         Đăng ký bằng Google

@@ -36,9 +36,8 @@ const CancelOrderModal = ({ order, onClose, onConfirm }) => {
             onClose={onClose}
             title={`Hủy Đơn Hàng #${order.orderNumber || order._id}`}
             footer={modalFooter}
-            className="cancel-modal"
         >
-            <div className="cancel-modal-body">
+            <div>
                 <div className="detail-grid">
                     <div className="detail-card">
                         <span className="detail-label">Trạng thái</span>

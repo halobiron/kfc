@@ -137,7 +137,7 @@ const Login = () => {
 
                 <div className="social-divider">Hoặc tiếp tục với</div>
 
-                <div className="social-login">
+                <div>
                     <button className="btn-social" onClick={() => handleGoogleLogin()}>
                         <FcGoogle />
                         Đăng nhập bằng Google

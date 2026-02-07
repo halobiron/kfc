@@ -108,7 +108,7 @@ const AccountOrders = () => {
                     actionPath="/products"
                 />
             ) : filteredOrders.length === 0 ? (
-                <div className="empty-orders-search text-center py-5">
+                <div className="text-center py-5">
                     <h4>Không tìm thấy đơn hàng nào</h4>
                     <p className="text-muted">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
                     <button
@@ -119,7 +119,7 @@ const AccountOrders = () => {
                     </button>
                 </div>
             ) : (
-                <div className="orders-list">
+                <div>
                     {filteredOrders.map((order) => (
                         <div key={order._id} className="order-card">
                             <div className="order-header">

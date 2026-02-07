@@ -63,7 +63,7 @@ const ResetPassword = () => {
                     Nhập mật khẩu mới cho tài khoản của bạn.
                 </p>
 
-                <form className="auth-form" onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <FormInput
                         label="Mật khẩu mới *"
                         id="password"
