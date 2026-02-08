@@ -16,19 +16,14 @@
 
 .form-title {
     font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 20px;
     display: flex;
-    align-items: center;
     gap: 10px;
-    color: #202124;
 }
 
 .form-title i {
     color: #e4002b;
 }
 
-/* Clean Selectable Options */
 .checkout-options-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -42,16 +37,6 @@
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    cursor: pointer;
-    background: #fff;
-    transition: 0.2s;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.checkout-option:hover {
-    border-color: #e4002b;
 }
 
 .checkout-option.selected {
@@ -75,27 +60,8 @@
     font-size: 0.9rem;
 }
 
-.checkout-option small {
-    font-size: 0.8rem;
-    color: #666;
-}
-
-/* Selection Indicator */
-.selection-indicator {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #e4002b;
-    color: #fff;
-    padding: 1px 6px;
-    border-radius: 0 0 0 6px;
-    font-size: 0.8rem;
-}
-
-/* Payment Balance Adjustments */
 .payment-methods.checkout-options-grid {
     grid-template-columns: 1fr;
-    /* Rows for payment look better */
 }
 
 .payment-methods .checkout-option {
@@ -108,17 +74,10 @@
     margin-bottom: 0;
 }
 
-.summary-items {
-    margin-bottom: 20px;
-    max-height: 300px;
-    overflow-y: auto;
-}
-
 .summary-item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 12px;
-    font-size: 0.95rem;
+    margin-bottom: 10px;
 }
 
 .item-name-qty {
@@ -131,19 +90,11 @@
     color: #e4002b;
 }
 
-/* Sidebar sticky */
 .checkout-summary-sidebar {
     position: sticky;
     top: 120px;
 }
 
-/* Custom summary title */
-.summary-title {
-    font-size: 1.2rem !important;
-    margin-bottom: 15px !important;
-}
-
-/* Divider refinements */
 .summary-divider {
     margin: 15px 0;
     border-top: 1px solid #eee;
@@ -153,13 +104,11 @@
     border-top-width: 2px;
 }
 
-/* Coupon button */
 .btn-apply-coupon {
     height: 52px;
     border-radius: 8px !important;
 }
 
-/* Store pickup hint */
 .store-pickup-hint {
     display: block;
     margin-top: -10px;
