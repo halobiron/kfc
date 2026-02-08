@@ -41,7 +41,7 @@ const OrderSuccess = () => {
 
     return (
         <div className="kfc-page-wrapper">
-            <div className="container">
+            <div className="container kfc-container">
                 <div className="success-card text-center py-5">
                     <div className="success-icon-wrapper mb-4">
                         <i className="bi bi-check-circle-fill text-success" style={{ fontSize: '5rem' }}></i>

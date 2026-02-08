@@ -120,7 +120,7 @@ const Product = () => {
                     </div>
                 </div>
 
-                <div className="container py-4">
+                <div className="container kfc-container">
                     {/* Products Sections */}
 
                     <div className="products-section">

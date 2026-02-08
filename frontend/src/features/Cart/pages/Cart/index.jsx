@@ -63,7 +63,7 @@ const Cart = () => {
 
     return (
         <div className="kfc-page-wrapper">
-            <div className="container cart-container py-5">
+            <div className="container kfc-container">
                 <div className="section-header">
                     <h2>Giỏ Hàng Của Bạn</h2>
                     <hr className="section-underline" />

@@ -19,6 +19,12 @@
   min-height: 100vh;
 }
 
+.kfc-container {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  min-width: 1200px;
+}
+
 body {
   margin: 0;
   font-family: var(--font-family);

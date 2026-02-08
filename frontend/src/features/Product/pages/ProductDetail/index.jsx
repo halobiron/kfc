@@ -55,7 +55,7 @@ const ProductDetail = () => {
 
     return (
         <div className='kfc-page-wrapper'>
-            <div className="container py-5">
+            <div className="container kfc-container">
                 <div className="product-breadcrumb mb-4">
                     <Link to="/">Trang chủ</Link> <span className="separator">/</span>
                     <Link to="/products">Thực đơn</Link> <span className="separator">/</span>
