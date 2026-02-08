@@ -5,6 +5,8 @@ import categoryReducer from '../features/Product/categorySlice';
 import couponReducer from '../features/Cart/couponSlice';
 import authReducer from '../features/Auth/authSlice';
 
+import { authMiddleware } from './authMiddleware';
+
 const store = configureStore({
   reducer: {
     cart: cartReducer,
@@ -13,6 +15,7 @@ const store = configureStore({
     coupons: couponReducer,
     auth: authReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authMiddleware),
 });
 
 store.subscribe(() => {

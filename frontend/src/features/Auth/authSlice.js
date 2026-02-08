@@ -75,7 +75,6 @@ const authSlice = createSlice({
             state.isAuthenticated = false;
             state.loading = false;
             state.error = null;
-            localStorage.removeItem('user');
         },
         loadUserStart: (state) => {
             state.loading = true;
@@ -89,12 +88,10 @@ const authSlice = createSlice({
             state.loading = false;
             state.isAuthenticated = false;
             state.user = null;
-            localStorage.removeItem('user');
         },
         updateUserSuccess: (state, action) => {
             if (state.user) {
                 state.user = { ...state.user, ...action.payload };
-                localStorage.setItem('user', JSON.stringify(state.user));
             }
         },
     },
@@ -110,7 +107,6 @@ const authSlice = createSlice({
                 state.isAuthenticated = true;
                 state.user = action.payload;
                 state.error = null;
-                localStorage.setItem('user', JSON.stringify(action.payload));
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
@@ -128,7 +124,6 @@ const authSlice = createSlice({
                 state.isAuthenticated = true;
                 state.user = action.payload;
                 state.error = null;
-                localStorage.setItem('user', JSON.stringify(action.payload));
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.loading = false;
@@ -146,7 +141,6 @@ const authSlice = createSlice({
                 state.isAuthenticated = true;
                 state.user = action.payload;
                 state.error = null;
-                localStorage.setItem('user', JSON.stringify(action.payload));
             })
             .addCase(loginGoogleUser.rejected, (state, action) => {
                 state.loading = false;
