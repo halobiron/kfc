@@ -2,18 +2,12 @@ import React, { useState, useEffect } from 'react';
 import storeApi from '../../../../api/storeApi';
 import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
+import { calculateDistance, getCurrentLocation, searchLocation } from '../../../../utils/geoUtils';
 import './StoreSystem.css';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-
-// Fix for default Leaflet marker icons in React
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-    iconUrl: require('leaflet/dist/images/marker-icon.png'),
-    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-});
+import '../../../../components/Map/LeafletConfig';
 
 // Constants
 const CITIES = [
@@ -35,17 +29,6 @@ const SERVICE_MAP = {
 };
 
 // Helpers
-const deg2rad = (deg) => deg * (Math.PI / 180);
-
-const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Radius of the earth in km
-    const dLat = deg2rad(lat2 - lat1);
-    const dLon = deg2rad(lon2 - lon1);
-    const a = Math.sin(dLat / 2) ** 2 +
-        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) ** 2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-};
 
 const createKfcIcon = (isActive, index) => L.divIcon({
     className: 'custom-kfc-marker',
@@ -123,41 +106,26 @@ const StoreSystem = () => {
         fetchSavedAddresses();
     }, []);
 
-    const handleFindNearest = () => {
-        if (!navigator.geolocation) {
-            setLocationError("Trình duyệt không hỗ trợ Geolocation.");
-            return;
-        }
-
+    const handleFindNearest = async () => {
         setIsSearching(true);
         setLocationError(null);
-        navigator.geolocation.getCurrentPosition(
-            async (pos) => {
-                const { latitude: lat, longitude: lng } = pos.coords;
-                setUserLocation({ lat, lng });
-                setMapCenter({ lat, lng });
-                setSelectedCity('all'); // Show all stores to find nearest across data
-                setSearchTerm('');
 
-                // Reverse Geocoding to show address
-                try {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
-                    const data = await response.json();
-                    if (data && data.display_name) {
-                        setSearchTerm(data.display_name); // Fill search box with address
-                    }
-                } catch (err) {
-                    console.error("Reverse geocoding error", err);
-                } finally {
-                    setIsSearching(false);
-                }
-            },
-            (err) => {
-                console.error("Error getting location:", err);
-                setLocationError("Không thể lấy vị trí của bạn.");
-                setIsSearching(false);
-            }
-        );
+        try {
+            const pos = await getCurrentLocation();
+            const { lat, lng } = pos;
+            setUserLocation({ lat, lng });
+            setMapCenter({ lat, lng });
+            setSelectedCity('all'); // Show all stores to find nearest across data
+            setSearchTerm('');
+
+            // Reverse Geocoding to show address (Optional)
+            // You can add reverseGeocode here if needed
+        } catch (err) {
+            console.error("Error getting location:", err);
+            setLocationError("Không thể lấy vị trí của bạn/Trình duyệt không hỗ trợ.");
+        } finally {
+            setIsSearching(false);
+        }
     };
 
     const handleFindFromSaved = async (index) => {
@@ -177,12 +145,13 @@ const StoreSystem = () => {
                 lat = selected.latitude;
                 lng = selected.longitude;
             } else {
-                // Fallback fetch if no coords
-                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(selected.fullAddress)}&countrycodes=vn&limit=1`);
-                const data = await res.json();
-                if (data?.length > 0) {
-                    lat = parseFloat(data[0].lat);
-                    lng = parseFloat(data[0].lon);
+                // Fallback using utility
+                const data = await searchLocation(selected.fullAddress);
+                if (data) {
+                    lat = data.lat;
+                    lng = data.lng;
+                } else {
+                    setLocationError("Không tìm thấy tọa độ địa chỉ này.");
                 }
             }
 
@@ -210,26 +179,19 @@ const StoreSystem = () => {
         setIsSearching(true);
         setLocationError(null);
 
-        try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchTerm)}&countrycodes=vn&limit=1`);
-            const data = await res.json();
-
-            if (data?.length > 0) {
-                const { lat, lon } = data[0];
-                const location = { lat: parseFloat(lat), lng: parseFloat(lon) };
-                setUserLocation(location);
-                setMapCenter(location);
-                setSelectedCity('all');
-            } else {
-                setLocationError("Không tìm thấy địa chỉ này.");
-                setUserLocation(null);
-            }
-        } catch (error) {
-            console.error("Search error:", error);
-            setLocationError("Lỗi kết nối tìm kiếm.");
-        } finally {
-            setIsSearching(false);
+        // Simple search without try/catch as utility handles errors
+        const data = await searchLocation(searchTerm);
+        if (data) {
+            const { lat, lng } = data;
+            const location = { lat, lng };
+            setUserLocation(location);
+            setMapCenter(location);
+            setSelectedCity('all');
+        } else {
+            setLocationError("Không tìm thấy địa chỉ này.");
+            setUserLocation(null);
         }
+        setIsSearching(false);
     };
 
     useEffect(() => {

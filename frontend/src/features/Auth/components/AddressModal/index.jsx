@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import FormInput from '../../../../components/FormInput';
 import Button from '../../../../components/Button';
 import Modal from '../../../../components/Modal';
+import { getCurrentLocation, reverseGeocode } from '../../../../utils/geoUtils';
 import './AddressModal.css';
 
 const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
@@ -35,47 +36,30 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
         }
     }, [show, initialData]);
 
-    const handleGetCurrentLocation = () => {
+    const handleGetCurrentLocation = async () => {
         setGettingLocation(true);
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                const { latitude, longitude } = position.coords;
+        try {
+            const { lat, lng } = await getCurrentLocation();
 
+            setAddressForm(prev => ({ ...prev, latitude: lat, longitude: lng }));
+
+            const data = await reverseGeocode(lat, lng);
+            if (data) {
                 setAddressForm(prev => ({
                     ...prev,
-                    latitude,
-                    longitude
+                    fullAddress: data.address,
+                    latitude: lat,
+                    longitude: lng
                 }));
-
-                try {
-                    // Reverse Geocoding sử dụng OpenStreetMap Nominatim API (Miễn phí)
-                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`);
-                    const data = await response.json();
-
-                    if (data && data.display_name) {
-                        setAddressForm(prev => ({
-                            ...prev,
-                            fullAddress: data.display_name,
-                            latitude,
-                            longitude
-                        }));
-                        toast.success('Đã lấy được địa chỉ!');
-                    } else {
-                        toast.warning('Lấy được tọa độ nhưng không tìm thấy tên đường.');
-                    }
-                } catch (error) {
-                    console.error("Reverse geocoding error:", error);
-                    toast.warning('Không thể lấy tên đường (Lỗi mạng hoặc API).');
-                } finally {
-                    setGettingLocation(false);
-                }
-            },
-            (error) => {
-                console.error("Geolocation error:", error);
-                toast.error('Không thể lấy vị trí của bạn. Hãy kiểm tra quyền truy cập.');
-                setGettingLocation(false);
+                toast.success('Đã lấy được địa chỉ!');
+            } else {
+                toast.warning('Lấy được tọa độ nhưng không tìm thấy tên đường.');
             }
-        );
+        } catch (error) {
+            toast.error('Không thể lấy vị trí của bạn. Hãy kiểm tra quyền truy cập.');
+        } finally {
+            setGettingLocation(false);
+        }
     };
 
     const handleSave = () => {

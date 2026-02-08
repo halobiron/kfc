@@ -13,19 +13,7 @@ import { getAllCoupons } from '../../couponSlice';
 import { clearCart } from '../../cartSlice';
 import { formatCurrency } from '../../../../utils/formatters';
 import { calculateDeliveryFee, DEFAULT_SHIPPING_CONFIG } from '../../../../utils/shipping';
-
-const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-};
-
-
+import { calculateDistance, getCurrentLocation, searchLocation } from '../../../../utils/geoUtils';
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -60,7 +48,7 @@ const Checkout = () => {
                 setShippingConfig(response.data.data);
             }
         } catch (error) {
-            // Fallback to defaults on error
+            // Fallback
         }
     };
 
@@ -77,7 +65,6 @@ const Checkout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [savedAddresses, setSavedAddresses] = useState([]);
 
-    // Promotion State
     const [couponCode, setCouponCode] = useState('');
     const [appliedCoupon, setAppliedCoupon] = useState(null);
     const [couponError, setCouponError] = useState('');
@@ -106,31 +93,26 @@ const Checkout = () => {
     const fetchSavedAddresses = async () => {
         try {
             const response = await axiosClient.get('/users/profile');
-            if (response.data?.status) {
-                const userData = response.data.data;
-                const addresses = userData.addresses || [];
-                setSavedAddresses(addresses);
+            if (!response.data?.status || !response.data?.data) return;
+            const userData = response.data.data;
+            const addresses = userData.addresses || [];
+            setSavedAddresses(addresses);
 
-                // Auto-fill phone, name and default address if available
-                if (userData) {
-                    const defaultAddress = addresses.find(addr => addr.isDefault);
-                    setFormData(prev => ({
-                        ...prev,
-                        fullName: prev.fullName || userData.name || '',
-                        phone: prev.phone || userData.phone || '',
-                        address: prev.address || (defaultAddress ? defaultAddress.fullAddress : '')
-                    }));
-                }
-            }
+            const defaultAddress = addresses.find(addr => addr.isDefault);
+            setFormData(prev => ({
+                ...prev,
+                fullName: prev.fullName || userData.name || '',
+                phone: prev.phone || userData.phone || '',
+                address: prev.address || defaultAddress?.fullAddress || ''
+            }));
         } catch (error) {
-            // User not logged in or no addresses
+            // Người dùng chưa đăng nhập hoặc không có địa chỉ
         }
     };
 
     const handleApplyCoupon = () => {
         if (!couponCode) return;
 
-        // Find coupon from Redux state
         const coupon = Array.isArray(coupons)
             ? coupons.find(c => c.code === couponCode.toUpperCase())
             : null;
@@ -196,19 +178,15 @@ const Checkout = () => {
 
         try {
             if (sourceType === 'current') {
-                if (!navigator.geolocation) {
-                    toast.error("Trình duyệt không hỗ trợ Geolocation.");
+                try {
+                    const pos = await getCurrentLocation();
+                    lat = pos.lat;
+                    lng = pos.lng;
+                } catch (err) {
+                    toast.error("Không thể lấy vị trí của bạn.");
                     setIsLocating(false);
                     return;
                 }
-
-                // Wrap geolocation in promise
-                const pos = await new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition(resolve, reject);
-                });
-
-                lat = pos.coords.latitude;
-                lng = pos.coords.longitude;
 
             } else if (sourceType === 'saved' && index !== null) {
                 const selected = savedAddresses[index];
@@ -220,12 +198,11 @@ const Checkout = () => {
                 } else {
                     // Fallback to nominatim search if coords missing
                     toast.info("Đang tìm tọa độ cho địa chỉ này...");
-                    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(selected.fullAddress)}&countrycodes=vn&limit=1`);
-                    const data = await res.json();
+                    const data = await searchLocation(selected.fullAddress);
 
-                    if (data?.length > 0) {
-                        lat = parseFloat(data[0].lat);
-                        lng = parseFloat(data[0].lon);
+                    if (data) {
+                        lat = data.lat;
+                        lng = data.lng;
                     } else {
                         toast.error("Không tìm thấy tọa độ của địa chỉ này.");
                         setIsLocating(false);
@@ -542,11 +519,11 @@ const Checkout = () => {
                     {/* Right Column: Order Summary */}
                     <div className="checkout-summary-section">
                         <Card className="checkout-summary-sidebar">
-                            <h3 className="form-title summary-title">
+                            <h3 className="form-title">
                                 Tóm Tắt Đơn Hàng
                             </h3>
 
-                            <div className="summary-items">
+                            <div>
                                 {cartItems.map(item => (
                                     <div key={item._id || item.id} className="summary-item">
                                         <div className="item-name-qty">
@@ -561,7 +538,7 @@ const Checkout = () => {
                             <div className="summary-divider"></div>
 
                             {/* Promotion Section */}
-                            <div className="promotion-section mb-3">
+                            <div className="mb-3">
                                 <label className="form-label d-flex justify-content-between align-items-center">
                                     <span className="fw-bold"><i className="bi bi-ticket-perforated-fill me-1 text-danger"></i>Mã khuyến mãi</span>
                                 </label>
