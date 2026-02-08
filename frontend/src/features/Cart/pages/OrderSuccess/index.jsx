@@ -40,7 +40,7 @@ const OrderSuccess = () => {
     }, [orderId, status, dispatch]);
 
     return (
-        <div className="order-success-wrapper">
+        <div className="kfc-page-wrapper">
             <div className="container">
                 <div className="success-card text-center py-5">
                     <div className="success-icon-wrapper mb-4">

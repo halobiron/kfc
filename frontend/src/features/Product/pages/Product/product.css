@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
 
-.product-wrapper {
-    background-color: #f8f8f8;
-    min-height: 100vh;
-}
 
 /* Hero Banner */
 .product-hero {
@@ -52,11 +48,13 @@
     padding: 0;
     margin: 0;
     overflow-x: auto;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 .category-wrapper ul::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    display: none;
+    /* Chrome/Safari */
 }
 
 .category-wrapper a {
@@ -66,7 +64,7 @@
     align-items: flex-end;
     height: 100%;
     padding-bottom: 5px;
-    
+
     font-size: 1.5rem;
     font-weight: 700;
     color: #333;
@@ -131,7 +129,7 @@
     .hero-title {
         font-size: 2rem;
     }
-    
+
     .category-wrapper a {
         font-size: 1.2rem;
         padding-bottom: 6px;

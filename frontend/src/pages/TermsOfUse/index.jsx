@@ -24,7 +24,7 @@ const TermsOfUse = () => {
     }, []);
 
     return (
-        <div className="policy-page">
+        <div className="kfc-page-wrapper">
             <div className="container py-5">
                 <h1 className="policy-title">CHÍNH SÁCH HOẠT ĐỘNG</h1>
 

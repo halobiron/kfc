@@ -364,7 +364,7 @@ const Checkout = () => {
     };
 
     return (
-        <div className="checkout-wrapper">
+        <div className="kfc-page-wrapper">
             <div className="container checkout-container py-5">
                 <div className="section-header">
                     <h2>Thanh Toán</h2>

@@ -87,7 +87,7 @@ const Product = () => {
 
     return (
         <AnimatedPage>
-            <div className='product-wrapper'>
+            <div className='kfc-page-wrapper'>
                 {/* Hero Banner */}
                 <div className="product-hero">
                     <div className="container">

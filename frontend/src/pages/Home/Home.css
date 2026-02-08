@@ -1,6 +1,6 @@
 .home-category-section {
     padding: 3rem 0;
-    background-color: #f8f9fa;
+    background-color: var(--kfc-gray-bg);
 }
 
 .category-link {

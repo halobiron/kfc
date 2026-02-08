@@ -54,7 +54,7 @@ const ProductDetail = () => {
     const categoryName = categories.find(c => c.slug === product.category)?.name || product.category;
 
     return (
-        <div className='product-detail-wrapper'>
+        <div className='kfc-page-wrapper'>
             <div className="container py-5">
                 <div className="product-breadcrumb mb-4">
                     <Link to="/">Trang chủ</Link> <span className="separator">/</span>
