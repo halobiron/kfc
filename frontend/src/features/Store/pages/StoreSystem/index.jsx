@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import storeApi from '../../../../api/storeApi';
 import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
-import { calculateDistance, getCurrentLocation, searchLocation } from '../../../../utils/geoUtils';
+import { calculateDistance, resolveLocationFromValue, getLocationOptions } from '../../../../utils/geoUtils';
 import './StoreSystem.css';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import '../../../../components/Map/LeafletConfig';
+
+// Fix for default Leaflet marker icons in React
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
 
 // Constants
 const CITIES = [
@@ -106,67 +113,22 @@ const StoreSystem = () => {
         fetchSavedAddresses();
     }, []);
 
-    const handleFindNearest = async () => {
-        setIsSearching(true);
-        setLocationError(null);
+    const [isResolvingAddress, setIsResolvingAddress] = useState(false);
 
-        try {
-            const pos = await getCurrentLocation();
-            const { lat, lng } = pos;
-            setUserLocation({ lat, lng });
-            setMapCenter({ lat, lng });
-            setSelectedCity('all'); // Show all stores to find nearest across data
-            setSearchTerm('');
+    // Generate options using util
+    const addressOptions = useMemo(() => getLocationOptions(savedAddresses), [savedAddresses]);
 
-            // Reverse Geocoding to show address (Optional)
-            // You can add reverseGeocode here if needed
-        } catch (err) {
-            console.error("Error getting location:", err);
-            setLocationError("Không thể lấy vị trí của bạn/Trình duyệt không hỗ trợ.");
-        } finally {
-            setIsSearching(false);
-        }
-    };
+    const handleLocationSelect = async (val) => {
+        setIsResolvingAddress(true);
+        const location = await resolveLocationFromValue(val, savedAddresses);
+        setIsResolvingAddress(false);
 
-    const handleFindFromSaved = async (index) => {
-        if (index === 'current') {
-            handleFindNearest();
-            return;
-        }
-
-        const selected = savedAddresses[index];
-        if (!selected) return;
-
-        setIsSearching(true);
-        let lat, lng;
-
-        try {
-            if (selected.latitude && selected.longitude) {
-                lat = selected.latitude;
-                lng = selected.longitude;
-            } else {
-                // Fallback using utility
-                const data = await searchLocation(selected.fullAddress);
-                if (data) {
-                    lat = data.lat;
-                    lng = data.lng;
-                } else {
-                    setLocationError("Không tìm thấy tọa độ địa chỉ này.");
-                }
-            }
-
-            if (lat && lng) {
-                setUserLocation({ lat, lng });
-                setMapCenter({ lat, lng });
-                setSelectedCity('all');
-                setSearchTerm(selected.fullAddress);
-            } else {
-                setLocationError("Không tìm thấy tọa độ địa chỉ này.");
-            }
-        } catch (e) {
-            setLocationError("Lỗi khi tìm vị trí.");
-        } finally {
-            setIsSearching(false);
+        if (location) {
+            setUserLocation({ lat: location.lat, lng: location.lng });
+            setMapCenter({ lat: location.lat, lng: location.lng });
+            setSelectedCity('all');
+            setSearchTerm(location.address || '');
+            setLocationError(null);
         }
     };
 
@@ -179,19 +141,26 @@ const StoreSystem = () => {
         setIsSearching(true);
         setLocationError(null);
 
-        // Simple search without try/catch as utility handles errors
-        const data = await searchLocation(searchTerm);
-        if (data) {
-            const { lat, lng } = data;
-            const location = { lat, lng };
-            setUserLocation(location);
-            setMapCenter(location);
-            setSelectedCity('all');
-        } else {
-            setLocationError("Không tìm thấy địa chỉ này.");
-            setUserLocation(null);
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchTerm)}&countrycodes=vn&limit=1`);
+            const data = await res.json();
+
+            if (data?.length > 0) {
+                const { lat, lon } = data[0];
+                const location = { lat: parseFloat(lat), lng: parseFloat(lon) };
+                setUserLocation(location);
+                setMapCenter(location);
+                setSelectedCity('all');
+            } else {
+                setLocationError("Không tìm thấy địa chỉ này.");
+                setUserLocation(null);
+            }
+        } catch (error) {
+            console.error("Search error:", error);
+            setLocationError("Lỗi kết nối tìm kiếm.");
+        } finally {
+            setIsSearching(false);
         }
-        setIsSearching(false);
     };
 
     useEffect(() => {
@@ -257,7 +226,7 @@ const StoreSystem = () => {
                             disabled={isSearching}
                             title="Tìm kiếm vị trí"
                         >
-                            {isSearching ? (
+                            {isSearching || isResolvingAddress ? (
                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             ) : (
                                 <i className="bi bi-search"></i>
@@ -274,16 +243,7 @@ const StoreSystem = () => {
                         <CustomSelect
                             options={[
                                 { value: 'all', label: 'Tất cả khu vực' },
-                                {
-                                    label: 'Tìm quanh vị trí',
-                                    options: [
-                                        { value: 'current', label: 'Vị trí hiện tại (GPS)' },
-                                        ...savedAddresses.map((addr, idx) => ({
-                                            value: `saved_${idx}`,
-                                            label: `${addr.label} - ${addr.fullAddress}`
-                                        }))
-                                    ]
-                                },
+                                ...addressOptions,
                                 {
                                     label: 'Lọc theo Thành phố',
                                     options: CITIES.filter(c => c.id !== 'all').map(city => ({
@@ -294,10 +254,13 @@ const StoreSystem = () => {
                             ]}
                             value={selectedCity}
                             onChange={(val) => {
-                                if (val === 'all') setSelectedCity('all');
-                                else if (val === 'current') handleFindNearest();
-                                else if (val.startsWith('saved_')) handleFindFromSaved(parseInt(val.split('_')[1]));
-                                else setSelectedCity(val);
+                                if (val === 'all') {
+                                    setSelectedCity('all');
+                                } else if (val === 'current' || val.startsWith('saved-')) {
+                                    handleLocationSelect(val);
+                                } else {
+                                    setSelectedCity(val);
+                                }
                             }}
                             placeholder="Chọn khu vực"
                             icon="bi bi-geo-alt"

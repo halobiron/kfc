@@ -13,7 +13,7 @@ import { getAllCoupons } from '../../couponSlice';
 import { clearCart } from '../../cartSlice';
 import { formatCurrency } from '../../../../utils/formatters';
 import { calculateDeliveryFee, DEFAULT_SHIPPING_CONFIG } from '../../../../utils/shipping';
-import { calculateDistance, getCurrentLocation, searchLocation } from '../../../../utils/geoUtils';
+import { calculateDistance, resolveLocationFromValue, getLocationOptions } from '../../../../utils/geoUtils';
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -21,7 +21,6 @@ const Checkout = () => {
     const { coupons } = useSelector((state) => state.coupons);
     const { items: cartItems } = useSelector((state) => state.cart);
     const [stores, setStores] = useState([]);
-    const [isLocating, setIsLocating] = useState(false);
     const [shippingConfig, setShippingConfig] = useState(DEFAULT_SHIPPING_CONFIG);
 
     useEffect(() => {
@@ -172,48 +171,12 @@ const Checkout = () => {
         }
     };
 
-    const handleFindNearestStore = async (sourceType, index = null) => {
-        setIsLocating(true);
-        let lat, lng;
+    const [isResolvingLocation, setIsResolvingLocation] = useState(false);
 
+    const searchLocationOptions = useMemo(() => getLocationOptions(savedAddresses), [savedAddresses]);
+
+    const handleFindNearestStore = (lat, lng) => {
         try {
-            if (sourceType === 'current') {
-                try {
-                    const pos = await getCurrentLocation();
-                    lat = pos.lat;
-                    lng = pos.lng;
-                } catch (err) {
-                    toast.error("Không thể lấy vị trí của bạn.");
-                    setIsLocating(false);
-                    return;
-                }
-
-            } else if (sourceType === 'saved' && index !== null) {
-                const selected = savedAddresses[index];
-                if (!selected) return;
-
-                if (selected.latitude && selected.longitude) {
-                    lat = selected.latitude;
-                    lng = selected.longitude;
-                } else {
-                    // Fallback to nominatim search if coords missing
-                    toast.info("Đang tìm tọa độ cho địa chỉ này...");
-                    const data = await searchLocation(selected.fullAddress);
-
-                    if (data) {
-                        lat = data.lat;
-                        lng = data.lng;
-                    } else {
-                        toast.error("Không tìm thấy tọa độ của địa chỉ này.");
-                        setIsLocating(false);
-                        return;
-                    }
-                }
-            } else {
-                return;
-            }
-
-            // Calculate & Sort
             const storesWithDist = stores.map(store => ({
                 ...store,
                 distance: calculateDistance(lat, lng, store.latitude, store.longitude)
@@ -223,40 +186,27 @@ const Checkout = () => {
 
             setStores(storesWithDist);
             if (storesWithDist.length > 0) {
-                const nearestId = storesWithDist[0].id || storesWithDist[0]._id;
-                setSelectedStore(nearestId);
-                toast.success(`Đã tìm thấy quán gần: ${storesWithDist[0].name} (${storesWithDist[0].distance.toFixed(1)}km)`);
+                const nearest = storesWithDist[0];
+                setSelectedStore(nearest.id || nearest._id);
+                toast.success(`Đã tìm thấy quán gần: ${nearest.name} (${nearest.distance.toFixed(1)}km)`);
             }
-
         } catch (error) {
             console.error(error);
-            toast.error("Có lỗi khi xác định vị trí.");
-        } finally {
-            setIsLocating(false);
+            toast.error("Có lỗi khi tính toán khoảng cách.");
         }
     };
 
-    const searchLocationOptions = useMemo(() => [
-        { value: 'current', label: 'Vị trí hiện tại (GPS)', icon: 'bi bi-crosshair text-danger' },
-        ...(savedAddresses.length > 0 ? [
-            {
-                label: 'Từ địa chỉ đã lưu',
-                options: savedAddresses.map((addr, idx) => ({
-                    value: `saved-${idx}`,
-                    label: `${addr.label} - ${addr.fullAddress}`,
-                    icon: 'bi bi-house'
-                }))
-            }
-        ] : [])
-    ], [savedAddresses]);
+    const handleLocationSearchSelect = async (val) => {
+        if (!val) return;
+        setIsResolvingLocation(true);
 
-    const handleLocationSearchSelect = (val) => {
-        if (val === 'current') {
-            handleFindNearestStore('current');
-        } else if (val.startsWith('saved-')) {
-            const index = parseInt(val.split('-')[1]);
-            handleFindNearestStore('saved', index);
+        const location = await resolveLocationFromValue(val, savedAddresses);
+
+        if (location) {
+            handleFindNearestStore(location.lat, location.lng);
         }
+
+        setIsResolvingLocation(false);
     };
 
     const removeCoupon = () => {
@@ -457,7 +407,7 @@ const Checkout = () => {
                                         />
 
                                         <div className="col-12">
-                                            {isLocating && <div className="text-center small text-muted mb-2"><span className="spinner-border spinner-border-sm me-1"></span>Đang tìm kiếm...</div>}
+                                            {isResolvingLocation && <div className="text-center small text-muted mb-2"><span className="spinner-border spinner-border-sm me-1"></span>Đang tìm kiếm...</div>}
 
                                             <CustomSelect
                                                 className="mb-3"
