@@ -2,7 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import axiosClient from '../../../../api/axiosClient';
+import storeApi from '../../../../api/storeApi';
+import orderApi from '../../../../api/orderApi';
 import CustomSelect from '../../../../components/CustomSelect';
 import FormInput from '../../../../components/FormInput';
 import Button from '../../../../components/Button';
@@ -12,44 +13,46 @@ import './Checkout.css';
 import { getAllCoupons } from '../../couponSlice';
 import { clearCart } from '../../cartSlice';
 import { formatCurrency } from '../../../../utils/formatters';
-import { calculateDeliveryFee, DEFAULT_SHIPPING_CONFIG } from '../../../../utils/shipping';
-import { calculateDistance, resolveLocationFromValue, getLocationOptions } from '../../../../utils/geoUtils';
+import { calculateDeliveryFee } from '../../../../utils/shipping';
+import { getStoresWithDistance } from '../../../../utils/geoUtils';
+import useUserProfile from '../../../../hooks/useUserProfile';
+import useShippingConfig from '../../../../hooks/useShippingConfig';
+import useAddressSelection from '../../../../hooks/useAddressSelection';
 
 const Checkout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { coupons } = useSelector((state) => state.coupons);
     const { items: cartItems } = useSelector((state) => state.cart);
+
+    // Use custom hooks for API data
+    const { profile, addresses: savedAddresses } = useUserProfile();
+    const { config: shippingConfig } = useShippingConfig();
+
+    const {
+        options: locationOptions,
+        handleSelect: resolveLocation,
+        isLoading: isResolvingLocation
+    } = useAddressSelection(savedAddresses);
+
     const [stores, setStores] = useState([]);
-    const [shippingConfig, setShippingConfig] = useState(DEFAULT_SHIPPING_CONFIG);
 
     useEffect(() => {
         dispatch(getAllCoupons());
-        fetchStores();
-        fetchSavedAddresses();
-        fetchShippingConfig();
-    }, [dispatch]);
 
-    const fetchStores = async () => {
-        try {
-            const response = await axiosClient.get('/stores');
-            setStores(response.data.data || []);
-        } catch (error) {
-            console.error('Lỗi khi tải cửa hàng:', error);
-            toast.error('Không thể tải danh sách cửa hàng.');
-        }
-    };
-
-    const fetchShippingConfig = async () => {
-        try {
-            const response = await axiosClient.get('/config/shipping');
-            if (response.data?.status && response.data?.data) {
-                setShippingConfig(response.data.data);
+        // Fetch stores using storeApi
+        const fetchStores = async () => {
+            try {
+                const response = await storeApi.getAll();
+                setStores(response.data.data || []);
+            } catch (error) {
+                console.error('Lỗi khi tải cửa hàng:', error);
+                toast.error('Không thể tải danh sách cửa hàng.');
             }
-        } catch (error) {
-            // Fallback
-        }
-    };
+        };
+
+        fetchStores();
+    }, [dispatch]);
 
     const [formData, setFormData] = useState({
         fullName: '',
@@ -62,7 +65,6 @@ const Checkout = () => {
     const [selectedStore, setSelectedStore] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('cod');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [savedAddresses, setSavedAddresses] = useState([]);
 
     const [couponCode, setCouponCode] = useState('');
     const [appliedCoupon, setAppliedCoupon] = useState(null);
@@ -89,25 +91,18 @@ const Checkout = () => {
 
     const total = useMemo(() => Math.max(0, subtotal + deliveryFee - discountAmount), [subtotal, deliveryFee, discountAmount]);
 
-    const fetchSavedAddresses = async () => {
-        try {
-            const response = await axiosClient.get('/users/profile');
-            if (!response.data?.status || !response.data?.data) return;
-            const userData = response.data.data;
-            const addresses = userData.addresses || [];
-            setSavedAddresses(addresses);
-
-            const defaultAddress = addresses.find(addr => addr.isDefault);
+    // Auto-fill form data from user profile
+    useEffect(() => {
+        if (profile) {
+            const defaultAddress = savedAddresses.find(addr => addr.isDefault);
             setFormData(prev => ({
                 ...prev,
-                fullName: prev.fullName || userData.name || '',
-                phone: prev.phone || userData.phone || '',
+                fullName: prev.fullName || profile.name || '',
+                phone: prev.phone || profile.phone || '',
                 address: prev.address || defaultAddress?.fullAddress || ''
             }));
-        } catch (error) {
-            // Người dùng chưa đăng nhập hoặc không có địa chỉ
         }
-    };
+    }, [profile, savedAddresses]);
 
     const handleApplyCoupon = () => {
         if (!couponCode) return;
@@ -157,56 +152,38 @@ const Checkout = () => {
         setCouponError('');
     };
 
-    const handleAddressSelect = (e) => {
-        const index = e.target.value;
-        if (index === "") return;
+    const handleAddressSelect = async (val) => {
+        if (!val) return;
 
-        const selected = savedAddresses[index];
-        if (selected) {
+        const location = await resolveLocation(val);
+        if (location) {
             setFormData(prev => ({
                 ...prev,
-                address: selected.fullAddress
+                address: location.address
             }));
-            toast.info(`Đã chọn địa chỉ: ${selected.label}`, { autoClose: 2000 });
+            toast.info(`Đã chọn địa chỉ!`, { autoClose: 2000 });
         }
     };
 
-    const [isResolvingLocation, setIsResolvingLocation] = useState(false);
-
-    const searchLocationOptions = useMemo(() => getLocationOptions(savedAddresses), [savedAddresses]);
-
     const handleFindNearestStore = (lat, lng) => {
-        try {
-            const storesWithDist = stores.map(store => ({
-                ...store,
-                distance: calculateDistance(lat, lng, store.latitude, store.longitude)
-            }));
+        const sorted = getStoresWithDistance(lat, lng, stores);
+        setStores(sorted);
 
-            storesWithDist.sort((a, b) => a.distance - b.distance);
-
-            setStores(storesWithDist);
-            if (storesWithDist.length > 0) {
-                const nearest = storesWithDist[0];
-                setSelectedStore(nearest.id || nearest._id);
-                toast.success(`Đã tìm thấy quán gần: ${nearest.name} (${nearest.distance.toFixed(1)}km)`);
-            }
-        } catch (error) {
-            console.error(error);
-            toast.error("Có lỗi khi tính toán khoảng cách.");
+        if (sorted.length > 0 && sorted[0].distance !== null) {
+            const nearest = sorted[0];
+            setSelectedStore(nearest.id || nearest._id);
+            toast.success(`Đã tìm thấy quán gần: ${nearest.name} (${nearest.distance.toFixed(1)}km)`);
         }
     };
 
     const handleLocationSearchSelect = async (val) => {
         if (!val) return;
-        setIsResolvingLocation(true);
 
-        const location = await resolveLocationFromValue(val, savedAddresses);
+        const location = await resolveLocation(val);
 
         if (location) {
             handleFindNearestStore(location.lat, location.lng);
         }
-
-        setIsResolvingLocation(false);
     };
 
     const removeCoupon = () => {
@@ -262,7 +239,7 @@ const Checkout = () => {
                 total
             };
 
-            const response = await axiosClient.post('/order/new', orderData);
+            const response = await orderApi.createOrder(orderData);
 
             // Clear cart immediately upon successful request
             dispatch(clearCart());
@@ -362,14 +339,9 @@ const Checkout = () => {
                                             <CustomSelect
                                                 className="col-12 mb-3"
                                                 label={<><i className="bi bi-journal-bookmark-fill me-1 text-danger"></i>Chọn từ sổ địa chỉ</>}
-                                                options={savedAddresses.map((addr, index) => ({
-                                                    value: index,
-                                                    label: `${addr.label} - ${addr.fullAddress}`
-                                                }))}
+                                                options={locationOptions.filter(opt => opt.label === 'Từ địa chỉ đã lưu')[0]?.options || []}
                                                 value=""
-                                                onChange={(val) => {
-                                                    handleAddressSelect({ target: { value: val } });
-                                                }}
+                                                onChange={handleAddressSelect}
                                                 placeholder="-- Chọn địa chỉ đã lưu --"
                                             />
                                         )}
@@ -399,8 +371,8 @@ const Checkout = () => {
                                     <>
                                         <CustomSelect
                                             className="col-12 mb-3"
-                                            label={<><i className="bi bi-geo-alt-fill me-1 text-danger"></i>Tìm quán gần bạn...</>}
-                                            options={searchLocationOptions}
+                                            label={<><i className="bi bi-geo-alt-fill me-1 text-danger"></i>Tìm quán theo vị trí...</>}
+                                            options={locationOptions}
                                             value=""
                                             onChange={handleLocationSearchSelect}
                                             placeholder="Chọn cách tìm kiếm..."
@@ -411,9 +383,9 @@ const Checkout = () => {
 
                                             <CustomSelect
                                                 className="mb-3"
-                                                label="Chọn cửa hàng KFC gần nhất *"
+                                                label="Chọn cửa hàng KFC *"
                                                 options={[
-                                                    { value: '', label: '-- Chọn cửa hàng gần bạn --' },
+                                                    { value: '', label: '-- Chọn cửa hàng --' },
                                                     ...stores.map(store => ({
                                                         value: store.id || store._id,
                                                         label: `${store.name} - ${store.address}${store.distance !== undefined ? ` (${store.distance.toFixed(1)}km)` : ''}`

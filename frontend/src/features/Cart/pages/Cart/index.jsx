@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, updateQuantity } from '../../cartSlice';
 import { formatCurrency } from '../../../../utils/formatters';
-import axiosClient from '../../../../api/axiosClient';
-import { calculateDeliveryFee, DEFAULT_SHIPPING_CONFIG } from '../../../../utils/shipping';
+import { calculateDeliveryFee } from '../../../../utils/shipping';
+import useShippingConfig from '../../../../hooks/useShippingConfig';
 
 import './Cart.css';
 import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
@@ -21,22 +21,8 @@ const Cart = () => {
     // Get cart data from Redux
     const { items: cartItems, totalPrice: subtotal } = useSelector((state) => state.cart);
 
-    const [shippingConfig, setShippingConfig] = useState(DEFAULT_SHIPPING_CONFIG);
-
-    useEffect(() => {
-        const fetchShippingConfig = async () => {
-            try {
-                const response = await axiosClient.get('/config/shipping');
-                if (response.data?.status && response.data?.data) {
-                    setShippingConfig(response.data.data);
-                }
-            } catch (error) {
-                // Fallback to defaults on error
-            }
-        };
-
-        fetchShippingConfig();
-    }, []);
+    // Use custom hook for shipping config
+    const { config: shippingConfig } = useShippingConfig();
 
     const handleQuantityChange = (productId, newQuantity) => {
         dispatch(updateQuantity({ productId, quantity: newQuantity }));

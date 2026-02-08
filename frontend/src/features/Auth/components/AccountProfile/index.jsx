@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { updateUserSuccess } from '../../authSlice';
-import axiosClient from '../../../../api/axiosClient';
+import userApi from '../../../../api/userApi';
+import useUserProfile from '../../../../hooks/useUserProfile';
 import FormInput from '../../../../components/FormInput';
 import Button from '../../../../components/Button';
 import Card from '../../../../components/Card';
@@ -11,6 +12,9 @@ import './AccountProfile.css';
 const AccountProfile = () => {
     const dispatch = useDispatch();
     const { user } = useSelector(state => state.auth);
+
+    // Use custom hook for user profile
+    const { profile, refetch } = useUserProfile();
 
     const [userInfo, setUserInfo] = useState({
         name: user?.name || '',
@@ -25,32 +29,23 @@ const AccountProfile = () => {
         confirmPassword: ''
     });
 
-    const fetchProfile = useCallback(async () => {
-        try {
-            const response = await axiosClient.get('/users/profile');
-            if (response.data?.status) {
-                const userData = response.data.data;
-                setUserInfo({
-                    name: userData.name,
-                    email: userData.email,
-                    phone: userData.phone,
-                    birthdate: userData.birthdate ? userData.birthdate.split('T')[0] : ''
-                });
-                dispatch(updateUserSuccess(userData));
-            }
-        } catch (error) {
-            toast.error('Không thể tải thông tin người dùng.');
-        }
-    }, [dispatch]);
-
+    // Update form when profile loads
     useEffect(() => {
-        fetchProfile();
-    }, [fetchProfile]);
+        if (profile) {
+            setUserInfo({
+                name: profile.name,
+                email: profile.email,
+                phone: profile.phone,
+                birthdate: profile.birthdate ? profile.birthdate.split('T')[0] : ''
+            });
+            dispatch(updateUserSuccess(profile));
+        }
+    }, [profile, dispatch]);
 
     const handleUpdateInfo = async (e) => {
         e.preventDefault();
         try {
-            const response = await axiosClient.put('/users/profile/update', {
+            const response = await userApi.updateProfile({
                 name: userInfo.name,
                 phone: userInfo.phone,
                 birthdate: userInfo.birthdate
@@ -73,7 +68,7 @@ const AccountProfile = () => {
         }
 
         try {
-            const response = await axiosClient.post('/users/change-password', {
+            const response = await userApi.changePassword({
                 currentPassword: passwordData.currentPassword,
                 newPassword: passwordData.newPassword,
                 confirmPassword: passwordData.confirmPassword

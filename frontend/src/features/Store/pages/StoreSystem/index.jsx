@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import storeApi from '../../../../api/storeApi';
-import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
-import { calculateDistance, resolveLocationFromValue, getLocationOptions } from '../../../../utils/geoUtils';
+import { getStoresWithDistance, geocodeAddress } from '../../../../utils/geoUtils';
+import useUserProfile from '../../../../hooks/useUserProfile';
+import useAddressSelection from '../../../../hooks/useAddressSelection';
 import './StoreSystem.css';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -80,7 +81,16 @@ const StoreSystem = () => {
     const [locationError, setLocationError] = useState(null);
     const [isSearching, setIsSearching] = useState(false);
     const [mapCenter, setMapCenter] = useState({ lat: 10.7718, lng: 106.6015 }); // Default HCM
-    const [savedAddresses, setSavedAddresses] = useState([]);
+
+    // Use custom hook for user profile
+    const { addresses: savedAddresses } = useUserProfile();
+
+    // Use custom hook for address selection
+    const {
+        options: addressOptions,
+        handleSelect: resolveLocation,
+        isLoading: isResolvingAddress
+    } = useAddressSelection(savedAddresses);
 
     useEffect(() => {
         const fetchStores = async () => {
@@ -98,30 +108,11 @@ const StoreSystem = () => {
             }
         };
 
-        const fetchSavedAddresses = async () => {
-            try {
-                const response = await axiosClient.get('/users/profile');
-                if (response.data?.status) {
-                    setSavedAddresses(response.data.data.addresses || []);
-                }
-            } catch (error) {
-                // Ignore if not logged in
-            }
-        };
-
         fetchStores();
-        fetchSavedAddresses();
     }, []);
 
-    const [isResolvingAddress, setIsResolvingAddress] = useState(false);
-
-    // Generate options using util
-    const addressOptions = useMemo(() => getLocationOptions(savedAddresses), [savedAddresses]);
-
     const handleLocationSelect = async (val) => {
-        setIsResolvingAddress(true);
-        const location = await resolveLocationFromValue(val, savedAddresses);
-        setIsResolvingAddress(false);
+        const location = await resolveLocation(val);
 
         if (location) {
             setUserLocation({ lat: location.lat, lng: location.lng });
@@ -134,23 +125,21 @@ const StoreSystem = () => {
 
     const handleSearch = async (e) => {
         if (e.key !== 'Enter' && e.type !== 'click') return;
-
         e.preventDefault();
+
         if (!searchTerm.trim()) return;
 
         setIsSearching(true);
         setLocationError(null);
 
         try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchTerm)}&countrycodes=vn&limit=1`);
-            const data = await res.json();
+            const geo = await geocodeAddress(searchTerm);
 
-            if (data?.length > 0) {
-                const { lat, lon } = data[0];
-                const location = { lat: parseFloat(lat), lng: parseFloat(lon) };
-                setUserLocation(location);
-                setMapCenter(location);
+            if (geo) {
+                setUserLocation({ lat: geo.lat, lng: geo.lng });
+                setMapCenter({ lat: geo.lat, lng: geo.lng });
                 setSelectedCity('all');
+                setSearchTerm(geo.displayName || searchTerm);
             } else {
                 setLocationError("Không tìm thấy địa chỉ này.");
                 setUserLocation(null);
@@ -164,13 +153,7 @@ const StoreSystem = () => {
     };
 
     useEffect(() => {
-        let results = stores.map(store => ({
-            ...store,
-            distance: userLocation ? calculateDistance(
-                userLocation.lat, userLocation.lng,
-                store.location.lat, store.location.lng
-            ) : null
-        }));
+        let results = getStoresWithDistance(userLocation?.lat, userLocation?.lng, stores);
 
         if (selectedCity !== 'all') {
             results = results.filter(s => s.city === selectedCity);
@@ -182,10 +165,6 @@ const StoreSystem = () => {
                 s.name.toLowerCase().includes(term) ||
                 s.address.toLowerCase().includes(term)
             );
-        }
-
-        if (userLocation) {
-            results.sort((a, b) => a.distance - b.distance);
         }
 
         setSortedStores(results);
@@ -236,7 +215,7 @@ const StoreSystem = () => {
 
                     <div className="search-hint">
                         <i className="bi bi-info-circle me-1"></i>
-                        Nhấn Enter hoặc nút tìm kiếm để xem cửa hàng gần bạn nhất
+                        Nhấn Enter hoặc nút tìm kiếm để tìm cửa hàng quanh đây
                     </div>
 
                     <div className="filter-wrapper mb-3">

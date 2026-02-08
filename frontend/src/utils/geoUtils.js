@@ -108,3 +108,24 @@ export const getLocationOptions = (savedAddresses = []) => [
         }))
     }] : [])
 ];
+
+/**
+ * Calculate distance for a list of stores and sort by nearest
+ * Returns array of stores with .distance property
+ */
+export const getStoresWithDistance = (lat, lng, stores = []) => {
+    if (!lat || !lng) return stores.map(s => ({ ...s, distance: null }));
+
+    return stores
+        .map(store => ({
+            ...store,
+            // Handle different store object structures (latitude/longitude or location.lat/lng)
+            distance: calculateDistance(
+                lat,
+                lng,
+                store.latitude || store.location?.lat,
+                store.longitude || store.location?.lng
+            )
+        }))
+        .sort((a, b) => (a.distance ?? 99999) - (b.distance ?? 99999));
+};

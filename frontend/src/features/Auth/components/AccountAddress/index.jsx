@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import axiosClient from '../../../../api/axiosClient';
+import userApi from '../../../../api/userApi';
+import useUserProfile from '../../../../hooks/useUserProfile';
 import Card from '../../../../components/Card';
 import Button from '../../../../components/Button';
 import EmptyState from '../../../../components/EmptyState';
@@ -8,30 +9,13 @@ import AddressModal from '../AddressModal';
 import './AccountAddress.css';
 
 const AccountAddress = () => {
-    const [addresses, setAddresses] = useState([]);
     const [loadingAddresses, setLoadingAddresses] = useState(false);
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [editingAddressData, setEditingAddressData] = useState(null); // stores the address object
     const [editingAddressIndex, setEditingAddressIndex] = useState(null); // stores the index
 
-    useEffect(() => {
-        fetchAddresses();
-    }, []);
-
-    const fetchAddresses = async () => {
-        try {
-            setLoadingAddresses(true);
-            const response = await axiosClient.get('/users/profile');
-            if (response.data?.status) {
-                const userData = response.data.data;
-                setAddresses(userData.addresses || []);
-            }
-        } catch (error) {
-            toast.error('Không thể tải sổ địa chỉ.');
-        } finally {
-            setLoadingAddresses(false);
-        }
-    };
+    // Use custom hook for user profile
+    const { addresses, refetch } = useUserProfile();
 
     const handleAddAddress = () => {
         setEditingAddressData(null);
@@ -56,21 +40,21 @@ const AccountAddress = () => {
             };
 
             if (editingAddressIndex !== null) {
-                const response = await axiosClient.put(`/users/address/update/${editingAddressIndex}`, addressData);
+                const response = await userApi.updateAddress(editingAddressIndex, addressData);
                 if (response.data?.status) {
                     toast.success('Cập nhật địa chỉ thành công!');
                     setShowAddressForm(false);
-                    fetchAddresses();
+                    refetch();
                 }
             } else {
-                const response = await axiosClient.post('/users/address/add', {
+                const response = await userApi.addAddress({
                     ...addressData,
                     isDefault: addressForm.isDefault || addresses.length === 0
                 });
                 if (response.data?.status) {
                     toast.success('Thêm địa chỉ thành công!');
                     setShowAddressForm(false);
-                    fetchAddresses();
+                    refetch();
                 }
             }
         } catch (error) {
@@ -81,10 +65,10 @@ const AccountAddress = () => {
     const handleDeleteAddress = async (idx) => {
         if (window.confirm('Bạn có chắc muốn xóa địa chỉ này?')) {
             try {
-                const response = await axiosClient.delete(`/users/address/delete/${idx}`);
+                const response = await userApi.deleteAddress(idx);
                 if (response.data?.status) {
                     toast.success('Xóa địa chỉ thành công!');
-                    fetchAddresses();
+                    refetch();
                 }
             } catch (error) {
                 toast.error('Không thể xóa địa chỉ. Vui lòng thử lại.');
@@ -95,7 +79,7 @@ const AccountAddress = () => {
     const handleSetDefaultAddress = async (idx) => {
         try {
             const address = addresses[idx];
-            const response = await axiosClient.put(`/users/address/update/${idx}`, {
+            const response = await userApi.updateAddress(idx, {
                 label: address.label,
                 fullAddress: address.fullAddress,
                 isDefault: true,
@@ -104,7 +88,7 @@ const AccountAddress = () => {
             });
             if (response.data?.status) {
                 toast.success('Cập nhật địa chỉ mặc định thành công!');
-                fetchAddresses();
+                refetch();
             }
         } catch (error) {
             toast.error('Không thể cập nhật địa chỉ mặc định.');
