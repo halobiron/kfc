@@ -73,6 +73,12 @@
     box-shadow: none;
 }
 
+/* Dark Variant */
+.kfc-btn--dark {
+    background-color: var(--kfc-black, #202124);
+    color: white;
+}
+
 /* --- Sizes --- */
 .kfc-btn--sm {
     padding: 8px 16px;

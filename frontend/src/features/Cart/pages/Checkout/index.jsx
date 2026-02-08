@@ -380,60 +380,23 @@ const Checkout = () => {
                                 <i className="bi bi-bicycle"></i>
                                 Hình Thức Nhận Hàng
                             </h3>
-                            <div className="delivery-type-options" style={{ display: 'flex', gap: '15px' }}>
+                            <div className="checkout-options-grid">
                                 <div
-                                    className={`delivery-type-option ${deliveryType === 'delivery' ? 'selected' : ''}`}
+                                    className={`checkout-option ${deliveryType === 'delivery' ? 'selected' : ''}`}
                                     onClick={() => setDeliveryType('delivery')}
-                                    style={{
-                                        flex: 1,
-                                        padding: '20px 15px',
-                                        border: `2px solid ${deliveryType === 'delivery' ? '#e4002b' : '#ddd'}`,
-                                        borderRadius: '8px',
-                                        cursor: 'pointer',
-                                        textAlign: 'center',
-                                        transition: 'all 0.3s',
-                                        backgroundColor: deliveryType === 'delivery' ? '#fff5f5' : '#fff',
-                                        position: 'relative'
-                                    }}
                                 >
-                                    <input
-                                        type="radio"
-                                        name="deliveryType"
-                                        checked={deliveryType === 'delivery'}
-                                        onChange={() => setDeliveryType('delivery')}
-                                        style={{ position: 'absolute', top: '10px', left: '10px' }}
-                                    />
-                                    <i className="bi bi-house-door-fill" style={{ fontSize: '2rem', color: '#e4002b', display: 'block', marginBottom: '10px' }}></i>
-                                    <div style={{ fontWeight: '600', fontSize: '1rem', marginBottom: '5px' }}>Giao hàng tận nơi</div>
-                                    <div style={{ fontSize: '0.85rem', color: '#666' }}>Nhận hàng tại địa chỉ của bạn</div>
+                                    <i className="bi bi-house-door-fill"></i>
+                                    <span>Giao hàng tận nơi</span>
+                                    <small>Giao tận địa chỉ</small>
                                 </div>
 
                                 <div
-                                    className={`delivery-type-option ${deliveryType === 'pickup' ? 'selected' : ''}`}
+                                    className={`checkout-option ${deliveryType === 'pickup' ? 'selected' : ''}`}
                                     onClick={() => setDeliveryType('pickup')}
-                                    style={{
-                                        flex: 1,
-                                        padding: '20px 15px',
-                                        border: `2px solid ${deliveryType === 'pickup' ? '#e4002b' : '#ddd'}`,
-                                        borderRadius: '8px',
-                                        cursor: 'pointer',
-                                        textAlign: 'center',
-                                        transition: 'all 0.3s',
-                                        backgroundColor: deliveryType === 'pickup' ? '#fff5f5' : '#fff',
-                                        position: 'relative'
-                                    }}
                                 >
-                                    <input
-                                        type="radio"
-                                        name="deliveryType"
-                                        checked={deliveryType === 'pickup'}
-                                        onChange={() => setDeliveryType('pickup')}
-                                        style={{ position: 'absolute', top: '10px', left: '10px' }}
-                                    />
-                                    <i className="bi bi-shop" style={{ fontSize: '2rem', color: '#e4002b', display: 'block', marginBottom: '10px' }}></i>
-                                    <div style={{ fontWeight: '600', fontSize: '1rem', marginBottom: '5px' }}>Đặt Hẹn Đến Lấy</div>
-                                    <div style={{ fontSize: '0.85rem', color: '#666', marginBottom: '5px' }}>Tự đến cửa hàng lấy món</div>
-                                    <div style={{ fontSize: '0.85rem', color: '#28a745', fontWeight: 'bold' }}>Miễn phí ship</div>
+                                    <i className="bi bi-shop"></i>
+                                    <span>Đặt Hẹn Đến Lấy</span>
+                                    <small>Miễn phí ship</small>
                                 </div>
                             </div>
                         </Card>
@@ -533,7 +496,7 @@ const Checkout = () => {
                                                 onChange={(val) => setSelectedStore(val)}
                                                 placeholder="Chọn cửa hàng"
                                             />
-                                            <small className="text-muted" style={{ display: 'block', marginTop: '-10px', marginBottom: '15px' }}>
+                                            <small className="text-muted store-pickup-hint">
                                                 <i className="bi bi-info-circle"></i> Vui lòng đến cửa hàng trong vòng 30 phút sau khi đặt
                                             </small>
                                         </div>
@@ -558,44 +521,28 @@ const Checkout = () => {
                                 <i className="bi bi-credit-card-2-front-fill"></i>
                                 Phương Thức Thanh Toán
                             </h3>
-                            <div className="payment-methods">
-                                <div
-                                    className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}
-                                    onClick={() => setPaymentMethod('cod')}
-                                >
-                                    <input
-                                        type="radio"
-                                        name="paymentParams"
-                                        className="payment-radio"
-                                        checked={paymentMethod === 'cod'}
-                                        onChange={() => setPaymentMethod('cod')}
-                                    />
-                                    <div className="payment-icon"><i className="bi bi-cash-coin"></i></div>
-                                    <span className="payment-label">Thanh toán khi nhận hàng (COD)</span>
-                                </div>
-
-                                <div
-                                    className={`payment-option ${paymentMethod === 'payos' ? 'selected' : ''}`}
-                                    onClick={() => setPaymentMethod('payos')}
-                                >
-                                    <input
-                                        type="radio"
-                                        name="paymentParams"
-                                        className="payment-radio"
-                                        checked={paymentMethod === 'payos'}
-                                        onChange={() => setPaymentMethod('payos')}
-                                    />
-                                    <div className="payment-icon"><i className="bi bi-qr-code-scan"></i></div>
-                                    <span className="payment-label">Thanh toán Online (QR Code/Thẻ/Ví)</span>
-                                </div>
+                            <div className="checkout-options-grid payment-methods">
+                                {[
+                                    { id: 'cod', icon: 'bi bi-cash-coin', label: 'Thanh toán khi nhận hàng (COD)' },
+                                    { id: 'payos', icon: 'bi bi-qr-code-scan', label: 'Thanh toán Online (QR/Thẻ/Ví)' }
+                                ].map(method => (
+                                    <div
+                                        key={method.id}
+                                        className={`checkout-option ${paymentMethod === method.id ? 'selected' : ''}`}
+                                        onClick={() => setPaymentMethod(method.id)}
+                                    >
+                                        <i className={method.icon}></i>
+                                        <span>{method.label}</span>
+                                    </div>
+                                ))}
                             </div>
                         </Card>
                     </div>
 
                     {/* Right Column: Order Summary */}
                     <div className="checkout-summary-section">
-                        <Card style={{ position: 'sticky', top: '100px' }}>
-                            <h3 className="form-title" style={{ fontSize: '1.2rem', marginBottom: '15px' }}>
+                        <Card className="checkout-summary-sidebar">
+                            <h3 className="form-title summary-title">
                                 Tóm Tắt Đơn Hàng
                             </h3>
 
@@ -611,28 +558,32 @@ const Checkout = () => {
                                 ))}
                             </div>
 
-                            <div className="summary-divider" style={{ margin: '15px 0', borderTop: '1px solid #eee' }}></div>
+                            <div className="summary-divider"></div>
 
                             {/* Promotion Section */}
                             <div className="promotion-section mb-3">
                                 <label className="form-label d-flex justify-content-between align-items-center">
                                     <span className="fw-bold"><i className="bi bi-ticket-perforated-fill me-1 text-danger"></i>Mã khuyến mãi</span>
                                 </label>
-                                <div className="input-group">
-                                    <FormInput
-                                        type="text"
-                                        placeholder="Nhập mã voucher"
-                                        value={couponCode}
-                                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                    />
-                                    <button
-                                        className="btn btn-dark"
-                                        type="button"
+                                <div className="d-flex gap-2 align-items-start">
+                                    <div className="flex-grow-1">
+                                        <FormInput
+                                            type="text"
+                                            placeholder="Nhập mã voucher"
+                                            value={couponCode}
+                                            containerClass="mb-0"
+                                            onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                                        />
+                                    </div>
+                                    <Button
+                                        variant="dark"
                                         onClick={handleApplyCoupon}
+                                        className="btn-apply-coupon"
                                     >
                                         Áp dụng
-                                    </button>
+                                    </Button>
                                 </div>
+
                                 {couponError && <div className="text-danger small mt-1"><i className="bi bi-exclamation-circle me-1"></i>{couponError}</div>}
                                 {appliedCoupon && (
                                     <div className="alert alert-success mt-2 d-flex justify-content-between align-items-center p-2 mb-0">
@@ -666,7 +617,7 @@ const Checkout = () => {
                                 </div>
                             )}
 
-                            <div className="summary-divider" style={{ margin: '15px 0', borderTop: '2px solid #eee' }}></div>
+                            <div className="summary-divider thick"></div>
 
                             <div className="d-flex justify-content-between align-items-center mb-4">
                                 <span className="fw-bold fs-5">TỔNG CỘNG</span>

@@ -69,7 +69,7 @@ const Button = React.forwardRef(({
 
 Button.propTypes = {
     children: PropTypes.node,
-    variant: PropTypes.oneOf(['primary', 'outline', 'text']),
+    variant: PropTypes.oneOf(['primary', 'outline', 'text', 'dark']),
     size: PropTypes.oneOf(['sm', 'md', 'lg']),
     loading: PropTypes.bool,
     disabled: PropTypes.bool,

@@ -1,4 +1,3 @@
-/* Checkout.css */
 .checkout-wrapper {
     background-color: #f8f9fa;
     min-height: 100vh;
@@ -8,26 +7,20 @@
     padding-bottom: 3rem;
 }
 
-
 .checkout-layout {
     display: flex;
     gap: 30px;
 }
 
-@media (max-width: 992px) {
-    .checkout-layout {
-        flex-direction: column;
-    }
-}
-
-/* Left Column: Forms */
 .checkout-form-section {
     flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
-/* Add spacing between cards in the form section */
-.checkout-form-section .card-kfc {
-    margin-bottom: 24px;
+.checkout-summary-section {
+    flex: 1;
 }
 
 .form-title {
@@ -36,65 +29,92 @@
     margin-bottom: 20px;
     display: flex;
     align-items: center;
+    gap: 10px;
     color: #202124;
 }
 
 .form-title i {
-    margin-right: 10px;
     color: #e4002b;
 }
 
-.payment-methods {
+/* Clean Selectable Options */
+.checkout-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.checkout-option {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-}
-
-.payment-option {
-    display: flex;
     align-items: center;
     padding: 15px;
-    border: 1px solid #dadce0;
+    border: 1px solid #ddd;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s;
-}
-
-.payment-option:hover {
-    background-color: #fce8e8;
-    border-color: #e4002b;
-}
-
-.payment-option.selected {
-    border-color: #e4002b;
-    background-color: #fff0f0;
-    box-shadow: 0 2px 8px rgba(228, 0, 43, 0.1);
-}
-
-.payment-radio {
-    margin-right: 15px;
-    accent-color: #e4002b;
-    width: 20px;
-    height: 20px;
-}
-
-.payment-icon {
-    font-size: 1.5rem;
-    margin-right: 15px;
-    color: #5f6368;
-    width: 30px;
+    background: #fff;
+    transition: 0.2s;
     text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.payment-label {
-    font-weight: 600;
-    color: #202124;
-    flex: 1;
+.checkout-option:hover {
+    border-color: #e4002b;
 }
 
-/* Right Column: Order Summary */
-.checkout-summary-section {
-    flex: 1;
+.checkout-option.selected {
+    border: 2px solid #e4002b;
+    background: #fff5f5;
+    color: #e4002b;
+}
+
+.checkout-option i {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    color: #5f6368;
+}
+
+.checkout-option.selected i {
+    color: #e4002b;
+}
+
+.checkout-option span {
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.checkout-option small {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Selection Indicator */
+.selection-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #e4002b;
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 0 0 0 6px;
+    font-size: 0.8rem;
+}
+
+/* Payment Balance Adjustments */
+.payment-methods.checkout-options-grid {
+    grid-template-columns: 1fr;
+    /* Rows for payment look better */
+}
+
+.payment-methods .checkout-option {
+    flex-direction: row;
+    gap: 15px;
+    padding: 12px 20px;
+}
+
+.payment-methods .checkout-option i {
+    margin-bottom: 0;
 }
 
 .summary-items {
@@ -112,10 +132,45 @@
 
 .item-name-qty {
     display: flex;
+    gap: 8px;
 }
 
 .item-qty {
     font-weight: 700;
-    margin-right: 8px;
     color: #e4002b;
+}
+
+/* Sidebar sticky */
+.checkout-summary-sidebar {
+    position: sticky;
+    top: 120px;
+}
+
+/* Custom summary title */
+.summary-title {
+    font-size: 1.2rem !important;
+    margin-bottom: 15px !important;
+}
+
+/* Divider refinements */
+.summary-divider {
+    margin: 15px 0;
+    border-top: 1px solid #eee;
+}
+
+.summary-divider.thick {
+    border-top-width: 2px;
+}
+
+/* Coupon button */
+.btn-apply-coupon {
+    height: 52px;
+    border-radius: 8px !important;
+}
+
+/* Store pickup hint */
+.store-pickup-hint {
+    display: block;
+    margin-top: -10px;
+    margin-bottom: 15px;
 }
