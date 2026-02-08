@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../authSlice';
 import '../../auth.css'
-import './register.css'
+import './Register.css'
 import signinImg from '../../../../assets/images/common/auth-bg.jpg'
 import { FcGoogle } from 'react-icons/fc';
 import Button from '../../../../components/Button';
