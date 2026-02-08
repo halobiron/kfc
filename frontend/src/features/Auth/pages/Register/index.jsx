@@ -5,8 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginStart, loginSuccess, loginFailure } from '../../authSlice';
-import authApi from '../../../../api/authApi';
+import { registerUser } from '../../authSlice';
 import '../../auth.css'
 import './register.css'
 import signinImg from '../../../../assets/images/common/auth-bg.jpg'
@@ -49,7 +48,6 @@ const Register = () => {
         }),
         onSubmit: async (values) => {
             try {
-                dispatch(loginStart());
                 const registerData = {
                     name: `${values.lastName} ${values.firstName}`,
                     email: values.email,
@@ -57,23 +55,15 @@ const Register = () => {
                     password: values.password,
                     confirmPassword: values.confirmPassword
                 };
-                const response = await authApi.register(registerData);
-                if (response.data.status) {
-                    const userData = {
-                        ...response.data.user,
-                        token: response.data.token
-                    };
-                    dispatch(loginSuccess(userData));
+                const resultAction = await dispatch(registerUser(registerData));
+                if (registerUser.fulfilled.match(resultAction)) {
                     toast.success('Đăng ký thành công!');
                     navigate('/');
                 } else {
-                    dispatch(loginFailure(response.data.message));
-                    toast.error(response.data.message);
+                    toast.error(resultAction.payload || 'Đăng ký thất bại');
                 }
             } catch (error) {
-                const message = error.response?.data?.message || 'Đăng ký thất bại';
-                dispatch(loginFailure(message));
-                toast.error(message);
+                toast.error('Đăng ký thất bại');
             }
         }
     })

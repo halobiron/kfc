@@ -5,8 +5,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginStart, loginSuccess, loginFailure } from '../../authSlice';
-import authApi from '../../../../api/authApi';
+import { loginUser, loginGoogleUser } from '../../authSlice';
 import '../../auth.css'
 import './login.css'
 import signinImg from '../../../../assets/images/common/auth-bg.jpg'
@@ -29,36 +28,20 @@ const Login = () => {
         }
     }, [isAuthenticated, navigate, from]);
 
-    const handleLoginResponse = (response) => {
-        if (response.data.status) {
-            const userData = {
-                ...response.data.user,
-                token: response.data.token
-            };
-            dispatch(loginSuccess(userData));
-            toast.success('Đăng nhập thành công!');
-        } else {
-            dispatch(loginFailure(response.data.message));
-            toast.error(response.data.message);
-        }
-    };
-
     const handleGoogleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             try {
-                dispatch(loginStart());
-                const response = await authApi.googleLogin({
-                    token: tokenResponse.access_token
-                });
-                handleLoginResponse(response);
+                const resultAction = await dispatch(loginGoogleUser(tokenResponse.access_token));
+                if (loginGoogleUser.fulfilled.match(resultAction)) {
+                    toast.success('Đăng nhập thành công!');
+                } else {
+                    toast.error(resultAction.payload || 'Đăng nhập Google thất bại');
+                }
             } catch (error) {
-                const message = error.response?.data?.message || 'Đăng nhập Google thất bại';
-                dispatch(loginFailure(message));
-                toast.error(message);
+                toast.error('Đăng nhập Google thất bại');
             }
         },
         onError: () => {
-            dispatch(loginFailure('Đăng nhập Google thất bại'));
             toast.error('Đăng nhập Google thất bại');
         }
     });
@@ -74,13 +57,14 @@ const Login = () => {
         }),
         onSubmit: async (values) => {
             try {
-                dispatch(loginStart());
-                const response = await authApi.login(values);
-                handleLoginResponse(response);
+                const resultAction = await dispatch(loginUser(values));
+                if (loginUser.fulfilled.match(resultAction)) {
+                    toast.success('Đăng nhập thành công!');
+                } else {
+                    toast.error(resultAction.payload || 'Đăng nhập thất bại');
+                }
             } catch (error) {
-                const message = error.response?.data?.message || 'Đăng nhập thất bại';
-                dispatch(loginFailure(message));
-                toast.error(message);
+                toast.error('Đăng nhập thất bại');
             }
         }
     })
