@@ -10,8 +10,8 @@ import PaymentMethod from '../../components/PaymentMethod';
 import OrderSummary from '../../components/OrderSummary';
 
 import './Checkout.css';
-import { getAllCoupons } from '../../couponSlice';
-import { clearCart } from '../../cartSlice';
+import { getAllCoupons, selectCoupons } from '../../couponSlice';
+import { clearCart, selectCartItems, selectCartTotalPrice } from '../../cartSlice';
 import { formatCurrency } from '../../../../utils/formatters';
 import { calculateDeliveryFee } from '../../../../utils/shipping';
 import { getStoresWithDistance } from '../../../../utils/geoUtils';
@@ -22,8 +22,8 @@ import useAddressSelection from '../../../../hooks/useAddressSelection';
 const Checkout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { coupons } = useSelector((state) => state.coupons);
-    const { items: cartItems } = useSelector((state) => state.cart);
+    const coupons = useSelector(selectCoupons);
+    const cartItems = useSelector(selectCartItems);
 
     // Use custom hooks for API data
     const { profile, addresses: savedAddresses } = useUserProfile();
@@ -70,7 +70,7 @@ const Checkout = () => {
     const [appliedCoupon, setAppliedCoupon] = useState(null);
     const [couponError, setCouponError] = useState('');
 
-    const subtotal = useMemo(() => cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0), [cartItems]);
+    const subtotal = useSelector(selectCartTotalPrice);
     const deliveryFee = useMemo(
         () => calculateDeliveryFee({ subtotal, deliveryType, config: shippingConfig }),
         [deliveryType, subtotal, shippingConfig]

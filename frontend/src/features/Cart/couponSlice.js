@@ -4,17 +4,25 @@ import axiosClient from '../../api/axiosClient';
 // Async Thunks
 export const getAllCoupons = createAsyncThunk(
     'coupons/getAllCoupons',
-    async () => {
-        const response = await axiosClient.get('/coupons');
-        return response.data.data;
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axiosClient.get('/coupons');
+            return response.data.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Không thể tải danh sách mã giảm giá');
+        }
     }
 );
 
 export const getCouponByCode = createAsyncThunk(
     'coupons/getCouponByCode',
-    async (code) => {
-        const response = await axiosClient.get(`/coupon/code/${code}`);
-        return response.data.data;
+    async (code, { rejectWithValue }) => {
+        try {
+            const response = await axiosClient.get(`/coupon/code/${code}`);
+            return response.data.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Mã giảm giá không hợp lệ hoặc đã hết hạn');
+        }
     }
 );
 
@@ -29,6 +37,10 @@ const couponSlice = createSlice({
     reducers: {
         clearSelectedCoupon: (state) => {
             state.selectedCoupon = null;
+            state.error = null;
+        },
+        clearError: (state) => {
+            state.error = null;
         }
     },
     extraReducers: (builder) => {
@@ -43,7 +55,7 @@ const couponSlice = createSlice({
             })
             .addCase(getAllCoupons.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.payload || action.error.message;
             })
             .addCase(getCouponByCode.pending, (state) => {
                 state.loading = true;
@@ -55,10 +67,17 @@ const couponSlice = createSlice({
             })
             .addCase(getCouponByCode.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.payload || action.error.message;
             });
     },
 });
 
-export const { clearSelectedCoupon } = couponSlice.actions;
+export const { clearSelectedCoupon, clearError } = couponSlice.actions;
+
+// Selectors
+export const selectCoupons = (state) => state.coupons.coupons;
+export const selectSelectedCoupon = (state) => state.coupons.selectedCoupon;
+export const selectCouponLoading = (state) => state.coupons.loading;
+export const selectCouponError = (state) => state.coupons.error;
+
 export default couponSlice.reducer;

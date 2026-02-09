@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { selectCartTotalQuantity } from '../../features/Cart/cartSlice';
 import logo from '../../assets/images/logos/kfc-logo.png';
 import { BsGeoAlt, BsPersonCircle, BsShop, BsTruck, BsBag } from 'react-icons/bs';
 
@@ -9,7 +10,7 @@ import Button from '../Button';
 
 const Header = () => {
 
-  const cartQuantity = useSelector(state => state.cart.totalQuantity);
+  const cartQuantity = useSelector(selectCartTotalQuantity);
   const navigate = useNavigate();
   const [isAnimating, setIsAnimating] = useState(false);
   const [prevQuantity, setPrevQuantity] = useState(cartQuantity);

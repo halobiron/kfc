@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, updateQuantity } from '../../cartSlice';
+import { removeFromCart, updateQuantity, selectCartItems, selectCartTotalPrice } from '../../cartSlice';
 import { formatCurrency } from '../../../../utils/formatters';
 import { calculateDeliveryFee } from '../../../../utils/shipping';
 import useShippingConfig from '../../../../hooks/useShippingConfig';
@@ -19,7 +19,8 @@ const Cart = () => {
     const dispatch = useDispatch();
 
     // Get cart data from Redux
-    const { items: cartItems, totalPrice: subtotal } = useSelector((state) => state.cart);
+    const cartItems = useSelector(selectCartItems);
+    const subtotal = useSelector(selectCartTotalPrice);
 
     // Use custom hook for shipping config
     const { config: shippingConfig } = useShippingConfig();
