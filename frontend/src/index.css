@@ -156,3 +156,8 @@ h6 {
 .kfc-price.text-success {
   color: #198754 !important;
 }
+
+.no-padding-y {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}

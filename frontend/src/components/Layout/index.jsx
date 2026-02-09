@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
             <Header />
             <main className={`main-content ${shouldShowPageWrapper ? 'kfc-page-wrapper' : ''} ${pageClass}`}>
                 {shouldShowContainer ? (
-                    <div className={`container kfc-container ${isAuthPage ? 'p-0' : ''}`}>
+                    <div className={`container kfc-container ${isAuthPage ? 'no-padding-y' : ''}`}>
                         {children}
                     </div>
                 ) : (

@@ -119,7 +119,7 @@ const Product = () => {
 
             {/* Products Sections */}
 
-            <div className="container kfc-container">
+            <div className="container kfc-container no-padding-y">
                 {loading ? (
                     <div className="product-loading">
                         <div className="spinner-border kfc-spinner" role="status">
