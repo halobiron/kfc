@@ -73,15 +73,6 @@
     font-size: 0.9rem;
 }
 
-.checkout-option small {
-    font-size: 0.8rem;
-    color: #666;
-}
-
-.checkout-option.selected small {
-    color: #e4002b;
-}
-
 /* Responsive */
 @media (max-width: 992px) {
     .checkout-layout {
@@ -90,11 +81,5 @@
 
     .checkout-summary-section {
         order: -1;
-    }
-}
-
-@media (max-width: 576px) {
-    .checkout-options-grid {
-        grid-template-columns: 1fr;
     }
 }
