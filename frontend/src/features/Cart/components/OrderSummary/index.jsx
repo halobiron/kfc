@@ -34,7 +34,7 @@ const OrderSummary = ({
                             <span className="item-qty">{item.quantity}x</span>
                             <span>{item.title || item.name}</span>
                         </div>
-                        <span>{formatCurrency(item.price * item.quantity)}</span>
+                        <span className="kfc-price">{formatCurrency(item.price * item.quantity)}</span>
                     </div>
                 ))}
             </div>
@@ -76,16 +76,18 @@ const OrderSummary = ({
 
             <div className="d-flex justify-content-between mb-2">
                 <span className="text-muted">Tạm tính</span>
-                <span className="fw-bold">{formatCurrency(subtotal)}</span>
+                <span className="kfc-price">{formatCurrency(subtotal)}</span>
             </div>
             <div className="d-flex justify-content-between mb-2">
                 <span className="text-muted">Phí giao hàng</span>
                 <div className="text-end">
                     {deliveryType === 'pickup' ? (
-                        <span className="text-success fw-bold">Miễn phí <i className="bi bi-check-circle-fill"></i></span>
+                        <span className="kfc-price text-success">Miễn phí</span>
                     ) : (
                         <>
-                            {deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}
+                            <span className={`kfc-price ${deliveryFee === 0 ? "text-success" : ""}`}>
+                                {deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}
+                            </span>
                             {appliedCoupon?.type === 'shipping' && <div className="text-success small fst-italic">(Đã giảm phí ship)</div>}
                         </>
                     )}
@@ -94,7 +96,7 @@ const OrderSummary = ({
             {discountAmount > 0 && (
                 <div className="d-flex justify-content-between mb-2 text-danger">
                     <span><i className="bi bi-tag-fill me-1"></i>Giảm tiền</span>
-                    <span className="fw-bold">-{formatCurrency(discountAmount)}</span>
+                    <span className="kfc-price">-{formatCurrency(discountAmount)}</span>
                 </div>
             )}
 
@@ -102,7 +104,7 @@ const OrderSummary = ({
 
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <span className="fw-bold fs-5">TỔNG CỘNG</span>
-                <span className="fw-bold fs-4 text-danger">{formatCurrency(total)}</span>
+                <span className="kfc-price price-xl">{formatCurrency(total)}</span>
             </div>
 
             <Button

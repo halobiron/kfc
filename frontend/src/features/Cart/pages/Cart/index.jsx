@@ -118,7 +118,9 @@ const Cart = () => {
                                 </div>
                                 <div className="summary-row">
                                     <span>Phí giao hàng</span>
-                                    <span className="kfc-price">{deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}</span>
+                                    <span className={`kfc-price ${deliveryFee === 0 ? "text-success" : ""}`}>
+                                        {deliveryFee === 0 ? "Miễn phí" : formatCurrency(deliveryFee)}
+                                    </span>
                                 </div>
                                 {deliveryFee === 0 && (
                                     <div className="text-success small mb-2">

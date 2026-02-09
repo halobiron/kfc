@@ -16,7 +16,7 @@
 
 .item-qty {
     font-weight: 700;
-    color: #e4002b;
+    color: var(--kfc-black);
 }
 
 .summary-divider {
