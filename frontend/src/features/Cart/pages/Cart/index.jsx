@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -48,14 +48,14 @@ const Cart = () => {
     };
 
     return (
-        <div className="kfc-page-wrapper">
-            <div className="container kfc-container">
-                <div className="section-header">
-                    <h2>Giỏ Hàng Của Bạn</h2>
-                    <hr className="section-underline" />
-                </div>
+        <>
+            <div className="section-header">
+                <h2>Giỏ Hàng Của Bạn</h2>
+                <hr className="section-underline" />
+            </div>
 
-                {cartItems.length === 0 ? (
+            {
+                cartItems.length === 0 ? (
                     <EmptyState
                         title="Giỏ hàng của bạn đang trống. Hãy đặt món ngay!"
                         actionText="Bắt đầu đặt hàng"
@@ -147,9 +147,9 @@ const Cart = () => {
                             </Card>
                         </div>
                     </div>
-                )}
-            </div>
-        </div>
+                )
+            }
+        </>
     );
 };
 

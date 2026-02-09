@@ -54,57 +54,55 @@ const ProductDetail = () => {
     const categoryName = categories.find(c => c.slug === product.category)?.name || product.category;
 
     return (
-        <div className='kfc-page-wrapper'>
-            <div className="container kfc-container">
-                <div className="product-breadcrumb mb-4">
-                    <Link to="/">Trang chủ</Link> <span className="separator">/</span>
-                    <Link to="/products">Thực đơn</Link> <span className="separator">/</span>
-                    <Link to={`/products?category=${product.category}`}>
-                        {categoryName}
-                    </Link> <span className="separator">/</span>
-                    <span className="current">{product.title}</span>
-                </div>
+        <>
+            <div className="product-breadcrumb mb-4">
+                <Link to="/">Trang chủ</Link> <span className="separator">/</span>
+                <Link to="/products">Thực đơn</Link> <span className="separator">/</span>
+                <Link to={`/products?category=${product.category}`}>
+                    {categoryName}
+                </Link> <span className="separator">/</span>
+                <span className="current">{product.title}</span>
+            </div>
 
-                <div className="row g-4 justify-content-center">
-                    <div className="col-lg-7 col-md-6">
-                        <div className="product-image-container">
-                            <img src={product.productImage} alt={product.title} className="img-fluid" />
-                        </div>
+            <div className="row g-4 justify-content-center">
+                <div className="col-lg-7 col-md-6">
+                    <div className="product-image-container">
+                        <img src={product.productImage} alt={product.title} className="img-fluid" />
                     </div>
-                    <div className="col-lg-5 col-md-6">
-                        <div className="product-info-card">
-                            <div className="product-category-badge">{categoryName}</div>
-                            <h1 className="product-title">{product.title}</h1>
-                            <p className="product-description">{product.description}</p>
+                </div>
+                <div className="col-lg-5 col-md-6">
+                    <div className="product-info-card">
+                        <div className="product-category-badge">{categoryName}</div>
+                        <h1 className="product-title">{product.title}</h1>
+                        <p className="product-description">{product.description}</p>
 
-                            <div className="product-price-section">
-                                <span className="kfc-price price-xl">{formatCurrency(price)}</span>
-                            </div>
-
-                            <div className="quantity-section">
-                                <span className="section-label">Số lượng</span>
-                                <QuantityPicker
-                                    quantity={quantity}
-                                    onIncrease={handleIncrease}
-                                    onDecrease={handleDecrease}
-                                />
-                            </div>
-
-                            <Button
-                                variant="primary"
-                                onClick={handleAddToCart}
-                                fullWidth
-                                className="mt-3"
-                            >
-                                Thêm vào giỏ hàng
-                            </Button>
-
-
+                        <div className="product-price-section">
+                            <span className="kfc-price price-xl">{formatCurrency(price)}</span>
                         </div>
+
+                        <div className="quantity-section">
+                            <span className="section-label">Số lượng</span>
+                            <QuantityPicker
+                                quantity={quantity}
+                                onIncrease={handleIncrease}
+                                onDecrease={handleDecrease}
+                            />
+                        </div>
+
+                        <Button
+                            variant="primary"
+                            onClick={handleAddToCart}
+                            fullWidth
+                            className="mt-3"
+                        >
+                            Thêm vào giỏ hàng
+                        </Button>
+
+
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

@@ -87,71 +87,69 @@ const Product = () => {
 
     return (
         <AnimatedPage>
-            <div className='kfc-page-wrapper'>
-                {/* Hero Banner */}
-                <div className="product-hero">
-                    <div className="container">
-                        <h1 className="hero-title">THỰC ĐƠN</h1>
-                        <div className="title-underline"></div>
+            {/* Hero Banner */}
+            <div className="product-hero">
+                <div className="container">
+                    <h1 className="hero-title">THỰC ĐƠN</h1>
+                    <div className="title-underline"></div>
+                </div>
+            </div>
+
+            {/* Sticky Category Navigation (Matching KFC Vietnam structure) */}
+            <div className="category-wrapper">
+                <div className="container">
+                    <div className="category-nav-scroll">
+                        <ul>
+                            {categories.map(category => (
+                                <li key={category._id}>
+                                    <a
+                                        href={`#${category.slug}`}
+                                        className={activeCategory === category.slug ? 'active' : ''}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            scrollToCategory(category.slug);
+                                        }}
+                                    >
+                                        {category.name}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
+            </div>
 
-                {/* Sticky Category Navigation (Matching KFC Vietnam structure) */}
-                <div className="category-wrapper">
-                    <div className="container">
-                        <div className="category-nav-scroll">
-                            <ul>
-                                {categories.map(category => (
-                                    <li key={category._id}>
-                                        <a
-                                            href={`#${category.slug}`}
-                                            className={activeCategory === category.slug ? 'active' : ''}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                scrollToCategory(category.slug);
-                                            }}
-                                        >
-                                            {category.name}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            {/* Products Sections */}
 
-                <div className="container kfc-container">
-                    {/* Products Sections */}
-
-                    <div className="products-section">
-                        {loading ? (
-                            <div className="text-center py-5">
-                                <div className="spinner-border text-danger" role="status">
-                                    <span className="visually-hidden">Loading...</span>
-                                </div>
+            <div className="container kfc-container">
+                <div className="products-section">
+                    {loading ? (
+                        <div className="text-center py-5">
+                            <div className="spinner-border text-danger" role="status">
+                                <span className="visually-hidden">Loading...</span>
                             </div>
-                        ) : (
-                            <>
-                                {categories.map(category => {
-                                    const categoryProducts = getProductsByCategory(category.slug);
-                                    if (categoryProducts.length === 0) return null;
+                        </div>
+                    ) : (
+                        <>
+                            {categories.map(category => {
+                                const categoryProducts = getProductsByCategory(category.slug);
+                                if (categoryProducts.length === 0) return null;
 
-                                    return (
-                                        <div key={category._id} id={category.slug} className="category-section mb-5">
-                                            <h2 className="category-title">{category.name}</h2>
-                                            <div className="row">
-                                                {categoryProducts.map(product => (
-                                                    <div key={product._id} className="col-md-4 mb-4">
-                                                        <Card product={product} />
-                                                    </div>
-                                                ))}
-                                            </div>
+                                return (
+                                    <div key={category._id} id={category.slug} className="category-section mb-5">
+                                        <h2 className="category-title">{category.name}</h2>
+                                        <div className="row">
+                                            {categoryProducts.map(product => (
+                                                <div key={product._id} className="col-md-4 mb-4">
+                                                    <Card product={product} />
+                                                </div>
+                                            ))}
                                         </div>
-                                    );
-                                })}
-                            </>
-                        )}
-                    </div>
+                                    </div>
+                                );
+                            })}
+                        </>
+                    )}
                 </div>
             </div>
         </AnimatedPage>

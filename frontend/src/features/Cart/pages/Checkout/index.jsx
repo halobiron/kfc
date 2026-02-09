@@ -268,64 +268,62 @@ const Checkout = () => {
     };
 
     return (
-        <div className="kfc-page-wrapper">
-            <div className="container kfc-container">
-                <div className="section-header">
-                    <h2>Thanh Toán</h2>
-                    <hr className="section-underline" />
+        <>
+            <div className="section-header">
+                <h2>Thanh Toán</h2>
+                <hr className="section-underline" />
+            </div>
+
+            <div className="checkout-layout">
+                {/* Left Column: Information & Payment */}
+                <div className="checkout-form-section">
+                    <DeliveryMethod
+                        deliveryType={deliveryType}
+                        setDeliveryType={setDeliveryType}
+                    />
+
+                    <DeliveryInfo
+                        deliveryType={deliveryType}
+                        formData={formData}
+                        handleInputChange={handleInputChange}
+                        savedAddresses={savedAddresses}
+                        locationOptions={locationOptions}
+                        handleAddressSelect={handleAddressSelect}
+                        handleLocationSearchSelect={handleLocationSearchSelect}
+                        isResolvingLocation={isResolvingLocation}
+                        stores={stores}
+                        selectedStore={selectedStore}
+                        setSelectedStore={setSelectedStore}
+                    />
+
+                    <PaymentMethod
+                        paymentMethod={paymentMethod}
+                        setPaymentMethod={setPaymentMethod}
+                    />
                 </div>
 
-                <div className="checkout-layout">
-                    {/* Left Column: Information & Payment */}
-                    <div className="checkout-form-section">
-                        <DeliveryMethod
-                            deliveryType={deliveryType}
-                            setDeliveryType={setDeliveryType}
-                        />
-
-                        <DeliveryInfo
-                            deliveryType={deliveryType}
-                            formData={formData}
-                            handleInputChange={handleInputChange}
-                            savedAddresses={savedAddresses}
-                            locationOptions={locationOptions}
-                            handleAddressSelect={handleAddressSelect}
-                            handleLocationSearchSelect={handleLocationSearchSelect}
-                            isResolvingLocation={isResolvingLocation}
-                            stores={stores}
-                            selectedStore={selectedStore}
-                            setSelectedStore={setSelectedStore}
-                        />
-
-                        <PaymentMethod
-                            paymentMethod={paymentMethod}
-                            setPaymentMethod={setPaymentMethod}
-                        />
-                    </div>
-
-                    {/* Right Column: Order Summary */}
-                    <div className="checkout-summary-section">
-                        <OrderSummary
-                            cartItems={cartItems}
-                            formatCurrency={formatCurrency}
-                            couponCode={couponCode}
-                            setCouponCode={setCouponCode}
-                            handleApplyCoupon={handleApplyCoupon}
-                            couponError={couponError}
-                            appliedCoupon={appliedCoupon}
-                            removeCoupon={removeCoupon}
-                            subtotal={subtotal}
-                            deliveryFee={deliveryFee}
-                            discountAmount={discountAmount}
-                            total={total}
-                            isSubmitting={isSubmitting}
-                            handlePlaceOrder={handlePlaceOrder}
-                            deliveryType={deliveryType}
-                        />
-                    </div>
+                {/* Right Column: Order Summary */}
+                <div className="checkout-summary-section">
+                    <OrderSummary
+                        cartItems={cartItems}
+                        formatCurrency={formatCurrency}
+                        couponCode={couponCode}
+                        setCouponCode={setCouponCode}
+                        handleApplyCoupon={handleApplyCoupon}
+                        couponError={couponError}
+                        appliedCoupon={appliedCoupon}
+                        removeCoupon={removeCoupon}
+                        subtotal={subtotal}
+                        deliveryFee={deliveryFee}
+                        discountAmount={discountAmount}
+                        total={total}
+                        isSubmitting={isSubmitting}
+                        handlePlaceOrder={handlePlaceOrder}
+                        deliveryType={deliveryType}
+                    />
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

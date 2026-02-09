@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import storeApi from '../../../../api/storeApi';
 import CustomSelect from '../../../../components/CustomSelect';
 import { getStoresWithDistance, geocodeAddress } from '../../../../utils/geoUtils';
