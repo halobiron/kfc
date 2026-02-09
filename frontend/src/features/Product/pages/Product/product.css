@@ -72,3 +72,12 @@
         top: 60px;
     }
 }
+
+.product-loading {
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.kfc-spinner {
+    color: var(--kfc-red);
+}

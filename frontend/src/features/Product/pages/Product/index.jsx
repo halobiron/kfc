@@ -90,7 +90,6 @@ const Product = () => {
             <div className="product-hero">
                 <div className="container">
                     <h1 className="hero-title">THỰC ĐƠN</h1>
-                    <div className="title-underline"></div>
                 </div>
             </div>
 
@@ -121,35 +120,33 @@ const Product = () => {
             {/* Products Sections */}
 
             <div className="container kfc-container">
-                <div className="products-section">
-                    {loading ? (
-                        <div className="text-center py-5">
-                            <div className="spinner-border text-danger" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </div>
+                {loading ? (
+                    <div className="product-loading">
+                        <div className="spinner-border kfc-spinner" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
-                    ) : (
-                        <>
-                            {categories.map(category => {
-                                const categoryProducts = getProductsByCategory(category.slug);
-                                if (categoryProducts.length === 0) return null;
+                    </div>
+                ) : (
+                    <>
+                        {categories.map(category => {
+                            const categoryProducts = getProductsByCategory(category.slug);
+                            if (categoryProducts.length === 0) return null;
 
-                                return (
-                                    <div key={category._id} id={category.slug} className="category-section mb-5">
-                                        <h2 className="category-title">{category.name}</h2>
-                                        <div className="row">
-                                            {categoryProducts.map(product => (
-                                                <div key={product._id} className="col-md-4 mb-4">
-                                                    <Card product={product} />
-                                                </div>
-                                            ))}
-                                        </div>
+                            return (
+                                <div key={category._id} id={category.slug} className="category-section">
+                                    <h2 className="category-title">{category.name}</h2>
+                                    <div className="row">
+                                        {categoryProducts.map(product => (
+                                            <div key={product._id} className="col-md-4 product-card-wrapper">
+                                                <Card product={product} />
+                                            </div>
+                                        ))}
                                     </div>
-                                );
-                            })}
-                        </>
-                    )}
-                </div>
+                                </div>
+                            );
+                        })}
+                    </>
+                )}
             </div>
         </>
     );
