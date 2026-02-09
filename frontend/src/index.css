@@ -16,7 +16,6 @@
 
 .kfc-page-wrapper {
   background-color: var(--kfc-gray-bg);
-  min-height: 100vh;
 }
 
 .kfc-container {

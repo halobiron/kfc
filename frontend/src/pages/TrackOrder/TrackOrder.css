@@ -1,17 +1,9 @@
-/* Track Order Page - Minimalist & Semantic */
-.track-order-wrapper {
+/* Track Order Page - Restored Background */
+.main-content.page-track-order {
     background: url('https://static.kfcvietnam.com.vn/images/web/store-selection/lg/localization-bg.jpg?v=5.0') no-repeat center center fixed;
     background-size: cover;
     display: flex;
     align-items: center;
-    padding: 3rem 0;
-}
-
-.track-order-container {
-    width: 100%;
-    padding: 0 15px;
-    margin: 0 auto;
-    max-width: 1320px;
 }
 
 .track-order-row {
