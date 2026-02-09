@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import Card from '../../components/ProductCard';
 
-import './product.css';
-import AnimatedPage from '../../../../components/AnimatedPage';
+import './Product.css';
 import { getAllProducts } from '../../productSlice';
 import { getAllCategories } from '../../categorySlice';
 
@@ -86,7 +85,7 @@ const Product = () => {
     };
 
     return (
-        <AnimatedPage>
+        <>
             {/* Hero Banner */}
             <div className="product-hero">
                 <div className="container">
@@ -152,7 +151,7 @@ const Product = () => {
                     )}
                 </div>
             </div>
-        </AnimatedPage>
+        </>
     );
 }
 
