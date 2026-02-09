@@ -11,6 +11,18 @@
 .success-icon {
     font-size: 5rem;
     color: #198754;
+    display: block;
+    animation: zoomIn 0.5s ease-out forwards;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
 }
 
 .order-info-box {

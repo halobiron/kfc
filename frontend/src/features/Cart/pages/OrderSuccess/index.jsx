@@ -2,22 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { motion } from 'framer-motion';
 import axiosClient from '../../../../api/axiosClient';
 import { clearCart } from '../../cartSlice';
 import Card from '../../../../components/Card';
 import Button from '../../../../components/Button';
 import './OrderSuccess.css';
-
-const iconAnimation = {
-    initial: { scale: 0 },
-    animate: { scale: 1 },
-    transition: {
-        type: "spring",
-        stiffness: 260,
-        damping: 20
-    }
-};
 
 const OrderSuccess = () => {
     const [searchParams] = useSearchParams();
@@ -33,10 +22,7 @@ const OrderSuccess = () => {
     };
 
     useEffect(() => {
-        // Scroll to top when loaded
         window.scrollTo(0, 0);
-
-        // Clear cart to ensure it's empty after success
         dispatch(clearCart());
 
         const fetchOrder = async () => {
@@ -55,10 +41,7 @@ const OrderSuccess = () => {
     return (
         <>
             <Card className="order-success-card">
-                <motion.i
-                    {...iconAnimation}
-                    className="bi bi-check-circle-fill success-icon"
-                ></motion.i>
+                <i className="bi bi-check-circle-fill success-icon"></i>
 
                 <h2>ĐẶT HÀNG THÀNH CÔNG!</h2>
 
