@@ -1,21 +1,16 @@
 .order-success-card {
     max-width: 600px;
     margin: 0 auto;
-    padding: 3rem 2rem;
     text-align: center;
 }
 
 .order-success-card.card-kfc {
     cursor: default;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    transform: none !important;
 }
 
 .success-icon {
     font-size: 5rem;
     color: #198754;
-    margin-bottom: 1.5rem;
-    display: inline-block;
 }
 
 .order-info-box {
@@ -24,13 +19,6 @@
     padding: 1.5rem;
     background: var(--kfc-gray-bg);
     border-radius: 1rem;
-}
-
-.success-message {
-    color: var(--kfc-text-gray);
-    line-height: 1.6;
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
 }
 
 .order-summary-grid {
@@ -64,13 +52,6 @@
     color: var(--kfc-text-gray);
 }
 
-.detail-label {
-    font-weight: 700;
-    font-size: .75rem;
-    text-transform: uppercase;
-    margin-bottom: .5rem;
-}
-
 .detail-value {
     font: 700 1.25rem var(--font-family);
     color: var(--kfc-black);
@@ -92,7 +73,6 @@
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-top: 2rem;
 }
 
 @media (max-width: 576px) {
@@ -102,9 +82,5 @@
 
     .order-summary-grid {
         grid-template-columns: 1fr;
-    }
-
-    .action-buttons {
-        flex-direction: column;
     }
 }

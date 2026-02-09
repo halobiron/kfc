@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
-import AnimatedPage from '../../../../components/AnimatedPage';
 import axiosClient from '../../../../api/axiosClient';
 import { clearCart } from '../../cartSlice';
 import Card from '../../../../components/Card';
@@ -54,17 +53,17 @@ const OrderSuccess = () => {
     }, [orderId, status, dispatch]);
 
     return (
-        <AnimatedPage>
+        <>
             <Card className="order-success-card">
                 <motion.i
                     {...iconAnimation}
                     className="bi bi-check-circle-fill success-icon"
                 ></motion.i>
 
-                <h2 className="success-title">ĐẶT HÀNG THÀNH CÔNG!</h2>
+                <h2>ĐẶT HÀNG THÀNH CÔNG!</h2>
 
                 <div className="order-info-box">
-                    <p className="success-message">
+                    <p>
                         Đơn hàng đã được tiếp nhận.<br />
                         Chuẩn bị thưởng thức <strong>"Vị ngon trên từng ngón tay"</strong> nhé!
                     </p>
@@ -123,7 +122,7 @@ const OrderSuccess = () => {
                     )}
                 </div>
             </Card>
-        </AnimatedPage>
+        </>
     );
 };
 
