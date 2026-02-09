@@ -1,6 +1,5 @@
 import React from 'react';
 import Card from '../../../../components/Card';
-import './DeliveryMethod.css';
 
 const DeliveryMethod = ({ deliveryType, setDeliveryType }) => {
     return (

@@ -1,8 +1,6 @@
-/* CSS for OrderSummary component */
 .checkout-summary-sidebar {
     position: sticky;
     top: 120px;
-    /* transition: top 0.3s; */
 }
 
 .summary-item {
@@ -24,13 +22,10 @@
 .summary-divider {
     margin: 15px 0;
     border-top: 1px solid #eee;
-    height: auto;
-    background-color: transparent;
 }
 
 .summary-divider.thick {
     border-top-width: 2px;
-    background-color: transparent;
 }
 
 .btn-apply-coupon {

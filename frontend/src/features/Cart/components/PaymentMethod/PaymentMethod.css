@@ -1,5 +1,4 @@
-/* CSS for PaymentMethod component */
-.checkout-options-grid.payment-methods {
+.payment-methods {
     grid-template-columns: 1fr;
 }
 
