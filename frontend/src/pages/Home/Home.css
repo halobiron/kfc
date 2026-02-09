@@ -14,7 +14,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem !important;
+    padding: 1rem !important;
     height: 100%;
 }
 
@@ -29,13 +29,6 @@
     justify-content: center;
     color: white;
     font-size: 28px;
-}
-
-
-.category-title {
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin: 0;
 }
 
 .home-product-section {

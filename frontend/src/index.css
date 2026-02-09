@@ -22,7 +22,8 @@
 .kfc-container {
   padding-top: 3rem;
   padding-bottom: 3rem;
-  min-width: 1200px;
+  width: 100%;
+  max-width: 1300px;
 }
 
 body {

@@ -40,7 +40,7 @@ const Home = () => {
                     <div className="category-icon">
                       <i className={`bi ${cat.icon}`}></i>
                     </div>
-                    <h5 className="category-title">{cat.name}</h5>
+                    <h4 className="category-title">{cat.name}</h4>
                   </Card>
                 </Link>
               </div>

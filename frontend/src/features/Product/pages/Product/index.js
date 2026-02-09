@@ -138,7 +138,7 @@ const Product = () => {
 
                                     return (
                                         <div key={category._id} id={category.slug} className="category-section mb-5">
-                                            <h2 className="category-title mb-4">{category.name}</h2>
+                                            <h2 className="category-title">{category.name}</h2>
                                             <div className="row">
                                                 {categoryProducts.map(product => (
                                                     <div key={product._id} className="col-md-4 mb-4">

@@ -1,0 +1,16 @@
+/* CSS for PaymentMethod component */
+.checkout-options-grid.payment-methods {
+    grid-template-columns: 1fr;
+}
+
+.payment-methods .checkout-option {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 15px;
+    padding: 12px 20px;
+}
+
+.payment-methods .checkout-option i {
+    margin-bottom: 0;
+}

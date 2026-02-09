@@ -3,6 +3,10 @@
     background: white;
 }
 
+.kfc-header .container {
+    max-width: 1320px;
+}
+
 /* Main Navigation */
 .main-nav {
     border-bottom: 1px solid #f0f0f0;
