@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 12px 15px;
+    padding: 12px 2.5rem 12px 15px;
     font-size: 1rem;
     color: var(--kfc-black);
     background: #fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") no-repeat right 1rem center / 16px 12px;
@@ -25,6 +25,11 @@
     border-color: var(--kfc-red);
     box-shadow: 0 0 0 2px rgba(228, 0, 43, 0.15);
     outline: none;
+}
+
+.select-trigger span {
+    flex: 1;
+    min-width: 0;
 }
 
 .select-dropdown {
