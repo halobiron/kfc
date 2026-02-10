@@ -1,7 +1,9 @@
+import './PrivacyPolicy.css';
+
 const PrivacyPolicy = () => {
     return (
         <>
-            <h1 className="text-center">CHÍNH SÁCH BẢO MẬT THÔNG TIN</h1>
+            <h1 className="policy-title">CHÍNH SÁCH BẢO MẬT THÔNG TIN</h1>
 
             <section className="policy-section">
                 <h2>A. ĐỐI VỚI WEBSITE</h2>
