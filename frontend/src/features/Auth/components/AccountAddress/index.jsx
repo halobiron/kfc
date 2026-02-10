@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import userApi from '../../../../api/userApi';
 import useUserProfile from '../../../../hooks/useUserProfile';
@@ -9,13 +9,12 @@ import AddressModal from '../AddressModal';
 import './AccountAddress.css';
 
 const AccountAddress = () => {
-    const [loadingAddresses, setLoadingAddresses] = useState(false);
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [editingAddressData, setEditingAddressData] = useState(null); // stores the address object
     const [editingAddressIndex, setEditingAddressIndex] = useState(null); // stores the index
 
     // Use custom hook for user profile
-    const { addresses, refetch } = useUserProfile();
+    const { addresses, refetch, isLoading: loadingAddresses } = useUserProfile();
 
     const handleAddAddress = () => {
         setEditingAddressData(null);

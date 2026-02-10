@@ -14,7 +14,7 @@ const AccountProfile = () => {
     const { user } = useSelector(state => state.auth);
 
     // Use custom hook for user profile
-    const { profile, refetch } = useUserProfile();
+    const { profile } = useUserProfile();
 
     const [userInfo, setUserInfo] = useState({
         name: user?.name || '',
