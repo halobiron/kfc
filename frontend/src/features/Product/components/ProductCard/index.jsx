@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { addToCart } from '../../../Cart/cartSlice';
 import Button from '../../../../components/Button';
 import { formatCurrency } from '../../../../utils/formatters';
-import './card.css';
+import './ProductCard.css';
 
 const Card = ({ product }) => {
     const dispatch = useDispatch();
@@ -20,13 +20,11 @@ const Card = ({ product }) => {
             >
                 <img src={product.productImage} className="product-image" alt={product.title} />
                 <div className="card-body">
-                    {/* Title and Price on same row */}
                     <div className="title-price-row">
                         <h5 className="product-title">{product.title}</h5>
                         <span className="kfc-price price-xl">{formatCurrency(product.price)}</span>
                     </div>
                     <p className="product-description">{product.description}</p>
-                    {/* Single Add button */}
                     <Button
                         component={motion.button}
                         variant="primary"

@@ -40,7 +40,7 @@ const ProductDetail = () => {
 
     if (loading) {
         return (
-            <div className="product-status-message">
+            <div>
                 <div className="spinner-border text-danger" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </div>
@@ -49,7 +49,7 @@ const ProductDetail = () => {
     }
 
     if (!product) {
-        return <div className="product-status-message">Không tìm thấy sản phẩm</div>;
+        return <div>Không tìm thấy sản phẩm</div>;
     }
 
     const price = product.price || 0;
@@ -76,7 +76,7 @@ const ProductDetail = () => {
                     <Card className="product-info-wrapper">
                         <div className="product-category-badge">{categoryName}</div>
                         <h1 className="product-title">{product.title}</h1>
-                        <p className="product-description">{product.description}</p>
+                        <p>{product.description}</p>
 
                         <div className="product-price-section">
                             <span className="kfc-price price-xl">{formatCurrency(price)}</span>
@@ -95,7 +95,6 @@ const ProductDetail = () => {
                             variant="primary"
                             onClick={handleAddToCart}
                             fullWidth
-                            className="add-to-cart-btn"
                         >
                             Thêm vào giỏ hàng
                         </Button>
