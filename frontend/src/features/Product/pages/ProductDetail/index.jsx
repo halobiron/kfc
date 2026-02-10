@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import './product-detail.css';
+import './ProductDetail.css';
 import { formatCurrency } from '../../../../utils/formatters';
 import QuantityPicker from '../../../../components/QuantityPicker/QuantityPicker';
 import Button from '../../../../components/Button';
@@ -38,7 +38,7 @@ const ProductDetail = () => {
 
     if (loading) {
         return (
-            <div className="text-center py-5">
+            <div className="product-status-message">
                 <div className="spinner-border text-danger" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </div>
@@ -47,7 +47,7 @@ const ProductDetail = () => {
     }
 
     if (!product) {
-        return <div className="text-center py-5">Không tìm thấy sản phẩm</div>;
+        return <div className="product-status-message">Không tìm thấy sản phẩm</div>;
     }
 
     const price = product.price || 0;
@@ -55,7 +55,7 @@ const ProductDetail = () => {
 
     return (
         <>
-            <div className="product-breadcrumb mb-4">
+            <div className="product-breadcrumb">
                 <Link to="/">Trang chủ</Link> <span className="separator">/</span>
                 <Link to="/products">Thực đơn</Link> <span className="separator">/</span>
                 <Link to={`/products?category=${product.category}`}>
@@ -67,7 +67,7 @@ const ProductDetail = () => {
             <div className="row g-4 justify-content-center">
                 <div className="col-lg-7 col-md-6">
                     <div className="product-image-container">
-                        <img src={product.productImage} alt={product.title} className="img-fluid" />
+                        <img src={product.productImage} alt={product.title} />
                     </div>
                 </div>
                 <div className="col-lg-5 col-md-6">
@@ -93,7 +93,7 @@ const ProductDetail = () => {
                             variant="primary"
                             onClick={handleAddToCart}
                             fullWidth
-                            className="mt-3"
+                            className="add-to-cart-btn"
                         >
                             Thêm vào giỏ hàng
                         </Button>
