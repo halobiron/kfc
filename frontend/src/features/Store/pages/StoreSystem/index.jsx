@@ -40,23 +40,8 @@ const SERVICE_MAP = {
 
 const createKfcIcon = (isActive, index) => L.divIcon({
     className: 'custom-kfc-marker',
-    html: `<div class="kfc-sprite" style="
-            width: 50px;
-            height: 65px;
-            background-position: ${isActive ? '-120px -50px' : '-70px -50px'};
-            transform: scale(1.1);
-            transform-origin: bottom center;
-            position: relative;
-        ">
-            ${!isActive ? `<span style="
-                color: #fff;
-                font-weight: bold;
-                font-size: 14px;
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                font-family: Arial, sans-serif;
-            ">${index}</span>` : ''}
+    html: `<div class="kfc-sprite custom-kfc-marker-inner ${isActive ? 'active' : ''}">
+            ${!isActive ? `<span class="marker-number">${index}</span>` : ''}
         </div>`,
     iconSize: [50, 65],
     iconAnchor: [25, 65],
@@ -309,7 +294,7 @@ const StoreSystem = () => {
 
                         {sortedStores.length === 0 && (
                             <div className="no-results">
-                                <i className="bi bi-search" style={{ fontSize: '2rem', opacity: 0.3 }}></i>
+                                <i className="bi bi-search no-results-icon"></i>
                                 <p>Không tìm thấy cửa hàng nào</p>
                             </div>
                         )}
@@ -322,7 +307,7 @@ const StoreSystem = () => {
                 <MapContainer
                     center={[mapCenter.lat, mapCenter.lng]}
                     zoom={15}
-                    style={{ height: '100%', width: '100%' }}
+                    className="map-container-full"
                     scrollWheelZoom={true}
                 >
                     <TileLayer
