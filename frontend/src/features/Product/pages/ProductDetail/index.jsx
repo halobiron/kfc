@@ -10,6 +10,8 @@ import { getProductById } from '../../productSlice';
 import { getAllCategories } from '../../categorySlice';
 import { useParams, Link } from 'react-router-dom';
 
+import Card from '../../../../components/Card';
+
 const ProductDetail = () => {
     const { id } = useParams();
     const [quantity, setQuantity] = useState(1);
@@ -54,7 +56,7 @@ const ProductDetail = () => {
     const categoryName = categories.find(c => c.slug === product.category)?.name || product.category;
 
     return (
-        <>
+        <div className="product-detail-page">
             <div className="product-breadcrumb">
                 <Link to="/">Trang chủ</Link> <span className="separator">/</span>
                 <Link to="/products">Thực đơn</Link> <span className="separator">/</span>
@@ -66,12 +68,12 @@ const ProductDetail = () => {
 
             <div className="row g-4 justify-content-center">
                 <div className="col-lg-7 col-md-6">
-                    <div className="product-image-container">
-                        <img src={product.productImage} alt={product.title} />
-                    </div>
+                    <Card className="product-image-wrapper">
+                        <img src={product.productImage} alt={product.title} className="img-fluid" />
+                    </Card>
                 </div>
                 <div className="col-lg-5 col-md-6">
-                    <div className="product-info-card">
+                    <Card className="product-info-wrapper">
                         <div className="product-category-badge">{categoryName}</div>
                         <h1 className="product-title">{product.title}</h1>
                         <p className="product-description">{product.description}</p>
@@ -97,12 +99,10 @@ const ProductDetail = () => {
                         >
                             Thêm vào giỏ hàng
                         </Button>
-
-
-                    </div>
+                    </Card>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
