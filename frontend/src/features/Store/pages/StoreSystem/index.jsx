@@ -188,7 +188,7 @@ const StoreSystem = () => {
             {/* Sidebar */}
             <div className="store-sidebar">
                 <div className="sidebar-header">
-                    <h2 className="sidebar-title">HỆ THỐNG NHÀ HÀNG</h2>
+                    <h3>HỆ THỐNG NHÀ HÀNG</h3>
 
                     <div className="search-wrapper">
                         <input
@@ -266,8 +266,8 @@ const StoreSystem = () => {
                                         {index + 1}
                                     </div>
                                     <div className="store-item-info">
-                                        <div className="d-flex justify-content-between align-items-start">
-                                            <h3 className="store-item-name">{store.name}</h3>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <h4 className="store-item-name">{store.name}</h4>
                                             {store.distance !== null && (
                                                 <span className="store-distance badge bg-light text-dark border">
                                                     {store.distance.toFixed(1)} km
@@ -293,7 +293,7 @@ const StoreSystem = () => {
                                         </div>
                                         <div className="detail-section">
                                             <h6><i className="bi bi-gear me-2"></i>Dịch vụ</h6>
-                                            <div className="service-icons">
+                                            <div className="service-tags">
                                                 {store.services.map((s, idx) => (
                                                     <span key={idx} className="service-tag">{SERVICE_MAP[s] || s}</span>
                                                 ))}

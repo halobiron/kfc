@@ -1,50 +1,34 @@
 .store-system-container {
     display: flex;
     height: calc(100vh - 70px);
-    overflow: hidden;
-    background-color: #fff;
 }
 
 .store-sidebar {
-    width: 400px;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid #e0e0e0;
-    background: #fff;
-    z-index: 10;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-header {
     padding: 24px;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.sidebar-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--kfc-black, #202124);
-    margin-bottom: 20px;
 }
 
 .search-wrapper {
     position: relative;
-    margin-bottom: 15px;
 }
 
 .store-search-input {
     width: 100%;
     padding: 10px 45px 10px 18px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--kfc-border-color);
     border-radius: 50px;
     font-size: 13px;
     outline: none;
     transition: all 0.2s;
-    background-color: #f8f9fa;
+    background-color: var(--kfc-gray-bg);
 }
 
 .store-search-input:focus {
-    border-color: var(--kfc-red, #e4002b);
+    border-color: var(--kfc-red);
     background-color: #fff;
     box-shadow: 0 0 0 3px rgba(228, 0, 43, 0.1);
 }
@@ -54,7 +38,7 @@
     right: 5px;
     top: 50%;
     transform: translateY(-50%);
-    background: var(--kfc-red, #e4002b);
+    background: var(--kfc-red);
     color: #fff;
     border: none;
     border-radius: 50%;
@@ -65,7 +49,6 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
-    z-index: 5;
 }
 
 .search-btn-trigger:hover {
@@ -81,27 +64,23 @@
 .search-hint {
     font-size: 11px;
     color: #6c757d;
-    margin: -10px 0 15px;
-    display: flex;
-    align-items: center;
+    margin: 10px 0 15px;
     padding-left: 5px;
 }
 
 .store-list-container {
-    flex: 1;
     overflow-y: auto;
 }
 
 .results-count {
-    padding: 15px 24px;
+    padding: 12px;
     font-size: 13px;
     color: #5f6368;
-    background: #f8f9fa;
     border-bottom: 1px solid #f0f0f0;
 }
 
 .results-count strong {
-    color: #e4002b;
+    color: var(--kfc-red);
 }
 
 .store-item-card {
@@ -118,8 +97,7 @@
 }
 
 .store-item-card.expanded {
-    background-color: #fff;
-    border-left-color: #e4002b;
+    border-left-color: var(--kfc-red);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     z-index: 1;
     position: relative;
@@ -149,43 +127,20 @@
     margin-right: -5px;
 }
 
-.store-item-card.expanded .store-index-popcorn,
-.store-item-card:hover .store-index-popcorn {
-    transform: none;
-    filter: none;
-}
-
-.store-item-info {
-    flex: 1;
-}
-
 .store-item-name {
     font-size: 15px;
-    font-weight: 700;
-    color: #202124;
-    margin-bottom: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    margin: 0;
 }
 
 .store-item-address {
     font-size: 13px;
     color: #5f6368;
     margin: 0;
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
 .store-distance {
-    font-size: 12px;
     padding: 6px 10px;
     border-radius: 20px;
-    align-self: flex-start;
 }
 
 .expand-icon {
@@ -200,16 +155,18 @@
     border-top: 1px dashed #e0e0e0;
 }
 
+.store-item-info {
+    flex: 1;
+}
+
 .detail-section {
     margin-bottom: 15px;
 }
 
 .detail-section h6 {
     font-size: 12px;
-    font-weight: 700;
-    color: #202124;
+    font-weight: 600;
     margin-bottom: 6px;
-    text-transform: uppercase;
 }
 
 .detail-section p {
@@ -218,7 +175,7 @@
     margin: 0;
 }
 
-.service-icons {
+.service-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
@@ -226,28 +183,20 @@
 
 .service-tag {
     background: #f1f3f4;
-    color: #5f6368;
+    color: var(--kfc-text-gray);
     padding: 4px 10px;
     border-radius: 4px;
     font-size: 11px;
     font-weight: 500;
 }
 
-.detail-actions {
-    margin-top: 20px;
-}
-
 .detail-actions .btn {
     padding: 10px;
     font-weight: 600;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .store-map-view {
     flex: 1;
-    background-color: #e5e3df;
     position: relative;
 }
 
@@ -261,30 +210,15 @@
     width: 6px;
 }
 
-.store-list-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
 .store-list-container::-webkit-scrollbar-thumb {
     background: #ddd;
     border-radius: 10px;
-}
-
-.store-list-container::-webkit-scrollbar-thumb:hover {
-    background: #ccc;
 }
 
 @media (max-width: 992px) {
     .store-system-container {
         flex-direction: column;
         height: auto;
-    }
-
-    .store-sidebar {
-        width: 100%;
-        height: 500px;
-        border-right: none;
-        border-bottom: 1px solid #e0e0e0;
     }
 
     .store-map-view {
