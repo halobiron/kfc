@@ -35,4 +35,9 @@ const categorySlice = createSlice({
     },
 });
 
+// Selectors
+export const selectAllCategories = (state) => state.categories.categories;
+export const selectCategoryLoading = (state) => state.categories.loading;
+export const selectCategoryError = (state) => state.categories.error;
+
 export default categorySlice.reducer;

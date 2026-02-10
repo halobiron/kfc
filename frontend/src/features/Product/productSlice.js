@@ -56,4 +56,10 @@ const productSlice = createSlice({
     },
 });
 
+// Selectors
+export const selectAllProducts = (state) => state.products.products;
+export const selectProductLoading = (state) => state.products.loading;
+export const selectProductError = (state) => state.products.error;
+export const selectCurrentProduct = (state) => state.products.currentProduct;
+
 export default productSlice.reducer;
