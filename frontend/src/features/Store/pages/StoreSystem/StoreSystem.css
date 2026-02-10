@@ -1,15 +1,12 @@
 .store-system-container {
     display: flex;
     height: calc(100vh - 70px);
-    /* Adjust based on header height */
     overflow: hidden;
     background-color: #fff;
 }
 
-/* Sidebar Styling */
 .store-sidebar {
     width: 400px;
-    height: 100%;
     display: flex;
     flex-direction: column;
     border-right: 1px solid #e0e0e0;
@@ -21,13 +18,12 @@
 .sidebar-header {
     padding: 24px;
     border-bottom: 1px solid #f0f0f0;
-    background: #fff;
 }
 
 .sidebar-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--kfc-black);
+    color: var(--kfc-black, #202124);
     margin-bottom: 20px;
 }
 
@@ -36,15 +32,32 @@
     margin-bottom: 15px;
 }
 
+.store-search-input {
+    width: 100%;
+    padding: 10px 45px 10px 18px;
+    border: 1px solid #e0e0e0;
+    border-radius: 50px;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.2s;
+    background-color: #f8f9fa;
+}
+
+.store-search-input:focus {
+    border-color: var(--kfc-red, #e4002b);
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(228, 0, 43, 0.1);
+}
+
 .search-btn-trigger {
     position: absolute;
     right: 5px;
     top: 50%;
     transform: translateY(-50%);
-    background: var(--kfc-red);
+    background: var(--kfc-red, #e4002b);
     color: #fff;
     border: none;
-    border-radius: 50px;
+    border-radius: 50%;
     width: 34px;
     height: 34px;
     display: flex;
@@ -65,58 +78,18 @@
     cursor: wait;
 }
 
-@keyframes search-spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.store-search-input {
-    width: 100%;
-    padding: 10px 45px 10px 18px;
-    border: 1px solid #e0e0e0;
-    border-radius: 50px;
-    font-size: 13px;
-    outline: none;
-    transition: all 0.2s;
-    background-color: #f8f9fa;
-}
-
-.store-search-input:focus {
-    border-color: var(--kfc-red);
-    background-color: #fff;
-    box-shadow: 0 0 0 3px rgba(228, 0, 43, 0.1);
-}
-
 .search-hint {
     font-size: 11px;
     color: #6c757d;
-    margin-bottom: 15px;
-    margin-top: -10px;
+    margin: -10px 0 15px;
     display: flex;
     align-items: center;
     padding-left: 5px;
 }
 
-.city-dropdown {
-    height: 42px;
-    font-size: 13px;
-    border-radius: 8px;
-    border-color: #e0e0e0;
-    background-color: #fff;
-    cursor: pointer;
-}
-
-.city-dropdown:focus {
-    border-color: var(--kfc-red);
-    box-shadow: none;
-}
-
-/* Store List Container */
 .store-list-container {
     flex: 1;
     overflow-y: auto;
-    padding: 0;
 }
 
 .results-count {
@@ -131,23 +104,16 @@
     color: #e4002b;
 }
 
-/* Store Item Card */
-.store-items {
-    padding: 0;
-}
-
 .store-item-card {
     padding: 16px 20px;
     border-bottom: 1px solid #f0f0f0;
     cursor: pointer;
     transition: all 0.2s ease;
     border-left: 4px solid transparent;
-    /* Prepare for hover/active state */
 }
 
 .store-item-card:hover {
     background-color: #fff9fa;
-    /* Very light red tint */
     border-left-color: #ffccd5;
 }
 
@@ -155,9 +121,7 @@
     background-color: #fff;
     border-left-color: #e4002b;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    /* Add depth when expanded */
     z-index: 1;
-    /* Bring above others */
     position: relative;
 }
 
@@ -167,35 +131,24 @@
     gap: 16px;
 }
 
-/* Sprite Base */
 .kfc-sprite {
-    background-image: url("../../../../assets/images/common/sprite.png");
-    background-repeat: no-repeat;
-    background-color: transparent;
+    background: url("../../../../assets/images/common/sprite.png") no-repeat transparent;
 }
 
-/* Popcorn Style Number */
 .store-index-popcorn {
     width: 28px;
     height: 37px;
     background-position: -70px -59px;
-
     color: #fff;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     padding-top: 4px;
-
-    font-weight: 700;
-    font-size: 13px;
-    font-family: 'Oswald', sans-serif;
-
+    font: 700 13px 'Oswald', sans-serif;
     flex-shrink: 0;
     margin-right: -5px;
-    /* Adjust spacing since width changed */
 }
 
-/* Active/Expanded State - Icon to the right in the sprite */
 .store-item-card.expanded .store-index-popcorn,
 .store-item-card:hover .store-index-popcorn {
     transform: none;
@@ -208,7 +161,6 @@
 
 .store-item-name {
     font-size: 15px;
-    /* Slightly smaller for neatness */
     font-weight: 700;
     color: #202124;
     margin-bottom: 4px;
@@ -225,9 +177,15 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
-    /* Standard property for compatibility */
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.store-distance {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    align-self: flex-start;
 }
 
 .expand-icon {
@@ -236,7 +194,6 @@
     margin-top: 4px;
 }
 
-/* Expanded Details */
 .store-item-details {
     margin-top: 20px;
     padding-top: 20px;
@@ -288,14 +245,18 @@
     letter-spacing: 0.5px;
 }
 
-/* Map View */
 .store-map-view {
     flex: 1;
     background-color: #e5e3df;
     position: relative;
 }
 
-/* Scrollbar Styling */
+.no-results {
+    text-align: center;
+    padding: 50px 24px;
+    color: #9aa0a6;
+}
+
 .store-list-container::-webkit-scrollbar {
     width: 6px;
 }
@@ -313,13 +274,6 @@
     background: #ccc;
 }
 
-.no-results {
-    text-align: center;
-    padding: 50px 24px;
-    color: #9aa0a6;
-}
-
-/* Responsive */
 @media (max-width: 992px) {
     .store-system-container {
         flex-direction: column;
@@ -336,43 +290,4 @@
     .store-map-view {
         height: 400px;
     }
-}
-
-/* New Styles for Location Feature */
-.btn-location-neat {
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    color: #e4002b;
-    font-size: 13px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    padding: 0 12px;
-    height: 42px;
-    /* Match input/select height */
-    border-radius: 8px;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-}
-
-.btn-location-neat:hover {
-    background-color: #fff5f6;
-    border-color: #e4002b;
-    color: #c40025;
-    text-decoration: none;
-}
-
-.btn-location-neat:disabled {
-    color: #eebdc5;
-    cursor: wait;
-    text-decoration: none;
-}
-
-.store-distance {
-    font-size: 12px;
-    padding: 6px 10px;
-    border-radius: 20px;
-    align-self: flex-start;
 }
