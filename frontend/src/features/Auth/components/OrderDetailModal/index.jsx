@@ -14,7 +14,7 @@ const OrderDetailModal = ({ order, onClose }) => {
             show={!!order}
             onClose={onClose}
             title={`Chi tiết đơn hàng #${order.orderNumber || order._id}`}
-            size="lg"
+            size="md"
         >
             <div className="detail-grid">
                 <div className="detail-card">

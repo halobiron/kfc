@@ -22,8 +22,6 @@ const Button = React.forwardRef(({
     if (to) Component = Link;
     else if (href) Component = 'a';
 
-    const isLink = to || href || Component === 'a' || Component === Link;
-
     const buttonClass = [
         'kfc-btn',
         `kfc-btn--${variant}`,
@@ -37,10 +35,7 @@ const Button = React.forwardRef(({
         <Component
             ref={ref}
             className={buttonClass}
-            disabled={!isLink ? (disabled || loading) : undefined}
-            type={!isLink ? type : undefined}
-            to={to}
-            href={href}
+            {...(to ? { to } : href ? { href } : { type, disabled: disabled || loading })}
             {...props}
         >
             {loading ? (
