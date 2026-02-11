@@ -1,30 +1,21 @@
 .footer-wrapper {
     background-color: var(--kfc-black);
     color: #b0b0b0;
-    font-size: 0.9rem;
-    padding-top: 4rem;
+    padding-top: 3rem;
     margin-top: auto;
-    width: 100%;
 }
 
 .footer-top {
     padding-bottom: 3rem;
-    border-bottom: 1px solid #3c4043;
 }
 
 .footer-logo {
-    height: 50px;
-    width: auto;
-    margin-bottom: 1.5rem;
+    height: 60px;
 }
 
 .footer-heading {
     color: #fff;
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .footer-links {
@@ -39,9 +30,7 @@
 
 .footer-links a {
     color: #b0b0b0;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    display: inline-block;
+    transition: color 0.3s ease;
 }
 
 .footer-links a:hover {
@@ -63,24 +52,15 @@
     align-items: center;
     justify-content: center;
     color: #fff;
-    text-decoration: none;
-    transition: background 0.3s;
+    transition: background-color 0.3s;
 }
 
 .social-icon:hover {
     background: var(--kfc-red);
-    color: white;
+    color: #fff;
 }
 
 .footer-bottom {
     padding: 1.5rem 0;
     background-color: #171717;
-}
-
-.app-downloads img {
-    height: 40px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #3c4043;
 }
