@@ -1,4 +1,3 @@
-/* Header Wrapper */
 .kfc-header {
     background: white;
 }
@@ -7,7 +6,6 @@
     max-width: 1300px;
 }
 
-/* Main Navigation */
 .main-nav {
     border-bottom: 1px solid #f0f0f0;
 }
@@ -28,8 +26,6 @@
     color: var(--kfc-red) !important;
 }
 
-
-/* Hamburger Menu */
 .hamburger-menu {
     background: none;
     border: none;
@@ -43,13 +39,11 @@
     color: var(--kfc-red);
 }
 
-/* Secondary Bar */
 .secondary-bar {
     background-color: var(--kfc-dark);
     color: white;
 }
 
-/* Order Type Toggle */
 .order-type-toggle {
     display: flex;
     gap: 0.5rem;
@@ -74,7 +68,6 @@
     font-size: 1.1rem;
 }
 
-/* CTA Button */
 .cta-button {
     background-color: var(--kfc-red);
     color: white;
@@ -99,9 +92,6 @@ a {
     text-decoration: none;
 }
 
-/* Dropdown Menu Styles moved to index.css for global usage */
-
-/* User Icon Button */
 .btn:focus {
     box-shadow: none;
 }
@@ -121,7 +111,6 @@ a {
     box-shadow: none !important;
 }
 
-/* Responsive */
 @media (max-width: 991px) {
     .secondary-bar {
         display: none;

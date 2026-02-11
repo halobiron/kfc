@@ -5,7 +5,7 @@ import { selectCartTotalQuantity } from '../../features/Cart/cartSlice';
 import logo from '../../assets/images/logos/kfc-logo.png';
 import { BsGeoAlt, BsPersonCircle, BsShop, BsTruck, BsBag } from 'react-icons/bs';
 
-import './header.css';
+import './Header.css';
 import Button from '../Button';
 
 const Header = () => {
