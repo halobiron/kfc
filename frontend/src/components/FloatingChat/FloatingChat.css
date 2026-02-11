@@ -1,4 +1,3 @@
-/* Floating Chat Container */
 .floating-chat {
     position: fixed;
     bottom: 30px;
@@ -9,7 +8,6 @@
     z-index: 1000;
 }
 
-/* Chat Bubble Base */
 .chat-bubble {
     width: 52px;
     height: 52px;
@@ -21,7 +19,6 @@
     font-size: 24px;
     text-decoration: none;
     background-color: #e4002b;
-    /* KFC Red */
     box-shadow: 0 4px 12px rgba(228, 0, 43, 0.2);
     transition: all 0.2s ease;
     cursor: pointer;
@@ -34,13 +31,11 @@
     color: white;
 }
 
-/* Specific colors - now all red as requested */
 .chat-bubble.zalo,
 .chat-bubble.messenger {
     background-color: #e4002b;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .floating-chat {
         bottom: 20px;
