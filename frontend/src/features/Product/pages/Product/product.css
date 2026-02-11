@@ -81,3 +81,8 @@
 .kfc-spinner {
     color: var(--kfc-red);
 }
+
+.category-section .category-title {
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+}

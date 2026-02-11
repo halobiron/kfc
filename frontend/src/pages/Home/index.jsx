@@ -36,7 +36,7 @@ const Home = () => {
             {categories.map((cat, index) => (
               <div key={index} className="col-6 col-md-4 col-lg-3">
                 <Link to={`/products?category=${cat.slug}`} className="category-link">
-                  <Card className="category-card">
+                  <Card className="category-card" interactive>
                     <div className="category-icon">
                       <i className={`bi ${cat.icon}`}></i>
                     </div>
