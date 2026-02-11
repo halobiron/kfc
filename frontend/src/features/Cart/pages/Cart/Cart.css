@@ -14,6 +14,7 @@
 }
 
 .cart-item-card {
+    position: relative;
     display: flex;
     margin-bottom: 15px;
 }
