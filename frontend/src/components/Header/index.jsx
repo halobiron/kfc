@@ -42,29 +42,28 @@ const Header = () => {
 
               {/* Main Navigation */}
               <div className="collapse navbar-collapse" id="kfcNavbar">
-                <ul className="navbar-nav mx-auto mb-2 mb-lg-0 fw-bold text-uppercase">
+                <ul className="navbar-nav">
                   <li className="nav-item">
-                    <Link className="nav-link text-dark mx-2" to="/products">Thực Đơn</Link>
+                    <Link className="nav-link" to="/products">Thực Đơn</Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link text-dark mx-2" to="/stores">Cửa hàng</Link>
+                    <Link className="nav-link" to="/stores">Cửa hàng</Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link text-danger mx-2" to="/track-order">
+                    <Link className="nav-link text-danger" to="/track-order">
                       <BsGeoAlt className="me-1" />Tra cứu đơn
                     </Link>
                   </li>
                 </ul>
 
                 {/* Right Action Buttons */}
-                <div className="d-flex align-items-center gap-3">
+                <div className="header-actions">
                   {/* User Account Link */}
                   <Link
                     to="/account"
-                    className="btn user-acc-btn text-dark fw-bold d-flex align-items-center justify-content-center p-0 border-0"
-                    style={{ width: '36px', height: '36px' }}
+                    className="btn user-acc-btn"
                   >
-                    <BsPersonCircle style={{ fontSize: '28px', lineHeight: '1' }} />
+                    <BsPersonCircle />
                   </Link>
 
                   {/* Cart Icon */}
