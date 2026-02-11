@@ -86,26 +86,6 @@
     flex: 1;
 }
 
-.btn-view {
-    background: var(--kfc-black);
-    color: #fff;
-}
-
-.btn-view:hover {
-    background: #000;
-    color: #fff;
-}
-
-.btn-cancel {
-    background: var(--kfc-red);
-    color: #fff;
-}
-
-.btn-cancel:hover {
-    background: #c40025;
-    color: #fff;
-}
-
 @media (max-width: 560px) {
     .order-actions {
         flex-direction: column;

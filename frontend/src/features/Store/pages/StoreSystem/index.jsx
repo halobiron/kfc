@@ -286,7 +286,15 @@ const StoreSystem = () => {
                                             </div>
                                         </div>
                                         <div className="detail-actions">
-                                            <Button variant="secondary" fullWidth>XEM CHỈ ĐƯỜNG</Button>
+                                            <Button
+                                                variant="secondary"
+                                                fullWidth
+                                                href={`https://www.google.com/maps/dir/?api=1&destination=${store.location.lat},${store.location.lng}${userLocation ? `&origin=${userLocation.lat},${userLocation.lng}` : ''}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                XEM CHỈ ĐƯỜNG
+                                            </Button>
                                         </div>
                                     </div>
                                 )}
