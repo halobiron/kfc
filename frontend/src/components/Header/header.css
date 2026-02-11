@@ -6,52 +6,28 @@
     max-width: 1300px;
 }
 
+/* Navigation */
 .main-nav {
     border-bottom: 1px solid #f0f0f0;
 }
 
-.navbar-brand img {
-    height: 40px;
-    width: auto;
-}
-
 .nav-link {
-    font-size: 1rem;
     font-weight: 700;
-    transition: color 0.2s ease;
     letter-spacing: 0.5px;
+    transition: color 0.2s ease;
 }
 
 .nav-link:hover {
     color: var(--kfc-red) !important;
 }
 
-.hamburger-menu {
-    background: none;
-    border: none;
-    color: var(--kfc-black);
-    cursor: pointer;
-    padding: 0;
-    transition: color 0.2s;
-}
-
-.hamburger-menu:hover {
-    color: var(--kfc-red);
-}
-
+/* Secondary Bar */
 .secondary-bar {
     background-color: var(--kfc-dark);
     color: white;
 }
 
-.order-type-toggle {
-    display: flex;
-    gap: 0.5rem;
-}
-
 .order-type-item {
-    background: transparent;
-    color: white;
     font-size: 0.85rem;
     font-weight: 600;
     padding: 0.5rem 1rem;
@@ -59,26 +35,13 @@
     align-items: center;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    user-select: none;
     cursor: default;
 }
 
-.order-type-item i {
-    color: var(--kfc-red);
-    font-size: 1.1rem;
-}
-
+/* Interactive Elements */
 .cta-button {
-    background-color: var(--kfc-red);
-    color: white;
-    border: none;
     padding: 0.6rem 1.5rem;
     font-size: 0.95rem;
-    font-weight: 700;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
@@ -86,14 +49,6 @@
     background-color: #c41230;
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(228, 0, 43, 0.3);
-}
-
-a {
-    text-decoration: none;
-}
-
-.btn:focus {
-    box-shadow: none;
 }
 
 .user-acc-btn svg {
@@ -111,48 +66,21 @@ a {
     box-shadow: none !important;
 }
 
-@media (max-width: 991px) {
-    .secondary-bar {
-        display: none;
-    }
-
-    .hamburger-menu {
-        display: block;
-    }
-
-    .dropdown-menu-end {
-        right: 0 !important;
-        left: auto !important;
-    }
-
-    .dropdown-menu.show {
-        max-width: calc(100vw - 2rem);
-    }
-}
-
-@media (min-width: 992px) {
-    .navbar-toggler {
-        display: none;
-    }
-}
-
+/* Shopping Cart Basket */
 .shopping-cart .basket {
     width: 30px;
     height: 43px;
-    background: url(https://static.kfcvietnam.com.vn/images/web/cart.png?v=5.0) no-repeat -53px 1px;
+    background: url("https://static.kfcvietnam.com.vn/images/web/cart.png?v=5.0") no-repeat -53px 1px;
     background-size: 350%;
-    text-align: center;
-    line-height: 50px;
-    font-family: Roboto, sans-serif;
-    display: block;
-    letter-spacing: -1px;
-    cursor: pointer;
     color: #000;
+    font-family: Roboto, sans-serif;
     font-weight: 700;
     font-size: 16px;
-    position: relative;
-    border: none;
-    outline: none;
+    line-height: 50px;
+    text-align: center;
+    letter-spacing: -1px;
+    cursor: pointer;
+    transition: opacity 0.2s;
 }
 
 .shopping-cart .basket.blank {
@@ -161,40 +89,14 @@ a {
 
 .shopping-cart .basket.Itemadded {
     background-position: -53px -44px;
-    animation-name: tada;
-    animation-duration: 0.6s;
-    animation-iteration-count: 1;
-    animation-fill-mode: both;
-    animation-timing-function: ease-in-out;
+    animation: tada 0.6s ease-in-out both;
 }
 
 .shopping-cart .basket:hover {
-    text-decoration: none;
     opacity: 0.9;
 }
 
-@keyframes tada {
-    0% {
-        transform: scale(1);
-    }
-
-    25% {
-        transform: scale(1.1) rotate(-3deg);
-    }
-
-    50% {
-        transform: scale(1.2) rotate(3deg);
-    }
-
-    75% {
-        transform: scale(1.1) rotate(-3deg);
-    }
-
-    100% {
-        transform: scale(1) rotate(0deg);
-    }
-}
-
+/* Utilities */
 .mat-ripple.mat-ripple-unbounded {
     overflow: visible;
 }
@@ -203,9 +105,19 @@ a {
     transform: translateZ(0);
 }
 
-a:active,
-a:focus,
-a:hover {
-    outline: 0;
-    text-decoration: none;
+@keyframes tada {
+
+    0%,
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+
+    25%,
+    75% {
+        transform: scale(1.1) rotate(-3deg);
+    }
+
+    50% {
+        transform: scale(1.2) rotate(3deg);
+    }
 }

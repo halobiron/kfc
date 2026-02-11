@@ -85,7 +85,7 @@ const Header = () => {
         </div>
 
         {/* Secondary Utility Bar */}
-        <div className="secondary-bar">
+        <div className="secondary-bar d-none d-lg-block">
           <div className="container">
             <div className="d-flex align-items-center justify-content-between py-2">
               {/* Order Type Toggle */}
