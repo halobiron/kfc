@@ -17,9 +17,7 @@
     justify-content: center;
     color: white;
     font-size: 24px;
-    text-decoration: none;
-    background-color: #e4002b;
-    box-shadow: 0 4px 12px rgba(228, 0, 43, 0.2);
+    background-color: var(--kfc-red);
     transition: all 0.2s ease;
     cursor: pointer;
 }
@@ -29,11 +27,6 @@
     background-color: #cc0026;
     box-shadow: 0 6px 15px rgba(228, 0, 43, 0.3);
     color: white;
-}
-
-.chat-bubble.zalo,
-.chat-bubble.messenger {
-    background-color: #e4002b;
 }
 
 @media (max-width: 768px) {
