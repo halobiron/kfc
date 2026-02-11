@@ -3,10 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCartTotalQuantity } from '../../features/Cart/cartSlice';
 import logo from '../../assets/images/logos/kfc-logo.png';
-import { BsGeoAlt, BsPersonCircle, BsShop, BsTruck, BsBag } from 'react-icons/bs';
+import { BsGeoAlt, BsPersonCircle } from 'react-icons/bs';
 
 import './Header.css';
-import Button from '../Button';
 
 const Header = () => {
 
@@ -30,9 +29,9 @@ const Header = () => {
         {/* Main Navigation Bar */}
         <div className="main-nav bg-white shadow-sm">
           <div className="container">
-            <nav className="navbar navbar-expand-lg navbar-light py-2">
+            <nav className="navbar navbar-expand-lg navbar-light py-3">
               {/* Logo */}
-              <Link className="navbar-brand me-5" to="/">
+              <Link className="navbar-brand" to="/">
                 <img src={logo} alt="KFC Vietnam" height="40" />
               </Link>
 
@@ -43,7 +42,7 @@ const Header = () => {
 
               {/* Main Navigation */}
               <div className="collapse navbar-collapse" id="kfcNavbar">
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0 fw-bold text-uppercase">
+                <ul className="navbar-nav mx-auto mb-2 mb-lg-0 fw-bold text-uppercase">
                   <li className="nav-item">
                     <Link className="nav-link text-dark mx-2" to="/products">Thực Đơn</Link>
                   </li>
@@ -85,36 +84,7 @@ const Header = () => {
         </div>
 
         {/* Secondary Utility Bar */}
-        <div className="secondary-bar d-none d-lg-block">
-          <div className="container">
-            <div className="d-flex align-items-center justify-content-between py-2">
-              {/* Order Type Toggle */}
-              <div className="order-type-toggle d-flex gap-3">
-                <div className="order-type-item">
-                  <BsShop className="me-1" />
-                  Đặt Ngay
-                </div>
-                <div className="order-type-item">
-                  <BsTruck className="me-1" />
-                  Giao Hàng
-                </div>
-                <div className="order-type-item">
-                  <BsBag className="me-1" />
-                  Mang đi
-                </div>
-              </div>
 
-              {/* CTA Button */}
-              <Button
-                variant="primary"
-                onClick={() => navigate('/products')}
-                className="cta-button"
-              >
-                Bắt đầu đặt hàng
-              </Button>
-            </div>
-          </div>
-        </div>
       </header>
 
       {/* Cart Modal */}

@@ -11,7 +11,7 @@
 
 .category-wrapper {
     position: sticky;
-    top: 114px;
+    top: 76px;
     z-index: 999;
     background: white;
     border-bottom: 1px solid var(--kfc-border-color);
