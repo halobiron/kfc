@@ -1,8 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import './EmptyState.css';
 import Button from '../Button';
+import './EmptyState.css';
 
 const EmptyState = ({
     title,
@@ -13,19 +12,13 @@ const EmptyState = ({
     image,
     className = ''
 }) => {
-    const navigate = useNavigate();
-    const style = image ? { backgroundImage: `url(${image})` } : {};
-
-    const handleAction = () => {
-        if (onAction) {
-            onAction();
-        } else if (actionPath) {
-            navigate(actionPath);
-        }
-    };
+    const buttonProps = onAction ? { onClick: onAction } : { to: actionPath };
 
     return (
-        <div className={`empty-state ${className}`} style={style}>
+        <div
+            className={`empty-state ${className}`}
+            style={image ? { backgroundImage: `url(${image})` } : undefined}
+        >
             <div className="empty-state-content">
                 {title && <h2 className="empty-state-title">{title}</h2>}
                 {description && <p className="empty-state-message">{description}</p>}
@@ -33,8 +26,8 @@ const EmptyState = ({
                 {actionText && (
                     <Button
                         variant="primary"
-                        onClick={handleAction}
                         style={{ maxWidth: '300px' }}
+                        {...buttonProps}
                     >
                         {actionText}
                     </Button>
