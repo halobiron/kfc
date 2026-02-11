@@ -78,7 +78,6 @@ const CustomSelect = ({
             if (opt.options) {
               return (
                 <React.Fragment key={idx}>
-                  {idx > 0 && <li><hr className="select-divider" /></li>}
                   <li><h6 className="select-header">{opt.label}</h6></li>
                   {opt.options.map((subOpt, subIdx) => (
                     <li key={`${idx}-${subIdx}`}>
