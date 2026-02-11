@@ -91,6 +91,7 @@
 
 .account-left ul li a {
     color: hsla(0, 0%, 100%, 0.5);
+    text-decoration: none;
 }
 
 .account-left ul li.active a,

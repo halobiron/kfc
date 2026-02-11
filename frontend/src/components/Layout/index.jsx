@@ -4,29 +4,27 @@ import Footer from '../Footer';
 import FloatingChat from '../FloatingChat';
 import { useLocation } from 'react-router-dom';
 
+const NO_WRAPPER_PATHS = new Set(['/', '/stores']);
+const NO_CONTAINER_PATHS = new Set(['/', '/stores', '/products']);
+const AUTH_PATH_PREFIXES = ['/login', '/register', '/forgot-password', '/reset-password'];
+
 const Layout = ({ children }) => {
-    const location = useLocation();
-    const noWrapperPaths = ['/', '/stores'];
-    const noContainerPaths = ['/', '/stores', '/products'];
-
-    const shouldShowPageWrapper = !noWrapperPaths.includes(location.pathname);
-    const shouldShowContainer = !noContainerPaths.includes(location.pathname);
-
-    const authPaths = ['/login', '/register', '/forgot-password', '/reset-password'];
-    const isAuthPage = authPaths.some(path => location.pathname.startsWith(path));
-
-    const pageClass = location.pathname === '/' ? 'page-home' : `page-${location.pathname.substring(1).split('/')[0]}`;
+    const { pathname } = useLocation();
+    const pageName = pathname === '/' ? 'home' : pathname.slice(1).split('/')[0];
+    const isAuthPage = AUTH_PATH_PREFIXES.some((path) => pathname.startsWith(path));
 
     return (
         <div className="layout-wrapper">
             <Header />
-            <main className={`main-content ${shouldShowPageWrapper ? 'kfc-page-wrapper' : ''} ${pageClass}`}>
-                {shouldShowContainer ? (
+            <main
+                className={`main-content ${!NO_WRAPPER_PATHS.has(pathname) ? 'kfc-page-wrapper' : ''} page-${pageName}`}
+            >
+                {NO_CONTAINER_PATHS.has(pathname) ? (
+                    children
+                ) : (
                     <div className={`container kfc-container ${isAuthPage ? 'no-padding-y' : ''}`}>
                         {children}
                     </div>
-                ) : (
-                    children
                 )}
             </main>
             <Footer />
