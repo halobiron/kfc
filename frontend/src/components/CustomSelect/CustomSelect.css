@@ -56,14 +56,15 @@
 }
 
 .select-divider {
-    margin: 0;
+    margin: 4px 0;
     border-top: 1px solid #f0f0f0;
 }
 
 .select-header {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    color: #6c757d;
+    padding: 10px 1.25rem 5px;
+    font-size: 0.75rem;
+    color: #9aa0a6;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
 }

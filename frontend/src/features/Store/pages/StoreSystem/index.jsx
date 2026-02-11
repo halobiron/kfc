@@ -59,7 +59,7 @@ const MapUpdater = ({ center }) => {
 
 const StoreSystem = () => {
     const [stores, setStores] = useState([]);
-    const [selectedCity, setSelectedCity] = useState('all');
+    const [activeFilter, setActiveFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [expandedStore, setExpandedStore] = useState(null);
     const [userLocation, setUserLocation] = useState(null);
@@ -103,7 +103,7 @@ const StoreSystem = () => {
         if (location) {
             setUserLocation({ lat: location.lat, lng: location.lng });
             setMapCenter({ lat: location.lat, lng: location.lng });
-            setSelectedCity('all');
+            setActiveFilter(val);
             setSearchTerm(location.address || '');
             setLocationError(null);
         }
@@ -124,7 +124,7 @@ const StoreSystem = () => {
             if (geo) {
                 setUserLocation({ lat: geo.lat, lng: geo.lng });
                 setMapCenter({ lat: geo.lat, lng: geo.lng });
-                setSelectedCity('all');
+                setActiveFilter('all');
                 setSearchTerm(geo.displayName || searchTerm);
             } else {
                 setLocationError("Không tìm thấy địa chỉ này.");
@@ -141,8 +141,10 @@ const StoreSystem = () => {
     useEffect(() => {
         let results = getStoresWithDistance(userLocation?.lat, userLocation?.lng, stores);
 
-        if (selectedCity !== 'all') {
-            results = results.filter(s => s.city === selectedCity);
+        const isCityFilter = CITIES.find(c => c.id === activeFilter && c.id !== 'all');
+
+        if (isCityFilter) {
+            results = results.filter(s => s.city === activeFilter);
         }
 
         if (!userLocation && searchTerm) {
@@ -154,7 +156,7 @@ const StoreSystem = () => {
         }
 
         setSortedStores(results);
-    }, [userLocation, selectedCity, searchTerm, stores]);
+    }, [userLocation, activeFilter, searchTerm, stores]);
 
 
     const toggleStore = (id) => {
@@ -207,7 +209,7 @@ const StoreSystem = () => {
                     <div className="filter-wrapper mb-3">
                         <CustomSelect
                             options={[
-                                { value: 'all', label: 'Tất cả khu vực' },
+                                { value: 'all', label: 'Tất cả khu vực', icon: 'bi bi-grid' },
                                 ...addressOptions,
                                 {
                                     label: 'Lọc theo Thành phố',
@@ -217,14 +219,18 @@ const StoreSystem = () => {
                                     }))
                                 }
                             ]}
-                            value={selectedCity}
+                            value={activeFilter}
                             onChange={(val) => {
                                 if (val === 'all') {
-                                    setSelectedCity('all');
+                                    setActiveFilter('all');
+                                    setUserLocation(null);
+                                    setSearchTerm('');
                                 } else if (val === 'current' || val.startsWith('saved-')) {
                                     handleLocationSelect(val);
                                 } else {
-                                    setSelectedCity(val);
+                                    setActiveFilter(val);
+                                    setUserLocation(null);
+                                    setSearchTerm('');
                                 }
                             }}
                             placeholder="Chọn khu vực"

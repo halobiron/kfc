@@ -28,24 +28,28 @@ const CustomSelect = ({
     };
   }, [wrapperRef]);
 
-  // Find selected label
-  const getSelectedLabel = () => {
-    if (!value) return placeholder;
+  // Find selected item
+  const getSelectedItem = () => {
+    if (!value) return null;
 
     // Search in flat options
     let selected = options.find(opt => opt.value === value);
-    if (selected) return selected.label;
+    if (selected) return selected;
 
     // Search in optgroups
     for (const opt of options) {
       if (opt.options) { // is Group
         selected = opt.options.find(subOpt => subOpt.value === value);
-        if (selected) return selected.label;
+        if (selected) return selected;
       }
     }
 
-    return value; // Fallback
+    return null;
   };
+
+  const selectedItem = getSelectedItem();
+  const displayLabel = selectedItem ? selectedItem.label : (value || placeholder);
+  const displayIcon = selectedItem?.icon || icon;
 
   const handleSelect = (val) => {
     onChange(val);
@@ -61,8 +65,10 @@ const CustomSelect = ({
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
-        {icon && <i className={`${icon} me-2`}></i>}
-        <span className="text-truncate">{getSelectedLabel()}</span>
+        <span className="d-flex align-items-center text-truncate">
+          {displayIcon && <i className={`${displayIcon} me-2`}></i>}
+          <span className="text-truncate">{displayLabel}</span>
+        </span>
       </button>
 
       {isOpen && (
