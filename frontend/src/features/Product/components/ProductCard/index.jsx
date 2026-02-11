@@ -3,21 +3,22 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addToCart } from '../../../Cart/cartSlice';
 import Button from '../../../../components/Button';
+import Card from '../../../../components/Card';
 import { formatCurrency } from '../../../../utils/formatters';
 import './ProductCard.css';
 
-const Card = ({ product }) => {
+const ProductCard = ({ product }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     return (
-        <div className='card-wrapper'>
-            <motion.div
-                className="kfc-product-card"
-                onClick={() => navigate(`/product-detail/${product._id}`)}
-                whileHover={{ scale: 1.02, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            >
+        <motion.div
+            className="card-wrapper"
+            onClick={() => navigate(`/product-detail/${product._id}`)}
+            whileHover={{ scale: 1.02, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+        >
+            <Card className="kfc-product-card">
                 <img src={product.productImage} className="product-image" alt={product.title} />
                 <div className="card-body">
                     <div className="title-price-row">
@@ -38,9 +39,9 @@ const Card = ({ product }) => {
                         Thêm
                     </Button>
                 </div>
-            </motion.div>
-        </div>
+            </Card>
+        </motion.div>
     )
 }
 
-export default Card
+export default ProductCard

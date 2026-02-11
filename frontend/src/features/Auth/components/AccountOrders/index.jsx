@@ -123,7 +123,7 @@ const AccountOrders = () => {
             ) : (
                 <div>
                     {filteredOrders.map((order) => (
-                        <div key={order._id} className="order-card">
+                        <Card key={order._id} className="order-card">
                             <div className="order-header">
                                 <div className="order-info">
                                     <h5 title={order.orderNumber || order._id}>Đơn hàng {order.orderNumber || order._id}</h5>
@@ -171,7 +171,7 @@ const AccountOrders = () => {
                                     </Button>
                                 )}
                             </div>
-                        </div>
+                        </Card>
                     ))}
                 </div>
             )}
