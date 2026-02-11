@@ -5,13 +5,12 @@ import './Button.css';
 
 const Button = React.forwardRef(({
     children,
-    variant = 'primary', // primary, outline, text
+    variant = 'primary', // primary, secondary
     size = 'md',         // sm, md, lg
     loading = false,
     disabled = false,
     fullWidth = false,
     startIcon = null,
-    endIcon = null,
     className = '',
     component = 'button', // can be 'button', 'a', Link, or motion.button
     to,
@@ -59,7 +58,6 @@ const Button = React.forwardRef(({
                     <>
                         {startIcon && <span className="kfc-btn-start-icon">{startIcon}</span>}
                         {children}
-                        {endIcon && <span className="kfc-btn-end-icon">{endIcon}</span>}
                     </>
                 )}
             </FinalComponent>
@@ -69,13 +67,12 @@ const Button = React.forwardRef(({
 
 Button.propTypes = {
     children: PropTypes.node,
-    variant: PropTypes.oneOf(['primary', 'outline', 'text', 'dark']),
+    variant: PropTypes.oneOf(['primary', 'secondary']),
     size: PropTypes.oneOf(['sm', 'md', 'lg']),
     loading: PropTypes.bool,
     disabled: PropTypes.bool,
     fullWidth: PropTypes.bool,
     startIcon: PropTypes.node,
-    endIcon: PropTypes.node,
     className: PropTypes.string,
     component: PropTypes.elementType,
     to: PropTypes.string,

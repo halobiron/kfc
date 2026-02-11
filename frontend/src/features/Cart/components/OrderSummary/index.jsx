@@ -57,7 +57,7 @@ const OrderSummary = ({
                         />
                     </div>
                     <Button
-                        variant="dark"
+                        variant="secondary"
                         onClick={handleApplyCoupon}
                         className="btn-apply-coupon"
                     >

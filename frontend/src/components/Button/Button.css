@@ -2,80 +2,46 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--kfc-red, #E4002B);
-    color: white;
-    text-align: center;
-    padding: 14px 25px;
-    border-radius: 99px;
-    font-weight: 700;
-    font-size: 1rem;
-    text-transform: uppercase;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    text-decoration: none;
-    line-height: 1.2;
+    gap: 0.6rem;
     position: relative;
+
+    /* Typography */
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+
+    /* Appearance */
+    padding: 14px 25px;
+    border: 1px solid transparent;
+    border-radius: 99px;
+    cursor: pointer;
     user-select: none;
-}
-
-/* Hover State */
-.kfc-btn:hover:not(:disabled) {
-    background-color: #b00020;
-    color: white;
-    box-shadow: 0 4px 12px rgba(228, 0, 43, 0.2);
-}
-
-/* Active/Focus State */
-.kfc-btn:active,
-.kfc-btn:focus {
-    transform: translateY(1px);
-    outline: none;
-}
-
-/* Disabled State */
-.kfc-btn:disabled,
-.kfc-btn.disabled {
-    background-color: #ccc;
-    border-color: #ccc;
-    color: #666;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+    transition: all 0.2s ease-in-out;
 }
 
 /* --- Variants --- */
-
-/* Outline Variant */
-.kfc-btn--outline {
-    background-color: transparent;
-    border-color: var(--kfc-red, #E4002B);
-    color: var(--kfc-red, #E4002B);
-}
-
-.kfc-btn--outline:hover:not(:disabled) {
+.kfc-btn--primary {
     background-color: var(--kfc-red, #E4002B);
     color: white;
 }
 
-/* Text Variant */
-.kfc-btn--text {
-    background-color: transparent;
-    color: var(--kfc-red, #E4002B);
-    padding-left: 10px;
-    padding-right: 10px;
+.kfc-btn--primary:hover:not(.disabled) {
+    background-color: #b00020;
+    box-shadow: 0 4px 12px rgba(228, 0, 43, 0.2);
+    color: white;
 }
 
-.kfc-btn--text:hover:not(:disabled) {
-    background-color: rgba(228, 0, 43, 0.05);
-    color: #b00020;
-    box-shadow: none;
+.kfc-btn--secondary {
+    background-color: var(--kfc-black);
+    border-color: var(--kfc-black);
+    color: white;
 }
 
-/* Dark Variant */
-.kfc-btn--dark {
-    background-color: var(--kfc-black, #202124);
+.kfc-btn--secondary:hover:not(.disabled) {
+    background-color: #333;
+    border-color: #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     color: white;
 }
 
@@ -90,28 +56,30 @@
     font-size: 1.1rem;
 }
 
-/* --- Full Width --- */
 .kfc-btn--full {
     width: 100%;
-    display: flex;
 }
 
-/* --- Loading Spinner --- */
+/* --- States --- */
+.kfc-btn:active:not(.disabled),
+.kfc-btn:focus {
+    transform: translateY(1px);
+}
+
+.kfc-btn.disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+/* --- Spinner --- */
 .kfc-btn-spinner {
     width: 1.2em;
     height: 1.2em;
     border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: currentColor;
     border-radius: 50%;
-    border-top-color: white;
     animation: kfc-spin 0.8s linear infinite;
-    margin: 0 auto;
-}
-
-/* If button is outline/text, spinner needs correct color */
-.kfc-btn--outline .kfc-btn-spinner,
-.kfc-btn--text .kfc-btn-spinner {
-    border-color: rgba(228, 0, 43, 0.2);
-    border-top-color: var(--kfc-red, #E4002B);
 }
 
 @keyframes kfc-spin {
@@ -120,13 +88,7 @@
     }
 }
 
-/* Icon Spacing */
+/* Helper to ensure icons center nicely */
 .kfc-btn-start-icon {
-    margin-right: 8px;
-    display: flex;
-}
-
-.kfc-btn-end-icon {
-    margin-left: 8px;
     display: flex;
 }

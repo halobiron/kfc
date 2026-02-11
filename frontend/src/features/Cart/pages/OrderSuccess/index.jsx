@@ -81,7 +81,7 @@ const OrderSuccess = () => {
                 <div className="action-buttons">
                     <Button
                         to="/"
-                        variant="outline"
+                        variant="secondary"
                         startIcon={<i className="bi bi-house-door"></i>}
                     >
                         Về Trang Chủ
