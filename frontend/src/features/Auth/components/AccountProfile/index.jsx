@@ -88,8 +88,11 @@ const AccountProfile = () => {
             <h3>Quản lý hồ sơ</h3>
 
             <div className="profile-section">
-                <h4>Thông tin cá nhân</h4>
-                <form onSubmit={handleUpdateInfo}>
+                <div className="profile-section-header">
+                    <h4>Thông tin cá nhân</h4>
+                    <Button type="submit" variant="primary" form="info-form">Lưu thông tin</Button>
+                </div>
+                <form id="info-form" onSubmit={handleUpdateInfo}>
                     <div className="form-row">
                         <FormInput
                             label="Họ và tên"
@@ -121,13 +124,15 @@ const AccountProfile = () => {
                             onChange={(e) => setUserInfo({ ...userInfo, birthdate: e.target.value })}
                         />
                     </div>
-                    <Button type="submit" variant="primary">Lưu thông tin</Button>
                 </form>
             </div>
 
             <div className="profile-section">
-                <h4>Đổi mật khẩu</h4>
-                <form onSubmit={handleChangePassword}>
+                <div className="profile-section-header">
+                    <h4>Đổi mật khẩu</h4>
+                    <Button type="submit" variant="primary" form="password-form">Cập nhật mật khẩu</Button>
+                </div>
+                <form id="password-form" onSubmit={handleChangePassword}>
                     <div className="form-row">
                         <FormInput
                             label="Mật khẩu hiện tại"
@@ -155,7 +160,6 @@ const AccountProfile = () => {
                             minLength="6"
                         />
                     </div>
-                    <Button type="submit" variant="primary">Cập nhật mật khẩu</Button>
                 </form>
             </div>
         </Card>

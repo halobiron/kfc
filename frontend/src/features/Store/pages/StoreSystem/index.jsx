@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import storeApi from '../../../../api/storeApi';
+import Button from '../../../../components/Button';
 import CustomSelect from '../../../../components/CustomSelect';
 import { getStoresWithDistance, geocodeAddress } from '../../../../utils/geoUtils';
 import useUserProfile from '../../../../hooks/useUserProfile';
@@ -285,7 +286,7 @@ const StoreSystem = () => {
                                             </div>
                                         </div>
                                         <div className="detail-actions">
-                                            <button className="btn btn-outline-secondary w-100">XEM CHỈ ĐƯỜNG</button>
+                                            <Button variant="secondary" fullWidth>XEM CHỈ ĐƯỜNG</Button>
                                         </div>
                                     </div>
                                 )}

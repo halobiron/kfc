@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import FormInput from '../../../../components/FormInput';
+import Button from '../../../../components/Button';
 import Modal from '../../../../components/Modal';
 import OrderStatusBadge from '../../../../components/OrderStatusBadge';
 import { formatDateTime } from '../../../../utils/formatters';
@@ -25,8 +26,8 @@ const CancelOrderModal = ({ order, onClose, onConfirm }) => {
 
     const modalFooter = (
         <>
-            <button className="btn btn-secondary" onClick={onClose}>Đóng</button>
-            <button className="btn btn-danger" onClick={handleConfirm}>Xác nhận hủy</button>
+            <Button variant="secondary" onClick={onClose}>Đóng</Button>
+            <Button variant="primary" onClick={handleConfirm}>Xác nhận hủy</Button>
         </>
     );
 

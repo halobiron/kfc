@@ -5,6 +5,17 @@
     margin-bottom: 1.5rem;
 }
 
+.profile-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.profile-section-header h4 {
+    margin: 0;
+}
+
 .form-row {
     display: flex;
     gap: 1rem;

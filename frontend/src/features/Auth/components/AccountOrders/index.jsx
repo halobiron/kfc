@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import axiosClient from '../../../../api/axiosClient';
 import CustomSelect from '../../../../components/CustomSelect';
 import FormInput from '../../../../components/FormInput';
+import Button from '../../../../components/Button';
 import EmptyState from '../../../../components/EmptyState';
 import Card from '../../../../components/Card';
 import OrderStatusBadge, { STATUS_OPTIONS } from '../../../../components/OrderStatusBadge';
@@ -111,12 +112,13 @@ const AccountOrders = () => {
                 <div className="text-center py-5">
                     <h4>Không tìm thấy đơn hàng nào</h4>
                     <p className="text-muted">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
-                    <button
-                        className="btn btn-outline-danger mt-2"
+                    <Button
+                        variant="secondary"
+                        className="mt-2"
                         onClick={() => { setSearchTerm(''); setFilterStatus('All'); }}
                     >
                         Xóa bộ lọc
-                    </button>
+                    </Button>
                 </div>
             ) : (
                 <div>
@@ -154,19 +156,19 @@ const AccountOrders = () => {
                                 </div>
                             </div>
                             <div className="order-actions">
-                                <button
-                                    className="btn btn-view"
+                                <Button
+                                    variant="secondary"
                                     onClick={() => setSelectedOrder(order)}
                                 >
                                     Xem chi tiết
-                                </button>
+                                </Button>
                                 {order.status === 'pending' && (
-                                    <button
-                                        className="btn btn-cancel"
+                                    <Button
+                                        variant="primary"
                                         onClick={() => setOrderToCancel(order)}
                                     >
                                         Hủy đơn
-                                    </button>
+                                    </Button>
                                 )}
                             </div>
                         </div>

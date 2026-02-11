@@ -82,10 +82,13 @@
     border-top: 1px solid var(--kfc-border-color);
 }
 
+.order-actions .kfc-btn {
+    flex: 1;
+}
+
 .btn-view {
     background: var(--kfc-black);
     color: #fff;
-    flex: 1;
 }
 
 .btn-view:hover {
@@ -96,7 +99,6 @@
 .btn-cancel {
     background: var(--kfc-red);
     color: #fff;
-    flex: 1;
 }
 
 .btn-cancel:hover {

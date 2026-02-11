@@ -80,9 +80,9 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
 
     const modalFooter = (
         <>
-            <button className="btn btn-outline-secondary" onClick={onClose}>
+            <Button variant="secondary" onClick={onClose}>
                 Hủy
-            </button>
+            </Button>
             <Button variant="primary" onClick={handleSave}>
                 {initialData ? 'Cập nhật' : 'Thêm mới'}
             </Button>
@@ -108,24 +108,18 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
             <div>
                 <div className="label-with-button">
                     <label>Địa chỉ đầy đủ <span className="text-danger">*</span></label>
-                    <button
+                    <Button
                         type="button"
-                        className="btn-get-location"
+                        variant="primary"
+                        size="sm"
                         onClick={handleGetCurrentLocation}
                         disabled={gettingLocation}
                         title="Lấy vị trí hiện tại"
+                        startIcon={!gettingLocation && <i className="bi bi-geo-alt"></i>}
+                        loading={gettingLocation}
                     >
-                        {gettingLocation ? (
-                            <>
-                                <span className="spinner-border spinner-border-sm me-1"></span>
-                                Đang lấy...
-                            </>
-                        ) : (
-                            <>
-                                <i className="bi bi-geo-alt"></i> Lấy vị trí
-                            </>
-                        )}
-                    </button>
+                        {gettingLocation ? "Đang lấy..." : "Lấy vị trí"}
+                    </Button>
                 </div>
                 <FormInput
                     type="textarea"
