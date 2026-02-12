@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import axiosClient from '../../../../api/axiosClient';
+import orderApi from '../../../../api/orderApi';
 import CustomSelect from '../../../../components/CustomSelect';
 import FormInput from '../../../../components/FormInput';
 import Button from '../../../../components/Button';
@@ -47,7 +47,7 @@ const AccountOrders = () => {
     const fetchOrders = async () => {
         try {
             setLoading(true);
-            const response = await axiosClient.get('/user/orders');
+            const response = await orderApi.getMyOrders();
             setOrders(response.data.data || []);
         } catch (error) {
             toast.error('Không thể tải đơn hàng. Vui lòng thử lại.');
@@ -59,7 +59,7 @@ const AccountOrders = () => {
     const handleConfirmCancelOrder = async (reason) => {
         if (!orderToCancel) return;
         try {
-            await axiosClient.post(`/order/${orderToCancel._id}/cancel`, {
+            await orderApi.cancelOrder(orderToCancel._id, {
                 reason: reason
             });
             toast.success(`Đơn hàng #${orderToCancel.orderNumber || orderToCancel._id} đã được hủy thành công.`);

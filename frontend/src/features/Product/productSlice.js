@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axiosClient from '../../api/axiosClient';
+import productApi from '../../api/productApi';
 
 // Async Thunks
 export const getAllProducts = createAsyncThunk(
     'products/getAllProducts',
     async () => {
-        const response = await axiosClient.get('/products');
+        const response = await productApi.getAll();
         return response.data.data;
     }
 );
@@ -13,7 +13,7 @@ export const getAllProducts = createAsyncThunk(
 export const getProductById = createAsyncThunk(
     'products/getProductById',
     async (id) => {
-        const response = await axiosClient.get(`/product/${id}`);
+        const response = await productApi.getById(id);
         return response.data.data;
     }
 );

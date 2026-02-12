@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import axiosClient from '../../../../api/axiosClient';
+import orderApi from '../../../../api/orderApi';
 import { clearCart } from '../../cartSlice';
 import Card from '../../../../components/Card';
 import Button from '../../../../components/Button';
@@ -28,7 +28,7 @@ const OrderSuccess = () => {
         const fetchOrder = async () => {
             if (orderId) {
                 try {
-                    const res = await axiosClient.get(`/order/${orderId}${status === 'success' ? '/verify-payment' : ''}`);
+                    const res = await orderApi.getOrderById(orderId, status === 'success');
                     setOrderData(res.data.data);
                 } catch (error) {
                     console.error('Lỗi tải thông tin đơn hàng:', error);

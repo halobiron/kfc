@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axiosClient from '../../api/axiosClient';
+import orderApi from '../../api/orderApi';
 import { formatCurrency } from '../../utils/formatters';
 import { DEFAULT_SHIPPING_CONFIG } from '../../utils/shipping';
 
@@ -11,7 +11,7 @@ const TermsOfUse = () => {
     useEffect(() => {
         const fetchShippingConfig = async () => {
             try {
-                const response = await axiosClient.get('/config/shipping');
+                const response = await orderApi.getShippingConfig();
                 if (response.data?.status && response.data?.data) {
                     setShippingConfig(response.data.data);
                 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axiosClient from '../../api/axiosClient';
+import orderApi from '../../api/orderApi';
 import { toast } from 'react-toastify';
 import FormInput from '../../components/FormInput';
 import Button from '../../components/Button';
@@ -24,7 +24,7 @@ const TrackOrder = () => {
 
         setLoading(true);
         try {
-            const response = await axiosClient.post('/order/lookup', { orderNumber, phone });
+            const response = await orderApi.lookupOrder({ orderNumber, phone });
             if (response.data.status) {
                 setOrder(response.data.data);
             }

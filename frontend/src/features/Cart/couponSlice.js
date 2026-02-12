@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axiosClient from '../../api/axiosClient';
+import couponApi from '../../api/couponApi';
 
 // Async Thunks
 export const getAllCoupons = createAsyncThunk(
     'coupons/getAllCoupons',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axiosClient.get('/coupons');
+            const response = await couponApi.getAll();
             return response.data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Không thể tải danh sách mã giảm giá');
@@ -18,7 +18,7 @@ export const getCouponByCode = createAsyncThunk(
     'coupons/getCouponByCode',
     async (code, { rejectWithValue }) => {
         try {
-            const response = await axiosClient.get(`/coupon/code/${code}`);
+            const response = await couponApi.getByCode(code);
             return response.data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Mã giảm giá không hợp lệ hoặc đã hết hạn');
