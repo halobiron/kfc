@@ -129,15 +129,7 @@ const TrackOrder = () => {
                                 <h6 className="timeline-title">
                                     <i className="bi bi-clock-history me-2"></i>Hành trình đơn
                                 </h6>
-
-                                {order.statusHistory && order.statusHistory.length > 0 ? (
-                                    <OrderTimeline statusHistory={order.statusHistory} />
-                                ) : (
-                                    <div className="timeline-empty-state">
-                                        <i className="bi bi-inbox fs-1 d-block mb-2"></i>
-                                        <p>Chưa có cập nhật trạng thái</p>
-                                    </div>
-                                )}
+                                <OrderTimeline statusHistory={order.statusHistory} />
                             </div>
                         </div>
                     </Card>

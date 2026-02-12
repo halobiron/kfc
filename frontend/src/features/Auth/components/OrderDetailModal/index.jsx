@@ -47,14 +47,10 @@ const OrderDetailModal = ({ order, onClose }) => {
                 <span className="kfc-price price-lg">{formatCurrency(order.totalAmount)}</span>
             </div>
 
-            {
-                order.statusHistory && order.statusHistory.length > 0 && (
-                    <div className="timeline-section">
-                        <h6>Lịch sử trạng thái</h6>
-                        <OrderTimeline statusHistory={order.statusHistory} />
-                    </div>
-                )
-            }
+            <div className="timeline-section">
+                <h6>Lịch sử trạng thái</h6>
+                <OrderTimeline statusHistory={order.statusHistory} />
+            </div>
         </Modal >
     );
 };

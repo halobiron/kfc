@@ -32,22 +32,17 @@
 .timeline-dot {
     position: absolute;
     left: 0;
-    top: 3px;
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #fff;
-    border: 3px solid #dee2e6;
 }
 
 .timeline-item.latest .timeline-dot {
     background: var(--kfc-red);
-    border-color: var(--kfc-red);
 }
 
 .timeline-item.completed .timeline-dot {
     background: #198754;
-    border-color: #198754;
 }
 
 .timeline-date {
@@ -56,8 +51,7 @@
 }
 
 .timeline-status-text {
-    font-weight: 700;
-    font-size: 1rem;
+    font-weight: 500;
 }
 
 .timeline-note {
