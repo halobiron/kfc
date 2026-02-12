@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../utils/api';
+import roleApi from '../../api/roleApi';
 
 // Get all roles
 export const getAllRoles = createAsyncThunk(
     'role/getAllRoles',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await api.get('/roles'); // Adjust route if needed, checking backend routes
+            const data = await roleApi.getAll(); // Adjust route if needed, checking backend routes
             // Backend route was /api/v1/roles (mounted in server.js as /api/v1 and router path /)
-            return response.data;
+            return data;
         } catch (error) {
             return rejectWithValue(error.response.data.message || 'Không thể tải danh sách vai trò');
         }
@@ -20,8 +20,8 @@ export const createRole = createAsyncThunk(
     'role/createRole',
     async (roleData, { rejectWithValue }) => {
         try {
-            const response = await api.post('/roles', roleData);
-            return response.data;
+            const data = await roleApi.add(roleData);
+            return data;
         } catch (error) {
             return rejectWithValue(error.response.data.message || 'Không thể tạo vai trò mới');
         }
@@ -33,8 +33,8 @@ export const updateRole = createAsyncThunk(
     'role/updateRole',
     async ({ id, roleData }, { rejectWithValue }) => {
         try {
-            const response = await api.put(`/roles/${id}`, roleData);
-            return response.data;
+            const data = await roleApi.update(id, roleData);
+            return data;
         } catch (error) {
             return rejectWithValue(error.response.data.message || 'Không thể cập nhật vai trò');
         }
@@ -46,7 +46,7 @@ export const deleteRole = createAsyncThunk(
     'role/deleteRole',
     async (id, { rejectWithValue }) => {
         try {
-            await api.delete(`/roles/${id}`);
+            await roleApi.delete(id);
             return id;
         } catch (error) {
             return rejectWithValue(error.response.data.message || 'Không thể xóa vai trò');

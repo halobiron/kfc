@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FiPlus, FiEdit2, FiTrash2, FiGift, FiPercent } from 'react-icons/fi';
 import { toast } from 'react-toastify';
-import StatCard from '../../../../components/StatCard';
+import StatCard from '../../../../components/Common/StatCard';
 import { getAllCoupons, createCoupon, updateCoupon, deleteCoupon, clearErrors, resetSuccess } from '../../couponSlice';
 import './promotions.css';
 
@@ -117,7 +117,7 @@ const Promotions = () => {
 
   return (
     <>
-      <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+      <>
         <div className="page-header d-flex justify-content-between align-items-center">
           <h1 className="page-title">Quản lý Khuyến mãi & Voucher</h1>
           <button
@@ -253,7 +253,7 @@ const Promotions = () => {
             </table>
           </div>
         </div>
-      </main>
+      </>
 
       {/* Modal */}
       {showModal && (

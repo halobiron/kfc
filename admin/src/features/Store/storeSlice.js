@@ -1,34 +1,34 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../utils/api';
+import storeApi from '../../api/storeApi';
 
 export const getAllStores = createAsyncThunk(
   'stores/getAllStores',
   async () => {
-    const response = await api.get('/stores');
-    return response.data;
+    const data = await storeApi.getAll();
+    return data;
   }
 );
 
 export const createStore = createAsyncThunk(
   'stores/createStore',
   async (data) => {
-    const response = await api.post('/store/new', data);
-    return response.data;
+    const result = await storeApi.add(data);
+    return result;
   }
 );
 
 export const updateStore = createAsyncThunk(
   'stores/updateStore',
   async ({ id, data }) => {
-    const response = await api.put(`/store/update/${id}`, data);
-    return response.data;
+    const result = await storeApi.update(id, data);
+    return result;
   }
 );
 
 export const deleteStore = createAsyncThunk(
   'stores/deleteStore',
   async (id) => {
-    await api.delete(`/store/delete/${id}`);
+    await storeApi.delete(id);
     return id;
   }
 );

@@ -5,7 +5,7 @@ import { getAllRoles } from '../../../Role/roleSlice';
 import { FiPlus, FiEdit2, FiTrash2, FiMail, FiPhone, FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { MdRestaurant } from 'react-icons/md';
-import StatCard from '../../../../components/StatCard';
+import StatCard from '../../../../components/Common/StatCard';
 import './users.css';
 
 const Users = () => {
@@ -104,7 +104,7 @@ const Users = () => {
 
     return (
         <>
-            <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+            <>
                 <div className="page-header d-flex justify-content-between align-items-center">
                     <h1 className="page-title">Quản lý người dùng</h1>
                     <button
@@ -255,7 +255,7 @@ const Users = () => {
                         </table>
                     </div>
                 </div>
-            </main>
+            </>
 
             {/* Modal */}
             {showModal && (

@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../utils/api';
+import categoryApi from '../../api/categoryApi';
 
 export const getAllCategories = createAsyncThunk(
     'categories/getAllCategories',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await api.get('/categories');
-            return response.data;
+            const data = await categoryApi.getAll();
+            return data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi lấy danh mục');
         }
@@ -17,8 +17,8 @@ export const addNewCategory = createAsyncThunk(
     'categories/addNewCategory',
     async (categoryData, { rejectWithValue }) => {
         try {
-            const response = await api.post('/category/new', categoryData);
-            return response.data;
+            const data = await categoryApi.add(categoryData);
+            return data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi thêm danh mục');
         }
@@ -29,8 +29,8 @@ export const updateCategory = createAsyncThunk(
     'categories/updateCategory',
     async ({ id, data }, { rejectWithValue }) => {
         try {
-            const response = await api.put(`/category/update/${id}`, data);
-            return response.data;
+            const result = await categoryApi.update(id, data);
+            return result;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi cập nhật danh mục');
         }
@@ -41,7 +41,7 @@ export const deleteCategory = createAsyncThunk(
     'categories/deleteCategory',
     async (id, { rejectWithValue }) => {
         try {
-            await api.delete(`/category/delete/${id}`);
+            await categoryApi.delete(id);
             return id;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi xóa danh mục');

@@ -104,28 +104,28 @@ const ProductDetails = () => {
 
     if (loading) {
         return (
-            <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+            <>
                 <div className="text-center p-5">
                     <div className="spinner-border text-primary" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </div>
                 </div>
-            </main>
+            </>
         );
     }
 
     if (!currentProduct) {
         return (
-            <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+            <>
                 <div className="alert alert-danger mt-4">
                     Không tìm thấy sản phẩm!
                 </div>
-            </main>
+            </>
         );
     }
 
     return (
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <>
             {/* Header */}
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div className="d-flex align-items-center">
@@ -407,7 +407,7 @@ const ProductDetails = () => {
                     </div>
                 </div>
             </div >
-        </main >
+        </>
     );
 };
 

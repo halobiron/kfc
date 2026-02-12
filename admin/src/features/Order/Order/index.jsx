@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllOrders, updateOrderStatus, deleteOrder } from '../orderSlice';
 import { toast } from 'react-toastify';
-import StatusModal from '../../../components/StatusModal';
+import StatusModal from '../../../components/Common/StatusModal';
 
 const Order = () => {
   const dispatch = useDispatch();
@@ -63,7 +63,7 @@ const Order = () => {
   }
 
   return (
-    <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+    <>
       <div className="page-header">
         <h1 className="page-title">Đơn hàng</h1>
       </div>
@@ -176,7 +176,7 @@ const Order = () => {
         loading={updating}
         title={targetStatus === 'cancelled' ? 'Xác nhận Hủy đơn hàng' : 'Cập nhật trạng thái'}
       />
-    </main>
+    </>
   )
 }
 

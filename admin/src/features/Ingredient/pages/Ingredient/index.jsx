@@ -164,7 +164,7 @@ const Ingredient = () => {
     };
 
     return (
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <>
             <div className="page-header d-flex justify-content-between align-items-center">
                 <h1 className="page-title">Quản lý Nguyên liệu (Kho)</h1>
                 <div className="d-flex gap-2">
@@ -488,7 +488,7 @@ const Ingredient = () => {
                     </div>
                 </div>
             )}
-        </main>
+        </>
     );
 };
 

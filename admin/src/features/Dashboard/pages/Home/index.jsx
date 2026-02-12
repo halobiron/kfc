@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDashboardStats } from '../../statsSlice'
-import StatCard from '../../../../components/StatCard'
+import StatCard from '../../../../components/Common/StatCard';
 import { FiShoppingBag, FiDollarSign, FiUsers, FiAlertCircle, FiCheckCircle, FiClock } from 'react-icons/fi'
 import {
   Chart as ChartJS,
@@ -98,7 +98,7 @@ const Home = () => {
   };
 
   return (
-    <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+    <>
       <div className="page-header mb-3">
         <h1 className="page-title mb-0">Tổng quan</h1>
       </div>
@@ -198,7 +198,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-    </main>
+    </>
   )
 }
 

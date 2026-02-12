@@ -1,19 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../utils/api';
+import productApi from '../../api/productApi';
 
 export const getAllProducts = createAsyncThunk(
   'products/getAllProducts',
   async () => {
-    const response = await api.get('/products');
-    return response.data;
+    const data = await productApi.getAll();
+    return data;
   }
 );
 
 export const getProductById = createAsyncThunk(
   'products/getProductById',
   async (id) => {
-    const response = await api.get(`/product/${id}`);
-    return response.data;
+    const data = await productApi.get(id);
+    return data;
   }
 );
 
@@ -21,23 +21,23 @@ export const addNewProduct = createAsyncThunk(
   'products/addNewProduct',
   async (productData) => {
     // Backend expects JSON with base64 image
-    const response = await api.post('/product/new', productData);
-    return response.data;
+    const data = await productApi.add(productData);
+    return data;
   }
 );
 
 export const updateProduct = createAsyncThunk(
   'products/updateProduct',
   async ({ id, data }) => {
-    const response = await api.put(`/product/update/${id}`, data);
-    return response.data;
+    const result = await productApi.update(id, data);
+    return result;
   }
 );
 
 export const deleteProduct = createAsyncThunk(
   'products/deleteProduct',
   async (id) => {
-    await api.delete(`/product/delete/${id}`);
+    await productApi.delete(id);
     return id;
   }
 );

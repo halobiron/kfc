@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FiClock, FiCheckCircle, FiAlertCircle, FiChevronRight, FiPackage } from 'react-icons/fi';
 import { toast } from 'react-toastify';
-import api from '../../../utils/api';
-import StatCard from '../../../components/StatCard';
-import StatusModal from '../../../components/StatusModal';
+import orderApi from '../../../api/orderApi';
+import StatCard from '../../../components/Common/StatCard';
+import StatusModal from '../../../components/Common/StatusModal';
 import './kitchen.css';
 
 const Kitchen = () => {
@@ -25,8 +25,8 @@ const Kitchen = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await api.get('/orders');
-      setOrders(response.data.data || []);
+      const data = await orderApi.getAll();
+      setOrders(data.data || []);
     } catch (error) {
       console.error('Lỗi khi tải đơn hàng:', error);
       toast.error('Không thể tải danh sách đơn hàng.');
@@ -52,7 +52,7 @@ const Kitchen = () => {
 
     setUpdating(true);
     try {
-      await api.put(`/order/update/${selectedOrder}`, { status: targetStatus, note });
+      await orderApi.updateStatus(selectedOrder, { status: targetStatus, note });
       toast.success('Cập nhật trạng thái thành công');
       setShowModal(false);
       fetchOrders(); // Reload to sync
@@ -136,7 +136,7 @@ const Kitchen = () => {
   };
 
   return (
-    <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+    <>
       <div className="page-header d-flex justify-content-between align-items-center">
         <div>
           <h1 className="page-title">Điều phối Chế biến</h1>
@@ -248,7 +248,7 @@ const Kitchen = () => {
         loading={updating}
         title="Cập nhật tiến độ nấu"
       />
-    </main>
+    </>
   );
 };
 

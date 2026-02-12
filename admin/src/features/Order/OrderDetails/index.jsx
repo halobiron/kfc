@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import api from '../../../utils/api';
+import orderApi from '../../../api/orderApi';
 import { FiArrowLeft, FiPrinter, FiXCircle, FiCheckCircle, FiTruck, FiPackage, FiClock, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
-import StatusModal from '../../../components/StatusModal';
+import StatusModal from '../../../components/Common/StatusModal';
 import './OrderDetails.css';
 
 const STATUS_LABELS = {
@@ -45,8 +45,8 @@ const OrderDetails = () => {
 
     const fetchOrderDetails = async () => {
         try {
-            const response = await api.get(`/order/${id}`);
-            const orderData = response.data.data || response.data;
+            const data = await orderApi.get(id);
+            const orderData = data.data || data;
             setOrder(orderData);
             setStatus(orderData.status);
         } catch (error) {
@@ -66,7 +66,7 @@ const OrderDetails = () => {
     const handleConfirmStatusChange = async (note) => {
         setUpdating(true);
         try {
-            await api.put(`/order/update/${id}`, { status: targetStatus, note });
+            await orderApi.updateStatus(id, { status: targetStatus, note });
             setStatus(targetStatus);
             toast.success(`Cập nhật trạng thái thành công`);
             setShowModal(false);
@@ -85,7 +85,7 @@ const OrderDetails = () => {
     const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 
     return (
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <>
             {/* Header */}
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div className="d-flex align-items-center">
@@ -280,7 +280,7 @@ const OrderDetails = () => {
                 loading={updating}
                 title={targetStatus === 'cancelled' ? 'Xác nhận Hủy đơn hàng' : 'Cập nhật trạng thái'}
             />
-        </main >
+        </>
     );
 };
 

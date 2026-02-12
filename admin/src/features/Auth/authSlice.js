@@ -1,15 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../utils/api';
+import authApi from '../../api/authApi';
 
 // Async thunk for login
 export const login = createAsyncThunk(
     'auth/login',
     async ({ email, password }, { rejectWithValue }) => {
         try {
-            const response = await api.post('/auth/login', { email, password });
-            return response.data;
+            const data = await authApi.login({ email, password });
+            return data;
         } catch (error) {
-            return rejectWithValue(error.response.data.message || 'Đăng nhập thất bại');
+            return rejectWithValue(error.response?.data?.message || 'Đăng nhập thất bại');
         }
     }
 );
@@ -19,10 +19,10 @@ export const loadUser = createAsyncThunk(
     'auth/loadUser',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await api.get('/auth/me');
-            return response.data;
+            const data = await authApi.getMe();
+            return data;
         } catch (error) {
-            return rejectWithValue(error.response.data.message || 'Không thể tải thông tin người dùng');
+            return rejectWithValue(error.response?.data?.message || 'Không thể tải thông tin người dùng');
         }
     }
 );
@@ -31,9 +31,9 @@ export const logout = createAsyncThunk(
     'auth/logout',
     async (_, { rejectWithValue }) => {
         try {
-            await api.post('/auth/logout');
+            await authApi.logout();
         } catch (error) {
-            return rejectWithValue(error.response.data.message);
+            return rejectWithValue(error.response?.data?.message);
         }
     }
 );
@@ -42,8 +42,8 @@ export const changePassword = createAsyncThunk(
     'auth/changePassword',
     async (passwords, { rejectWithValue }) => {
         try {
-            const response = await api.post('/users/change-password', passwords);
-            return response.data;
+            const data = await authApi.changePassword(passwords);
+            return data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Đổi mật khẩu thất bại');
         }

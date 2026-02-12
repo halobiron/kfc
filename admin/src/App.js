@@ -1,5 +1,5 @@
 import './App.css';
-import Header from './components/Header';
+import AdminLayout from './components/Layout/AdminLayout';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Login from './features/Auth/pages/Login';
@@ -55,34 +55,22 @@ function App() {
         />
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route
-            path="*"
-            element={
-              <>
-                <Header />
-                <div className="container-fluid">
-                  <div className="row">
-                    <Routes>
-                      <Route path="/home" element={<Home />} />
-                      <Route path="/products" element={<Product />} />
-                      <Route path="/products/:id" element={<ProductDetails />} />
-                      <Route path="/categories" element={<Categories />} />
-                      <Route path="/ingredients" element={<Ingredient />} />
-                      <Route path="/orders" element={<Order />} />
-                      <Route path="/orders/:id" element={<OrderDetails />} />
-                      <Route path="/kitchen" element={<Kitchen />} />
-                      <Route path="/users" element={<Users />} />
-                      <Route path="/promotions" element={<Promotions />} />
-                      <Route path="/stores" element={<Stores />} />
-                      <Route path="/reports" element={<Reports />} />
-                      <Route path="/change-password" element={<ChangePassword />} />
-                      <Route path="/roles" element={<Roles />} />
-                    </Routes>
-                  </div>
-                </div>
-              </>
-            }
-          />
+          <Route element={<AdminLayout />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/products" element={<Product />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/ingredients" element={<Ingredient />} />
+            <Route path="/orders" element={<Order />} />
+            <Route path="/orders/:id" element={<OrderDetails />} />
+            <Route path="/kitchen" element={<Kitchen />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/promotions" element={<Promotions />} />
+            <Route path="/stores" element={<Stores />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/roles" element={<Roles />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

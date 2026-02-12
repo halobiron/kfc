@@ -38,7 +38,7 @@ const ChangePassword = () => {
     });
 
     return (
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <>
             <div className="page-header mb-3">
                 <h1 className="page-title mb-0">Đổi mật khẩu</h1>
             </div>
@@ -100,7 +100,7 @@ const ChangePassword = () => {
                     </div>
                 </div>
             </div>
-        </main>
+        </>
     );
 };
 

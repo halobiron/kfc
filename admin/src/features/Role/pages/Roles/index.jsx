@@ -127,7 +127,7 @@ const RoleManagement = () => {
     };
 
     return (
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <>
             <div className="d-flex justify-content-between align-items-center mb-4 pt-4">
                 <h2>Quản lý Phân quyền</h2>
                 <button className="btn btn-primary" onClick={() => { setIsEdit(false); handleShow(); }}>
@@ -284,7 +284,7 @@ const RoleManagement = () => {
                     </Form>
                 </Modal.Body>
             </Modal>
-        </main>
+        </>
     );
 };
 

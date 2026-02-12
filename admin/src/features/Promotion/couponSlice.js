@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../utils/api';
+import couponApi from '../../api/couponApi';
 
 // Async Thunks
 export const getAllCoupons = createAsyncThunk(
     'coupons/getAllCoupons',
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await api.get('/coupons');
+            const data = await couponApi.getAll();
             return data.data; // data.data contains the array of coupons
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Lỗi khi tải danh sách khuyến mãi');
@@ -18,7 +18,7 @@ export const createCoupon = createAsyncThunk(
     'coupons/createCoupon',
     async (couponData, { rejectWithValue }) => {
         try {
-            const { data } = await api.post('/coupon/new', couponData);
+            const data = await couponApi.add(couponData);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Lỗi khi tạo khuyến mãi');
@@ -30,7 +30,7 @@ export const updateCoupon = createAsyncThunk(
     'coupons/updateCoupon',
     async ({ id, couponData }, { rejectWithValue }) => {
         try {
-            const { data } = await api.put(`/coupon/update/${id}`, couponData);
+            const data = await couponApi.update(id, couponData);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Lỗi khi cập nhật khuyến mãi');
@@ -42,7 +42,7 @@ export const deleteCoupon = createAsyncThunk(
     'coupons/deleteCoupon',
     async (id, { rejectWithValue }) => {
         try {
-            await api.delete(`/coupon/delete/${id}`);
+            await couponApi.delete(id);
             return id;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Lỗi khi xóa khuyến mãi');

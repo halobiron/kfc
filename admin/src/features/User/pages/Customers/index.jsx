@@ -27,7 +27,7 @@ const Customers = () => {
     };
 
     return (
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <>
             <div className="page-header">
                 <h1 className="page-title">Quản lý khách hàng</h1>
             </div>
@@ -105,7 +105,7 @@ const Customers = () => {
                     </table>
                 </div>
             </div>
-        </main>
+        </>
     );
 };
 

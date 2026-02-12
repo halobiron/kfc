@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../utils/api';
+import userApi from '../../api/userApi';
 import { toast } from 'react-toastify';
 
 export const getAllUsers = createAsyncThunk(
     'users/getAllUsers',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await api.get('/users');
-            return response.data;
+            const data = await userApi.getAll();
+            return data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi lấy danh sách người dùng');
         }
@@ -18,9 +18,9 @@ export const createUser = createAsyncThunk(
     'users/createUser',
     async (userData, { rejectWithValue }) => {
         try {
-            const response = await api.post('/users/new', userData);
+            const data = await userApi.add(userData);
             toast.success('Thêm người dùng thành công!');
-            return response.data;
+            return data;
         } catch (error) {
             toast.error(error.response?.data?.message || 'Thêm người dùng thất bại');
             return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi thêm người dùng');
@@ -32,9 +32,9 @@ export const updateUser = createAsyncThunk(
     'users/updateUser',
     async ({ id, data }, { rejectWithValue }) => {
         try {
-            const response = await api.put(`/users/update/${id}`, data);
+            const result = await userApi.update(id, data);
             toast.success('Cập nhật người dùng thành công!');
-            return response.data;
+            return result;
         } catch (error) {
             toast.error(error.response?.data?.message || 'Cập nhật người dùng thất bại');
             return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi cập nhật người dùng');
@@ -46,7 +46,7 @@ export const deleteUser = createAsyncThunk(
     'users/deleteUser',
     async (id, { rejectWithValue }) => {
         try {
-            await api.delete(`/users/delete/${id}`);
+            await userApi.delete(id);
             toast.success('Xóa người dùng thành công!');
             return id;
         } catch (error) {

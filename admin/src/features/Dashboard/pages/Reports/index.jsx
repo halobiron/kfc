@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiCalendar, FiDownload, FiTrendingUp, FiShoppingBag, FiUsers, FiDollarSign } from 'react-icons/fi';
-import StatCard from '../../../../components/StatCard';
-import api from '../../../../utils/api';
+import StatCard from '../../../../components/Common/StatCard';
+import statsApi from '../../../../api/statsApi';
 import { toast } from 'react-toastify';
 import {
     Chart as ChartJS,
@@ -44,9 +44,9 @@ const Reports = () => {
         const fetchStats = async () => {
             try {
                 setLoading(true);
-                const response = await api.get(`/stats/dashboard?range=${dateRange}`);
-                if (response.data.status) {
-                    setStatsData(response.data.data);
+                const data = await statsApi.getDashboardStats(dateRange);
+                if (data.status) {
+                    setStatsData(data.data);
                 }
             } catch (error) {
                 console.error("Error fetching stats:", error);
@@ -150,7 +150,7 @@ const Reports = () => {
     };
 
     return (
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <>
             <div className="page-header d-flex flex-wrap justify-content-between align-items-center">
                 <h1 className="page-title">Báo cáo & Thống kê</h1>
                 <div className="d-flex gap-3 align-items-center mt-3 mt-md-0">
@@ -278,7 +278,7 @@ const Reports = () => {
                     </div>
                 </>
             )}
-        </main>
+        </>
     );
 };
 

@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../utils/api';
+import statsApi from '../../api/statsApi';
 
 export const getDashboardStats = createAsyncThunk(
     'stats/getDashboardStats',
     async (range = 'month', { rejectWithValue }) => {
         try {
-            const response = await api.get(`/stats/dashboard?range=${range}`);
-            return response.data;
+            const data = await statsApi.getDashboardStats(range);
+            return data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Không thể tải thống kê');
         }

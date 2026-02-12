@@ -1,27 +1,27 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../utils/api';
+import orderApi from '../../api/orderApi';
 
 export const getAllOrders = createAsyncThunk(
   'orders/getAllOrders',
   async () => {
-    const response = await api.get('/orders');
-    return response.data;
+    const data = await orderApi.getAll();
+    return data;
   }
 );
 
 export const updateOrderStatus = createAsyncThunk(
   'orders/updateOrderStatus',
   async ({ id, status, note }) => {
-    const response = await api.put(`/order/update/${id}`, { status, note });
-    return response.data;
+    const data = await orderApi.updateStatus(id, { status, note });
+    return data;
   }
 );
 
 export const deleteOrder = createAsyncThunk(
   'orders/deleteOrder',
   async (id) => {
-    const response = await api.delete(`/order/delete/${id}`);
-    return { id, message: response.data.message }; // Return id to remove from state
+    const data = await orderApi.delete(id);
+    return { id, message: data?.message }; // Return id to remove from state
   }
 );
 
