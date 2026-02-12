@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import useGeoLocation from './useGeoLocation';
-import { geocodeAddress } from '../utils/geoUtils';
+import mapApi from '../api/mapApi';
 
 const useAddressSelection = (savedAddresses = []) => {
     const { getCurrentLocation, isLoading: isGettingCurrentLocation } = useGeoLocation();
@@ -23,65 +23,55 @@ const useAddressSelection = (savedAddresses = []) => {
         ] : [])
     ], [savedAddresses]);
 
-    /**
-     * Handles selection from the dropdown.
-     * Returns a promise that resolves to the location object { lat, lng, ... } or null if failed.
-     */
     const handleSelect = async (value) => {
         setIsResolving(true);
         setSelectedLocation(null);
 
         try {
+            let locationData = null;
+
             if (value === 'current') {
-                const coords = await getCurrentLocation(); // Should handle errors/toasts internally
-                const locationData = {
-                    ...coords,
-                    type: 'current',
-                    address: 'Vị trí hiện tại'
-                };
-                setSelectedLocation(locationData);
-                return locationData;
-            }
+                const coords = await getCurrentLocation();
+                if (coords) {
+                    locationData = { ...coords, type: 'current', address: 'Vị trí hiện tại' };
+                }
+            } 
             else if (typeof value === 'string' && value.startsWith('saved-')) {
                 const index = parseInt(value.split('-')[1]);
                 const saved = savedAddresses[index];
+                
+                if (saved) {
+                    let { latitude: lat, longitude: lng } = saved;
 
-                if (!saved) {
-                    setIsResolving(false);
-                    return null;
-                }
-
-                let lat = saved.latitude;
-                let lng = saved.longitude;
-
-                // Check if coords exist, if not, fallback to geocoding
-                if (!lat || !lng) {
-                    toast.info("Đang tìm tọa độ cho địa chỉ này...");
-                    const geoData = await geocodeAddress(saved.fullAddress);
-
-                    if (geoData) {
+                    // Auto-fill missing coordinates
+                    if (!lat || !lng) {
+                        toast.info("Đang tìm tọa độ cho địa chỉ này...");
+                        const geoData = await mapApi.geocodeAddress(saved.fullAddress);
+                        
+                        if (!geoData) throw new Error("Không tìm thấy tọa độ của địa chỉ này.");
+                        
                         lat = geoData.lat;
                         lng = geoData.lng;
-                    } else {
-                        toast.error("Không tìm thấy tọa độ của địa chỉ này.");
-                        setIsResolving(false);
-                        return null;
                     }
-                }
 
-                const locationData = {
-                    lat,
-                    lng,
-                    type: 'saved',
-                    id: saved._id || index,
-                    address: saved.fullAddress
-                };
+                    locationData = {
+                        lat,
+                        lng,
+                        type: 'saved',
+                        id: saved._id || index,
+                        address: saved.fullAddress
+                    };
+                }
+            }
+
+            if (locationData) {
                 setSelectedLocation(locationData);
                 return locationData;
             }
+
         } catch (error) {
             console.error("Address selection error:", error);
-            // Error usually handled by sub-functions (getCurrentLocation) or UI
+            toast.error(error.message || "Có lỗi xảy ra khi chọn địa chỉ.");
         } finally {
             setIsResolving(false);
         }

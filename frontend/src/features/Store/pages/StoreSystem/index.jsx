@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import storeApi from '../../../../api/storeApi';
+import mapApi from '../../../../api/mapApi';
 import Button from '../../../../components/Button';
 import CustomSelect from '../../../../components/CustomSelect';
-import { getStoresWithDistance, geocodeAddress } from '../../../../utils/geoUtils';
+import { getStoresWithDistance } from '../../../../utils/geoUtils';
 import useUserProfile from '../../../../hooks/useUserProfile';
 import useAddressSelection from '../../../../hooks/useAddressSelection';
 import Spinner from '../../../../components/Spinner';
@@ -11,7 +12,6 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Fix for default Leaflet marker icons in React
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -37,8 +37,6 @@ const SERVICE_MAP = {
     'wifi': 'Wifi',
     'kids': 'Khu vui chơi trẻ em'
 };
-
-// Helpers
 
 const createKfcIcon = (isActive, index) => L.divIcon({
     className: 'custom-kfc-marker',
@@ -69,10 +67,8 @@ const StoreSystem = () => {
     const [isSearching, setIsSearching] = useState(false);
     const [mapCenter, setMapCenter] = useState({ lat: 10.7718, lng: 106.6015 }); // Default HCM
 
-    // Use custom hook for user profile
     const { addresses: savedAddresses } = useUserProfile();
 
-    // Use custom hook for address selection
     const {
         options: addressOptions,
         handleSelect: resolveLocation,
@@ -120,7 +116,7 @@ const StoreSystem = () => {
         setLocationError(null);
 
         try {
-            const geo = await geocodeAddress(searchTerm);
+            const geo = await mapApi.geocodeAddress(searchTerm);
 
             if (geo) {
                 setUserLocation({ lat: geo.lat, lng: geo.lng });

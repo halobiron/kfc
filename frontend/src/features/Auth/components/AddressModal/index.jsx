@@ -3,7 +3,8 @@ import { toast } from 'react-toastify';
 import FormInput from '../../../../components/FormInput';
 import Button from '../../../../components/Button';
 import Modal from '../../../../components/Modal';
-import { reverseGeocode, getCurrentLocation } from '../../../../utils/geoUtils';
+import { getCurrentLocation } from '../../../../utils/geoUtils';
+import mapApi from '../../../../api/mapApi';
 import './AddressModal.css';
 
 const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
@@ -40,8 +41,6 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
         setGettingLocation(true);
         try {
             const location = await getCurrentLocation();
-            if (!location) return; // Error handled in util
-
             const { lat, lng } = location;
 
             setAddressForm(prev => ({
@@ -51,7 +50,7 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
             }));
 
             // Reverse Geocoding
-            const data = await reverseGeocode(lat, lng);
+            const data = await mapApi.reverseGeocode(lat, lng);
             if (data && data.displayName) {
                 setAddressForm(prev => ({
                     ...prev,
@@ -65,6 +64,7 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
             }
         } catch (error) {
             console.error(error);
+            toast.error(error.message || "Có lỗi xảy ra khi lấy vị trí.");
         } finally {
             setGettingLocation(false);
         }
