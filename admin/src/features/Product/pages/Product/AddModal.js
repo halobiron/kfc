@@ -11,7 +11,7 @@ const AddModal = ({ setShowModal }) => {
 
   const [preview, setPreview] = useState('');
 
-  const { handleChange, handleSubmit, handleblur, values, touched, errors, setFieldValue } = useFormik({
+  const { handleChange, handleSubmit, handleBlur, values, touched, errors, setFieldValue } = useFormik({
     initialValues: {
       title: '',
       description: '',
@@ -41,37 +41,37 @@ const AddModal = ({ setShowModal }) => {
           <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
         </div>
         <form className="row g-3" onSubmit={handleSubmit}>
-          <div class="col-md-6">
-            <label for="title" class="form-label">Tên món</label>
-            <input type="text" name='title' onChange={handleChange} onBlur={handleblur} value={values.title} class="form-control" id="title" placeholder="Nhập tên món ăn..." />
+          <div className="col-md-6">
+            <label htmlFor="title" className="form-label">Tên món</label>
+            <input type="text" name='title' onChange={handleChange} onBlur={handleBlur} value={values.title} className="form-control" id="title" placeholder="Nhập tên món ăn..." />
             {touched.title && errors.title && <div className="text-danger small">{errors.title}</div>}
           </div>
-          <div class="col-md-6">
-            <label for="category" class="form-label">Danh mục</label>
-            <select name="category" onChange={handleChange} onBlur={handleblur} value={values.category} class="form-select" id="category">
+          <div className="col-md-6">
+            <label htmlFor="category" className="form-label">Danh mục</label>
+            <select name="category" onChange={handleChange} onBlur={handleBlur} value={values.category} className="form-select" id="category">
               {categories && categories.map(cat => (
                 <option key={cat._id} value={cat.slug}>{cat.name}</option>
               ))}
             </select>
             {touched.category && errors.category && <div className="text-danger small">{errors.category}</div>}
           </div>
-          <div class="col-12">
-            <label for="description" class="form-label">Mô tả</label>
-            <input type="text" name='description' onChange={handleChange} onBlur={handleblur} value={values.description} class="form-control" id="description" placeholder="Mô tả ngắn gọn về món ăn..." />
+          <div className="col-12">
+            <label htmlFor="description" className="form-label">Mô tả</label>
+            <input type="text" name='description' onChange={handleChange} onBlur={handleBlur} value={values.description} className="form-control" id="description" placeholder="Mô tả ngắn gọn về món ăn..." />
             {touched.description && errors.description && <div className="text-danger small">{errors.description}</div>}
           </div>
-          <div class="col-md-6">
-            <label for="price" class="form-label">Giá bán (VNĐ)</label>
-            <input type="number" name='price' onChange={handleChange} onBlur={handleblur} value={values.price} class="form-control" id="price" placeholder="Ví dụ: 50000" />
+          <div className="col-md-6">
+            <label htmlFor="price" className="form-label">Giá bán (VNĐ)</label>
+            <input type="number" name='price' onChange={handleChange} onBlur={handleBlur} value={values.price} className="form-control" id="price" placeholder="Ví dụ: 50000" />
             {touched.price && errors.price && <div className="text-danger small">{errors.price}</div>}
           </div>
-          <div class="col-md-6">
-            <label for="stock" class="form-label">Số lượng tồn kho</label>
-            <input type="number" name='stock' onChange={handleChange} onBlur={handleblur} value={values.stock} class="form-control" id="stock" placeholder="Nhập số lượng..." />
+          <div className="col-md-6">
+            <label htmlFor="stock" className="form-label">Số lượng tồn kho</label>
+            <input type="number" name='stock' onChange={handleChange} onBlur={handleBlur} value={values.stock} className="form-control" id="stock" placeholder="Nhập số lượng..." />
             {touched.stock && errors.stock && <div className="text-danger small">{errors.stock}</div>}
           </div>
-          <div class="col-12">
-            <label for="image" class="form-label">Tải lên hình ảnh</label>
+          <div className="col-12">
+            <label htmlFor="image" className="form-label">Tải lên hình ảnh</label>
             <input type="file"
               name='image'
               onChange={(event) => {
@@ -84,15 +84,14 @@ const AddModal = ({ setShowModal }) => {
                 }
                 reader.readAsDataURL(event.target.files[0])
               }}
-              onBlur={handleblur}
-              value={values.image}
-              class="form-control"
+              onBlur={handleBlur}
+              className="form-control"
               id="image" />
           </div>
           <img src={preview} style={{ width: '200px' }} alt="" />
-          <div class="col-12 mt-4">
-            <button type="submit" class="btn btn-primary px-4">Lưu sản phẩm</button>
-            <button type="button" class="btn btn-outline-secondary ms-3 px-4" onClick={() => setShowModal(false)}>Hủy bỏ</button>
+          <div className="col-12 mt-4">
+            <button type="submit" className="btn btn-primary px-4">Lưu sản phẩm</button>
+            <button type="button" className="btn btn-outline-secondary ms-3 px-4" onClick={() => setShowModal(false)}>Hủy bỏ</button>
           </div>
         </form>
       </div>

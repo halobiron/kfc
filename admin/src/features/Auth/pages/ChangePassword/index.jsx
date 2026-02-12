@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { changePassword } from '../../authSlice';
+import { TextField } from '../../../../components/Common/Form';
 
 const ChangePassword = () => {
     const dispatch = useDispatch();
@@ -48,47 +49,44 @@ const ChangePassword = () => {
                     <div className="card shadow-sm border-0">
                         <div className="card-body p-4">
                             <form onSubmit={formik.handleSubmit}>
-                                <div className="mb-3">
-                                    <label htmlFor="currentPassword" className="form-label">Mật khẩu hiện tại</label>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        id="currentPassword"
-                                        placeholder="Nhập mật khẩu hiện tại"
-                                        {...formik.getFieldProps('currentPassword')}
-                                    />
-                                    {formik.touched.currentPassword && formik.errors.currentPassword ? (
-                                        <div className="text-danger small mt-1">{formik.errors.currentPassword}</div>
-                                    ) : null}
-                                </div>
+                                <TextField
+                                    type="password"
+                                    name="currentPassword"
+                                    label="Mật khẩu hiện tại"
+                                    placeholder="Nhập mật khẩu hiện tại"
+                                    value={formik.values.currentPassword}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.errors.currentPassword}
+                                    touched={formik.touched.currentPassword}
+                                    containerClassName="mb-3"
+                                />
 
-                                <div className="mb-3">
-                                    <label htmlFor="newPassword" className="form-label">Mật khẩu mới</label>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        id="newPassword"
-                                        placeholder="Nhập mật khẩu mới"
-                                        {...formik.getFieldProps('newPassword')}
-                                    />
-                                    {formik.touched.newPassword && formik.errors.newPassword ? (
-                                        <div className="text-danger small mt-1">{formik.errors.newPassword}</div>
-                                    ) : null}
-                                </div>
+                                <TextField
+                                    type="password"
+                                    name="newPassword"
+                                    label="Mật khẩu mới"
+                                    placeholder="Nhập mật khẩu mới"
+                                    value={formik.values.newPassword}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.errors.newPassword}
+                                    touched={formik.touched.newPassword}
+                                    containerClassName="mb-3"
+                                />
 
-                                <div className="mb-4">
-                                    <label htmlFor="confirmPassword" className="form-label">Xác nhận mật khẩu mới</label>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        id="confirmPassword"
-                                        placeholder="Nhập lại mật khẩu mới"
-                                        {...formik.getFieldProps('confirmPassword')}
-                                    />
-                                    {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                                        <div className="text-danger small mt-1">{formik.errors.confirmPassword}</div>
-                                    ) : null}
-                                </div>
+                                <TextField
+                                    type="password"
+                                    name="confirmPassword"
+                                    label="Xác nhận mật khẩu mới"
+                                    placeholder="Nhập lại mật khẩu mới"
+                                    value={formik.values.confirmPassword}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.errors.confirmPassword}
+                                    touched={formik.touched.confirmPassword}
+                                    containerClassName="mb-4"
+                                />
 
                                 <div className="d-grid gap-2">
                                     <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>

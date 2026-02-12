@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategories, addNewCategory, updateCategory, deleteCategory } from '../../categorySlice';
 import StatCard from '../../../../components/Common/StatCard';
+import { CheckboxField, TextField } from '../../../../components/Common/Form';
 import './categories.css';
 
 const Categories = () => {
@@ -199,60 +200,44 @@ const Categories = () => {
               </div>
               <form onSubmit={handleSubmit}>
                 <div className="modal-body">
-                  <div className="mb-3">
-                    <label className="form-label">Tên danh mục <span className="text-danger">*</span></label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={currentCategory.name}
-                      onChange={(e) => setCurrentCategory({ ...currentCategory, name: e.target.value })}
-                      required
-                      placeholder="VD: Gà rán, Burger..."
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Slug (URL)</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={currentCategory.slug}
-                      onChange={(e) => setCurrentCategory({ ...currentCategory, slug: e.target.value })}
-                      placeholder="VD: ga-ran, burger..."
-                    />
-                    <small className="text-muted">Để trống sẽ tự động tạo từ tên danh mục</small>
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Mô tả</label>
-                    <textarea
-                      className="form-control"
-                      rows="3"
-                      value={currentCategory.description}
-                      onChange={(e) => setCurrentCategory({ ...currentCategory, description: e.target.value })}
-                      placeholder="Mô tả ngắn về danh mục này..."
-                    ></textarea>
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Biểu tượng (Bootstrap Icon class)</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={currentCategory.icon}
-                      onChange={(e) => setCurrentCategory({ ...currentCategory, icon: e.target.value })}
-                      placeholder="VD: bi-tag, bi-cup-hot..."
-                    />
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      checked={currentCategory.isActive}
-                      onChange={(e) => setCurrentCategory({ ...currentCategory, isActive: e.target.checked })}
-                      id="isActiveCheck"
-                    />
-                    <label className="form-check-label" htmlFor="isActiveCheck">
-                      Kích hoạt danh mục này
-                    </label>
-                  </div>
+                  <TextField
+                    name="name"
+                    label="Tên danh mục"
+                    required
+                    value={currentCategory.name}
+                    onChange={(e) => setCurrentCategory({ ...currentCategory, name: e.target.value })}
+                    placeholder="VD: Gà rán, Burger..."
+                  />
+                  <TextField
+                    name="slug"
+                    label="Slug (URL)"
+                    value={currentCategory.slug}
+                    onChange={(e) => setCurrentCategory({ ...currentCategory, slug: e.target.value })}
+                    placeholder="VD: ga-ran, burger..."
+                    hint="Để trống sẽ tự động tạo từ tên danh mục"
+                  />
+                  <TextField
+                    as="textarea"
+                    name="description"
+                    label="Mô tả"
+                    rows="3"
+                    value={currentCategory.description}
+                    onChange={(e) => setCurrentCategory({ ...currentCategory, description: e.target.value })}
+                    placeholder="Mô tả ngắn về danh mục này..."
+                  />
+                  <TextField
+                    name="icon"
+                    label="Biểu tượng (Bootstrap Icon class)"
+                    value={currentCategory.icon}
+                    onChange={(e) => setCurrentCategory({ ...currentCategory, icon: e.target.value })}
+                    placeholder="VD: bi-tag, bi-cup-hot..."
+                  />
+                  <CheckboxField
+                    id="isActiveCheck"
+                    checked={currentCategory.isActive}
+                    onChange={(e) => setCurrentCategory({ ...currentCategory, isActive: e.target.checked })}
+                    label="Kích hoạt danh mục này"
+                  />
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>
