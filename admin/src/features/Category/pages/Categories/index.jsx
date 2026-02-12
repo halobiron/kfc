@@ -3,7 +3,7 @@ import { FiPlus, FiEdit2, FiTrash2, FiTag } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategories, addNewCategory, updateCategory, deleteCategory } from '../../categorySlice';
-import StatCard from '../../../../components/StatCard';
+import StatCard from '../../../../components/Common/StatCard';
 import './categories.css';
 
 const Categories = () => {
