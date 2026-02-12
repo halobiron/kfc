@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Spinner.css';
 
 const Spinner = ({ variant = 'danger', size = 'md', className = '', center = false }) => {
     const sizeClass = size === 'sm' ? 'spinner-border-sm' : '';
@@ -15,7 +16,7 @@ const Spinner = ({ variant = 'danger', size = 'md', className = '', center = fal
     );
 
     if (center) {
-        return <div className="d-flex justify-content-center align-items-center w-100 py-3">{spinner}</div>;
+        return <div className="spinner-centered">{spinner}</div>;
     }
 
     return spinner;
