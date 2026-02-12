@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ProductCard from '../../features/Product/components/ProductCard'
 import Card from '../../components/Card'
+import Spinner from '../../components/Spinner'
 
 import Slider from '../../components/Slider'
 
@@ -58,9 +59,7 @@ const Home = () => {
 
           {productsLoading ? (
             <div className="text-center py-5">
-              <div className="spinner-border text-danger" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
+              <Spinner />
             </div>
           ) : (
             <div className="row">

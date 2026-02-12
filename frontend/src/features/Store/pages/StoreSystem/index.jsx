@@ -5,6 +5,7 @@ import CustomSelect from '../../../../components/CustomSelect';
 import { getStoresWithDistance, geocodeAddress } from '../../../../utils/geoUtils';
 import useUserProfile from '../../../../hooks/useUserProfile';
 import useAddressSelection from '../../../../hooks/useAddressSelection';
+import Spinner from '../../../../components/Spinner';
 import './StoreSystem.css';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -194,7 +195,7 @@ const StoreSystem = () => {
                             title="Tìm kiếm vị trí"
                         >
                             {isSearching || isResolvingAddress ? (
-                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <Spinner size="sm" variant={null} />
                             ) : (
                                 <i className="bi bi-search"></i>
                             )}

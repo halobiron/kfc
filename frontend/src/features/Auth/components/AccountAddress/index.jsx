@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import userApi from '../../../../api/userApi';
 import useUserProfile from '../../../../hooks/useUserProfile';
 import Card from '../../../../components/Card';
+import Spinner from '../../../../components/Spinner';
 import Button from '../../../../components/Button';
 import EmptyState from '../../../../components/EmptyState';
 import AddressModal from '../AddressModal';
@@ -112,9 +113,7 @@ const AccountAddress = () => {
 
                 {loadingAddresses ? (
                     <div className="text-center py-5">
-                        <div className="spinner-border text-danger" role="status">
-                            <span className="visually-hidden">Đang tải...</span>
-                        </div>
+                        <Spinner />
                     </div>
                 ) : (
                     <div className="addresses-list">

@@ -5,6 +5,7 @@ import Card from '../../components/ProductCard';
 import useCategoryScroll from '../../hooks/useCategoryScroll';
 import { getAllProducts } from '../../productSlice';
 import { getAllCategories } from '../../categorySlice';
+import Spinner from '../../../../components/Spinner';
 import './Product.css';
 
 const ProductHero = () => (
@@ -55,9 +56,7 @@ const CategorySection = ({ category, products }) => (
 
 const ProductLoading = () => (
     <div className="product-loading">
-        <div className="spinner-border kfc-spinner" role="status">
-            <span className="visually-hidden">Loading...</span>
-        </div>
+        <Spinner variant={null} className="kfc-spinner" />
     </div>
 );
 

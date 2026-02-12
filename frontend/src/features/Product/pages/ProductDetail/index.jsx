@@ -11,6 +11,7 @@ import { getAllCategories } from '../../categorySlice';
 import { useParams, Link } from 'react-router-dom';
 
 import Card from '../../../../components/Card';
+import Spinner from '../../../../components/Spinner';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -39,13 +40,7 @@ const ProductDetail = () => {
     };
 
     if (loading) {
-        return (
-            <div>
-                <div className="spinner-border text-danger" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        );
+        return <Spinner center />;
     }
 
     if (!product) {

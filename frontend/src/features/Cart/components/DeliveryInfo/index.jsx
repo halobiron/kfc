@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '../../../../components/Card';
 import FormInput from '../../../../components/FormInput';
 import CustomSelect from '../../../../components/CustomSelect';
+import Spinner from '../../../../components/Spinner';
 import './DeliveryInfo.css';
 
 const DeliveryInfo = ({
@@ -91,7 +92,7 @@ const DeliveryInfo = ({
                         />
 
                         <div className="col-12">
-                            {isResolvingLocation && <div className="text-center small text-muted mb-2"><span className="spinner-border spinner-border-sm me-1"></span>Đang tìm kiếm...</div>}
+                            {isResolvingLocation && <div className="text-center small text-muted mb-2"><Spinner size="sm" variant={null} className="me-1" />Đang tìm kiếm...</div>}
 
                             <CustomSelect
                                 className="mb-3"

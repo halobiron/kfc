@@ -5,6 +5,7 @@ import CustomSelect from '../../../../components/CustomSelect';
 import FormInput from '../../../../components/FormInput';
 import Button from '../../../../components/Button';
 import EmptyState from '../../../../components/EmptyState';
+import Spinner from '../../../../components/Spinner';
 import Card from '../../../../components/Card';
 import OrderStatusBadge, { STATUS_OPTIONS } from '../../../../components/OrderStatusBadge';
 import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
@@ -97,9 +98,7 @@ const AccountOrders = () => {
 
             {loading ? (
                 <div className="text-center py-5">
-                    <div className="spinner-border text-danger" role="status">
-                        <span className="visually-hidden">Đang tải...</span>
-                    </div>
+                    <Spinner />
                 </div>
             ) : orders.length === 0 ? (
                 <EmptyState
