@@ -5,15 +5,13 @@ const {
     getStoreById, 
     createStore, 
     updateStore, 
-    deleteStore,
-    getStoresByCity
+    deleteStore
 } = require('../controllers/storeController');
 const { isAuthenticatedUser, authorizeRoles } = require('../middleware/auth');
 
 // Public routes
 router.get('/stores', getAllStores);
 router.get('/store/:id', getStoreById);
-router.get('/stores/city/:city', getStoresByCity);
 
 // Admin routes
 router.post('/store/new', isAuthenticatedUser, authorizeRoles('admin'), createStore);

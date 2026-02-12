@@ -19,16 +19,6 @@ L.Icon.Default.mergeOptions({
     shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-// Constants
-const CITIES = [
-    { id: 'all', name: 'Tất cả thành phố' },
-    { id: 'hcm', name: 'TP. Hồ Chí Minh' },
-    { id: 'hn', name: 'Hà Nội' },
-    { id: 'dn', name: 'Đà Nẵng' },
-    { id: 'hp', name: 'Hải Phòng' },
-    { id: 'ct', name: 'Cần Thơ' },
-];
-
 const SERVICE_MAP = {
     'dine-in': 'Tại chỗ',
     'takeaway': 'Mang đi',
@@ -138,17 +128,11 @@ const StoreSystem = () => {
     useEffect(() => {
         let results = getStoresWithDistance(userLocation?.lat, userLocation?.lng, stores);
 
-        const isCityFilter = CITIES.find(c => c.id === activeFilter && c.id !== 'all');
-
-        if (isCityFilter) {
-            results = results.filter(s => s.city === activeFilter);
-        }
-
         if (!userLocation && searchTerm) {
             const term = searchTerm.toLowerCase();
             results = results.filter(s =>
                 s.name.toLowerCase().includes(term) ||
-                s.address.toLowerCase().includes(term)
+                s.address?.toLowerCase().includes(term)
             );
         }
 
@@ -208,13 +192,6 @@ const StoreSystem = () => {
                             options={[
                                 { value: 'all', label: 'Tất cả khu vực', icon: 'bi bi-grid' },
                                 ...addressOptions,
-                                {
-                                    label: 'Lọc theo Thành phố',
-                                    options: CITIES.filter(c => c.id !== 'all').map(city => ({
-                                        value: city.id,
-                                        label: city.name
-                                    }))
-                                }
                             ]}
                             value={activeFilter}
                             onChange={(val) => {
@@ -222,7 +199,7 @@ const StoreSystem = () => {
                                     setActiveFilter('all');
                                     setUserLocation(null);
                                     setSearchTerm('');
-                                } else if (val === 'current' || val.startsWith('saved-')) {
+                                } else if (val === 'current' || (typeof val === 'string' && val.startsWith('saved-'))) {
                                     handleLocationSelect(val);
                                 } else {
                                     setActiveFilter(val);

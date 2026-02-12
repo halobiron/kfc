@@ -119,18 +119,3 @@ exports.deleteStore = async (req, res, next) => {
         next(error);
     }
 };
-
-// GET STORES BY CITY
-exports.getStoresByCity = async (req, res, next) => {
-    try {
-        const { city } = req.params;
-        const stores = await Store.find({ city, isActive: true });
-
-        res.status(200).json({
-            status: true,
-            data: stores
-        });
-    } catch (error) {
-        next(error);
-    }
-};
