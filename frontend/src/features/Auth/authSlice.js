@@ -7,13 +7,13 @@ export const loginUser = createAsyncThunk(
     async (userData, { rejectWithValue }) => {
         try {
             const response = await authApi.login(userData);
-            if (response.data.status) {
+            if (response.status) {
                 return {
-                    ...response.data.user,
-                    token: response.data.token
+                    ...response.user,
+                    token: response.token
                 };
             } else {
-                return rejectWithValue(response.data.message);
+                return rejectWithValue(response.message);
             }
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Đăng nhập thất bại');
@@ -26,13 +26,13 @@ export const registerUser = createAsyncThunk(
     async (userData, { rejectWithValue }) => {
         try {
             const response = await authApi.register(userData);
-            if (response.data.status) {
+            if (response.status) {
                 return {
-                    ...response.data.user,
-                    token: response.data.token
+                    ...response.user,
+                    token: response.token
                 };
             } else {
-                return rejectWithValue(response.data.message);
+                return rejectWithValue(response.message);
             }
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Đăng ký thất bại');
@@ -45,13 +45,13 @@ export const loginGoogleUser = createAsyncThunk(
     async (token, { rejectWithValue }) => {
         try {
             const response = await authApi.googleLogin({ token });
-            if (response.data.status) {
+            if (response.status) {
                 return {
-                    ...response.data.user,
-                    token: response.data.token
+                    ...response.user,
+                    token: response.token
                 };
             } else {
-                return rejectWithValue(response.data.message);
+                return rejectWithValue(response.message);
             }
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Đăng nhập Google thất bại');

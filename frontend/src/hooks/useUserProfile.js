@@ -17,8 +17,8 @@ const useUserProfile = () => {
             setError(null);
             const response = await userApi.getProfile();
 
-            if (response.data?.status && response.data?.data) {
-                const userData = response.data.data;
+            if (response?.status && response?.data) {
+                const userData = response.data;
                 setProfile(userData);
                 setAddresses(userData.addresses || []);
             }

@@ -6,7 +6,7 @@ export const getAllProducts = createAsyncThunk(
     'products/getAllProducts',
     async () => {
         const response = await productApi.getAll();
-        return response.data.data;
+        return response.data;
     }
 );
 
@@ -14,7 +14,7 @@ export const getProductById = createAsyncThunk(
     'products/getProductById',
     async (id) => {
         const response = await productApi.getById(id);
-        return response.data.data;
+        return response.data;
     }
 );
 

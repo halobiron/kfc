@@ -41,7 +41,7 @@ const AccountAddress = () => {
 
             if (editingAddressIndex !== null) {
                 const response = await userApi.updateAddress(editingAddressIndex, addressData);
-                if (response.data?.status) {
+                if (response?.status) {
                     toast.success('Cập nhật địa chỉ thành công!');
                     setShowAddressForm(false);
                     refetch();
@@ -51,7 +51,7 @@ const AccountAddress = () => {
                     ...addressData,
                     isDefault: addressForm.isDefault || addresses.length === 0
                 });
-                if (response.data?.status) {
+                if (response?.status) {
                     toast.success('Thêm địa chỉ thành công!');
                     setShowAddressForm(false);
                     refetch();
@@ -66,7 +66,7 @@ const AccountAddress = () => {
         if (window.confirm('Bạn có chắc muốn xóa địa chỉ này?')) {
             try {
                 const response = await userApi.deleteAddress(idx);
-                if (response.data?.status) {
+                if (response?.status) {
                     toast.success('Xóa địa chỉ thành công!');
                     refetch();
                 }
@@ -86,7 +86,7 @@ const AccountAddress = () => {
                 latitude: address.latitude,
                 longitude: address.longitude
             });
-            if (response.data?.status) {
+            if (response?.status) {
                 toast.success('Cập nhật địa chỉ mặc định thành công!');
                 refetch();
             }

@@ -82,9 +82,9 @@ const StoreSystem = () => {
     useEffect(() => {
         const fetchStores = async () => {
             try {
-                const { data } = await storeApi.getAll();
-                if (data?.status) {
-                    setStores(data.data.map(store => ({
+                const response = await storeApi.getAll();
+                if (response?.status) {
+                    setStores(response.data.map(store => ({
                         ...store,
                         id: store._id,
                         location: { lat: store.latitude, lng: store.longitude }

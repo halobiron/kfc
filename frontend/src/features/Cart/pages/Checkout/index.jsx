@@ -44,7 +44,7 @@ const Checkout = () => {
         const fetchStores = async () => {
             try {
                 const response = await storeApi.getAll();
-                setStores(response.data.data || []);
+                setStores(response.data || []);
             } catch (error) {
                 console.error('Lỗi khi tải cửa hàng:', error);
                 toast.error('Không thể tải danh sách cửa hàng.');
@@ -244,22 +244,22 @@ const Checkout = () => {
             // Clear cart immediately upon successful request
             dispatch(clearCart());
 
-            if (response.data.checkoutUrl) {
-                window.location.href = response.data.checkoutUrl;
+            if (response.checkoutUrl) {
+                window.location.href = response.checkoutUrl;
                 return;
             }
 
             toast.success(
                 <div>
                     <strong>Đặt hàng thành công!</strong><br />
-                    Mã đơn: {response.data.data._id}<br />
+                    Mã đơn: {response.data._id}<br />
                     Tổng: {formatCurrency(total)}
                 </div>,
                 { autoClose: 5000 }
             );
 
             // Redirect to Success Page with orderId
-            navigate(`/order-success?orderId=${response.data.data._id}`);
+            navigate(`/order-success?orderId=${response.data._id}`);
         } catch (error) {
             toast.error('Không thể đặt hàng. Vui lòng thử lại.');
         } finally {

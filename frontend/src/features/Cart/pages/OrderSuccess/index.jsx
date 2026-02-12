@@ -29,7 +29,7 @@ const OrderSuccess = () => {
             if (orderId) {
                 try {
                     const res = await orderApi.getOrderById(orderId, status === 'success');
-                    setOrderData(res.data.data);
+                    setOrderData(res.data);
                 } catch (error) {
                     console.error('Lỗi tải thông tin đơn hàng:', error);
                 }

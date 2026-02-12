@@ -12,8 +12,8 @@ const TermsOfUse = () => {
         const fetchShippingConfig = async () => {
             try {
                 const response = await orderApi.getShippingConfig();
-                if (response.data?.status && response.data?.data) {
-                    setShippingConfig(response.data.data);
+                if (response?.status && response?.data) {
+                    setShippingConfig(response.data);
                 }
             } catch (error) {
                 // Fallback to defaults on error

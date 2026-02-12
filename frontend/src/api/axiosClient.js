@@ -23,10 +23,10 @@ axiosClient.interceptors.request.use(
 
 axiosClient.interceptors.response.use(
     (response) => {
-        return response;
+        return response.data;
     },
     (error) => {
-        throw error;
+        return Promise.reject(error);
     }
 );
 

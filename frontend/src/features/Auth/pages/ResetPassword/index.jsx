@@ -32,13 +32,13 @@ const ResetPassword = () => {
                 setLoading(true);
                 const response = await authApi.resetPassword(token, values);
 
-                if (response.data.status) {
-                    toast.success(response.data.message);
+                if (response.status) {
+                    toast.success(response.message);
                     setTimeout(() => {
                         navigate('/login');
                     }, 2000);
                 } else {
-                    toast.error(response.data.message);
+                    toast.error(response.message);
                 }
             } catch (error) {
                 const message = error.response?.data?.message || 'Có lỗi xảy ra. Vui lòng thử lại sau.';

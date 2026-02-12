@@ -7,7 +7,7 @@ export const getAllCoupons = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const response = await couponApi.getAll();
-            return response.data.data;
+            return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Không thể tải danh sách mã giảm giá');
         }
@@ -19,7 +19,7 @@ export const getCouponByCode = createAsyncThunk(
     async (code, { rejectWithValue }) => {
         try {
             const response = await couponApi.getByCode(code);
-            return response.data.data;
+            return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Mã giảm giá không hợp lệ hoặc đã hết hạn');
         }

@@ -25,8 +25,8 @@ const TrackOrder = () => {
         setLoading(true);
         try {
             const response = await orderApi.lookupOrder({ orderNumber, phone });
-            if (response.data.status) {
-                setOrder(response.data.data);
+            if (response.status) {
+                setOrder(response.data);
             }
         } catch (error) {
             toast.error(error.response?.data?.message || 'Không tìm thấy đơn hàng');

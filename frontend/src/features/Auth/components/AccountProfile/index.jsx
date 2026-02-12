@@ -51,9 +51,9 @@ const AccountProfile = () => {
                 birthdate: userInfo.birthdate
             });
 
-            if (response.data?.status) {
+            if (response?.status) {
                 toast.success('Cập nhật thông tin thành công!');
-                dispatch(updateUserSuccess(response.data.data));
+                dispatch(updateUserSuccess(response.data));
             }
         } catch (error) {
             toast.error(error.response?.data?.message || 'Không thể cập nhật thông tin.');
@@ -74,7 +74,7 @@ const AccountProfile = () => {
                 confirmPassword: passwordData.confirmPassword
             });
 
-            if (response.data?.status) {
+            if (response?.status) {
                 toast.success('Đổi mật khẩu thành công!');
                 setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
             }

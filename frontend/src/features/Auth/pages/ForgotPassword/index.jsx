@@ -26,11 +26,11 @@ const ForgotPassword = () => {
                 setLoading(true);
                 const response = await authApi.forgotPassword(values);
 
-                if (response.data.status) {
+                if (response.status) {
                     setEmailSent(true);
-                    toast.success(response.data.message);
+                    toast.success(response.message);
                 } else {
-                    toast.error(response.data.message);
+                    toast.error(response.message);
                 }
             } catch (error) {
                 const message = error.response?.data?.message || 'Có lỗi xảy ra. Vui lòng thử lại sau.';

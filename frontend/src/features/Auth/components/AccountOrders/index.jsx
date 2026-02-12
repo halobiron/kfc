@@ -48,7 +48,7 @@ const AccountOrders = () => {
         try {
             setLoading(true);
             const response = await orderApi.getMyOrders();
-            setOrders(response.data.data || []);
+            setOrders(response.data || []);
         } catch (error) {
             toast.error('Không thể tải đơn hàng. Vui lòng thử lại.');
         } finally {

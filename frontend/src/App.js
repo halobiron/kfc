@@ -73,9 +73,9 @@ function App() {
         try {
           dispatch(loadUserStart());
           const response = await authApi.getMe();
-          if (response.data.status) {
+          if (response.status) {
             dispatch(loadUserSuccess({
-              ...response.data.data,
+              ...response.data,
               token: user.token
             }));
           }

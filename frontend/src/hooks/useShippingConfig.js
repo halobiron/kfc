@@ -18,8 +18,8 @@ const useShippingConfig = () => {
                 setError(null);
                 const response = await orderApi.getShippingConfig();
 
-                if (response.data?.status && response.data?.data) {
-                    setConfig(response.data.data);
+                if (response?.status && response?.data) {
+                    setConfig(response.data);
                 }
             } catch (err) {
                 setError(err.response?.data?.message || 'Không thể tải cấu hình phí ship');
