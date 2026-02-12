@@ -3,7 +3,7 @@ import AddStoreModal from './AddStoreModal';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllStores, deleteStore } from '../../storeSlice';
-import './stores.css';
+import './Stores.css';
 import { FiEdit2, FiTrash2, FiPlus, FiMapPin, FiPhone, FiClock } from 'react-icons/fi';
 
 const CITY_LABELS = {

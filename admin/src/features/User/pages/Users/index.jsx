@@ -6,7 +6,7 @@ import { FiPlus, FiEdit2, FiTrash2, FiMail, FiPhone, FiUsers, FiDollarSign, FiUs
 import { toast } from 'react-toastify';
 import { MdRestaurant } from 'react-icons/md';
 import StatCard from '../../../../components/Common/StatCard';
-import './users.css';
+import './Users.css';
 
 const Users = () => {
     const dispatch = useDispatch();

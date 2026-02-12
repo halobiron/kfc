@@ -4,7 +4,7 @@ import { FiPlus, FiEdit2, FiTrash2, FiGift, FiPercent } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import StatCard from '../../../../components/Common/StatCard';
 import { getAllCoupons, createCoupon, updateCoupon, deleteCoupon, clearErrors, resetSuccess } from '../../couponSlice';
-import './promotions.css';
+import './Promotions.css';
 
 const Promotions = () => {
   const dispatch = useDispatch();

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import orderApi from '../../../api/orderApi';
 import StatCard from '../../../components/Common/StatCard';
 import StatusModal from '../../../components/Common/StatusModal';
-import './kitchen.css';
+import './Kitchen.css';
 
 const Kitchen = () => {
   const [orders, setOrders] = useState([]);

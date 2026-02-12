@@ -8,7 +8,7 @@ import { getAllIngredients } from '../../../Ingredient/ingredientSlice';
 import { getAllCategories } from '../../../Category/categorySlice';
 import { toast } from 'react-toastify';
 import { FiArrowLeft, FiSave, FiX, FiImage, FiBox, FiPlus, FiTrash2, FiActivity } from 'react-icons/fi';
-import './productDetails.css';
+import './ProductDetails.css';
 
 const ProductDetails = () => {
     const { id } = useParams();

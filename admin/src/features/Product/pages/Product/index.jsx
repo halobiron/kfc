@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { getAllProducts, deleteProduct } from '../../productSlice'
 import { getAllCategories } from '../../../Category/categorySlice'
 import AddModal from './AddModal';
-import './product.css';
+import './Product.css';
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
 
 const Product = () => {

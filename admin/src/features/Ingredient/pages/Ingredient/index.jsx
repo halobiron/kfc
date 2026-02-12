@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllIngredients, updateIngredientStock, createIngredient, updateIngredient } from '../../ingredientSlice';
 import { toast } from 'react-toastify';
 import { FiPlus, FiEdit2 } from 'react-icons/fi';
-import './ingredient.css';
+import './Ingredient.css';
 
 const Ingredient = () => {
     const dispatch = useDispatch();

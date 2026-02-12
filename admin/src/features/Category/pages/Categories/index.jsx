@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategories, addNewCategory, updateCategory, deleteCategory } from '../../categorySlice';
 import StatCard from '../../../../components/Common/StatCard';
 import { CheckboxField, TextField } from '../../../../components/Common/Form';
-import './categories.css';
+import './Categories.css';
 
 const Categories = () => {
   const dispatch = useDispatch();
