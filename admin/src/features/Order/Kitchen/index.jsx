@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import orderApi from '../../../api/orderApi';
 import StatCard from '../../../components/Common/StatCard';
 import StatusModal from '../../../components/Common/StatusModal';
+import Badge from '../../../components/Common/Badge';
 import './Kitchen.css';
 
 const Kitchen = () => {
@@ -86,10 +87,10 @@ const Kitchen = () => {
               <h5 className="mb-0 fw-bold" title={order.orderNumber || order._id}>{order.orderNumber || order._id.slice(0, 8).toUpperCase()}</h5>
               <small className="text-muted">{new Date(order.createdAt).toLocaleTimeString('vi-VN')}</small>
             </div>
-            <span className={`badge badge-${config.color}`}>
+            <Badge variant={config.color} className="d-inline-flex align-items-center">
               <StatusIcon size={14} className="me-1" />
               {config.label}
-            </span>
+            </Badge>
           </div>
         </div>
         <div className="order-card-body">

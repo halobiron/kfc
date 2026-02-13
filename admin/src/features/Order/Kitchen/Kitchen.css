@@ -75,18 +75,3 @@
 .orders-column::-webkit-scrollbar-track {
   background-color: #f0f0f0;
 }
-
-.badge-warning {
-  background-color: #ffc107;
-  color: #000;
-}
-
-.badge-info {
-  background-color: #0dcaf0;
-  color: #000;
-}
-
-.badge-success {
-  background-color: #198754;
-  color: white;
-}

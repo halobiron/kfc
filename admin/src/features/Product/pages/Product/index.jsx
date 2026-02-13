@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { getAllProducts, deleteProduct } from '../../productSlice'
 import { getAllCategories } from '../../../Category/categorySlice'
 import AddModal from './AddModal';
+import Badge from '../../../../components/Common/Badge';
 import './Product.css';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 
@@ -70,9 +71,9 @@ const Product = () => {
                           {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                         </td>
                         <td className="text-center">
-                          <span className={`badge ${product.stock > 10 ? 'badge-success' : 'badge-warning'}`}>
+                          <Badge variant={product.stock > 10 ? 'success' : 'warning'}>
                             {product.stock > 0 ? 'Còn hàng' : 'Hết hàng'} ({product.stock})
-                          </span>
+                          </Badge>
                         </td>
                         <td className="text-end pe-4">
                           <EditButton

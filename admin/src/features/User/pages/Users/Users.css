@@ -27,36 +27,6 @@
   border-radius: 4px;
 }
 
-.badge-danger {
-  background-color: rgba(220, 53, 69, 0.1) !important;
-  color: #dc3545 !important;
-}
-
-.badge-primary {
-  background-color: rgba(228, 0, 43, 0.1) !important;
-  color: var(--kfc-red) !important;
-}
-
-.badge-warning {
-  background-color: rgba(255, 193, 7, 0.2) !important;
-  color: #856404 !important;
-}
-
-.badge-info {
-  background-color: rgba(13, 202, 240, 0.1) !important;
-  color: #0dcaf0 !important;
-}
-
-.badge-success {
-  background-color: rgba(25, 135, 84, 0.1) !important;
-  color: #198754 !important;
-}
-
-.badge-secondary {
-  background-color: rgba(108, 117, 125, 0.1) !important;
-  color: #6c757d !important;
-}
-
 /* Synchronize StatCard colors with Role Badges */
 .stats-card .text-primary {
   color: var(--kfc-red) !important;
