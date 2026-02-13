@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FiCalendar, FiDownload, FiTrendingUp, FiShoppingBag, FiUsers, FiDollarSign } from 'react-icons/fi';
 import StatCard from '../../../../components/Common/StatCard';
 import Button from '../../../../components/Common/Button';
@@ -16,6 +16,51 @@ import {
     ArcElement
 } from 'chart.js';
 import { Line, Doughnut } from 'react-chartjs-2';
+import { formatCurrency } from '../../../../utils/formatters';
+
+const TIME_RANGES = [
+    { value: 'week', label: 'Tuần' },
+    { value: 'month', label: 'Tháng' },
+    { value: 'year', label: 'Năm' },
+];
+
+const STATS_CONFIG = [
+    {
+        label: 'Tổng doanh thu',
+        key: 'revenue',
+        icon: <FiDollarSign size={24} />,
+        color: 'primary',
+        formatter: (val) => formatCurrency(val)
+    },
+    {
+        label: 'Đơn hàng',
+        key: 'orders',
+        icon: <FiShoppingBag size={24} />,
+        color: 'success'
+    },
+    {
+        label: 'Khách hàng mới',
+        key: 'customers',
+        icon: <FiUsers size={24} />,
+        color: 'warning'
+    },
+    {
+        label: 'Trung bình đơn',
+        key: 'avgOrderValue',
+        icon: <FiTrendingUp size={24} />,
+        color: 'info',
+        formatter: (val) => formatCurrency(val)
+    }
+];
+
+const getDateRangeLabel = (range) => {
+    switch (range) {
+        case 'week': return 'Tuần này';
+        case 'month': return 'Tháng này';
+        case 'year': return 'Năm nay';
+        default: return '';
+    }
+};
 
 ChartJS.register(
     CategoryScale,
@@ -60,44 +105,15 @@ const Reports = () => {
         fetchStats();
     }, [dateRange]);
 
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-    };
-
     // Transform backend data to stats card format
-    const stats = [
-        {
-            label: 'Tổng doanh thu',
-            value: formatCurrency(statsData.revenue),
-            icon: <FiDollarSign size={24} />,
-            trend: 'N/A',
-            color: 'primary'
-        },
-        {
-            label: 'Đơn hàng',
-            value: statsData.orders,
-            icon: <FiShoppingBag size={24} />,
-            trend: 'N/A',
-            color: 'success'
-        },
-        {
-            label: 'Khách hàng mới',
-            value: statsData.customers,
-            icon: <FiUsers size={24} />,
-            trend: 'N/A',
-            color: 'warning'
-        },
-        {
-            label: 'Trung bình đơn',
-            value: formatCurrency(statsData.avgOrderValue),
-            icon: <FiTrendingUp size={24} />,
-            trend: 'N/A',
-            color: 'info'
-        }
-    ];
+    const stats = useMemo(() => STATS_CONFIG.map(config => ({
+        ...config,
+        value: config.formatter ? config.formatter(statsData[config.key]) : statsData[config.key],
+        trend: 'N/A'
+    })), [statsData]);
 
     // Chart Data Preparation
-    const lineChartData = {
+    const lineChartData = useMemo(() => ({
         labels: statsData.chart?.map(item => item._id) || [],
         datasets: [
             {
@@ -108,9 +124,9 @@ const Reports = () => {
                 tension: 0.3
             }
         ]
-    };
+    }), [statsData.chart]);
 
-    const pieChartData = {
+    const pieChartData = useMemo(() => ({
         labels: statsData.categoryStats?.map(item => item.name) || [],
         datasets: [
             {
@@ -126,7 +142,7 @@ const Reports = () => {
                 borderWidth: 1,
             },
         ],
-    };
+    }), [statsData.categoryStats]);
 
     const chartOptions = {
         responsive: true,
@@ -156,27 +172,16 @@ const Reports = () => {
                 <h1 className="page-title">Báo cáo & Thống kê</h1>
                 <div className="d-flex gap-3 align-items-center mt-3 mt-md-0">
                     <div className="btn-group border rounded overflow-hidden">
-                        <Button
-                            size="sm"
-                            variant={dateRange === 'week' ? 'primary' : 'light'}
-                            onClick={() => setDateRange('week')}
-                        >
-                            Tuần
-                        </Button>
-                        <Button
-                            size="sm"
-                            variant={dateRange === 'month' ? 'primary' : 'light'}
-                            onClick={() => setDateRange('month')}
-                        >
-                            Tháng
-                        </Button>
-                        <Button
-                            size="sm"
-                            variant={dateRange === 'year' ? 'primary' : 'light'}
-                            onClick={() => setDateRange('year')}
-                        >
-                            Năm
-                        </Button>
+                        {TIME_RANGES.map((range) => (
+                            <Button
+                                key={range.value}
+                                size="sm"
+                                variant={dateRange === range.value ? 'primary' : 'light'}
+                                onClick={() => setDateRange(range.value)}
+                            >
+                                {range.label}
+                            </Button>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -209,7 +214,7 @@ const Reports = () => {
                         <div className="col-12">
                             <div className="card border">
                                 <div className="card-header">
-                                    <h5 className="mb-0 fw-bold">Biểu đồ doanh thu <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
+                                    <h5 className="mb-0 fw-bold">Biểu đồ doanh thu <small className="text-muted fw-normal ms-2">({getDateRangeLabel(dateRange)})</small></h5>
                                 </div>
                                 <div className="card-body">
                                     <div style={{ height: '300px', width: '100%' }}>
@@ -231,7 +236,7 @@ const Reports = () => {
                         <div className="col-lg-6">
                             <div className="card h-100">
                                 <div className="card-header">
-                                    <h5 className="mb-0 fw-bold">Sản phẩm bán chạy <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
+                                    <h5 className="mb-0 fw-bold">Sản phẩm bán chạy <small className="text-muted fw-normal ms-2">({getDateRangeLabel(dateRange)})</small></h5>
                                 </div>
                                 <div className="table-responsive">
                                     <table className="table align-middle">
@@ -264,7 +269,7 @@ const Reports = () => {
                         <div className="col-lg-6">
                             <div className="card border shadow-sm h-100">
                                 <div className="card-header">
-                                    <h5 className="mb-0 fw-bold">Doanh thu theo danh mục <small className="text-muted fw-normal ms-2">({dateRange === 'week' ? 'Tuần này' : dateRange === 'month' ? 'Tháng này' : 'Năm nay'})</small></h5>
+                                    <h5 className="mb-0 fw-bold">Doanh thu theo danh mục <small className="text-muted fw-normal ms-2">({getDateRangeLabel(dateRange)})</small></h5>
                                 </div>
                                 <div className="card-body">
                                     <div className="d-flex align-items-center justify-content-center h-100" style={{ minHeight: '300px' }}>
