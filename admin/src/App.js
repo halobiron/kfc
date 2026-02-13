@@ -1,4 +1,3 @@
-import './App.css';
 import AdminLayout from './components/Layout/AdminLayout';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

@@ -1,0 +1,109 @@
+/* Form Enhancements */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--kfc-black);
+  font-size: 14px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--kfc-border-grey);
+  border-radius: 0;
+  font-size: 15px;
+  transition: all var(--transition-fast);
+}
+
+
+.form-control.is-invalid {
+  border-color: var(--kfc-danger);
+}
+
+.form-control.is-valid {
+  border-color: var(--kfc-success);
+}
+
+.invalid-feedback {
+  color: var(--kfc-danger);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.valid-feedback {
+  color: var(--kfc-success);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Custom Minimalist Search Bar */
+.input-group-search {
+  position: relative;
+  width: 100%;
+}
+
+.input-group-search .search-icon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--kfc-grey);
+  font-size: 18px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.form-control-search {
+  padding-left: 50px;
+  padding-right: 20px;
+  height: 50px;
+  border-radius: 100px !important;
+  border: 1px solid var(--kfc-border-grey);
+  background-color: var(--kfc-white);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.form-control-search:focus {
+  background-color: var(--kfc-white);
+  border-color: var(--kfc-red);
+  box-shadow: 0 4px 12px rgba(228, 0, 43, 0.15);
+}
+
+.form-control-search::placeholder {
+  color: #999;
+  font-weight: 300;
+}
+
+/* Custom Select */
+.form-select-custom {
+  height: 50px;
+  border-radius: 100px !important;
+  border: 1px solid var(--kfc-border-grey);
+  background-color: var(--kfc-white);
+  padding-left: 20px;
+  padding-right: 40px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1.5rem center;
+  background-size: 12px;
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.form-select-custom:focus {
+  border-color: var(--kfc-red);
+  box-shadow: 0 4px 12px rgba(228, 0, 43, 0.15);
+  outline: none;
+}

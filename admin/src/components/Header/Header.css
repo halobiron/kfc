@@ -1,0 +1,45 @@
+/*
+ * Navbar - KFC Style
+ */
+
+.navbar-brand {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-size: 1.2rem;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: var(--kfc-white);
+  color: var(--kfc-red) !important;
+  box-shadow: none;
+}
+
+.navbar .navbar-toggler {
+  top: .25rem;
+  right: 1rem;
+}
+
+.navbar .form-control {
+  padding: .75rem 1rem;
+  border: 1px solid var(--kfc-border-grey);
+  border-radius: 0;
+  background-color: var(--kfc-bg-light);
+}
+
+.navbar .form-control:focus {
+  border-color: var(--kfc-red);
+  box-shadow: none;
+  outline: none;
+}
+
+.form-control-dark {
+  color: var(--kfc-black);
+  background-color: var(--kfc-bg-light);
+  border-color: var(--kfc-border-grey);
+}
+
+.form-control-dark:focus {
+  border-color: var(--kfc-red);
+  box-shadow: none;
+}
+

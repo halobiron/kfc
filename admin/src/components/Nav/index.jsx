@@ -1,4 +1,5 @@
 import React from 'react'
+import './Nav.css';
 import { Link } from 'react-router-dom'
 import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiBox, FiTag, FiPackage, FiMapPin, FiLock } from 'react-icons/fi';
 

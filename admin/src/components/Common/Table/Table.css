@@ -1,0 +1,84 @@
+/* Enhanced Tables */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--kfc-white);
+  box-shadow: var(--shadow-card);
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.table thead {
+  background-color: var(--kfc-black);
+  color: var(--kfc-white);
+}
+
+.table thead th {
+  padding: 16px;
+  text-align: left;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid var(--kfc-border-grey);
+  transition: all var(--transition-fast);
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #FAFAFA;
+}
+
+.table tbody tr:hover {
+  background-color: #FFF5F5;
+  transform: scale(1.01);
+  box-shadow: var(--shadow-sm);
+}
+
+.table tbody td {
+  padding: 14px 16px;
+  color: var(--kfc-black);
+  font-size: 14px;
+}
+
+.table tbody td:first-child {
+  font-weight: 600;
+}
+
+/* Action Buttons in Tables */
+.btn-action {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 4px;
+  margin-right: 6px;
+  transition: all var(--transition-fast);
+}
+
+.btn-action:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-edit {
+  background-color: var(--kfc-black);
+  color: white;
+  border: none;
+}
+
+.btn-edit:hover {
+  background-color: var(--kfc-red);
+  color: var(--kfc-white) !important;
+}
+
+.btn-delete {
+  background-color: var(--kfc-red);
+  color: white;
+  border: none;
+}
+
+.btn-delete:hover {
+  background-color: #c40024;
+  color: var(--kfc-white) !important;
+}
