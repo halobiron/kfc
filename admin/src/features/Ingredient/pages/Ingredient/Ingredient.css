@@ -1,11 +1,6 @@
-
-.row-alert {
-    background-color: #fff8f8 !important;
-}
-
 .row-alert td {
     position: relative;
-    border-bottom: 1px solid rgba(228, 0, 43, 0.1) !important;
+    background-color: #ffdada !important;
 }
 
 .row-alert td:first-child::before {
@@ -19,28 +14,7 @@
     border-radius: 0 4px 4px 0;
 }
 
-.stats-card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 12px;
-}
-
-.stats-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
-}
-
-.btn-restock {
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.2s;
-}
-
 .modal-overlay-wrapper {
     background-color: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(2px);
-}
-
-.modal-overlay-inner {
-    border-radius: 12px !important;
-    padding: 24px !important;
 }

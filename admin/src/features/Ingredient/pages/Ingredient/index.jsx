@@ -204,7 +204,7 @@ const Ingredient = () => {
                                         <td><Badge variant="light" className="text-dark">{ing.category}</Badge></td>
                                         <td>
                                             <div className="fw-bold small">{ing.supplier || '---'}</div>
-                                            <div className="text-muted" style={{ fontSize: '0.75rem' }}>{ing.supplierContact || ''}</div>
+                                            <div className="text-muted supplier-contact-text">{ing.supplierContact || ''}</div>
                                         </td>
                                         <td className="text-center">{ing.unit}</td>
                                         <td className="text-end fw-bold">
@@ -243,7 +243,7 @@ const Ingredient = () => {
             {/* Restock Modal */}
             {showRestockModal && (
                 <div className="modal-overlay-wrapper">
-                    <div className="modal-overlay-inner overflow-hidden" style={{ width: '450px' }}>
+                    <div className="modal-overlay-inner overflow-hidden ingredient-restock-modal">
                         <div className="d-flex justify-content-between align-items-center mb-4">
                             <h5 className="mb-0 fw-bold">Nhập kho nguyên liệu</h5>
                             <button className="btn-close" onClick={() => setShowRestockModal(false)}></button>
@@ -258,7 +258,6 @@ const Ingredient = () => {
                             </div>
 
                             {/* Method Selection */}
-                            {/* Method Selection - Tabs */}
                             <ul className="nav nav-tabs nav-fill mb-3">
                                 <li className="nav-item">
                                     <button
@@ -372,7 +371,7 @@ const Ingredient = () => {
             {/* Add New Ingredient Modal */}
             {showAddModal && (
                 <div className="modal-overlay-wrapper">
-                    <div className="modal-overlay-inner overflow-hidden" style={{ width: '500px' }}>
+                    <div className="modal-overlay-inner overflow-hidden ingredient-add-modal">
                         <div className="d-flex justify-content-between align-items-center mb-4">
                             <h5 className="mb-0 fw-bold">{isEditing ? 'Cập nhật nguyên liệu' : 'Thêm nguyên liệu mới'}</h5>
                             <button className="btn-close" onClick={() => setShowAddModal(false)}></button>
