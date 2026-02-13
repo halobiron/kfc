@@ -1,5 +1,5 @@
 import React from 'react';
-import FieldWrapper from './FieldWrapper';
+import FieldWrapper from '../FieldWrapper';
 
 const TextField = ({
     label,
