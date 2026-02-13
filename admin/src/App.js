@@ -6,14 +6,14 @@ import Home from './features/Dashboard/pages/Home';
 import Product from './features/Product/pages/Product'
 import ProductDetails from './features/Product/pages/ProductDetails'
 import Ingredient from './features/Ingredient/pages/Ingredient'
-import Order from './features/Order/Order'
+import Order from './features/Order/pages/Order'
 import Users from './features/User/pages/Users';
 import Reports from './features/Dashboard/pages/Reports';
-import OrderDetails from './features/Order/OrderDetails';
+import OrderDetails from './features/Order/pages/OrderDetails';
 import Categories from './features/Category/pages/Categories';
 
 import Promotions from './features/Promotion/pages/Promotions';
-import Kitchen from './features/Order/Kitchen';
+import Kitchen from './features/Order/pages/Kitchen';
 import Stores from './features/Store/pages/Stores';
 import ChangePassword from './features/Auth/pages/ChangePassword';
 import Roles from './features/Role/pages/Roles';

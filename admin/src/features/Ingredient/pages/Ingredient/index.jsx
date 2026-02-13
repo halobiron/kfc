@@ -149,7 +149,7 @@ const Ingredient = () => {
                                         <td><Badge variant="light" className="text-dark">{ing.category}</Badge></td>
                                         <td>
                                             <div className="fw-bold small">{ing.supplier || '---'}</div>
-                                            <div className="text-muted supplier-contact-text">{ing.supplierContact || ''}</div>
+                                            <div className="text-muted">{ing.supplierContact || ''}</div>
                                         </td>
                                         <td className="text-center">{ing.unit}</td>
                                         <td className="text-end fw-bold">

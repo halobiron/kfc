@@ -2,7 +2,6 @@
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  margin-bottom: 12px;
   transition: all 0.2s ease;
 }
 
@@ -16,22 +15,6 @@
   border-bottom: 1px solid #f0f0f0;
 }
 
-.order-card-header .d-flex {
-  min-width: 0;
-}
-
-.order-card-header .d-flex>div:first-child {
-  min-width: 0;
-  flex: 1;
-}
-
-.order-card-header h5 {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-right: 10px;
-}
-
 .order-card-body {
   padding: 12px;
 }
@@ -43,12 +26,7 @@
 }
 
 .order-items-list li {
-  padding: 4px 0;
-  border-bottom: 1px dashed #e9ecef;
-}
-
-.order-items-list li:last-child {
-  border-bottom: none;
+  padding: 5px 0;
 }
 
 .item-quantity {

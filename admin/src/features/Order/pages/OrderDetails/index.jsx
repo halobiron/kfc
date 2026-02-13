@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import orderApi from '../../../api/orderApi';
+import orderApi from '../../../../api/orderApi';
 import { FiArrowLeft, FiPrinter, FiXCircle, FiCheckCircle, FiTruck, FiPackage, FiClock, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
-import StatusModal from '../../../components/Common/StatusModal';
-import Button from '../../../components/Common/Button';
-import Badge from '../../../components/Common/Badge';
+import StatusModal from '../../../../components/Common/StatusModal';
+import Button from '../../../../components/Common/Button';
+import Badge from '../../../../components/Common/Badge';
 import './OrderDetails.css';
 
 const STATUS_LABELS = {
@@ -41,6 +41,10 @@ const OrderDetails = () => {
     const [targetStatus, setTargetStatus] = useState('');
     const [updating, setUpdating] = useState(false);
 
+    const getErrorMessage = (error, fallback) => {
+        return error?.response?.data?.message || error?.message || fallback;
+    };
+
     useEffect(() => {
         fetchOrderDetails();
     }, [id]);
@@ -53,7 +57,7 @@ const OrderDetails = () => {
             setStatus(orderData.status);
         } catch (error) {
             console.error('Lỗi khi tải chi tiết đơn hàng:', error);
-            toast.error('Không thể tải chi tiết đơn hàng.');
+            toast.error(getErrorMessage(error, 'Không thể tải chi tiết đơn hàng.'));
             navigate('/orders');
         } finally {
             setLoading(false);
@@ -75,7 +79,7 @@ const OrderDetails = () => {
             fetchOrderDetails();
         } catch (error) {
             console.error(error);
-            toast.error('Không thể cập nhật trạng thái đơn hàng.');
+            toast.error(getErrorMessage(error, 'Không thể cập nhật trạng thái đơn hàng.'));
         } finally {
             setUpdating(false);
         }

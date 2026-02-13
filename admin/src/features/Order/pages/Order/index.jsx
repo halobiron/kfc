@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { FiEye, FiCheck, FiTrash2, FiMapPin, FiXCircle, FiTruck, FiCheckCircle } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllOrders, updateOrderStatus, deleteOrder } from '../orderSlice';
+import { getAllOrders, updateOrderStatus, deleteOrder } from '../../orderSlice';
 import { toast } from 'react-toastify';
-import StatusModal from '../../../components/Common/StatusModal';
-import Badge from '../../../components/Common/Badge';
+import StatusModal from '../../../../components/Common/StatusModal';
+import Badge from '../../../../components/Common/Badge';
 
 const Order = () => {
   const dispatch = useDispatch();
