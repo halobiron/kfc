@@ -22,11 +22,17 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  Navigate
 } from "react-router-dom";
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from './features/Auth/authSlice';
+
+const RequireAuth = ({ children }) => {
+  const { token } = useSelector(state => state.auth);
+  return token ? children : <Navigate to="/" replace />;
+};
 
 function App() {
   const dispatch = useDispatch();
@@ -54,7 +60,7 @@ function App() {
         />
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route element={<AdminLayout />}>
+          <Route element={<RequireAuth><AdminLayout /></RequireAuth>}>
             <Route path="/home" element={<Home />} />
             <Route path="/products" element={<Product />} />
             <Route path="/products/:id" element={<ProductDetails />} />

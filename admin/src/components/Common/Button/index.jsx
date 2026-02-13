@@ -106,7 +106,7 @@ export const AddButton = ({ onClick, ...props }) => (
 export const EditButton = ({ onClick, children, ...props }) => (
     <Button 
         size="sm" 
-        variant="outline-primary" 
+        variant="outline-dark" 
         icon={<FiEdit2 />}
         onClick={onClick}
         title={props.title || 'Sửa'}

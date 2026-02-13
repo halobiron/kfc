@@ -99,6 +99,7 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.isAuthenticated = false;
                 state.user = null;
+                state.token = null;
                 // Don't set error here to avoid showing error on initial load if not logged in
                 localStorage.removeItem('token');
             })

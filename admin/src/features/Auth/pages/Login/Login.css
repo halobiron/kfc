@@ -3,61 +3,22 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding-top: 40px;
-  padding-bottom: 40px;
   background-color: var(--kfc-bg-light);
 }
 
 .form-signin {
-  width: 100%;
-  max-width: 400px;
   padding: 40px;
-  margin: auto;
   background-color: var(--kfc-white);
-  border-radius: 0;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-signin h1 {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--kfc-black);
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.form-signin .checkbox {
-  font-weight: 400;
-}
-
-.form-signin .form-floating:focus-within {
-  z-index: 2;
-}
-
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-  border: 1px solid var(--kfc-border-grey);
-}
-
-.form-signin input[type="password"] {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border: 1px solid var(--kfc-border-grey);
-}
-
-.form-signin input:focus {
-  border-color: var(--kfc-red);
-  box-shadow: none;
-}
-
-.form-signin .btn {
-  margin-top: 10px;
+.login-logo {
+  width: 100px;
+  margin: 0 auto 20px;
+  display: block;
 }
 
 .form-signin .text-muted {
-  color: var(--kfc-grey) !important;
+  color: var(--kfc-grey);
   text-align: center;
 }

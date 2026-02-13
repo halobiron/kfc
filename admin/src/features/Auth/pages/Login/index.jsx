@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login, clearErrors } from '../../authSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { TextField } from '../../../../components/Common/Form';
+import '../../../../components/Common/Form/Form.css';
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -23,7 +25,7 @@ const Login = () => {
         }
     }, [dispatch, isAuthenticated, error, navigate]);
 
-    const { handleSubmit, handleChange, handleBlur, values, touched, errors } = useFormik({
+    const formik = useFormik({
         initialValues: {
             email: '',
             password: ''
@@ -32,26 +34,44 @@ const Login = () => {
             email: Yup.string().email('Địa chỉ email không hợp lệ').required('Bắt buộc'),
             password: Yup.string().required('Bắt buộc')
         }),
-        onSubmit: (values) => {
-            dispatch(login(values));
+        onSubmit: (formValues) => {
+            dispatch(login(formValues));
         }
     })
     return (
         <div className="login-wrapper">
             <main className="form-signin">
-                <form onSubmit={handleSubmit}>
-                    <img src="https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png" alt="KFC Logo" style={{ width: '120px', margin: '0 auto 20px', display: 'block' }} />
+                <form onSubmit={formik.handleSubmit}>
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png"
+                        alt="KFC Logo"
+                        className="login-logo"
+                    />
                     <h1 className="h3 mb-3 fw-normal">Đăng nhập vào hệ thống</h1>
-                    <div className="form-floating">
-                        <input type="email" onChange={handleChange} onBlur={handleBlur} value={values.email} name="email" className="form-control" id="floatingInput" placeholder="name@example.com" />
-                        <label htmlFor="floatingInput">Địa chỉ Email</label>
-                        <p style={{ color: 'red' }}>{touched.email && errors.email ? errors.email : null}</p>
-                    </div>
-                    <div className="form-floating">
-                        <input type="password" onChange={handleChange} onBlur={handleBlur} value={values.password} name="password" className="form-control" id="floatingPassword" placeholder="Password" />
-                        <label htmlFor="floatingPassword">Mật khẩu</label>
-                        <p style={{ color: 'red' }}>{touched.password && errors.password ? errors.password : null}</p>
-                    </div>
+                    <TextField
+                        type="email"
+                        name="email"
+                        label="Địa chỉ Email"
+                        placeholder="name@example.com"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.errors.email}
+                        touched={formik.touched.email}
+                        containerClassName="mb-3"
+                    />
+                    <TextField
+                        type="password"
+                        name="password"
+                        label="Mật khẩu"
+                        placeholder="Nhập mật khẩu"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.errors.password}
+                        touched={formik.touched.password}
+                        containerClassName="mb-3"
+                    />
 
                     <button className="w-100 btn btn-lg btn-primary" type="submit" disabled={loading}>
                         {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
