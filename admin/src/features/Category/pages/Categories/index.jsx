@@ -86,7 +86,7 @@ const Categories = () => {
   return (
     <>
       <>
-        <div className="page-header d-flex justify-content-between align-items-center">
+        <div className="categories-page-header">
           <h1 className="page-title">Quản lý Danh mục Sản phẩm</h1>
           <AddButton
             onClick={() => handleOpenModal()}
@@ -151,7 +151,7 @@ const Categories = () => {
                       <span className="badge bg-light text-dark">{category.productCount || 0} món</span>
                     </td>
                     <td className="text-center">
-                      <div className="form-check form-switch d-flex justify-content-center">
+                      <div className="form-check form-switch categories-switch-wrap">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -178,7 +178,7 @@ const Categories = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal fade show d-block categories-modal-backdrop" tabIndex="-1">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">

@@ -1,27 +1,13 @@
-/* Category specific styles */
-.badge {
-  padding: 0.5em 1em;
-  font-weight: 500;
-  border-radius: 20px;
+.categories-modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
-.table-responsive {
-  border-radius: 8px;
-  overflow: hidden;
+.categories-page-header {
+  display: flex;
+  justify-content: space-between;
 }
 
-.modal-content {
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.modal-header {
-  border-bottom: 1px solid var(--kfc-border-grey);
-  padding: 1.5rem;
-}
-
-.modal-footer {
-  border-top: 1px solid var(--kfc-border-grey);
-  padding: 1.5rem;
+.categories-switch-wrap {
+  display: flex;
+  justify-content: center;
 }

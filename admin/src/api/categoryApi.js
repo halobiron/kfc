@@ -5,16 +5,16 @@ const categoryApi = {
         return axiosClient.get('/categories');
     },
     get(id) {
-        return axiosClient.get(`/categories/${id}`);
+        return axiosClient.get(`/category/${id}`);
     },
     add(data) {
-        return axiosClient.post('/categories/new', data);
+        return axiosClient.post('/category/new', data);
     },
     update(id, data) {
-        return axiosClient.put(`/categories/update/${id}`, data);
+        return axiosClient.put(`/category/update/${id}`, data);
     },
     delete(id) {
-        return axiosClient.delete(`/categories/delete/${id}`);
+        return axiosClient.delete(`/category/delete/${id}`);
     }
 };
 
