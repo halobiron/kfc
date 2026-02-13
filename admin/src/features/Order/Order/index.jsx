@@ -115,7 +115,7 @@ const Order = () => {
                       <div className="btn-group">
                         <Link
                           to={`/orders/${order._id}`}
-                          className="btn btn-sm btn-outline-primary"
+                          className="btn btn-sm btn-outline-dark"
                           title="Xem chi tiết"
                         >
                           <FiEye />
