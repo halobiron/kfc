@@ -5,28 +5,9 @@ import orderApi from '../../../../api/orderApi';
 import { FiArrowLeft, FiPrinter, FiXCircle, FiCheckCircle, FiTruck, FiPackage, FiClock, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
 import StatusModal from '../../../../components/Common/StatusModal';
 import Button from '../../../../components/Common/Button';
-import Badge from '../../../../components/Common/Badge';
+import { getOrderStatusMeta } from '../../components/OrderStatusBadge/orderStatus';
+import OrderStatusBadge from '../../components/OrderStatusBadge';
 import './OrderDetails.css';
-
-const STATUS_LABELS = {
-    pending: 'Chờ xác nhận',
-    confirmed: 'Đã xác nhận',
-    preparing: 'Đang chuẩn bị',
-    ready: 'Sẵn sàng giao',
-    shipping: 'Đang giao hàng',
-    delivered: 'Hoàn thành',
-    cancelled: 'Đã hủy'
-};
-
-const STATUS_BADGES = {
-    pending: 'warning',
-    confirmed: 'info',
-    preparing: 'info', // text-dark handled by variant style or className if needed
-    ready: 'success',
-    shipping: 'primary',
-    delivered: 'success',
-    cancelled: 'danger'
-};
 
 const OrderDetails = () => {
     const { id } = useParams();
@@ -199,12 +180,7 @@ const OrderDetails = () => {
                         <div className="card-header">Trạng thái đơn hàng</div>
                         <div className="card-body">
                             <div className="d-flex align-items-center mb-3">
-                                <Badge
-                                    variant={STATUS_BADGES[status] || 'secondary'}
-                                    className="p-2 fs-6"
-                                >
-                                    {STATUS_LABELS[status] || status}
-                                </Badge>
+                                <OrderStatusBadge status={status} className="p-2 fs-6" />
                                 <span className="ms-3 text-muted">Cập nhật lần cuối: {new Date(order.updatedAt).toLocaleString('vi-VN')}</span>
                             </div>
 
@@ -216,7 +192,7 @@ const OrderDetails = () => {
                                         {[...order.statusHistory]
                                             .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
                                             .map((history, index) => {
-                                                const label = STATUS_LABELS[history.status] || history.status;
+                                                const { label } = getOrderStatusMeta(history.status);
                                                 const isLatest = index === 0;
                                                 return (
                                                     <li key={index} className={`timeline-item ${isLatest ? 'latest' : 'completed'}`}>
@@ -287,6 +263,7 @@ const OrderDetails = () => {
                 onHide={() => setShowModal(false)}
                 onConfirm={handleConfirmStatusChange}
                 status={targetStatus}
+                statusLabel={getOrderStatusMeta(targetStatus).label}
                 loading={updating}
                 title={targetStatus === 'cancelled' ? 'Xác nhận Hủy đơn hàng' : 'Cập nhật trạng thái'}
             />

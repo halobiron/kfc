@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllOrders, updateOrderStatus, deleteOrder } from '../../orderSlice';
 import { toast } from 'react-toastify';
 import StatusModal from '../../../../components/Common/StatusModal';
-import Badge from '../../../../components/Common/Badge';
+import OrderStatusBadge from '../../components/OrderStatusBadge';
+import { getOrderStatusMeta } from '../../components/OrderStatusBadge/orderStatus';
 
 const Order = () => {
   const dispatch = useDispatch();
@@ -44,19 +45,6 @@ const Order = () => {
 
   const handleCancelClick = (id) => {
     openUpdateModal(id, 'cancelled');
-  };
-
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'pending': return <Badge variant="warning">Chờ xác nhận</Badge>;
-      case 'confirmed': return <Badge variant="info">Đã xác nhận</Badge>;
-      case 'preparing': return <Badge variant="info" className="text-dark">Đang chuẩn bị</Badge>;
-      case 'ready': return <Badge variant="success">Sẵn sàng giao</Badge>;
-      case 'shipping': return <Badge variant="primary">Đang giao</Badge>;
-      case 'delivered': return <Badge variant="success">Hoàn thành</Badge>;
-      case 'cancelled': return <Badge variant="danger">Đã hủy</Badge>;
-      default: return <Badge variant="secondary">{status}</Badge>;
-    }
   };
 
   const formatPrice = (price) => {
@@ -111,7 +99,7 @@ const Order = () => {
                       </ul>
                     </td>
                     <td className="fw-bold text-danger">{formatPrice(order.totalAmount)}</td>
-                    <td>{getStatusBadge(order.status)}</td>
+                    <td><OrderStatusBadge status={order.status} /></td>
                     <td>
                       <div className="btn-group">
                         <Link
@@ -174,6 +162,7 @@ const Order = () => {
         onHide={() => setShowModal(false)}
         onConfirm={handleConfirmUpdate}
         status={targetStatus}
+        statusLabel={getOrderStatusMeta(targetStatus).label}
         loading={updating}
         title={targetStatus === 'cancelled' ? 'Xác nhận Hủy đơn hàng' : 'Cập nhật trạng thái'}
       />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const StatusModal = ({ show, onHide, onConfirm, status, loading, title }) => {
+const StatusModal = ({ show, onHide, onConfirm, status, statusLabel, loading, title }) => {
     const [note, setNote] = useState('');
     const inputRef = useRef(null);
 
@@ -29,18 +29,8 @@ const StatusModal = ({ show, onHide, onConfirm, status, loading, title }) => {
         }
     };
 
-    // Mapping status to readable text
-    const STATUS_LABELS = {
-        pending: 'Chờ xác nhận',
-        confirmed: 'Đã xác nhận',
-        preparing: 'Đang chuẩn bị',
-        ready: 'Sẵn sàng giao',
-        shipping: 'Đang giao hàng',
-        delivered: 'Hoàn thành',
-        cancelled: 'Hủy đơn'
-    };
-
     const isCancelAction = status === 'cancelled';
+    const displayStatusLabel = statusLabel || status;
 
     return (
         <Modal show={show} onHide={onHide} centered>
@@ -51,7 +41,7 @@ const StatusModal = ({ show, onHide, onConfirm, status, loading, title }) => {
                 <Form onSubmit={handleSubmit}>
                     <p className="mb-3">
                         Bạn có chắc muốn chuyển đơn hàng sang trạng thái <strong className={isCancelAction ? 'text-danger' : 'text-primary'}>
-                            {STATUS_LABELS[status] || status}
+                            {displayStatusLabel}
                         </strong> không?
                     </p>
                     <Form.Group className="mb-3">

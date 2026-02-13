@@ -13,12 +13,6 @@ const Kitchen = () => {
     getOrdersByStatus
   } = useKitchenOrders();
 
-  const statusConfig = {
-    confirmed: { label: 'Chờ chế biến', color: 'warning', icon: FiClock },
-    preparing: { label: 'Đang chuẩn bị', color: 'info', icon: FiAlertCircle },
-    ready: { label: 'Sẵn sàng giao', color: 'success', icon: FiCheckCircle }
-  };
-
   return (
     <>
       <div className="page-header d-flex justify-content-between align-items-center">
@@ -77,7 +71,6 @@ const Kitchen = () => {
                     <OrderCard
                       key={order._id}
                       order={order}
-                      config={statusConfig[order.status]}
                       onStatusChange={handleStatusChange}
                     />
                   ))
@@ -106,7 +99,6 @@ const Kitchen = () => {
                     <OrderCard
                       key={order._id}
                       order={order}
-                      config={statusConfig[order.status]}
                       onStatusChange={handleStatusChange}
                     />
                   ))
@@ -135,7 +127,6 @@ const Kitchen = () => {
                     <OrderCard
                       key={order._id}
                       order={order}
-                      config={statusConfig[order.status]}
                       onStatusChange={handleStatusChange}
                     />
                   ))

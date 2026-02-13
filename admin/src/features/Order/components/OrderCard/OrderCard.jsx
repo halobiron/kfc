@@ -1,14 +1,9 @@
-﻿import React from 'react';
-// Re-saving to fix import paths
+import React from 'react';
 import { FiChevronRight, FiCheckCircle } from 'react-icons/fi';
-import Badge from '../../../../components/Common/Badge';
 import { formatCurrency } from '../../../../utils/formatters';
+import OrderStatusBadge from '../OrderStatusBadge';
 
-const OrderCard = ({ order, config, onStatusChange }) => {
-  if (!config) return null;
-
-  const StatusIcon = config.icon;
-
+const OrderCard = ({ order, onStatusChange }) => {
   return (
     <div className="order-card">
       <div className="order-card-header">
@@ -21,10 +16,7 @@ const OrderCard = ({ order, config, onStatusChange }) => {
               {new Date(order.createdAt).toLocaleTimeString('vi-VN')}
             </small>
           </div>
-          <Badge variant={config.color} className="d-inline-flex align-items-center">
-            <StatusIcon size={14} className="me-1" />
-            {config.label}
-          </Badge>
+          <OrderStatusBadge status={order.status} />
         </div>
       </div>
       <div className="order-card-body">
