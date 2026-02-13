@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllRoles, createRole, updateRole, deleteRole, clearErrors, resetSuccess } from '../../roleSlice';
 import { toast } from 'react-toastify';
-import { FiPlus, FiEdit2, FiTrash2, FiX } from 'react-icons/fi';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
+import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Form from 'react-bootstrap/Form';
 
 const RoleManagement = () => {
@@ -130,9 +130,7 @@ const RoleManagement = () => {
         <>
             <div className="d-flex justify-content-between align-items-center mb-4 pt-4">
                 <h2>Quản lý Phân quyền</h2>
-                <button className="btn btn-primary" onClick={() => { setIsEdit(false); handleShow(); }}>
-                    <FiPlus className="me-2" /> Thêm vai trò
-                </button>
+                <AddButton onClick={() => { setIsEdit(false); handleShow(); }} />
             </div>
 
             <div className="table-responsive bg-white rounded shadow-sm p-4">
@@ -191,14 +189,12 @@ const RoleManagement = () => {
                                             </div>
                                         </td>
                                         <td>
-                                            <button className="btn btn-sm btn-outline-primary me-2" onClick={() => handleEdit(role)}>
-                                                <FiEdit2 />
-                                            </button>
-                                            {!role.isDefault && (
-                                                <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(role._id)}>
-                                                    <FiTrash2 />
-                                                </button>
-                                            )}
+                                            <div className="d-flex gap-2">
+                                                <EditButton onClick={() => handleEdit(role)} />
+                                                {!role.isDefault && (
+                                                    <DeleteButton onClick={() => handleDelete(role._id)} />
+                                                )}
+                                            </div>
                                         </td>
                                     </tr>
                                 )
@@ -277,8 +273,8 @@ const RoleManagement = () => {
                             <Button variant="secondary" onClick={handleClose}>
                                 Hủy
                             </Button>
-                            <Button variant="primary" type="submit" disabled={loading}>
-                                {loading ? 'Đang xử lý...' : (isEdit ? 'Cập nhật' : 'Thêm mới')}
+                            <Button variant="primary" type="submit" loading={loading}>
+                                {isEdit ? 'Cập nhật' : 'Thêm mới'}
                             </Button>
                         </div>
                     </Form>

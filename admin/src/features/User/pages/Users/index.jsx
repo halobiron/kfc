@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers, createUser, updateUser, deleteUser } from '../../userSlice';
 import { getAllRoles } from '../../../Role/roleSlice';
-import { FiPlus, FiEdit2, FiTrash2, FiMail, FiPhone, FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell } from 'react-icons/fi';
-import { toast } from 'react-toastify';
+import { FiMail, FiPhone, FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell } from 'react-icons/fi';
 import { MdRestaurant } from 'react-icons/md';
 import StatCard from '../../../../components/Common/StatCard';
+import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import './Users.css';
 
 const Users = () => {
     const dispatch = useDispatch();
-    const { users: usersList, loading } = useSelector((state) => state.users);
+    const { users: usersList } = useSelector((state) => state.users);
     const { roles } = useSelector((state) => state.roles);
 
     useEffect(() => {
@@ -107,13 +107,7 @@ const Users = () => {
             <>
                 <div className="page-header d-flex justify-content-between align-items-center">
                     <h1 className="page-title">Quản lý người dùng</h1>
-                    <button
-                        type="button"
-                        className="btn btn-primary d-flex align-items-center gap-2 shadow-sm"
-                        onClick={() => handleOpenModal()}
-                    >
-                        <FiPlus size={20} /> Thêm người dùng
-                    </button>
+                    <AddButton onClick={() => handleOpenModal()} />
                 </div>
 
                 {/* Stats Overview */}
@@ -232,24 +226,17 @@ const Users = () => {
                                                 </div>
                                             </td>
                                             <td className="text-end pe-4">
-                                                <button
-                                                    className="btn-action btn-edit border-0 d-inline-flex align-items-center"
+                                                <EditButton
+                                                    className="me-2"
                                                     onClick={() => handleOpenModal(user)}
-                                                >
-                                                    <FiEdit2 style={{ marginRight: '4px' }} />
-                                                    Sửa
-                                                </button>
-                                                <button
-                                                    className="btn-action btn-delete border-0 d-inline-flex align-items-center"
+                                                />
+                                                <DeleteButton
                                                     onClick={() => handleDelete(user._id)}
                                                     disabled={roleName === 'admin'}
-                                                >
-                                                    <FiTrash2 style={{ marginRight: '4px' }} />
-                                                    Xóa
-                                                </button>
+                                                />
                                             </td>
                                         </tr>
-                                    )
+                                    );
                                 })}
                             </tbody>
                         </table>
@@ -370,12 +357,12 @@ const Users = () => {
                                     </div>
                                 </div>
                                 <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>
+                                    <Button variant="secondary" onClick={handleCloseModal}>
                                         Hủy
-                                    </button>
-                                    <button type="submit" className="btn btn-primary">
+                                    </Button>
+                                    <Button type="submit" variant="primary">
                                         {editMode ? 'Cập nhật' : 'Thêm mới'}
-                                    </button>
+                                    </Button>
                                 </div>
                             </form>
                         </div>

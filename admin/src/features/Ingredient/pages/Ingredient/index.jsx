@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllIngredients, updateIngredientStock, createIngredient, updateIngredient } from '../../ingredientSlice';
 import { toast } from 'react-toastify';
 import { FiPlus, FiEdit2 } from 'react-icons/fi';
+import Button, { AddButton, EditButton } from '../../../../components/Common/Button';
 import './Ingredient.css';
 
 const Ingredient = () => {
@@ -168,9 +169,7 @@ const Ingredient = () => {
             <div className="page-header d-flex justify-content-between align-items-center">
                 <h1 className="page-title">Quản lý Nguyên liệu (Kho)</h1>
                 <div className="d-flex gap-2">
-                    <button className="btn btn-primary d-flex align-items-center gap-2 shadow-sm" onClick={openCreateModal}>
-                        <FiPlus size={20} /> Thêm nguyên liệu
-                    </button>
+                    <AddButton onClick={openCreateModal} />
                 </div>
             </div>
 
@@ -218,18 +217,19 @@ const Ingredient = () => {
                                             </span>
                                         </td>
                                         <td className="text-end pe-4">
-                                            <button
-                                                className="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 me-2"
+                                            <EditButton
+                                                className="me-2"
                                                 onClick={() => openEditModal(ing)}
-                                            >
-                                                <FiEdit2 /> Sửa
-                                            </button>
-                                            <button
-                                                className="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-1"
+                                            />
+                                            <Button
+                                                size="sm"
+                                                variant="outline-success"
+                                                title="Nhập kho"
+                                                aria-label="Nhập kho"
                                                 onClick={() => openRestockModal(ing)}
                                             >
-                                                <FiPlus /> Nhập
-                                            </button>
+                                                <FiPlus />
+                                            </Button>
                                         </td>
                                     </tr>
                                 )
@@ -354,14 +354,14 @@ const Ingredient = () => {
                             </div>
 
                             <div className="d-flex gap-2">
-                                <button type="submit" className="btn btn-primary w-100 py-2">
+                                <Button type="submit" variant="primary" className="w-100 py-2">
                                     Xác nhận nhập (+{
                                         importMethod === 'pack'
                                             ? (parseFloat(restockAmount || 0) * parseFloat(packSize || 0)).toLocaleString()
                                             : (parseFloat(restockAmount || 0)).toLocaleString()
                                     } {selectedIng?.unit})
-                                </button>
-                                <button type="button" className="btn btn-light w-100 py-2" onClick={() => setShowRestockModal(false)}>Hủy</button>
+                                </Button>
+                                <Button variant="light" className="w-100 py-2" onClick={() => setShowRestockModal(false)}>Hủy</Button>
                             </div>
                         </form>
                     </div>
@@ -481,8 +481,8 @@ const Ingredient = () => {
                             </div>
 
                             <div className="d-flex gap-2">
-                                <button type="submit" className="btn btn-primary w-100 py-2">{isEditing ? 'Cập nhật' : 'Thêm mới'}</button>
-                                <button type="button" className="btn btn-light w-100 py-2" onClick={() => setShowAddModal(false)}>Hủy</button>
+                                <Button type="submit" variant="primary" className="w-100 py-2">{isEditing ? 'Cập nhật' : 'Thêm mới'}</Button>
+                                <Button variant="light" className="w-100 py-2" onClick={() => setShowAddModal(false)}>Hủy</Button>
                             </div>
                         </form>
                     </div>

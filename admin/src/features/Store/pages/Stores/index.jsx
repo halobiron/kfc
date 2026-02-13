@@ -3,8 +3,9 @@ import AddStoreModal from './AddStoreModal';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllStores, deleteStore } from '../../storeSlice';
+import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import './Stores.css';
-import { FiEdit2, FiTrash2, FiPlus, FiMapPin, FiPhone, FiClock } from 'react-icons/fi';
+import { FiMapPin, FiPhone, FiClock } from 'react-icons/fi';
 
 const CITY_LABELS = {
     hcm: 'TP.HCM',
@@ -18,7 +19,7 @@ const Stores = () => {
     const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
     const [selectedStore, setSelectedStore] = useState(null);
-    const { stores, loading } = useSelector(state => state.stores);
+    const { stores } = useSelector(state => state.stores);
 
     useEffect(() => {
         dispatch(getAllStores());
@@ -50,16 +51,12 @@ const Stores = () => {
             <>
                 <div className="page-header d-flex justify-content-between align-items-center">
                     <h1 className="page-title">Quản lý Cửa Hàng</h1>
-                    <button
-                        type="button"
-                        className="btn btn-primary d-flex align-items-center gap-2 shadow-sm"
+                    <AddButton 
                         onClick={() => {
                             setSelectedStore(null);
                             setShowModal(true);
                         }}
-                    >
-                        <FiPlus size={20} /> Thêm cửa hàng
-                    </button>
+                    />
                 </div>
 
                 <div className="card">
@@ -104,18 +101,13 @@ const Stores = () => {
                                             </div>
                                         </td>
                                         <td className="text-end pe-4">
-                                            <button
-                                                className="btn-action btn-edit border-0 d-inline-flex align-items-center"
+                                            <EditButton
+                                                className="me-2"
                                                 onClick={() => handleEdit(store)}
-                                            >
-                                                <FiEdit2 className="me-1" /> Sửa
-                                            </button>
-                                            <button
-                                                className="btn-action btn-delete border-0 d-inline-flex align-items-center"
+                                            />
+                                            <DeleteButton
                                                 onClick={() => handleDelete(store._id)}
-                                            >
-                                                <FiTrash2 className="me-1" /> Xóa
-                                            </button>
+                                            />
                                         </td>
                                     </tr>
                                 ))}

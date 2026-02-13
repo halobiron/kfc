@@ -8,6 +8,7 @@ import { getAllIngredients } from '../../../Ingredient/ingredientSlice';
 import { getAllCategories } from '../../../Category/categorySlice';
 import { toast } from 'react-toastify';
 import { FiArrowLeft, FiSave, FiX, FiImage, FiBox, FiPlus, FiTrash2, FiActivity } from 'react-icons/fi';
+import { AddButton, DeleteButton } from '../../../../components/Common/Button';
 import './ProductDetails.css';
 
 const ProductDetails = () => {
@@ -305,13 +306,11 @@ const ProductDetails = () => {
                                         />
                                     </div>
                                     <div className="col-md-2">
-                                        <button
+                                        <AddButton
                                             type="button"
-                                            className="btn btn-primary w-100"
+                                            className="w-100"
                                             onClick={addIngredientToRecipe}
-                                        >
-                                            <FiPlus size={20} className="me-1" /> Thêm
-                                        </button>
+                                        />
                                     </div>
                                 </div>
 
@@ -338,6 +337,7 @@ const ProductDetails = () => {
                                                             className="btn btn-sm btn-outline-danger"
                                                             onClick={() => removeIngredientFromRecipe(item.ingredientId)}
                                                             style={{ borderRadius: '4px', padding: '4px 8px' }}
+                                                            title="Xóa nguyên liệu"
                                                         >
                                                             <FiTrash2 size={14} />
                                                         </button>

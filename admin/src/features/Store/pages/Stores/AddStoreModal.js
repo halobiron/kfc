@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { createStore, updateStore } from '../../storeSlice';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import Button from '../../../../components/Common/Button';
 
 const CITIES = [
     { id: 'hcm', name: 'TP. Hồ Chí Minh' },
@@ -191,8 +192,8 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
                     </div>
 
                     <div className="col-12 mt-4 text-end">
-                        <button type="button" className="btn btn-secondary me-3" onClick={() => setShowModal(false)}>Hủy</button>
-                        <button type="submit" className="btn btn-primary">{initialStore ? 'Cập nhật' : 'Lưu cửa hàng'}</button>
+                        <Button variant="secondary" className="me-3" onClick={() => setShowModal(false)}>Hủy</Button>
+                        <Button type="submit" variant="primary">{initialStore ? 'Cập nhật' : 'Lưu cửa hàng'}</Button>
                     </div>
                 </form>
             </div>

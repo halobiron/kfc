@@ -101,10 +101,14 @@ code {
 
 
 /* KFC Button Styles */
+.btn {
+  border-radius: 4px !important;
+  font-weight: 600;
+}
+
 .btn-primary {
   background-color: var(--kfc-red);
   border: none;
-  border-radius: 200px;
   padding: 10px 30px;
   font-weight: 700;
   font-size: 15px;
@@ -124,7 +128,6 @@ code {
 .btn-secondary {
   background-color: #CCCCCC;
   border: none;
-  border-radius: 25px;
   padding: 8px 24px;
   font-weight: 500;
   color: var(--kfc-black);
@@ -140,7 +143,6 @@ code {
   background-color: transparent;
   border: 2px solid var(--kfc-red);
   color: var(--kfc-red);
-  border-radius: 200px;
   padding: 10px 30px;
   font-weight: 700;
   font-size: 15px;
@@ -170,7 +172,6 @@ code {
 .btn-sm {
   padding: 6px 20px;
   font-size: 14px;
-  border-radius: 100px;
 }
 
 .btn-lg {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiCalendar, FiDownload, FiTrendingUp, FiShoppingBag, FiUsers, FiDollarSign } from 'react-icons/fi';
 import StatCard from '../../../../components/Common/StatCard';
+import Button from '../../../../components/Common/Button';
 import statsApi from '../../../../api/statsApi';
 import { toast } from 'react-toastify';
 import {
@@ -155,24 +156,27 @@ const Reports = () => {
                 <h1 className="page-title">Báo cáo & Thống kê</h1>
                 <div className="d-flex gap-3 align-items-center mt-3 mt-md-0">
                     <div className="btn-group border rounded overflow-hidden">
-                        <button
-                            className={`btn btn-sm ${dateRange === 'week' ? 'btn-primary' : 'btn-light'}`}
+                        <Button
+                            size="sm"
+                            variant={dateRange === 'week' ? 'primary' : 'light'}
                             onClick={() => setDateRange('week')}
                         >
                             Tuần
-                        </button>
-                        <button
-                            className={`btn btn-sm ${dateRange === 'month' ? 'btn-primary' : 'btn-light'}`}
+                        </Button>
+                        <Button
+                            size="sm"
+                            variant={dateRange === 'month' ? 'primary' : 'light'}
                             onClick={() => setDateRange('month')}
                         >
                             Tháng
-                        </button>
-                        <button
-                            className={`btn btn-sm ${dateRange === 'year' ? 'btn-primary' : 'btn-light'}`}
+                        </Button>
+                        <Button
+                            size="sm"
+                            variant={dateRange === 'year' ? 'primary' : 'light'}
                             onClick={() => setDateRange('year')}
                         >
                             Năm
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>

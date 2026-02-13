@@ -7,7 +7,7 @@ import { getAllProducts, deleteProduct } from '../../productSlice'
 import { getAllCategories } from '../../../Category/categorySlice'
 import AddModal from './AddModal';
 import './Product.css';
-import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
+import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 
 const Product = () => {
 
@@ -27,13 +27,7 @@ const Product = () => {
       <>
         <div className="page-header d-flex justify-content-between align-items-center">
           <h1 className="page-title">Quản lý Món ăn</h1>
-          <button
-            type="button"
-            className="btn btn-primary d-flex align-items-center gap-2 shadow-sm"
-            onClick={() => setShowModal(true)}
-          >
-            <FiPlus size={20} /> Thêm món mới
-          </button>
+          <AddButton onClick={() => setShowModal(true)} />
         </div>
 
         <div className="card">
@@ -81,23 +75,16 @@ const Product = () => {
                           </span>
                         </td>
                         <td className="text-end pe-4">
-                          <button
-                            className="btn-action btn-edit border-0 d-inline-flex align-items-center"
+                          <EditButton
                             onClick={() => navigate(`/products/${product._id}`)}
-                          >
-                            <FiEdit2 style={{ marginRight: '4px' }} />
-                            Sửa
-                          </button>
-                          <button className="btn-action btn-delete border-0 d-inline-flex align-items-center"
+                          />
+                          <DeleteButton
                             onClick={() => {
                               if (window.confirm('Bạn có chắc chắn muốn xóa món này?')) {
                                 dispatch(deleteProduct(product._id));
                               }
                             }}
-                          >
-                            <FiTrash2 style={{ marginRight: '4px' }} />
-                            Xóa
-                          </button>
+                          />
                         </td>
                       </tr>
                     )

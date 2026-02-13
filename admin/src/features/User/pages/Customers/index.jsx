@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { FiSearch, FiUserCheck, FiUserX } from 'react-icons/fi';
+import Button from '../../../../components/Common/Button';
 
 const Customers = () => {
     // Mock data for customers
@@ -83,15 +84,13 @@ const Customers = () => {
                                         </td>
                                         <td>
                                             {customer.status === 'Active' ? (
-                                                <button className="btn-action btn-delete border-0 d-inline-flex align-items-center" onClick={() => handleStatusToggle(customer.id)}>
-                                                    <FiUserX style={{ marginRight: '4px' }} />
-                                                    Khóa
-                                                </button>
+                                                <Button size="sm" variant="outline-danger" onClick={() => handleStatusToggle(customer.id)}>
+                                                    <FiUserX className="me-1" /> Khóa
+                                                </Button>
                                             ) : (
-                                                <button className="btn-action btn-edit border-0 d-inline-flex align-items-center bg-success text-white" onClick={() => handleStatusToggle(customer.id)}>
-                                                    <FiUserCheck style={{ marginRight: '4px' }} />
-                                                    Mở
-                                                </button>
+                                                <Button size="sm" variant="outline-success" onClick={() => handleStatusToggle(customer.id)}>
+                                                    <FiUserCheck className="me-1" /> Mở
+                                                </Button>
                                             )}
                                         </td>
                                     </tr>

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FiPlus, FiEdit2, FiTrash2, FiTag } from 'react-icons/fi';
+import { FiPlus, FiTag } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategories, addNewCategory, updateCategory, deleteCategory } from '../../categorySlice';
 import StatCard from '../../../../components/Common/StatCard';
 import { CheckboxField, TextField } from '../../../../components/Common/Form';
+import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import './Categories.css';
 
 const Categories = () => {
@@ -87,13 +88,9 @@ const Categories = () => {
       <>
         <div className="page-header d-flex justify-content-between align-items-center">
           <h1 className="page-title">Quản lý Danh mục Sản phẩm</h1>
-          <button
-            type="button"
-            className="btn btn-primary d-flex align-items-center gap-2 shadow-sm"
+          <AddButton
             onClick={() => handleOpenModal()}
-          >
-            <FiPlus size={20} /> Thêm danh mục
-          </button>
+          />
         </div>
 
         {/* Stats Overview */}
@@ -164,20 +161,12 @@ const Categories = () => {
                       </div>
                     </td>
                     <td className="text-end pe-4">
-                      <button
-                        className="btn-action btn-edit border-0 d-inline-flex align-items-center"
+                      <EditButton
                         onClick={() => handleOpenModal(category)}
-                      >
-                        <FiEdit2 style={{ marginRight: '4px' }} />
-                        Sửa
-                      </button>
-                      <button
-                        className="btn-action btn-delete border-0 d-inline-flex align-items-center"
+                      />
+                      <DeleteButton
                         onClick={() => handleDelete(category._id)}
-                      >
-                        <FiTrash2 style={{ marginRight: '4px' }} />
-                        Xóa
-                      </button>
+                      />
                     </td>
                   </tr>
                 ))}

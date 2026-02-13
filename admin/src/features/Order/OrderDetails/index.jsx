@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import orderApi from '../../../api/orderApi';
 import { FiArrowLeft, FiPrinter, FiXCircle, FiCheckCircle, FiTruck, FiPackage, FiClock, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
 import StatusModal from '../../../components/Common/StatusModal';
+import Button from '../../../components/Common/Button';
 import './OrderDetails.css';
 
 const STATUS_LABELS = {
@@ -89,9 +90,9 @@ const OrderDetails = () => {
             {/* Header */}
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div className="d-flex align-items-center">
-                    <button onClick={() => navigate('/orders')} className="btn btn-link text-dark p-0 me-3" title="Quay lại">
+                    <Button variant="link" onClick={() => navigate('/orders')} className="text-dark p-0 me-3" title="Quay lại">
                         <FiArrowLeft size={24} />
-                    </button>
+                    </Button>
                     <div>
                         <h1 className="h2 mb-0 font-weight-bold" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
                             Đơn hàng {order.orderNumber || order._id.substring(0, 8).toUpperCase()}
@@ -105,32 +106,33 @@ const OrderDetails = () => {
                     <div className="btn-group me-2">
                         {/* Status buttons */}
                         {status === 'pending' && (
-                            <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => openStatusModal('confirmed')}>
+                            <Button size="sm" variant="success" className="d-flex align-items-center" onClick={() => openStatusModal('confirmed')}>
                                 <FiCheckCircle className="me-2" /> Xác nhận
-                            </button>
+                            </Button>
                         )}
 
                         {status === 'ready' && (
-                            <button type="button" className="btn btn-sm btn-primary d-flex align-items-center" onClick={() => openStatusModal('shipping')}>
+                            <Button size="sm" variant="primary" className="d-flex align-items-center" onClick={() => openStatusModal('shipping')}>
                                 <FiTruck className="me-2" /> Giao hàng
-                            </button>
+                            </Button>
                         )}
                         {status === 'shipping' && (
-                            <button type="button" className="btn btn-sm btn-success d-flex align-items-center" onClick={() => openStatusModal('delivered')}>
+                            <Button size="sm" variant="success" className="d-flex align-items-center" onClick={() => openStatusModal('delivered')}>
                                 <FiCheckCircle className="me-2" /> Hoàn thành
-                            </button>
+                            </Button>
                         )}
                     </div>
                     {status !== 'cancelled' && status !== 'delivered' && (
-                        <button
-                            type="button"
-                            className="btn btn-sm btn-danger d-flex align-items-center ms-2"
+                        <Button
+                            size="sm"
+                            variant="danger"
+                            className="d-flex align-items-center ms-2"
                             onClick={() => {
                                 openStatusModal('cancelled');
                             }}
                         >
                             <FiXCircle className="me-2" /> Hủy đơn
-                        </button>
+                        </Button>
                     )}
                 </div>
             </div>

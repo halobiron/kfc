@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FiPlus, FiEdit2, FiTrash2, FiGift, FiPercent } from 'react-icons/fi';
+import { FiGift, FiPercent } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import StatCard from '../../../../components/Common/StatCard';
+import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import { getAllCoupons, createCoupon, updateCoupon, deleteCoupon, clearErrors, resetSuccess } from '../../couponSlice';
 import './Promotions.css';
 
@@ -120,13 +121,7 @@ const Promotions = () => {
       <>
         <div className="page-header d-flex justify-content-between align-items-center">
           <h1 className="page-title">Quản lý Khuyến mãi & Voucher</h1>
-          <button
-            type="button"
-            className="btn btn-primary d-flex align-items-center gap-2 shadow-sm"
-            onClick={() => handleOpenModal()}
-          >
-            <FiPlus size={20} /> Tạo khuyến mãi
-          </button>
+          <AddButton onClick={() => handleOpenModal()} />
         </div>
 
         {/* Stats Overview */}
@@ -231,20 +226,13 @@ const Promotions = () => {
                           </div>
                         </td>
                         <td className="text-end pe-4">
-                          <button
-                            className="btn-action btn-edit border-0 d-inline-flex align-items-center"
+                          <EditButton 
+                            className="me-2"
                             onClick={() => handleOpenModal(promotion)}
-                          >
-                            <FiEdit2 style={{ marginRight: '4px' }} />
-                            Sửa
-                          </button>
-                          <button
-                            className="btn-action btn-delete border-0 d-inline-flex align-items-center"
+                          />
+                          <DeleteButton
                             onClick={() => handleDelete(promotion._id)}
-                          >
-                            <FiTrash2 style={{ marginRight: '4px' }} />
-                            Xóa
-                          </button>
+                          />
                         </td>
                       </tr>
                     );
@@ -398,12 +386,12 @@ const Promotions = () => {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>
+                  <Button variant="secondary" onClick={handleCloseModal}>
                     Hủy
-                  </button>
-                  <button type="submit" className="btn btn-primary">
+                  </Button>
+                  <Button type="submit" variant="primary">
                     {editMode ? 'Cập nhật' : 'Tạo mới'}
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
