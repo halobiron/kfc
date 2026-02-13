@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllOrders, updateOrderStatus, deleteOrder } from '../orderSlice';
 import { toast } from 'react-toastify';
 import StatusModal from '../../../components/Common/StatusModal';
+import Badge from '../../../components/Common/Badge';
 
 const Order = () => {
   const dispatch = useDispatch();
@@ -47,14 +48,14 @@ const Order = () => {
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case 'pending': return <span className="badge badge-warning">Chờ xác nhận</span>;
-      case 'confirmed': return <span className="badge badge-info">Đã xác nhận</span>;
-      case 'preparing': return <span className="badge badge-info text-dark">Đang chuẩn bị</span>;
-      case 'ready': return <span className="badge badge-success">Sẵn sàng giao</span>;
-      case 'shipping': return <span className="badge badge-primary">Đang giao</span>;
-      case 'delivered': return <span className="badge badge-success">Hoàn thành</span>;
-      case 'cancelled': return <span className="badge badge-danger">Đã hủy</span>;
-      default: return <span className="badge badge-secondary">{status}</span>;
+      case 'pending': return <Badge variant="warning">Chờ xác nhận</Badge>;
+      case 'confirmed': return <Badge variant="info">Đã xác nhận</Badge>;
+      case 'preparing': return <Badge variant="info" className="text-dark">Đang chuẩn bị</Badge>;
+      case 'ready': return <Badge variant="success">Sẵn sàng giao</Badge>;
+      case 'shipping': return <Badge variant="primary">Đang giao</Badge>;
+      case 'delivered': return <Badge variant="success">Hoàn thành</Badge>;
+      case 'cancelled': return <Badge variant="danger">Đã hủy</Badge>;
+      default: return <Badge variant="secondary">{status}</Badge>;
     }
   };
 

@@ -6,6 +6,7 @@ import { getAllCategories, addCategory, updateCategory, deleteCategory } from '.
 import StatCard from '../../../../components/Common/StatCard';
 import { CheckboxField, TextField } from '../../../../components/Common/Form';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
+import Badge from '../../../../components/Common/Badge';
 import './Categories.css';
 
 const Categories = () => {
@@ -148,7 +149,7 @@ const Categories = () => {
                     </td>
                     <td className="text-muted">{category.description}</td>
                     <td className="text-center">
-                      <span className="badge bg-light text-dark">{category.productCount || 0} món</span>
+                      <Badge variant="light">{category.productCount || 0} món</Badge>
                     </td>
                     <td className="text-center">
                       <div className="form-check form-switch categories-switch-wrap">

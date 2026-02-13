@@ -4,6 +4,7 @@ import { getAllIngredients, updateIngredientStock, createIngredient, updateIngre
 import { toast } from 'react-toastify';
 import { FiPlus, FiEdit2 } from 'react-icons/fi';
 import Button, { AddButton, EditButton } from '../../../../components/Common/Button';
+import Badge from '../../../../components/Common/Badge';
 import './Ingredient.css';
 
 const Ingredient = () => {
@@ -159,9 +160,9 @@ const Ingredient = () => {
     };
 
     const getStockStatus = (ing) => {
-        if (ing.stock <= 0) return { label: 'Hết hàng', class: 'badge-danger' };
-        if (ing.stock <= ing.minStock) return { label: 'Sắp hết', class: 'badge-warning' };
-        return { label: 'Đủ hàng', class: 'badge-success' };
+        if (ing.stock <= 0) return { label: 'Hết hàng', variant: 'danger' };
+        if (ing.stock <= ing.minStock) return { label: 'Sắp hết', variant: 'warning' };
+        return { label: 'Đủ hàng', variant: 'success' };
     };
 
     return (
@@ -200,7 +201,7 @@ const Ingredient = () => {
                                         <td>
                                             <div className="fw-bold">{ing.name}</div>
                                         </td>
-                                        <td><span className="badge badge-light text-dark">{ing.category}</span></td>
+                                        <td><Badge variant="light" className="text-dark">{ing.category}</Badge></td>
                                         <td>
                                             <div className="fw-bold small">{ing.supplier || '---'}</div>
                                             <div className="text-muted" style={{ fontSize: '0.75rem' }}>{ing.supplierContact || ''}</div>
@@ -212,9 +213,9 @@ const Ingredient = () => {
                                             </span>
                                         </td>
                                         <td className="text-center">
-                                            <span className={`badge ${status.class}`}>
+                                            <Badge variant={status.variant}>
                                                 {status.label}
-                                            </span>
+                                            </Badge>
                                         </td>
                                         <td className="text-end pe-4">
                                             <EditButton
@@ -252,7 +253,7 @@ const Ingredient = () => {
                                 <label className="form-label small text-muted">Nguyên liệu</label>
                                 <div className="d-flex align-items-baseline gap-2">
                                     <div className="fw-bold fs-5">{selectedIng?.name}</div>
-                                    <span className="badge badge-light text-dark">Đơn vị chuẩn: {selectedIng?.unit}</span>
+                                    <Badge variant="light" className="text-dark">Đơn vị chuẩn: {selectedIng?.unit}</Badge>
                                 </div>
                             </div>
 

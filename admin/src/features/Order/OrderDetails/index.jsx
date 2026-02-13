@@ -5,6 +5,7 @@ import orderApi from '../../../api/orderApi';
 import { FiArrowLeft, FiPrinter, FiXCircle, FiCheckCircle, FiTruck, FiPackage, FiClock, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
 import StatusModal from '../../../components/Common/StatusModal';
 import Button from '../../../components/Common/Button';
+import Badge from '../../../components/Common/Badge';
 import './OrderDetails.css';
 
 const STATUS_LABELS = {
@@ -18,13 +19,13 @@ const STATUS_LABELS = {
 };
 
 const STATUS_BADGES = {
-    pending: 'badge-warning',
-    confirmed: 'badge-info',
-    preparing: 'badge-info text-dark',
-    ready: 'badge-success',
-    shipping: 'badge-primary',
-    delivered: 'badge-success',
-    cancelled: 'badge-danger'
+    pending: 'warning',
+    confirmed: 'info',
+    preparing: 'info', // text-dark handled by variant style or className if needed
+    ready: 'success',
+    shipping: 'primary',
+    delivered: 'success',
+    cancelled: 'danger'
 };
 
 const OrderDetails = () => {
@@ -194,9 +195,12 @@ const OrderDetails = () => {
                         <div className="card-header">Trạng thái đơn hàng</div>
                         <div className="card-body">
                             <div className="d-flex align-items-center mb-3">
-                                <span className={`badge ${STATUS_BADGES[status] || 'badge-secondary'} p-2 fs-6`}>
+                                <Badge
+                                    variant={STATUS_BADGES[status] || 'secondary'}
+                                    className="p-2 fs-6"
+                                >
                                     {STATUS_LABELS[status] || status}
-                                </span>
+                                </Badge>
                                 <span className="ms-3 text-muted">Cập nhật lần cuối: {new Date(order.updatedAt).toLocaleString('vi-VN')}</span>
                             </div>
 

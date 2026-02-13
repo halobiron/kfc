@@ -9,6 +9,7 @@ import { getAllCategories } from '../../../Category/categorySlice';
 import { toast } from 'react-toastify';
 import { FiArrowLeft, FiSave, FiX, FiImage, FiBox, FiPlus, FiTrash2, FiActivity } from 'react-icons/fi';
 import { AddButton, DeleteButton } from '../../../../components/Common/Button';
+import Badge from '../../../../components/Common/Badge';
 import './ProductDetails.css';
 
 const ProductDetails = () => {
@@ -384,7 +385,7 @@ const ProductDetails = () => {
                             <h5 className="fw-bold mb-2 Oswald-font text-uppercase">{values.title || 'Tên món ăn'}</h5>
                             <p className="text-muted small mb-3">{values.description || 'Mô tả món ăn'}</p>
                             <div className="d-flex justify-content-between align-items-center mb-3">
-                                <span className="badge badge-primary">{values.category || 'Danh mục'}</span>
+                                <Badge variant="primary">{values.category || 'Danh mục'}</Badge>
                                 <span className="fw-bold text-danger fs-5">
                                     {values.price ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(values.price) : '0 đ'}
                                 </span>

@@ -182,36 +182,6 @@ code {
 
 
 
-/* Badge Components */
-.badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.badge-primary {
-  background-color: var(--kfc-red);
-  color: var(--kfc-white);
-}
-
-.badge-success {
-  background-color: #28a745;
-  color: #fff;
-}
-
-.badge-warning {
-  background-color: #ffc107;
-  color: #212529;
-}
-
-.badge-danger {
-  background-color: #dc3545;
-  color: #fff;
-}
 
 /* Alert Components */
 .alert {
@@ -325,11 +295,6 @@ code {
 
 .text-info {
   color: var(--kfc-red) !important;
-}
-
-.badge-info {
-  background-color: var(--kfc-red) !important;
-  color: var(--kfc-white) !important;
 }
 
 /* Utilities for bg-opacity and standard colors */

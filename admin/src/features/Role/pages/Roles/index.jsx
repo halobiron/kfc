@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import Modal from 'react-bootstrap/Modal';
 // import Button from 'react-bootstrap/Button';
 import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
+import Badge from '../../../../components/Common/Badge';
 import Form from 'react-bootstrap/Form';
 
 const RoleManagement = () => {
@@ -178,9 +179,14 @@ const RoleManagement = () => {
                                                     Object.entries(groupedPerms).map(([res, types]) => {
                                                         const resLabel = RESOURCES.find(r => r.id === res)?.label || res;
                                                         return (
-                                                            <span key={res} className="badge bg-light text-dark border me-1 mb-1" style={{ fontWeight: 'normal' }}>
+                                                            <Badge
+                                                                key={res}
+                                                                variant="light"
+                                                                className="border me-1 mb-1 text-dark"
+                                                                style={{ fontWeight: 'normal' }}
+                                                            >
                                                                 <strong>{resLabel}:</strong> {types.join(', ')}
-                                                            </span>
+                                                            </Badge>
                                                         );
                                                     })
                                                 ) : (

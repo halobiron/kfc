@@ -74,13 +74,13 @@ const Customers = () => {
                                         </td>
                                         <td>{customer.phone}</td>
                                         <td>
-                                            <span
-                                                className={`badge ${customer.status === 'Active' ? 'badge-success' : 'badge-danger'}`}
+                                            <Badge
+                                                variant={customer.status === 'Active' ? 'success' : 'danger'}
                                                 style={{ cursor: 'pointer' }}
                                                 onClick={() => handleStatusToggle(customer.id)}
                                             >
                                                 {customer.status === 'Active' ? 'Hoạt động' : 'Đã khóa'}
-                                            </span>
+                                            </Badge>
                                         </td>
                                         <td>
                                             {customer.status === 'Active' ? (

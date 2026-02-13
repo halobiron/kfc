@@ -4,6 +4,7 @@ import { FiGift, FiPercent } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import StatCard from '../../../../components/Common/StatCard';
 import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
+import Badge from '../../../../components/Common/Badge';
 import { getAllCoupons, createCoupon, updateCoupon, deleteCoupon, clearErrors, resetSuccess } from '../../couponSlice';
 import './Promotions.css';
 
@@ -189,9 +190,9 @@ const Promotions = () => {
                         </td>
                         <td className="text-muted">{promotion.title}</td>
                         <td className="text-center">
-                          <span className="badge bg-light text-dark">
+                          <Badge variant="light">
                             {discountTypeLabels[promotion.type]}
-                          </span>
+                          </Badge>
                         </td>
                         <td className="text-center fw-bold text-danger">
                           {promotion.type === 'percent' && `${promotion.discount}%`}

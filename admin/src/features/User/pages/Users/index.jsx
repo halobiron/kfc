@@ -6,6 +6,7 @@ import { FiMail, FiPhone, FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell 
 import { MdRestaurant } from 'react-icons/md';
 import StatCard from '../../../../components/Common/StatCard';
 import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
+import Badge from '../../../../components/Common/Badge';
 import './Users.css';
 
 const Users = () => {
@@ -208,10 +209,13 @@ const Users = () => {
                                                 </div>
                                             </td>
                                             <td className="text-center">
-                                                <span className={`badge badge-${roleLabels[roleName]?.color || 'secondary'} role-badge`}>
+                                                <Badge
+                                                    variant={roleLabels[roleName]?.color || 'secondary'}
+                                                    className="role-badge"
+                                                >
                                                     <span className="me-1">{roleLabels[roleName]?.icon || <FiUsers size={20} />}</span>
                                                     {roleLabels[roleName]?.label || roleName}
-                                                </span>
+                                                </Badge>
                                             </td>
                                             <td className="text-center">
                                                 <div className="form-check form-switch d-flex justify-content-center">
