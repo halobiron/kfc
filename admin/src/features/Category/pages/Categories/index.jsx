@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiPlus, FiTag } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllCategories, addNewCategory, updateCategory, deleteCategory } from '../../categorySlice';
+import { getAllCategories, addCategory, updateCategory, deleteCategory } from '../../categorySlice';
 import StatCard from '../../../../components/Common/StatCard';
 import { CheckboxField, TextField } from '../../../../components/Common/Form';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
@@ -50,7 +50,7 @@ const Categories = () => {
         await dispatch(updateCategory({ id: currentCategory._id, data: currentCategory })).unwrap();
         toast.success('Cập nhật danh mục thành công!');
       } else {
-        await dispatch(addNewCategory(currentCategory)).unwrap();
+        await dispatch(addCategory(currentCategory)).unwrap();
         toast.success('Thêm danh mục thành công!');
       }
       handleCloseModal();
