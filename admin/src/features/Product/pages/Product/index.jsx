@@ -9,6 +9,7 @@ import AddModal from './AddModal';
 import Badge from '../../../../components/Common/Badge';
 import './Product.css';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
+import { formatCurrency } from '../../../../utils/formatters';
 
 const Product = () => {
 
@@ -68,7 +69,7 @@ const Product = () => {
                         </td>
                         <td className="text-muted small" style={{ maxWidth: '300px' }}>{product.description}</td>
                         <td className="text-end fw-bold text-danger">
-                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                          {formatCurrency(product.price)}
                         </td>
                         <td className="text-center">
                           <Badge variant={product.stock > 10 ? 'success' : 'warning'}>

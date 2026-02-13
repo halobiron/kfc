@@ -159,7 +159,7 @@ const Reports = () => {
                 beginAtZero: true,
                 ticks: {
                     callback: function (value) {
-                        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumSignificantDigits: 3 }).format(value);
+                        return formatCurrency(value, { maximumSignificantDigits: 3 });
                     }
                 }
             }

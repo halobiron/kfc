@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { FiArrowLeft, FiSave, FiX, FiImage, FiBox, FiPlus, FiTrash2, FiActivity } from 'react-icons/fi';
 import { AddButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
+import { formatCurrency } from '../../../../utils/formatters';
 import './ProductDetails.css';
 
 const ProductDetails = () => {
@@ -387,7 +388,7 @@ const ProductDetails = () => {
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <Badge variant="primary">{values.category || 'Danh mục'}</Badge>
                                 <span className="fw-bold text-danger fs-5">
-                                    {values.price ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(values.price) : '0 đ'}
+                                    {values.price ? formatCurrency(values.price) : '0 đ'}
                                 </span>
                             </div>
                             <div className="preview-stats-grid">

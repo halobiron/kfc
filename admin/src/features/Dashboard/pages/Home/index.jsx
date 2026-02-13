@@ -15,6 +15,7 @@ import {
   Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { formatCurrency } from '../../../../utils/formatters';
 
 ChartJS.register(
   CategoryScale,
@@ -34,10 +35,6 @@ const Home = () => {
   useEffect(() => {
     dispatch(getDashboardStats());
   }, [dispatch]);
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-  };
 
   const chartData = useMemo(() => {
     if (!stats.chart) return { labels: [], datasets: [] };
@@ -78,7 +75,7 @@ const Home = () => {
               label += ': ';
             }
             if (context.parsed.y !== null) {
-              label += new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(context.parsed.y);
+              label += formatCurrency(context.parsed.y);
             }
             return label;
           }
@@ -90,7 +87,7 @@ const Home = () => {
         beginAtZero: true,
         ticks: {
           callback: function (value) {
-            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumSignificantDigits: 3 }).format(value);
+            return formatCurrency(value, { maximumSignificantDigits: 3 });
           }
         }
       }

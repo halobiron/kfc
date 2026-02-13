@@ -7,6 +7,7 @@ import StatusModal from '../../../../components/Common/StatusModal';
 import Button from '../../../../components/Common/Button';
 import { getOrderStatusMeta } from '../../components/OrderStatusBadge/orderStatus';
 import OrderStatusBadge from '../../components/OrderStatusBadge';
+import { formatCurrency } from '../../../../utils/formatters';
 import './OrderDetails.css';
 
 const OrderDetails = () => {
@@ -68,8 +69,6 @@ const OrderDetails = () => {
 
     if (loading) return <div className="text-center p-5"><div className="spinner spinner-lg"></div></div>;
     if (!order) return <div className="text-center p-5">Không tìm thấy đơn hàng</div>;
-
-    const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 
     return (
         <>
@@ -146,29 +145,29 @@ const OrderDetails = () => {
                                                 <div className="fw-bold">{item.name}</div>
                                             </td>
                                             <td className="text-center">x{item.quantity}</td>
-                                            <td className="text-end">{formatPrice(item.price)}</td>
-                                            <td className="text-end fw-bold">{formatPrice(item.price * item.quantity)}</td>
+                                            <td className="text-end">{formatCurrency(item.price)}</td>
+                                            <td className="text-end fw-bold">{formatCurrency(item.price * item.quantity)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td colSpan="3" className="text-end fw-bold">Tạm tính:</td>
-                                        <td className="text-end">{formatPrice(order.subtotal || order.totalAmount)}</td>
+                                        <td className="text-end">{formatCurrency(order.subtotal || order.totalAmount)}</td>
                                     </tr>
                                     <tr>
                                         <td colSpan="3" className="text-end fw-bold">Phí vận chuyển:</td>
-                                        <td className="text-end">{formatPrice(order.shippingFee || 0)}</td>
+                                        <td className="text-end">{formatCurrency(order.shippingFee || 0)}</td>
                                     </tr>
                                     {order.couponDiscount > 0 && (
                                         <tr>
                                             <td colSpan="3" className="text-end fw-bold text-success">Giảm giá:</td>
-                                            <td className="text-end text-success">-{formatPrice(order.couponDiscount)}</td>
+                                            <td className="text-end text-success">-{formatCurrency(order.couponDiscount)}</td>
                                         </tr>
                                     )}
                                     <tr>
                                         <td colSpan="3" className="text-end fw-bold h5">Tổng cộng:</td>
-                                        <td className="text-end fw-bold h5 text-danger">{formatPrice(order.totalAmount)}</td>
+                                        <td className="text-end fw-bold h5 text-danger">{formatCurrency(order.totalAmount)}</td>
                                     </tr>
                                 </tfoot>
                             </table>

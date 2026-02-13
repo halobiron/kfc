@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import StatusModal from '../../../../components/Common/StatusModal';
 import OrderStatusBadge from '../../components/OrderStatusBadge';
 import { getOrderStatusMeta } from '../../components/OrderStatusBadge/orderStatus';
+import { formatCurrency } from '../../../../utils/formatters';
 
 const Order = () => {
   const dispatch = useDispatch();
@@ -46,10 +47,6 @@ const Order = () => {
   const handleCancelClick = (id) => {
     openUpdateModal(id, 'cancelled');
   };
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
-  }
 
   return (
     <>
@@ -98,7 +95,7 @@ const Order = () => {
                         {order.items.length > 2 && <li>...</li>}
                       </ul>
                     </td>
-                    <td className="fw-bold text-danger">{formatPrice(order.totalAmount)}</td>
+                    <td className="fw-bold text-danger">{formatCurrency(order.totalAmount)}</td>
                     <td><OrderStatusBadge status={order.status} /></td>
                     <td>
                       <div className="btn-group">

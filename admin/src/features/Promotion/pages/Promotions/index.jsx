@@ -6,6 +6,7 @@ import StatCard from '../../../../components/Common/StatCard';
 import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
 import { getAllCoupons, createCoupon, updateCoupon, deleteCoupon, clearErrors, resetSuccess } from '../../couponSlice';
+import { formatCurrency } from '../../../../utils/formatters';
 import './Promotions.css';
 
 const Promotions = () => {
@@ -102,10 +103,6 @@ const Promotions = () => {
       id: promotion._id,
       couponData: { isActive: !promotion.isActive }
     }));
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
   };
 
   const getUsagePercentage = (used, max) => {
