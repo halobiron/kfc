@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllIngredients, updateIngredientStock, createIngredient, updateIngredient } from '../../ingredientSlice';
 import { toast } from 'react-toastify';
@@ -9,9 +9,15 @@ import RestockModal from '../../components/RestockModal';
 import IngredientFormModal from '../../components/IngredientFormModal';
 import './Ingredient.css';
 
+const getStockStatus = (stock, minStock) => {
+    if (stock <= 0) return { label: 'Hết hàng', variant: 'danger' };
+    if (stock <= minStock) return { label: 'Sắp hết', variant: 'warning' };
+    return { label: 'Đủ hàng', variant: 'success' };
+};
+
 const Ingredient = () => {
     const dispatch = useDispatch();
-    const { ingredients } = useSelector(state => state.ingredients);
+    const { ingredients, loading } = useSelector(state => state.ingredients);
     
     // UI State
     const [showRestockModal, setShowRestockModal] = useState(false);
@@ -26,7 +32,7 @@ const Ingredient = () => {
         dispatch(getAllIngredients());
     }, [dispatch]);
 
-    const handleRestockSubmit = ({ amount, updates }) => {
+    const handleRestockSubmit = useCallback(({ amount, updates }) => {
         if (selectedIng && amount > 0) {
             dispatch(updateIngredientStock({
                 id: selectedIng._id,
@@ -40,9 +46,9 @@ const Ingredient = () => {
                 toast.error(err.message || 'Lỗi khi nhập kho');
             });
         }
-    };
+    }, [dispatch, selectedIng]);
 
-    const handleIngredientSubmit = (formData) => {
+    const handleIngredientSubmit = useCallback((formData) => {
         if (isEditing && selectedIng) {
             dispatch(updateIngredient({ id: selectedIng._id, data: formData }))
                 .unwrap()
@@ -63,7 +69,7 @@ const Ingredient = () => {
                 })
                 .catch(err => toast.error(err.message || 'Lỗi khi tạo nguyên liệu'));
         }
-    };
+    }, [dispatch, isEditing, selectedIng]);
 
     const openEditModal = (ing) => {
         setSelectedIng(ing);
@@ -92,12 +98,6 @@ const Ingredient = () => {
         setShowRestockModal(true);
     };
 
-    const getStockStatus = (ing) => {
-        if (ing.stock <= 0) return { label: 'Hết hàng', variant: 'danger' };
-        if (ing.stock <= ing.minStock) return { label: 'Sắp hết', variant: 'warning' };
-        return { label: 'Đủ hàng', variant: 'success' };
-    };
-
     return (
         <>
             <div className="page-header d-flex justify-content-between align-items-center">
@@ -124,13 +124,25 @@ const Ingredient = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {ingredients && ingredients.map((ing, i) => {
-                                const status = getStockStatus(ing);
+                            {loading && (
+                                <tr>
+                                    <td colSpan="8" className="text-center py-4 text-muted">Đang tải dữ liệu...</td>
+                                </tr>
+                            )}
+
+                            {!loading && ingredients && ingredients.length === 0 && (
+                                <tr>
+                                    <td colSpan="8" className="text-center py-4 text-muted">Không có nguyên liệu nào</td>
+                                </tr>
+                            )}
+
+                            {!loading && ingredients && ingredients.map((ing, i) => {
+                                const status = getStockStatus(ing.stock, ing.minStock);
                                 const isLow = ing.stock <= ing.minStock;
 
                                 return (
                                     <tr key={ing._id} className={isLow ? 'row-alert' : ''}>
-                                        <td className="ps-4 fw-bold">ING{1000 + i + 1}</td>
+                                        <td className="ps-4 fw-bold text-muted small">#{ing._id.slice(-6).toUpperCase()}</td>
                                         <td>
                                             <div className="fw-bold">{ing.name}</div>
                                         </td>
