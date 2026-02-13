@@ -1,13 +1,90 @@
 import React, { useEffect, useState } from 'react'
-import { FiEye, FiCheck, FiTrash2, FiMapPin, FiXCircle, FiTruck, FiCheckCircle } from 'react-icons/fi';
+import { FiEye, FiCheck, FiMapPin, FiXCircle, FiTruck, FiCheckCircle } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllOrders, updateOrderStatus, deleteOrder } from '../../orderSlice';
+import { getAllOrders, updateOrderStatus } from '../../orderSlice';
 import { toast } from 'react-toastify';
 import StatusModal from '../../../../components/Common/StatusModal';
+import Button from '../../../../components/Common/Button';
 import OrderStatusBadge from '../../components/OrderStatusBadge';
 import { getOrderStatusMeta } from '../../components/OrderStatusBadge/orderStatus';
 import { formatCurrency } from '../../../../utils/formatters';
+
+const OrderCustomerCell = ({ order }) => {
+  const shortAddress = order.deliveryInfo?.address && order.deliveryInfo.address.length > 30
+    ? `${order.deliveryInfo.address.substring(0, 30)}...`
+    : order.deliveryInfo?.address;
+
+  return (
+    <td>
+      <div>{order.deliveryInfo?.fullName}</div>
+      <small className="text-muted d-block">{order.deliveryInfo?.phone}</small>
+      <small className="text-muted d-block" style={{ fontSize: '0.8rem', maxWidth: '200px' }}>
+        <FiMapPin className="me-1" size={12} />
+        {order.deliveryType === 'pickup' ? 'Tại cửa hàng' : shortAddress}
+      </small>
+    </td>
+  );
+};
+
+const OrderItemsCell = ({ items = [] }) => (
+  <td>
+    <ul className="list-unstyled mb-0 small">
+      {items.slice(0, 2).map((item, idx) => (
+        <li key={idx}>- {item.name} (x{item.quantity})</li>
+      ))}
+      {items.length > 2 && <li>...</li>}
+    </ul>
+  </td>
+);
+
+const OrderActionButtons = ({ order, onOpenUpdateModal, onCancelClick }) => (
+  <div className="btn-group">
+    <Link
+      to={`/orders/${order._id}`}
+      className="btn btn-sm btn-outline-dark"
+      title="Xem chi tiết"
+    >
+      <FiEye />
+    </Link>
+    {order.status === 'pending' && (
+      <Button
+        size="sm"
+        variant="outline-success"
+        onClick={() => onOpenUpdateModal(order._id, 'confirmed')}
+        title="Duyệt đơn"
+        icon={<FiCheck />}
+      />
+    )}
+    {order.status === 'ready' && (
+      <Button
+        size="sm"
+        variant="outline-primary"
+        onClick={() => onOpenUpdateModal(order._id, 'shipping')}
+        title="Giao hàng"
+        icon={<FiTruck />}
+      />
+    )}
+    {order.status === 'shipping' && (
+      <Button
+        size="sm"
+        variant="outline-success"
+        onClick={() => onOpenUpdateModal(order._id, 'delivered')}
+        title="Hoàn thành"
+        icon={<FiCheckCircle />}
+      />
+    )}
+    {(order.status !== 'cancelled' && order.status !== 'delivered') && (
+      <Button
+        size="sm"
+        variant="outline-danger"
+        onClick={() => onCancelClick(order._id)}
+        title="Hủy đơn"
+        icon={<FiXCircle />}
+      />
+    )}
+  </div>
+);
 
 const Order = () => {
   const dispatch = useDispatch();
@@ -75,74 +152,16 @@ const Order = () => {
                 orders.map(order => (
                   <tr key={order._id}>
                     <td className="fw-bold">{order.orderNumber || order._id.substring(0, 8).toUpperCase()}</td>
-                    <td>
-                      <div>{order.deliveryInfo?.fullName}</div>
-                      <small className="text-muted d-block">{order.deliveryInfo?.phone}</small>
-                      <small className="text-muted d-block" style={{ fontSize: '0.8rem', maxWidth: '200px' }}>
-                        <FiMapPin className="me-1" size={12} />
-                        {order.deliveryType === 'pickup'
-                          ? 'Tại cửa hàng'
-                          : (order.deliveryInfo?.address && order.deliveryInfo.address.length > 30
-                            ? order.deliveryInfo.address.substring(0, 30) + '...'
-                            : order.deliveryInfo?.address)}
-                      </small>
-                    </td>
-                    <td>
-                      <ul className="list-unstyled mb-0 small">
-                        {order.items.slice(0, 2).map((item, idx) => (
-                          <li key={idx}>- {item.name} (x{item.quantity})</li>
-                        ))}
-                        {order.items.length > 2 && <li>...</li>}
-                      </ul>
-                    </td>
+                    <OrderCustomerCell order={order} />
+                    <OrderItemsCell items={order.items} />
                     <td className="fw-bold text-danger">{formatCurrency(order.totalAmount)}</td>
                     <td><OrderStatusBadge status={order.status} /></td>
                     <td>
-                      <div className="btn-group">
-                        <Link
-                          to={`/orders/${order._id}`}
-                          className="btn btn-sm btn-outline-dark"
-                          title="Xem chi tiết"
-                        >
-                          <FiEye />
-                        </Link>
-                        {order.status === 'pending' && (
-                          <button
-                            className="btn btn-sm btn-outline-success"
-                            onClick={() => openUpdateModal(order._id, 'confirmed')}
-                            title="Duyệt đơn"
-                          >
-                            <FiCheck />
-                          </button>
-                        )}
-                        {order.status === 'ready' && (
-                          <button
-                            className="btn btn-sm btn-outline-primary"
-                            onClick={() => openUpdateModal(order._id, 'shipping')}
-                            title="Giao hàng"
-                          >
-                            <FiTruck />
-                          </button>
-                        )}
-                        {order.status === 'shipping' && (
-                          <button
-                            className="btn btn-sm btn-outline-success"
-                            onClick={() => openUpdateModal(order._id, 'delivered')}
-                            title="Hoàn thành"
-                          >
-                            <FiCheckCircle />
-                          </button>
-                        )}
-                        {(order.status !== 'cancelled' && order.status !== 'delivered') && (
-                          <button
-                            className="btn btn-sm btn-outline-danger"
-                            onClick={() => handleCancelClick(order._id)}
-                            title="Hủy đơn"
-                          >
-                            <FiXCircle />
-                          </button>
-                        )}
-                      </div>
+                      <OrderActionButtons
+                        order={order}
+                        onOpenUpdateModal={openUpdateModal}
+                        onCancelClick={handleCancelClick}
+                      />
                     </td>
                   </tr>
                 ))
