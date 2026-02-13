@@ -20,27 +20,6 @@
   transition: all var(--transition-fast);
 }
 
-
-.form-control.is-invalid {
-  border-color: var(--kfc-danger);
-}
-
-.form-control.is-valid {
-  border-color: var(--kfc-success);
-}
-
-.invalid-feedback {
-  color: var(--kfc-danger);
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-.valid-feedback {
-  color: var(--kfc-success);
-  font-size: 13px;
-  margin-top: 4px;
-}
-
 /* Custom Minimalist Search Bar */
 .input-group-search {
   position: relative;

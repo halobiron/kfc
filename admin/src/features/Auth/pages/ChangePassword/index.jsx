@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { changePassword } from '../../authSlice';
 import { TextField } from '../../../../components/Common/Form';
+import './ChangePassword.css';
 
 const ChangePassword = () => {
     const dispatch = useDispatch();
@@ -40,63 +41,59 @@ const ChangePassword = () => {
 
     return (
         <>
-            <div className="page-header mb-3">
-                <h1 className="page-title mb-0">Đổi mật khẩu</h1>
+            <div className="page-header">
+                <h1 className="page-title">Đổi mật khẩu</h1>
             </div>
 
-            <div className="row justify-content-center">
-                <div className="col-md-6 col-lg-5">
-                    <div className="card shadow-sm border-0">
-                        <div className="card-body p-4">
-                            <form onSubmit={formik.handleSubmit}>
-                                <TextField
-                                    type="password"
-                                    name="currentPassword"
-                                    label="Mật khẩu hiện tại"
-                                    placeholder="Nhập mật khẩu hiện tại"
-                                    value={formik.values.currentPassword}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={formik.errors.currentPassword}
-                                    touched={formik.touched.currentPassword}
-                                    containerClassName="mb-3"
-                                />
+            <div className="change-password-wrapper">
+                <main className="change-password-form">
+                    <form onSubmit={formik.handleSubmit}>
+                        <TextField
+                            type="password"
+                            name="currentPassword"
+                            label="Mật khẩu hiện tại"
+                            placeholder="Nhập mật khẩu hiện tại"
+                            value={formik.values.currentPassword}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.errors.currentPassword}
+                            touched={formik.touched.currentPassword}
+                            containerClassName="mb-3"
+                        />
 
-                                <TextField
-                                    type="password"
-                                    name="newPassword"
-                                    label="Mật khẩu mới"
-                                    placeholder="Nhập mật khẩu mới"
-                                    value={formik.values.newPassword}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={formik.errors.newPassword}
-                                    touched={formik.touched.newPassword}
-                                    containerClassName="mb-3"
-                                />
+                        <TextField
+                            type="password"
+                            name="newPassword"
+                            label="Mật khẩu mới"
+                            placeholder="Nhập mật khẩu mới"
+                            value={formik.values.newPassword}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.errors.newPassword}
+                            touched={formik.touched.newPassword}
+                            containerClassName="mb-3"
+                        />
 
-                                <TextField
-                                    type="password"
-                                    name="confirmPassword"
-                                    label="Xác nhận mật khẩu mới"
-                                    placeholder="Nhập lại mật khẩu mới"
-                                    value={formik.values.confirmPassword}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={formik.errors.confirmPassword}
-                                    touched={formik.touched.confirmPassword}
-                                    containerClassName="mb-4"
-                                />
+                        <TextField
+                            type="password"
+                            name="confirmPassword"
+                            label="Xác nhận mật khẩu mới"
+                            placeholder="Nhập lại mật khẩu mới"
+                            value={formik.values.confirmPassword}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.errors.confirmPassword}
+                            touched={formik.touched.confirmPassword}
+                            containerClassName="mb-4"
+                        />
 
-                                <div className="d-grid gap-2">
-                                    <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
-                                        {formik.isSubmitting ? 'Đang xử lý...' : 'Lưu thay đổi'}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                        <button className="w-100 btn btn-lg btn-primary" type="submit" disabled={formik.isSubmitting}>
+                            {formik.isSubmitting ? 'Đang xử lý...' : 'Lưu thay đổi'}
+                        </button>
+                    </form>
+
+                    <p className="change-password-note">&copy; 2026 - KFC Admin</p>
+                </main>
             </div>
         </>
     );
