@@ -214,13 +214,25 @@ const Categories = () => {
                     onChange={(e) => setCurrentCategory({ ...currentCategory, description: e.target.value })}
                     placeholder="Mô tả ngắn về danh mục này..."
                   />
-                  <TextField
-                    name="icon"
-                    label="Biểu tượng (Bootstrap Icon class)"
-                    value={currentCategory.icon}
-                    onChange={(e) => setCurrentCategory({ ...currentCategory, icon: e.target.value })}
-                    placeholder="VD: bi-tag, bi-cup-hot..."
-                  />
+                  <div className="mb-3">
+                    <label className="form-label">Biểu tượng (Bootstrap Icon class)</label>
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="icon"
+                        value={currentCategory.icon}
+                        onChange={(e) => setCurrentCategory({ ...currentCategory, icon: e.target.value })}
+                        placeholder="VD: bi-tag, bi-cup-hot..."
+                      />
+                      <span className="input-group-text icon-preview-box" title="Preview">
+                        <i className={`bi ${currentCategory.icon} fs-5`}></i>
+                      </span>
+                    </div>
+                    <div className="form-text mt-1">
+                      Tra cứu thêm tại <a href="https://icons.getbootstrap.com/" target="_blank" rel="noreferrer" className="text-decoration-none">Bootstrap Icons</a>
+                    </div>
+                  </div>
                   <CheckboxField
                     id="isActiveCheck"
                     checked={currentCategory.isActive}

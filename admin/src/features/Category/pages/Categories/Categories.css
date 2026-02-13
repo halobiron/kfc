@@ -11,3 +11,9 @@
   display: flex;
   justify-content: center;
 }
+
+.icon-preview-box {
+  width: 48px;
+  justify-content: center;
+  align-items: center;
+}
