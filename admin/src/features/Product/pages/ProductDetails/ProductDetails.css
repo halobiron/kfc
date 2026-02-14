@@ -1,45 +1,13 @@
-/* ProductDetails Page Styling */
-
-.product-details-form .form-control,
-.product-details-form .form-select {
-    border: 1px solid var(--kfc-border-grey);
-    border-radius: 0;
-}
-
-.product-details-form .form-control:focus,
-.product-details-form .form-select:focus {
-    border-color: var(--kfc-red);
-    box-shadow: none;
-}
-
-.product-details-form .is-invalid {
-    border-color: #dc3545;
-}
-
-.product-details-form .invalid-feedback {
-    display: block;
-    font-size: 0.875rem;
-    color: #dc3545;
-}
-
-/* Preview Card */
-.product-preview-card img {
-    max-height: 300px;
-    object-fit: cover;
-}
-
-/* Buttons */
 .btn-link:hover {
     text-decoration: none;
 }
 
-/* Recipe Row Aesthetics */
 .recipe-add-row {
-    background-color: #ffffff !important;
+    background-color: #fff !important;
     border: 1px solid var(--kfc-border-grey);
     border-left: 4px solid var(--kfc-red);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+    transition: box-shadow 0.3s ease;
 }
 
 .recipe-add-row:hover {
@@ -56,15 +24,18 @@
 }
 
 .recipe-add-row .form-control,
-.recipe-add-row .form-select {
+.recipe-add-row .form-select,
+.recipe-add-row .btn-primary {
     height: 45px;
     border-radius: 4px;
+}
+
+.recipe-add-row .form-control,
+.recipe-add-row .form-select {
     background-color: #fcfcfc;
 }
 
 .recipe-add-row .btn-primary {
-    height: 45px;
-    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -72,7 +43,6 @@
     padding: 0;
 }
 
-/* Table Style for Recipe */
 .table-recipe thead th {
     background-color: var(--kfc-black) !important;
     color: var(--kfc-white) !important;
@@ -83,7 +53,6 @@
     padding: 12px 16px;
 }
 
-/* Preview Stats Grid */
 .preview-stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -118,11 +87,4 @@
     font-family: 'Oswald', sans-serif;
     font-size: 18px;
     font-weight: 700;
-}
-
-/* Responsive adjustments */
-@media (max-width: 991px) {
-    .product-preview-card {
-        margin-top: 1rem;
-    }
 }
