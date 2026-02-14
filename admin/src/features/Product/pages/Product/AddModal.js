@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { addNewProduct } from '../../productSlice';
@@ -8,8 +8,6 @@ const AddModal = ({ setShowModal }) => {
 
   const dispatch = useDispatch();
   const { categories } = useSelector(state => state.categories);
-
-  const [preview, setPreview] = useState('');
 
   const { handleChange, handleSubmit, handleBlur, values, touched, errors, setFieldValue } = useFormik({
     initialValues: {
@@ -79,7 +77,6 @@ const AddModal = ({ setShowModal }) => {
                 reader.onload = () => {
                   if (reader.readyState === 2) {
                     setFieldValue('productImage', reader.result);
-                    setPreview(reader.result)
                   }
                 }
                 reader.readAsDataURL(event.target.files[0])
@@ -88,7 +85,6 @@ const AddModal = ({ setShowModal }) => {
               className="form-control"
               id="image" />
           </div>
-          <img src={preview} className="product-preview-image" alt="" />
           <div className="col-12 mt-4">
             <button type="submit" className="btn btn-primary px-4">Lưu sản phẩm</button>
             <button type="button" className="btn btn-outline-secondary ms-3 px-4" onClick={() => setShowModal(false)}>Hủy bỏ</button>
@@ -100,3 +96,4 @@ const AddModal = ({ setShowModal }) => {
 }
 
 export default AddModal
+
