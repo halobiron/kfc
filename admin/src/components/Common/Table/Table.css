@@ -9,11 +9,13 @@
 }
 
 .table thead {
-  background-color: var(--kfc-black);
-  color: var(--kfc-white);
+  background-color: var(--kfc-black) !important;
+  color: var(--kfc-white) !important;
 }
 
 .table thead th {
+  background-color: var(--kfc-black) !important;
+  color: var(--kfc-white) !important;
   padding: 16px;
   text-align: left;
   font-family: 'Oswald', sans-serif;

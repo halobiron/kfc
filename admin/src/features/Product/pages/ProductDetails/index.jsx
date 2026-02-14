@@ -318,7 +318,7 @@ const ProductDetails = () => {
 
                                 {/* Ingredients Table - Enhanced Styling */}
                                 <div className="table-responsive">
-                                    <table className="table table-hover align-middle mb-0 table-recipe">
+                                    <table className="table table-hover align-middle mb-0">
                                         <thead>
                                             <tr>
                                                 <th>Tên nguyên liệu</th>
