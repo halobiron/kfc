@@ -201,7 +201,7 @@ const Promotions = () => {
                             <small className="text-muted">
                               {promotion.usedCount || 0}/{promotion.maxUsage}
                             </small>
-                            <div className="progress" style={{ width: '80px', height: '6px' }}>
+                            <div className="progress progress-container">
                               <div
                                 className={`progress-bar ${usagePercent >= 80 ? 'bg-danger' : usagePercent >= 50 ? 'bg-warning' : 'bg-success'}`}
                                 style={{ width: `${usagePercent}%` }}
@@ -243,7 +243,7 @@ const Promotions = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal fade show d-block modal-overlay" tabIndex="-1">
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content">
               <div className="modal-header">

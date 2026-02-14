@@ -1,17 +1,8 @@
-.stats-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.progress-container {
+  width: 80px;
+  height: 6px;
 }
 
-.stats-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-}
-
-.progress {
-  background-color: #e9ecef;
-}
-
-.form-check-input:checked {
-  background-color: #198754;
-  border-color: #198754;
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
 }
