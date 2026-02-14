@@ -15,6 +15,10 @@
     object-fit: cover;
 }
 
+.store-address-cell {
+    max-width: 300px;
+}
+
 .modal-overlay-wrapper {
     position: fixed;
     top: 0;
@@ -37,4 +41,8 @@
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-overlay-inner-wide {
+    max-width: 800px;
 }

@@ -6,14 +6,6 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import Button from '../../../../components/Common/Button';
 
-const CITIES = [
-    { id: 'hcm', name: 'TP. Hồ Chí Minh' },
-    { id: 'hn', name: 'Hà Nội' },
-    { id: 'dn', name: 'Đà Nẵng' },
-    { id: 'hp', name: 'Hải Phòng' },
-    { id: 'ct', name: 'Cần Thơ' },
-];
-
 const AddStoreModal = ({ setShowModal, initialStore }) => {
 
     const dispatch = useDispatch();
@@ -22,7 +14,6 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
         initialValues: {
             name: '',
             address: '',
-            city: 'hcm',
             phone: '',
             openTime: '',
             services: '',
@@ -32,7 +23,6 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
         validationSchema: Yup.object({
             name: Yup.string().required('Tên cửa hàng là bắt buộc'),
             address: Yup.string().required('Địa chỉ là bắt buộc'),
-            city: Yup.string().required('Thành phố là bắt buộc'),
             phone: Yup.string().required('Số điện thoại là bắt buộc'),
             openTime: Yup.string().required('Giờ mở cửa là bắt buộc'),
         }),
@@ -70,7 +60,6 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
             setValues({
                 name: initialStore.name || '',
                 address: initialStore.address || '',
-                city: initialStore.city || 'hcm',
                 phone: initialStore.phone || '',
                 openTime: initialStore.openTime || '',
                 services: initialStore.services ? initialStore.services.join(', ') : '',
@@ -82,10 +71,10 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
 
     return (
         <div className="modal-overlay-wrapper">
-            <div className="modal-overlay-inner" style={{ maxWidth: '800px' }}>
+            <div className="modal-overlay-inner modal-overlay-inner-wide">
                 <h3 className="mb-4 text-center">{initialStore ? 'Cập Nhật Cửa Hàng' : 'Thêm Cửa Hàng Mới'}</h3>
                 <form className="row g-3" onSubmit={handleSubmit}>
-                    <div className="col-md-6">
+                    <div className="col-12">
                         <label htmlFor="name" className="form-label">Tên cửa hàng</label>
                         <input
                             type="text"
@@ -97,21 +86,6 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
                             id="name"
                         />
                         {touched.name && errors.name && <div className="invalid-feedback">{errors.name}</div>}
-                    </div>
-                    <div className="col-md-6">
-                        <label htmlFor="city" className="form-label">Thành phố</label>
-                        <select
-                            name='city'
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.city}
-                            className="form-select"
-                            id="city"
-                        >
-                            {CITIES.map(city => (
-                                <option key={city.id} value={city.id}>{city.name}</option>
-                            ))}
-                        </select>
                     </div>
                     <div className="col-12">
                         <label htmlFor="address" className="form-label">Địa chỉ</label>

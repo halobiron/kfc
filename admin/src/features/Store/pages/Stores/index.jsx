@@ -7,14 +7,6 @@ import { AddButton, EditButton, DeleteButton } from '../../../../components/Comm
 import './Stores.css';
 import { FiMapPin, FiPhone, FiClock } from 'react-icons/fi';
 
-const CITY_LABELS = {
-    hcm: 'TP.HCM',
-    hn: 'Hà Nội',
-    dn: 'Đà Nẵng',
-    hp: 'Hải Phòng',
-    ct: 'Cần Thơ'
-};
-
 const Stores = () => {
     const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
@@ -68,7 +60,6 @@ const Stores = () => {
                                     <th scope="col" className="ps-4">#</th>
                                     <th scope="col">Tên cửa hàng</th>
                                     <th scope="col">Địa chỉ</th>
-                                    <th scope="col">Thành phố</th>
                                     <th scope="col">Điện thoại</th>
                                     <th scope="col">Giờ mở cửa</th>
                                     <th scope="col" className="text-end pe-4">Thao tác</th>
@@ -86,8 +77,7 @@ const Stores = () => {
                                                 <div className="fw-bold">{store.name}</div>
                                             </div>
                                         </td>
-                                        <td className="text-muted small" style={{ maxWidth: '300px' }}>{store.address}</td>
-                                        <td>{CITY_LABELS[store.city] || store.city}</td>
+                                        <td className="text-muted small store-address-cell">{store.address}</td>
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
                                                 <FiPhone size={14} className="text-secondary" />
