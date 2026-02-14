@@ -2,14 +2,20 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import userApi from '../../api/userApi';
 import { toast } from 'react-toastify';
 
+// Helper để lấy error message chuẩn
+const getErrorMessage = (error) => {
+    return error.response?.data?.message || error.message || 'Đã có lỗi xảy ra';
+};
+
 export const getAllUsers = createAsyncThunk(
     'users/getAllUsers',
     async (_, { rejectWithValue }) => {
         try {
-            const data = await userApi.getAll();
-            return data;
+            const response = await userApi.getAll();
+            // Chuẩn hóa return data tại đây để reducer gọn hơn
+            return response.users || response.data || response; 
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi lấy danh sách người dùng');
+            return rejectWithValue(getErrorMessage(error));
         }
     }
 );
@@ -18,12 +24,13 @@ export const createUser = createAsyncThunk(
     'users/createUser',
     async (userData, { rejectWithValue }) => {
         try {
-            const data = await userApi.add(userData);
+            const response = await userApi.add(userData);
             toast.success('Thêm người dùng thành công!');
-            return data;
+            return response.user || response.data || response; 
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Thêm người dùng thất bại');
-            return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi thêm người dùng');
+            const msg = getErrorMessage(error);
+            toast.error(msg);
+            return rejectWithValue(msg);
         }
     }
 );
@@ -32,12 +39,14 @@ export const updateUser = createAsyncThunk(
     'users/updateUser',
     async ({ id, data }, { rejectWithValue }) => {
         try {
-            const result = await userApi.update(id, data);
+            const response = await userApi.update(id, data);
             toast.success('Cập nhật người dùng thành công!');
-            return result;
+            // Quan trọng: Trả về response chứa user mới để cập nhật UI
+            return response.user || response.data || response;
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Cập nhật người dùng thất bại');
-            return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi cập nhật người dùng');
+            const msg = getErrorMessage(error);
+            toast.error(msg);
+            return rejectWithValue(msg);
         }
     }
 );
@@ -48,10 +57,11 @@ export const deleteUser = createAsyncThunk(
         try {
             await userApi.delete(id);
             toast.success('Xóa người dùng thành công!');
-            return id;
+            return id; // Trả về ID để filter xóa khỏi list
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Xóa người dùng thất bại');
-            return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi xóa người dùng');
+            const msg = getErrorMessage(error);
+            toast.error(msg);
+            return rejectWithValue(msg);
         }
     }
 );
@@ -70,52 +80,44 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            // Get All Users
+            // --- Get All ---
             .addCase(getAllUsers.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(getAllUsers.fulfilled, (state, action) => {
                 state.loading = false;
-                state.users = action.payload.users || action.payload.data || [];
+                state.users = action.payload; // Data đã được xử lý ở thunk
             })
             .addCase(getAllUsers.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
 
-            // Create User
+            // --- Create ---
             .addCase(createUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(createUser.fulfilled, (state, action) => {
                 state.loading = false;
-                // Assuming payload contains the created user
-                const newUser = action.payload.user || action.payload.data;
-                if (newUser) {
-                    state.users.push(newUser);
-                }
+                state.users.push(action.payload);
             })
             .addCase(createUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
 
-            // Update User
+            // --- Update ---
             .addCase(updateUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(updateUser.fulfilled, (state, action) => {
                 state.loading = false;
-                // Assuming payload contains the updated user
-                const updatedUser = action.payload.user || action.payload.data;
-                if (updatedUser) {
-                    const index = state.users.findIndex(u => u._id === updatedUser._id);
-                    if (index !== -1) {
-                        state.users[index] = updatedUser;
-                    }
+                const index = state.users.findIndex(u => u._id === action.payload._id);
+                if (index !== -1) {
+                    state.users[index] = action.payload;
                 }
             })
             .addCase(updateUser.rejected, (state, action) => {
@@ -123,7 +125,7 @@ const userSlice = createSlice({
                 state.error = action.payload;
             })
 
-            // Delete User
+            // --- Delete ---
             .addCase(deleteUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -138,6 +140,11 @@ const userSlice = createSlice({
             });
     },
 });
+
+// Selectors
+export const selectAllUsers = (state) => state.users.users;
+export const selectUserLoading = (state) => state.users.loading;
+export const selectUserError = (state) => state.users.error;
 
 export const { clearUserErrors } = userSlice.actions;
 export default userSlice.reducer;
