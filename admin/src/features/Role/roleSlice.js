@@ -134,3 +134,9 @@ const roleSlice = createSlice({
 
 export const { clearErrors, resetSuccess } = roleSlice.actions;
 export default roleSlice.reducer;
+
+// Selectors
+export const selectAllRoles = (state) => state.roles.roles;
+export const selectRoleLoading = (state) => state.roles.loading;
+export const selectRoleError = (state) => state.roles.error;
+export const selectRoleSuccess = (state) => state.roles.success;
