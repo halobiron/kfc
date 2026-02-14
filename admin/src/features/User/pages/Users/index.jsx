@@ -1,75 +1,76 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers, createUser, updateUser, deleteUser } from '../../userSlice';
 import { getAllRoles } from '../../../Role/roleSlice';
 import { FiMail, FiPhone, FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell } from 'react-icons/fi';
 import { MdRestaurant } from 'react-icons/md';
 import StatCard from '../../../../components/Common/StatCard';
-import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
+import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
 import { formatDate } from '../../../../utils/formatters';
+import UserModal from './UserModal';
 import './Users.css';
+
+const ROLE_LABELS = {
+    admin: { label: 'Quản trị viên', color: 'primary', icon: <FiUserCheck size={20} /> },
+    cashier: { label: 'Thu ngân', color: 'success', icon: <FiDollarSign size={20} /> },
+    receptionist: { label: 'Lễ tân', color: 'warning', icon: <FiBell size={20} /> },
+    chef: { label: 'Đầu bếp', color: 'danger', icon: <MdRestaurant size={20} /> },
+    warehouse: { label: 'Thủ kho', color: 'secondary', icon: <FiPackage size={20} /> },
+    customer: { label: 'Khách hàng', color: 'info', icon: <FiUsers size={20} /> }
+};
 
 const Users = () => {
     const dispatch = useDispatch();
     const { users: usersList } = useSelector((state) => state.users);
     const { roles } = useSelector((state) => state.roles);
 
+    const [showModal, setShowModal] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+
     useEffect(() => {
         dispatch(getAllUsers());
         dispatch(getAllRoles());
     }, [dispatch]);
 
-    const [showModal, setShowModal] = useState(false);
-    const [editMode, setEditMode] = useState(false);
-    const [currentUser, setCurrentUser] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        role: 'customer',
-        password: '',
-        isActive: true
-    });
-
-    const roleLabels = {
-        admin: { label: 'Quản trị viên', color: 'primary', icon: <FiUserCheck size={20} /> },
-        cashier: { label: 'Thu ngân', color: 'success', icon: <FiDollarSign size={20} /> },
-        receptionist: { label: 'Lễ tân', color: 'warning', icon: <FiBell size={20} /> },
-        chef: { label: 'Đầu bếp', color: 'danger', icon: <MdRestaurant size={20} /> },
-        warehouse: { label: 'Thủ kho', color: 'secondary', icon: <FiPackage size={20} /> },
-        customer: { label: 'Khách hàng', color: 'info', icon: <FiUsers size={20} /> }
-    };
+    // Optimize stats calculation
+    const stats = useMemo(() => {
+        const counts = {
+            admin: 0, cashier: 0, receptionist: 0, chef: 0, warehouse: 0, customer: 0
+        };
+        
+        usersList.forEach(user => {
+            if (user.isActive) {
+                const roleName = user.role?.name || user.role || 'customer';
+                if (counts[roleName] !== undefined) {
+                    counts[roleName]++;
+                }
+            }
+        });
+        
+        return counts;
+    }, [usersList]);
 
     const handleOpenModal = (user = null) => {
-        if (user) {
-            setEditMode(true);
-            const roleName = user.role?.name || user.role || 'customer';
-            setCurrentUser({ ...user, role: roleName, password: '' });
-        } else {
-            setEditMode(false);
-            setCurrentUser({ name: '', email: '', phone: '', role: 'customer', password: '', isActive: true });
-        }
+        setSelectedUser(user);
         setShowModal(true);
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
-        setEditMode(false);
-        setCurrentUser({ name: '', email: '', phone: '', role: 'customer', password: '', isActive: true });
+        setSelectedUser(null);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (editMode) {
-            if (currentUser.password === '') {
-                // Removes password if empty so backend doesn't update it to empty string
-                const { password, ...dataWithoutPassword } = currentUser;
-                dispatch(updateUser({ id: currentUser._id, data: dataWithoutPassword }));
+    const handleSaveUser = (formData, isEditMode) => {
+        if (isEditMode) {
+             if (formData.password === '') {
+                const { password, ...dataWithoutPassword } = formData;
+                dispatch(updateUser({ id: formData._id, data: dataWithoutPassword }));
             } else {
-                dispatch(updateUser({ id: currentUser._id, data: currentUser }));
+                dispatch(updateUser({ id: formData._id, data: formData }));
             }
         } else {
-            dispatch(createUser(currentUser));
+            dispatch(createUser(formData));
         }
         handleCloseModal();
     };
@@ -97,277 +98,114 @@ const Users = () => {
         }));
     };
 
-    const getUserCountByRole = (role) => {
-        return usersList.filter(user => {
-            const rName = user.role?.name || user.role;
-            return rName === role && user.isActive;
-        }).length;
-    };
-
     return (
         <>
-            <>
-                <div className="page-header d-flex justify-content-between align-items-center">
-                    <h1 className="page-title">Quản lý người dùng</h1>
-                    <AddButton onClick={() => handleOpenModal()} />
-                </div>
+            <div className="page-header d-flex justify-content-between align-items-center">
+                <h1 className="page-title">Quản lý người dùng</h1>
+                <AddButton onClick={() => handleOpenModal()} />
+            </div>
 
-                {/* Stats Overview */}
-                <div className="row mb-4 g-3">
-                    <div className="col-md-2">
+            {/* Stats Overview */}
+            <div className="row mb-4 g-3">
+                {Object.keys(ROLE_LABELS).map(roleKey => (
+                    <div className="col-md-2" key={roleKey}>
                         <StatCard
-                            label="Quản trị"
-                            value={getUserCountByRole('admin')}
-                            icon={roleLabels.admin.icon}
-                            color={roleLabels.admin.color}
+                            label={ROLE_LABELS[roleKey].label.replace('Quản trị viên', 'Quản trị')}
+                            value={stats[roleKey]}
+                            icon={ROLE_LABELS[roleKey].icon}
+                            color={ROLE_LABELS[roleKey].color}
                         />
                     </div>
-                    <div className="col-md-2">
-                        <StatCard
-                            label="Thu ngân"
-                            value={getUserCountByRole('cashier')}
-                            icon={roleLabels.cashier.icon}
-                            color={roleLabels.cashier.color}
-                        />
-                    </div>
-                    <div className="col-md-2">
-                        <StatCard
-                            label="Lễ tân"
-                            value={getUserCountByRole('receptionist')}
-                            icon={roleLabels.receptionist.icon}
-                            color={roleLabels.receptionist.color}
-                        />
-                    </div>
-                    <div className="col-md-2">
-                        <StatCard
-                            label="Đầu bếp"
-                            value={getUserCountByRole('chef')}
-                            icon={roleLabels.chef.icon}
-                            color={roleLabels.chef.color}
-                        />
-                    </div>
-                    <div className="col-md-2">
-                        <StatCard
-                            label="Thủ kho"
-                            value={getUserCountByRole('warehouse')}
-                            icon={roleLabels.warehouse.icon}
-                            color={roleLabels.warehouse.color}
-                        />
-                    </div>
-                    <div className="col-md-2">
-                        <StatCard
-                            label="Khách hàng"
-                            value={getUserCountByRole('customer')}
-                            icon={roleLabels.customer.icon}
-                            color={roleLabels.customer.color}
-                        />
-                    </div>
-                </div>
+                ))}
+            </div>
 
-                {/* Users Table */}
-                <div className="card">
-                    <div className="card-header">Danh sách người dùng</div>
-                    <div className="table-responsive">
-                        <table className="table align-middle">
-                            <thead>
-                                <tr>
-                                    <th scope="col" className="ps-4">#</th>
-                                    <th scope="col">Họ và tên</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Số điện thoại</th>
-                                    <th scope="col" className="text-center">Vai trò</th>
-                                    <th scope="col" className="text-center">Trạng thái</th>
-                                    <th scope="col" className="text-end pe-4">Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {usersList.map((user, index) => {
-                                    const roleName = user.role?.name || user.role || 'customer';
-                                    return (
-                                        <tr key={user._id}>
-                                            <td className="ps-4 fw-bold">USR{1000 + index + 1}</td>
-                                            <td>
-                                                <div>
-                                                    <div className="fw-bold">{user.name}</div>
-                                                    <small className="text-muted">Tham gia: {formatDate(user.createdAt)}</small>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="d-flex align-items-center gap-2 text-muted">
-                                                    <FiMail size={14} />
-                                                    {user.email}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="d-flex align-items-center gap-2 text-muted">
-                                                    <FiPhone size={14} />
-                                                    {user.phone}
-                                                </div>
-                                            </td>
-                                            <td className="text-center">
-                                                <Badge
-                                                    variant={roleLabels[roleName]?.color || 'secondary'}
-                                                >
-                                                    <span className="me-1">{roleLabels[roleName]?.icon || <FiUsers size={20} />}</span>
-                                                    {roleLabels[roleName]?.label || roleName}
-                                                </Badge>
-                                            </td>
-                                            <td className="text-center">
-                                                <div className="form-check form-switch d-flex justify-content-center">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="checkbox"
-                                                        checked={user.isActive}
-                                                        onChange={() => handleToggleActive(user._id)}
-                                                        disabled={roleName === 'admin'}
-                                                        title={roleName === 'admin' ? "Không thể vô hiệu hóa Quản trị viên" : ""}
-                                                    />
-                                                </div>
-                                            </td>
-                                            <td className="text-end pe-4">
-                                                <EditButton
-                                                    className="me-2"
-                                                    onClick={() => handleOpenModal(user)}
-                                                />
-                                                <DeleteButton
-                                                    onClick={() => handleDelete(user._id)}
+            {/* Users Table */}
+            <div className="card">
+                <div className="card-header">Danh sách người dùng</div>
+                <div className="table-responsive">
+                    <table className="table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col" className="ps-4">#</th>
+                                <th scope="col">Họ và tên</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Số điện thoại</th>
+                                <th scope="col" className="text-center">Vai trò</th>
+                                <th scope="col" className="text-center">Trạng thái</th>
+                                <th scope="col" className="text-end pe-4">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {usersList.map((user, index) => {
+                                const roleName = user.role?.name || user.role || 'customer';
+                                return (
+                                    <tr key={user._id}>
+                                        <td className="ps-4 fw-bold">USR{1000 + index + 1}</td>
+                                        <td>
+                                            <div>
+                                                <div className="fw-bold">{user.name}</div>
+                                                <small className="text-muted">Tham gia: {formatDate(user.createdAt)}</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="d-flex align-items-center gap-2 text-muted">
+                                                <FiMail size={14} />
+                                                {user.email}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="d-flex align-items-center gap-2 text-muted">
+                                                <FiPhone size={14} />
+                                                {user.phone}
+                                            </div>
+                                        </td>
+                                        <td className="text-center">
+                                            <Badge
+                                                variant={ROLE_LABELS[roleName]?.color || 'secondary'}
+                                            >
+                                                <span className="me-1">{ROLE_LABELS[roleName]?.icon || <FiUsers size={20} />}</span>
+                                                {ROLE_LABELS[roleName]?.label || roleName}
+                                            </Badge>
+                                        </td>
+                                        <td className="text-center">
+                                            <div className="form-check form-switch d-flex justify-content-center">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    checked={user.isActive}
+                                                    onChange={() => handleToggleActive(user._id)}
                                                     disabled={roleName === 'admin'}
+                                                    title={roleName === 'admin' ? "Không thể vô hiệu hóa Quản trị viên" : ""}
                                                 />
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
+                                            </div>
+                                        </td>
+                                        <td className="text-end pe-4">
+                                            <EditButton
+                                                className="me-2"
+                                                onClick={() => handleOpenModal(user)}
+                                            />
+                                            <DeleteButton
+                                                onClick={() => handleDelete(user._id)}
+                                                disabled={roleName === 'admin'}
+                                            />
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
                 </div>
-            </>
+            </div>
 
             {/* Modal */}
-            {showModal && (
-                <div className="modal fade show d-block users-modal-backdrop" tabIndex="-1">
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">
-                                    {editMode ? 'Chỉnh sửa người dùng' : 'Thêm người dùng mới'}
-                                </h5>
-                                <button type="button" className="btn-close" onClick={handleCloseModal}></button>
-                            </div>
-                            <form onSubmit={handleSubmit}>
-                                <div className="modal-body">
-                                    <div className="mb-3">
-                                        <label className="form-label">Họ và tên <span className="text-danger">*</span></label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            value={currentUser.name}
-                                            onChange={(e) => setCurrentUser({ ...currentUser, name: e.target.value })}
-                                            required
-                                            placeholder="VD: Nguyễn Văn A"
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="form-label">Email <span className="text-danger">*</span></label>
-                                        <input
-                                            type="email"
-                                            className="form-control"
-                                            value={currentUser.email}
-                                            onChange={(e) => setCurrentUser({ ...currentUser, email: e.target.value })}
-                                            required
-                                            placeholder="email@example.com"
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="form-label">Số điện thoại <span className="text-danger">*</span></label>
-                                        <input
-                                            type="tel"
-                                            className="form-control"
-                                            value={currentUser.phone}
-                                            onChange={(e) => setCurrentUser({ ...currentUser, phone: e.target.value })}
-                                            required
-                                            placeholder="0901234567"
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="form-label">Vai trò <span className="text-danger">*</span></label>
-                                        <select
-                                            className="form-select"
-                                            value={currentUser.role}
-                                            onChange={(e) => setCurrentUser({ ...currentUser, role: e.target.value })}
-                                            required
-                                        >
-                                            {roles && roles.length > 0 ? (
-                                                roles.map(role => (
-                                                    <option key={role._id} value={role.name}>{role.name}</option>
-                                                ))
-                                            ) : (
-                                                <>
-                                                    <option value="customer">customer</option>
-                                                    <option value="admin">admin</option>
-                                                </>
-                                            )}
-                                        </select>
-                                        <small className="text-muted d-block mt-1">
-                                            {roles?.find(r => r.name === currentUser.role)?.description ||
-                                                (roleLabels[currentUser.role]?.label ? `Vai trò: ${roleLabels[currentUser.role]?.label}` : '')}
-                                        </small>
-                                    </div>
-                                    {!editMode && (
-                                        <div className="mb-3">
-                                            <label className="form-label">Mật khẩu <span className="text-danger">*</span></label>
-                                            <input
-                                                type="password"
-                                                className="form-control"
-                                                value={currentUser.password}
-                                                onChange={(e) => setCurrentUser({ ...currentUser, password: e.target.value })}
-                                                required={!editMode}
-                                                placeholder="Tối thiểu 6 ký tự"
-                                                minLength="6"
-                                            />
-                                        </div>
-                                    )}
-                                    {editMode && (
-                                        <div className="mb-3">
-                                            <label className="form-label">Đổi mật khẩu</label>
-                                            <input
-                                                type="password"
-                                                className="form-control"
-                                                value={currentUser.password}
-                                                onChange={(e) => setCurrentUser({ ...currentUser, password: e.target.value })}
-                                                placeholder="Để trống nếu không đổi"
-                                                minLength="6"
-                                            />
-                                            <small className="text-muted">Chỉ nhập nếu muốn thay đổi mật khẩu</small>
-                                        </div>
-                                    )}
-                                    <div className="form-check">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            checked={currentUser.isActive}
-                                            onChange={(e) => setCurrentUser({ ...currentUser, isActive: e.target.checked })}
-                                            id="isActiveCheck"
-                                            disabled={currentUser.role === 'admin'}
-                                        />
-                                        <label className="form-check-label" htmlFor="isActiveCheck">
-                                            {currentUser.role === 'admin' ? 'Tài khoản Quản trị viên luôn hoạt động' : 'Kích hoạt tài khoản này'}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="modal-footer">
-                                    <Button variant="secondary" onClick={handleCloseModal}>
-                                        Hủy
-                                    </Button>
-                                    <Button type="submit" variant="primary">
-                                        {editMode ? 'Cập nhật' : 'Thêm mới'}
-                                    </Button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <UserModal 
+                show={showModal}
+                onClose={handleCloseModal}
+                user={selectedUser}
+                roles={roles}
+                onSubmit={handleSaveUser}
+                roleLabels={ROLE_LABELS}
+            />
         </>
     );
 };
