@@ -8,21 +8,13 @@
   overflow: hidden;
 }
 
-.table thead {
-  background-color: var(--kfc-black) !important;
-  color: var(--kfc-white) !important;
-}
-
 .table thead th {
   background-color: var(--kfc-black) !important;
   color: var(--kfc-white) !important;
-  padding: 16px;
+  padding: 12px;
   text-align: left;
   font-family: 'Oswald', sans-serif;
-  font-weight: 700;
   text-transform: uppercase;
-  font-size: 14px;
-  letter-spacing: 0.5px;
 }
 
 .table tbody tr {
