@@ -1,15 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import orderApi from '../../../api/orderApi';
+import { getErrorMessage } from '../../../utils/errors';
 
 const useKitchenOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const getErrorMessage = (error, fallback) => {
-        return error?.response?.data?.message || error?.message || fallback;
-    };
-    
     const fetchOrders = useCallback(async () => {
         try {
             const data = await orderApi.getAll();

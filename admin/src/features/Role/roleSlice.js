@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import roleApi from '../../api/roleApi';
+import { getErrorMessage } from '../../utils/errors';
 
 // Get all roles
 export const getAllRoles = createAsyncThunk(
@@ -10,7 +11,7 @@ export const getAllRoles = createAsyncThunk(
             // Backend route was /api/v1/roles (mounted in server.js as /api/v1 and router path /)
             return data;
         } catch (error) {
-            return rejectWithValue(error.response.data.message || 'Không thể tải danh sách vai trò');
+            return rejectWithValue(getErrorMessage(error, 'Không thể tải danh sách vai trò'));
         }
     }
 );
@@ -23,7 +24,7 @@ export const createRole = createAsyncThunk(
             const data = await roleApi.add(roleData);
             return data;
         } catch (error) {
-            return rejectWithValue(error.response.data.message || 'Không thể tạo vai trò mới');
+            return rejectWithValue(getErrorMessage(error, 'Không thể tạo vai trò mới'));
         }
     }
 );
@@ -36,7 +37,7 @@ export const updateRole = createAsyncThunk(
             const data = await roleApi.update(id, roleData);
             return data;
         } catch (error) {
-            return rejectWithValue(error.response.data.message || 'Không thể cập nhật vai trò');
+            return rejectWithValue(getErrorMessage(error, 'Không thể cập nhật vai trò'));
         }
     }
 );
@@ -49,7 +50,7 @@ export const deleteRole = createAsyncThunk(
             await roleApi.delete(id);
             return id;
         } catch (error) {
-            return rejectWithValue(error.response.data.message || 'Không thể xóa vai trò');
+            return rejectWithValue(getErrorMessage(error, 'Không thể xóa vai trò'));
         }
     }
 );

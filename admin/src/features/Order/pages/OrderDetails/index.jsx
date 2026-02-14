@@ -8,6 +8,7 @@ import Button from '../../../../components/Common/Button';
 import { getOrderStatusMeta } from '../../components/OrderStatusBadge/orderStatus';
 import OrderStatusBadge from '../../components/OrderStatusBadge';
 import { formatCurrency } from '../../../../utils/formatters';
+import { getErrorMessage } from '../../../../utils/errors';
 import './OrderDetails.css';
 
 const OrderDetails = () => {
@@ -22,10 +23,6 @@ const OrderDetails = () => {
     const [showModal, setShowModal] = useState(false);
     const [targetStatus, setTargetStatus] = useState('');
     const [updating, setUpdating] = useState(false);
-
-    const getErrorMessage = (error, fallback) => {
-        return error?.response?.data?.message || error?.message || fallback;
-    };
 
     useEffect(() => {
         fetchOrderDetails();
