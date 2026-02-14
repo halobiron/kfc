@@ -67,7 +67,7 @@ const Product = () => {
                             <div className="fw-bold">{product.title}</div>
                           </div>
                         </td>
-                        <td className="text-muted small" style={{ maxWidth: '300px' }}>{product.description}</td>
+                        <td className="text-muted small product-description-cell">{product.description}</td>
                         <td className="text-end fw-bold text-danger">
                           {formatCurrency(product.price)}
                         </td>

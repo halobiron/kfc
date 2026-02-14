@@ -88,7 +88,7 @@ const AddModal = ({ setShowModal }) => {
               className="form-control"
               id="image" />
           </div>
-          <img src={preview} style={{ width: '200px' }} alt="" />
+          <img src={preview} className="product-preview-image" alt="" />
           <div className="col-12 mt-4">
             <button type="submit" className="btn btn-primary px-4">Lưu sản phẩm</button>
             <button type="button" className="btn btn-outline-secondary ms-3 px-4" onClick={() => setShowModal(false)}>Hủy bỏ</button>
