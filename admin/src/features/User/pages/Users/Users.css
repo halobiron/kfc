@@ -7,26 +7,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.avatar-circle {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: var(--kfc-red);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.role-badge {
-  padding: 0.4rem 0.6rem;
-  font-weight: 500;
-  font-size: 0.75rem;
-  border-radius: 4px;
-}
-
 /* Synchronize StatCard colors with Role Badges */
 .stats-card .text-primary {
   color: var(--kfc-red) !important;
@@ -90,4 +70,8 @@
 .modal-body small {
   display: block;
   margin-top: 0.25rem;
+}
+
+.users-modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
 }

@@ -187,14 +187,9 @@ const Users = () => {
                                         <tr key={user._id}>
                                             <td className="ps-4 fw-bold">USR{1000 + index + 1}</td>
                                             <td>
-                                                <div className="d-flex align-items-center gap-2">
-                                                    <div className="avatar-circle">
-                                                        {user.name.charAt(0).toUpperCase()}
-                                                    </div>
-                                                    <div>
-                                                        <div className="fw-bold">{user.name}</div>
-                                                        <small className="text-muted">Tham gia: {formatDate(user.createdAt)}</small>
-                                                    </div>
+                                                <div>
+                                                    <div className="fw-bold">{user.name}</div>
+                                                    <small className="text-muted">Tham gia: {formatDate(user.createdAt)}</small>
                                                 </div>
                                             </td>
                                             <td>
@@ -212,7 +207,6 @@ const Users = () => {
                                             <td className="text-center">
                                                 <Badge
                                                     variant={roleLabels[roleName]?.color || 'secondary'}
-                                                    className="role-badge"
                                                 >
                                                     <span className="me-1">{roleLabels[roleName]?.icon || <FiUsers size={20} />}</span>
                                                     {roleLabels[roleName]?.label || roleName}
@@ -251,7 +245,7 @@ const Users = () => {
 
             {/* Modal */}
             {showModal && (
-                <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                <div className="modal fade show d-block users-modal-backdrop" tabIndex="-1">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header">
