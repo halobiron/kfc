@@ -102,9 +102,10 @@ const couponSlice = createSlice({
             .addCase(updateCoupon.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
-                state.coupons = state.coupons.map((coupon) =>
-                    coupon._id === action.payload._id ? action.payload : coupon
-                );
+                const index = state.coupons.findIndex((coupon) => coupon._id === action.payload._id);
+                if (index !== -1) {
+                    state.coupons[index] = action.payload;
+                }
             })
             .addCase(updateCoupon.rejected, (state, action) => {
                 state.loading = false;
@@ -118,7 +119,10 @@ const couponSlice = createSlice({
             .addCase(deleteCoupon.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
-                state.coupons = state.coupons.filter(coupon => coupon._id !== action.payload);
+                const index = state.coupons.findIndex(coupon => coupon._id === action.payload);
+                if (index !== -1) {
+                    state.coupons.splice(index, 1);
+                }
             })
             .addCase(deleteCoupon.rejected, (state, action) => {
                 state.loading = false;

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { getOrderStatusMeta } from '../OrderStatusBadge/orderStatus';
 import OrderStatusBadge from '../OrderStatusBadge';
+import { formatDateTime } from '../../../../utils/formatters';
 
 const OrderTimeline = ({ order, status }) => {
     
@@ -15,7 +16,7 @@ const OrderTimeline = ({ order, status }) => {
             <div className="card-body">
                 <div className="d-flex align-items-center mb-3">
                     <OrderStatusBadge status={status} className="p-2 fs-6" />
-                    <span className="ms-3 text-muted">Cập nhật lần cuối: {new Date(order.updatedAt).toLocaleString('vi-VN')}</span>
+                    <span className="ms-3 text-muted">Cập nhật lần cuối: {formatDateTime(order.updatedAt)}</span>
                 </div>
 
                 {/* Timeline Section */}
@@ -30,13 +31,7 @@ const OrderTimeline = ({ order, status }) => {
                                     <li key={index} className={`timeline-item ${isLatest ? 'latest' : 'completed'}`}>
                                         <div className="timeline-dot"></div>
                                         <div className="timeline-time">
-                                            {new Date(history.timestamp).toLocaleString('vi-VN', {
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                                day: '2-digit',
-                                                month: '2-digit',
-                                                year: 'numeric'
-                                            })}
+                                            {formatDateTime(history.timestamp)}
                                         </div>
                                         <div className="timeline-status" style={{ color: isLatest ? '#007bff' : '#333' }}>
                                             {label}

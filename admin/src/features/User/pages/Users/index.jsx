@@ -7,6 +7,7 @@ import { MdRestaurant } from 'react-icons/md';
 import StatCard from '../../../../components/Common/StatCard';
 import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
+import { formatDate } from '../../../../utils/formatters';
 import './Users.css';
 
 const Users = () => {
@@ -192,7 +193,7 @@ const Users = () => {
                                                     </div>
                                                     <div>
                                                         <div className="fw-bold">{user.name}</div>
-                                                        <small className="text-muted">Tham gia: {new Date(user.createdAt).toLocaleDateString('vi-VN')}</small>
+                                                        <small className="text-muted">Tham gia: {formatDate(user.createdAt)}</small>
                                                     </div>
                                                 </div>
                                             </td>

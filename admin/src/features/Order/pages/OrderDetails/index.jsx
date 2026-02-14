@@ -7,6 +7,7 @@ import StatusModal from '../../../../components/Common/StatusModal';
 import Button from '../../../../components/Common/Button';
 import { getOrderStatusMeta, ORDER_STATUS } from '../../components/OrderStatusBadge/orderStatus';
 import { getErrorMessage } from '../../../../utils/errors';
+import { formatDateTime } from '../../../../utils/formatters';
 import './OrderDetails.css';
 
 // Components
@@ -83,7 +84,7 @@ const OrderDetails = () => {
                             Đơn hàng {order.orderNumber || order._id.substring(0, 8).toUpperCase()}
                         </h1>
                         <span className="text-muted small">
-                            <FiClock className="me-1" /> {new Date(order.createdAt).toLocaleString('vi-VN')}
+                            <FiClock className="me-1" /> {formatDateTime(order.createdAt)}
                         </span>
                     </div>
                 </div>

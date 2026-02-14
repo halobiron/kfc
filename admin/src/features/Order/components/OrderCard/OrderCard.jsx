@@ -1,6 +1,6 @@
 import React from 'react';
 import { FiChevronRight, FiCheckCircle } from 'react-icons/fi';
-import { formatCurrency } from '../../../../utils/formatters';
+import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
 import OrderStatusBadge from '../OrderStatusBadge';
 
 const OrderCard = ({ order, onStatusChange }) => {
@@ -13,7 +13,7 @@ const OrderCard = ({ order, onStatusChange }) => {
               {order.orderNumber || order._id.slice(0, 8).toUpperCase()}
             </h5>
             <small className="text-muted">
-              {new Date(order.createdAt).toLocaleTimeString('vi-VN')}
+              {formatDateTime(order.createdAt)}
             </small>
           </div>
           <OrderStatusBadge status={order.status} />
