@@ -26,13 +26,12 @@ const Product = () => {
 
   return (
     <>
-      <>
-        <div className="page-header d-flex justify-content-between align-items-center">
-          <h1 className="page-title">Quản lý Món ăn</h1>
-          <AddButton onClick={() => setShowModal(true)} />
-        </div>
+      <div className="page-header d-flex justify-content-between align-items-center">
+        <h1 className="page-title">Quản lý Món ăn</h1>
+        <AddButton onClick={() => setShowModal(true)} />
+      </div>
 
-        <div className="card">
+      <div className="card">
           <div className="card-header">Danh sách món ăn</div>
           <div className="table-responsive">
             <table className="table align-middle">
@@ -96,7 +95,6 @@ const Product = () => {
             </table>
           </div>
         </div>
-      </>
       {showModal ? <AddModal setShowModal={setShowModal} /> : null}
     </>
   )
