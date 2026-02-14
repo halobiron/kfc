@@ -1,3 +1,13 @@
+export const ORDER_STATUS = {
+    PENDING: 'pending',
+    CONFIRMED: 'confirmed',
+    PREPARING: 'preparing',
+    READY: 'ready',
+    SHIPPING: 'shipping',
+    DELIVERED: 'delivered',
+    CANCELLED: 'cancelled',
+};
+
 export const ORDER_STATUS_META = {
     pending: { label: 'Chờ xác nhận', badgeVariant: 'warning', icon: 'bi-clock' },
     confirmed: { label: 'Đã xác nhận', badgeVariant: 'info', icon: 'bi-check2-circle' },

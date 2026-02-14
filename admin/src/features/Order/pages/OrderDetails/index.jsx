@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import orderApi from '../../../../api/orderApi';
-import { FiArrowLeft, FiPrinter, FiXCircle, FiCheckCircle, FiTruck, FiPackage, FiClock, FiMapPin, FiPhone, FiMail, FiUser } from 'react-icons/fi';
+import { FiArrowLeft, FiXCircle, FiCheckCircle, FiTruck, FiClock } from 'react-icons/fi';
 import StatusModal from '../../../../components/Common/StatusModal';
 import Button from '../../../../components/Common/Button';
-import { getOrderStatusMeta } from '../../components/OrderStatusBadge/orderStatus';
-import OrderStatusBadge from '../../components/OrderStatusBadge';
-import { formatCurrency } from '../../../../utils/formatters';
+import { getOrderStatusMeta, ORDER_STATUS } from '../../components/OrderStatusBadge/orderStatus';
 import { getErrorMessage } from '../../../../utils/errors';
 import './OrderDetails.css';
+
+// Components
+import OrderItemsTable from '../../components/OrderDetails/OrderItemsTable';
+import OrderTimeline from '../../components/OrderDetails/OrderTimeline';
+import CustomerInfoCard from '../../components/OrderDetails/CustomerInfoCard';
 
 const OrderDetails = () => {
     const { id } = useParams();
@@ -76,7 +79,7 @@ const OrderDetails = () => {
                         <FiArrowLeft size={24} />
                     </Button>
                     <div>
-                        <h1 className="h2 mb-0 font-weight-bold" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
+                        <h1 className="h2 mb-0 font-weight-bold">
                             Đơn hàng {order.orderNumber || order._id.substring(0, 8).toUpperCase()}
                         </h1>
                         <span className="text-muted small">
@@ -87,30 +90,30 @@ const OrderDetails = () => {
                 <div className="btn-toolbar mb-2 mb-md-0">
                     <div className="btn-group me-2">
                         {/* Status buttons */}
-                        {status === 'pending' && (
-                            <Button size="sm" variant="success" className="d-flex align-items-center" onClick={() => openStatusModal('confirmed')}>
+                        {status === ORDER_STATUS.PENDING && (
+                            <Button size="sm" variant="success" className="d-flex align-items-center" onClick={() => openStatusModal(ORDER_STATUS.CONFIRMED)}>
                                 <FiCheckCircle className="me-2" /> Xác nhận
                             </Button>
                         )}
 
-                        {status === 'ready' && (
-                            <Button size="sm" variant="primary" className="d-flex align-items-center" onClick={() => openStatusModal('shipping')}>
+                        {status === ORDER_STATUS.READY && (
+                            <Button size="sm" variant="primary" className="d-flex align-items-center" onClick={() => openStatusModal(ORDER_STATUS.SHIPPING)}>
                                 <FiTruck className="me-2" /> Giao hàng
                             </Button>
                         )}
-                        {status === 'shipping' && (
-                            <Button size="sm" variant="success" className="d-flex align-items-center" onClick={() => openStatusModal('delivered')}>
+                        {status === ORDER_STATUS.SHIPPING && (
+                            <Button size="sm" variant="success" className="d-flex align-items-center" onClick={() => openStatusModal(ORDER_STATUS.DELIVERED)}>
                                 <FiCheckCircle className="me-2" /> Hoàn thành
                             </Button>
                         )}
                     </div>
-                    {status !== 'cancelled' && status !== 'delivered' && (
+                    {status !== ORDER_STATUS.CANCELLED && status !== ORDER_STATUS.DELIVERED && (
                         <Button
                             size="sm"
                             variant="danger"
                             className="d-flex align-items-center ms-2"
                             onClick={() => {
-                                openStatusModal('cancelled');
+                                openStatusModal(ORDER_STATUS.CANCELLED);
                             }}
                         >
                             <FiXCircle className="me-2" /> Hủy đơn
@@ -123,134 +126,15 @@ const OrderDetails = () => {
                 {/* Left Column - Order Info */}
                 <div className="col-lg-8">
                     {/* Order Items */}
-                    <div className="card mb-4">
-                        <div className="card-header">Chi tiết sản phẩm</div>
-                        <div className="table-responsive">
-                            <table className="table align-middle mb-0">
-                                <thead className="">
-                                    <tr>
-                                        <th style={{ minWidth: '250px' }}>Sản phẩm</th>
-                                        <th className="text-center">Số lượng</th>
-                                        <th className="text-end">Đơn giá</th>
-                                        <th className="text-end">Thành tiền</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {order.items.map((item, idx) => (
-                                        <tr key={idx}>
-                                            <td>
-                                                <div className="fw-bold">{item.name}</div>
-                                            </td>
-                                            <td className="text-center">x{item.quantity}</td>
-                                            <td className="text-end">{formatCurrency(item.price)}</td>
-                                            <td className="text-end fw-bold">{formatCurrency(item.price * item.quantity)}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colSpan="3" className="text-end fw-bold">Tạm tính:</td>
-                                        <td className="text-end">{formatCurrency(order.subtotal || order.totalAmount)}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan="3" className="text-end fw-bold">Phí vận chuyển:</td>
-                                        <td className="text-end">{formatCurrency(order.shippingFee || 0)}</td>
-                                    </tr>
-                                    {order.couponDiscount > 0 && (
-                                        <tr>
-                                            <td colSpan="3" className="text-end fw-bold text-success">Giảm giá:</td>
-                                            <td className="text-end text-success">-{formatCurrency(order.couponDiscount)}</td>
-                                        </tr>
-                                    )}
-                                    <tr>
-                                        <td colSpan="3" className="text-end fw-bold h5">Tổng cộng:</td>
-                                        <td className="text-end fw-bold h5 text-danger">{formatCurrency(order.totalAmount)}</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
+                    <OrderItemsTable order={order} />
 
                     {/* Order Status */}
-                    <div className="card mb-4">
-                        <div className="card-header">Trạng thái đơn hàng</div>
-                        <div className="card-body">
-                            <div className="d-flex align-items-center mb-3">
-                                <OrderStatusBadge status={status} className="p-2 fs-6" />
-                                <span className="ms-3 text-muted">Cập nhật lần cuối: {new Date(order.updatedAt).toLocaleString('vi-VN')}</span>
-                            </div>
-
-                            {/* Timeline Section */}
-                            {order.statusHistory && order.statusHistory.length > 0 && (
-                                <div className="timeline-section">
-                                    <h6 className="mb-3 fw-bold text-uppercase text-secondary" style={{ fontSize: '0.8rem' }}>Lịch sử trạng thái</h6>
-                                    <ul className="timeline">
-                                        {[...order.statusHistory]
-                                            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                                            .map((history, index) => {
-                                                const { label } = getOrderStatusMeta(history.status);
-                                                const isLatest = index === 0;
-                                                return (
-                                                    <li key={index} className={`timeline-item ${isLatest ? 'latest' : 'completed'}`}>
-                                                        <div className="timeline-dot"></div>
-                                                        <div className="timeline-time">
-                                                            {new Date(history.timestamp).toLocaleString('vi-VN', {
-                                                                hour: '2-digit',
-                                                                minute: '2-digit',
-                                                                day: '2-digit',
-                                                                month: '2-digit',
-                                                                year: 'numeric'
-                                                            })}
-                                                        </div>
-                                                        <div className="timeline-status" style={{ color: isLatest ? '#007bff' : '#333' }}>
-                                                            {label}
-                                                        </div>
-                                                        {history.note && <div className="timeline-note">{history.note}</div>}
-                                                    </li>
-                                                );
-                                            })}
-                                    </ul>
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                    <OrderTimeline order={order} status={status} />
                 </div>
 
                 {/* Right Column - Customer Info */}
                 <div className="col-lg-4">
-                    <div className="card mb-4">
-                        <div className="card-header">Thông tin khách hàng</div>
-                        <div className="card-body">
-                            <div className="d-flex align-items-center mb-3">
-                                <div className="bg-light rounded-circle p-3 me-3">
-                                    <FiUser size={24} className="text-primary" />
-                                </div>
-                                <div>
-                                    <h6 className="mb-0 fw-bold">{order.deliveryInfo?.fullName}</h6>
-                                    <small className="text-muted">Khách hàng</small>
-                                </div>
-                            </div>
-                            <hr />
-                            <div className="mb-3">
-                                <div className="d-flex align-items-start mb-2">
-                                    <FiPhone className="me-2 mt-1 text-muted" />
-                                    <span>{order.deliveryInfo?.phone}</span>
-                                </div>
-                                <div className="d-flex align-items-start mb-2">
-                                    <FiMapPin className="me-2 mt-1 text-muted flex-shrink-0" />
-                                    <span>
-                                        {order.deliveryType === 'pickup'
-                                            ? 'Nhận tại cửa hàng'
-                                            : order.deliveryInfo?.address || 'Chưa cập nhật địa chỉ'}
-                                        {order.deliveryInfo?.city ? `, ${order.deliveryInfo?.city}` : ''}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="alert alert-info mb-0">
-                                <small><strong>Ghi chú:</strong> {order.deliveryInfo?.note || 'Không có ghi chú'}</small>
-                            </div>
-                        </div>
-                    </div>
+                    <CustomerInfoCard order={order} />
                 </div>
             </div>
 
@@ -261,7 +145,7 @@ const OrderDetails = () => {
                 status={targetStatus}
                 statusLabel={getOrderStatusMeta(targetStatus).label}
                 loading={updating}
-                title={targetStatus === 'cancelled' ? 'Xác nhận Hủy đơn hàng' : 'Cập nhật trạng thái'}
+                title={targetStatus === ORDER_STATUS.CANCELLED ? 'Xác nhận Hủy đơn hàng' : 'Cập nhật trạng thái'}
             />
         </>
     );
