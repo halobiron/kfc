@@ -1,12 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllRoles, createRole, updateRole, deleteRole, clearErrors, resetSuccess } from '../../roleSlice';
 import { toast } from 'react-toastify';
 import Modal from 'react-bootstrap/Modal';
-// import Button from 'react-bootstrap/Button';
 import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
 import Form from 'react-bootstrap/Form';
+import './Roles.css';
+
+// Constants defined outside component
+const RESOURCES = [
+    { id: 'dashboard', label: 'Tổng quan' },
+    { id: 'orders', label: 'Đơn hàng' },
+    { id: 'kitchen', label: 'Bếp' },
+    { id: 'products', label: 'Sản phẩm' },
+    { id: 'categories', label: 'Danh mục' },
+    { id: 'ingredients', label: 'Nguyên liệu' },
+    { id: 'users', label: 'Người dùng' },
+    { id: 'roles', label: 'Phân quyền' },
+    { id: 'promotions', label: 'Khuyến mãi' },
+    { id: 'reports', label: 'Báo cáo' },
+    { id: 'stores', label: 'Cửa hàng' }
+];
+
+const ROLE_DEFINITIONS = {
+    admin: { name: 'Quản trị viên', desc: 'Quản trị viên với toàn quyền truy cập' },
+    staff: { name: 'Nhân viên', desc: 'Nhân viên cửa hàng' },
+    customer: { name: 'Khách hàng', desc: 'Khách hàng thường' },
+    cashier: { name: 'Thu ngân', desc: 'Nhân viên thu ngân' },
+    kitchen: { name: 'Bếp', desc: 'Nhân viên bếp' },
+    delivery: { name: 'Giao hàng', desc: 'Nhân viên giao hàng' }
+};
 
 const RoleManagement = () => {
     const dispatch = useDispatch();
@@ -21,20 +45,6 @@ const RoleManagement = () => {
         description: '',
         permissions: []
     });
-
-    const RESOURCES = [
-        { id: 'dashboard', label: 'Tổng quan' },
-        { id: 'orders', label: 'Đơn hàng' },
-        { id: 'kitchen', label: 'Bếp' },
-        { id: 'products', label: 'Sản phẩm' },
-        { id: 'categories', label: 'Danh mục' },
-        { id: 'ingredients', label: 'Nguyên liệu' },
-        { id: 'users', label: 'Người dùng' },
-        { id: 'roles', label: 'Phân quyền' },
-        { id: 'promotions', label: 'Khuyến mãi' },
-        { id: 'reports', label: 'Báo cáo' },
-        { id: 'stores', label: 'Cửa hàng' }
-    ];
 
     useEffect(() => {
         dispatch(getAllRoles());
@@ -121,12 +131,6 @@ const RoleManagement = () => {
         }
     };
 
-    const getPermissionLabel = (perms) => {
-        if (!perms || perms.length === 0) return 'Không có quyền';
-        // Simple summary if needed, or just count
-        return `${perms.length} quyền`;
-    };
-
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-4 pt-4">
@@ -149,32 +153,25 @@ const RoleManagement = () => {
                             <tr><td colSpan="4" className="text-center">Đang tải...</td></tr>
                         ) : roles && roles.length > 0 ? (
                             roles.map((role) => {
-                                // Translate standard roles
-                                let roleName = role.name;
-                                let roleDesc = role.description;
-                                if (role.name === 'admin') { roleName = 'Quản trị viên'; roleDesc = 'Quản trị viên với toàn quyền truy cập'; }
-                                else if (role.name === 'staff') { roleName = 'Nhân viên'; roleDesc = 'Nhân viên cửa hàng'; }
-                                else if (role.name === 'customer') { roleName = 'Khách hàng'; roleDesc = 'Khách hàng thường'; }
-                                else if (role.name === 'cashier') { roleName = 'Thu ngân'; roleDesc = 'Nhân viên thu ngân'; }
-                                else if (role.name === 'kitchen') { roleName = 'Bếp'; roleDesc = 'Nhân viên bếp'; }
-                                else if (role.name === 'delivery') { roleName = 'Giao hàng'; roleDesc = 'Nhân viên giao hàng'; }
+                                // Translate standard roles using definitions
+                                const def = ROLE_DEFINITIONS[role.name];
+                                const roleName = def ? def.name : role.name;
+                                const roleDesc = def ? def.desc : role.description;
 
                                 // Group permissions
-                                const groupedPerms = {};
-                                const perms = role.permissions || [];
-
-                                perms.forEach(p => {
+                                const groupedPerms = (role.permissions || []).reduce((acc, p) => {
                                     const [res, type] = p.split('.');
-                                    if (!groupedPerms[res]) groupedPerms[res] = [];
-                                    groupedPerms[res].push(type === 'view' ? 'Xem' : 'Sửa');
-                                });
+                                    if (!acc[res]) acc[res] = [];
+                                    acc[res].push(type === 'view' ? 'Xem' : 'Sửa');
+                                    return acc;
+                                }, {});
 
                                 return (
                                     <tr key={role._id}>
                                         <td>{roleName}</td>
                                         <td>{roleDesc}</td>
                                         <td>
-                                            <div style={{ maxWidth: '400px', whiteSpace: 'normal' }}>
+                                            <div className="role-permissions-wrap">
                                                 {Object.keys(groupedPerms).length > 0 ? (
                                                     Object.entries(groupedPerms).map(([res, types]) => {
                                                         const resLabel = RESOURCES.find(r => r.id === res)?.label || res;
@@ -182,8 +179,7 @@ const RoleManagement = () => {
                                                             <Badge
                                                                 key={res}
                                                                 variant="light"
-                                                                className="border me-1 mb-1 text-dark"
-                                                                style={{ fontWeight: 'normal' }}
+                                                                className="border me-1 mb-1 text-dark role-permission-badge"
                                                             >
                                                                 <strong>{resLabel}:</strong> {types.join(', ')}
                                                             </Badge>
@@ -245,9 +241,9 @@ const RoleManagement = () => {
                                 <table className="table table-sm table-striped mb-0">
                                     <thead className="bg-light">
                                         <tr>
-                                            <th style={{ width: '40%' }}>Chức năng</th>
-                                            <th className="text-center" style={{ width: '30%' }}>Xem</th>
-                                            <th className="text-center" style={{ width: '30%' }}>Sửa (Thêm/Sửa/Xóa)</th>
+                                            <th className="role-col-feature">Chức năng</th>
+                                            <th className="text-center role-col-view">Xem</th>
+                                            <th className="text-center role-col-edit">Sửa (Thêm/Sửa/Xóa)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
