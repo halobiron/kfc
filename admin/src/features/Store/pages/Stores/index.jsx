@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllStores, deleteStore } from '../../storeSlice';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import './Stores.css';
-import { FiMapPin, FiPhone, FiClock } from 'react-icons/fi';
+import { FiPhone, FiClock } from 'react-icons/fi';
 
 const Stores = () => {
     const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
     const [selectedStore, setSelectedStore] = useState(null);
-    const { stores } = useSelector(state => state.stores);
+    const { stores, loading, error } = useSelector(state => state.stores);
 
     useEffect(() => {
         dispatch(getAllStores());
@@ -40,42 +40,55 @@ const Stores = () => {
 
     return (
         <>
-            <>
-                <div className="page-header d-flex justify-content-between align-items-center">
-                    <h1 className="page-title">Quản lý Cửa Hàng</h1>
-                    <AddButton 
-                        onClick={() => {
-                            setSelectedStore(null);
-                            setShowModal(true);
-                        }}
-                    />
-                </div>
+            <div className="page-header d-flex justify-content-between align-items-center">
+                <h1 className="page-title">Quản lý Cửa Hàng</h1>
+                <AddButton 
+                    onClick={() => {
+                        setSelectedStore(null);
+                        setShowModal(true);
+                    }}
+                />
+            </div>
 
-                <div className="card">
-                    <div className="card-header">Danh sách cửa hàng</div>
-                    <div className="table-responsive">
-                        <table className="table align-middle">
-                            <thead>
+            <div className="card">
+                <div className="card-header">Danh sách cửa hàng</div>
+                <div className="table-responsive">
+                    <table className="table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col" className="ps-4">#</th>
+                                <th scope="col">Tên cửa hàng</th>
+                                <th scope="col">Địa chỉ</th>
+                                <th scope="col">Điện thoại</th>
+                                <th scope="col">Giờ mở cửa</th>
+                                <th scope="col" className="text-end pe-4">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loading ? (
                                 <tr>
-                                    <th scope="col" className="ps-4">#</th>
-                                    <th scope="col">Tên cửa hàng</th>
-                                    <th scope="col">Địa chỉ</th>
-                                    <th scope="col">Điện thoại</th>
-                                    <th scope="col">Giờ mở cửa</th>
-                                    <th scope="col" className="text-end pe-4">Thao tác</th>
+                                    <td colSpan="6" className="text-center py-5 text-muted">
+                                        Đang tải dữ liệu...
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {stores.map((store, i) => (
+                            ) : error ? (
+                                <tr>
+                                    <td colSpan="6" className="text-center py-5 text-danger">
+                                        {error || 'Có lỗi xảy ra khi tải danh sách'}
+                                    </td>
+                                </tr>
+                            ) : stores.length === 0 ? (
+                                <tr>
+                                    <td colSpan="6" className="text-center py-5 text-muted">
+                                        Chưa có cửa hàng nào được tạo.
+                                    </td>
+                                </tr>
+                            ) : (
+                                stores.map((store, i) => (
                                     <tr key={store._id}>
                                         <td className="ps-4 fw-bold">STR{1000 + i + 1}</td>
                                         <td>
-                                            <div className="d-flex align-items-center gap-3">
-                                                <div className="store-img-wrapper">
-                                                    <FiMapPin size={24} className="text-danger" />
-                                                </div>
-                                                <div className="fw-bold">{store.name}</div>
-                                            </div>
+                                            <div className="fw-bold">{store.name}</div>
                                         </td>
                                         <td className="text-muted small store-address-cell">{store.address}</td>
                                         <td>
@@ -100,12 +113,13 @@ const Stores = () => {
                                             />
                                         </td>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
                 </div>
-            </>
+            </div>
+
             {showModal && (
                 <AddStoreModal
                     setShowModal={handleCloseModal}
