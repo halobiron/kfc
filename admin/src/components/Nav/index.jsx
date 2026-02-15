@@ -1,6 +1,6 @@
 import React from 'react'
 import './Nav.css';
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiBox, FiTag, FiPackage, FiMapPin, FiLock } from 'react-icons/fi';
 
 import { useSelector } from 'react-redux';
@@ -8,8 +8,8 @@ import { useSelector } from 'react-redux';
 const Nav = () => {
   const { user } = useSelector(state => state.auth);
   const roleName = user?.role?.name || user?.role;
+  const getNavLinkClass = ({ isActive }) => `nav-link${isActive ? ' active' : ''}`;
 
-  // Default to empty array if permissions not loaded/available yet or for legacy users
   const permissions = user?.permissions || user?.role?.permissions || user?.roleId?.permissions || [];
 
   const hasPermission = (perm) => {
@@ -17,117 +17,112 @@ const Nav = () => {
     return permissions.includes(perm);
   };
 
-  // Debug logs
-  console.log('Nav User:', user);
-  console.log('Nav RoleName:', roleName);
-  console.log('Nav Permissions:', permissions);
-
   return (
     <nav id="sidebarMenu" className="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse">
       <div className="position-sticky pt-3">
         <ul className="nav flex-column">
           <li className="nav-item">
-            <Link className="nav-link active" aria-current="page" to="/home">
+            <NavLink className={getNavLinkClass} to="/home" end>
               <FiHome className="nav-icon" />
               Tổng quan
-            </Link>
+            </NavLink>
           </li>
 
           {hasPermission('orders.view') && (
             <li className="nav-item">
-              <Link className="nav-link" to="/orders">
+              <NavLink className={getNavLinkClass} to="/orders">
                 <FiFileText className="nav-icon" />
                 Đơn hàng
-              </Link>
+              </NavLink>
             </li>
           )}
 
           {hasPermission('kitchen.view') && (
             <li className="nav-item">
-              <Link className="nav-link" to="/kitchen">
+              <NavLink className={getNavLinkClass} to="/kitchen">
                 <FiPackage className="nav-icon" />
                 Bếp
-              </Link>
+              </NavLink>
             </li>
           )}
 
           {hasPermission('products.view') && (
             <li className="nav-item">
-              <Link className="nav-link" to="/products">
+              <NavLink className={getNavLinkClass} to="/products">
                 <FiShoppingCart className="nav-icon" />
                 Sản phẩm
-              </Link>
+              </NavLink>
             </li>
           )}
 
           {hasPermission('categories.view') && (
             <li className="nav-item">
-              <Link className="nav-link" to="/categories">
+              <NavLink className={getNavLinkClass} to="/categories">
                 <FiTag className="nav-icon" />
                 Danh mục
-              </Link>
+              </NavLink>
             </li>
           )}
 
           {hasPermission('ingredients.view') && (
             <li className="nav-item">
-              <Link className="nav-link" to="/ingredients">
+              <NavLink className={getNavLinkClass} to="/ingredients">
                 <FiBox className="nav-icon" />
                 Nguyên liệu
-              </Link>
+              </NavLink>
             </li>
           )}
 
           {hasPermission('users.view') && (
             <li className="nav-item">
-              <Link className="nav-link" to="/users">
+              <NavLink className={getNavLinkClass} to="/users">
                 <FiUsers className="nav-icon" />
                 Người dùng
-              </Link>
+              </NavLink>
             </li>
           )}
 
           {(roleName === 'admin' || hasPermission('roles.view')) && (
             <li className="nav-item">
-              <Link className="nav-link" to="/roles">
+              <NavLink className={getNavLinkClass} to="/roles">
                 <FiLock className="nav-icon" />
                 Phân quyền
-              </Link>
+              </NavLink>
             </li>
           )}
 
           {hasPermission('promotions.view') && (
             <li className="nav-item">
-              <Link className="nav-link" to="/promotions">
+              <NavLink className={getNavLinkClass} to="/promotions">
                 <FiTag className="nav-icon" />
                 Khuyến mãi
-              </Link>
+              </NavLink>
             </li>
           )}
 
           {hasPermission('reports.view') && (
             <li className="nav-item">
-              <Link className="nav-link" to="/reports">
+              <NavLink className={getNavLinkClass} to="/reports">
                 <FiBarChart2 className="nav-icon" />
                 Báo cáo
-              </Link>
+              </NavLink>
             </li>
           )}
 
           {hasPermission('stores.view') && (
             <li className="nav-item">
-              <Link className="nav-link" to="/stores">
+              <NavLink className={getNavLinkClass} to="/stores">
                 <FiMapPin className="nav-icon" />
                 Cửa hàng
-              </Link>
+              </NavLink>
             </li>
           )}
 
           <li className="nav-item">
-            <Link className="nav-link" to="/change-password">
+            <NavLink className={getNavLinkClass} to="/change-password">
               <FiLock className="nav-icon" />
               Đổi mật khẩu
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </div>
