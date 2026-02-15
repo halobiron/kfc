@@ -1,5 +1,5 @@
 import React from 'react';
-import './statCard.css';
+import './StatCard.css';
 
 const StatCard = ({ label, value, icon, trend, color = 'primary', className = '' }) => {
   return (
@@ -14,7 +14,7 @@ const StatCard = ({ label, value, icon, trend, color = 'primary', className = ''
           <div className="d-flex justify-content-between align-items-center mb-0">
             <div className="stats-card-value text-truncate mb-0">{value}</div>
             {trend && (
-              <span className={`badge ${trend.startsWith('+') ? 'bg-success' : 'bg-danger'} rounded-pill`} style={{ fontSize: '10px', padding: '2px 6px' }}>
+              <span className={`badge ${trend.startsWith('+') ? 'bg-success' : 'bg-danger'} rounded-pill stats-card-trend`}>
                 {trend}
               </span>
             )}
