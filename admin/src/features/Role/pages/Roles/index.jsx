@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import Modal from 'react-bootstrap/Modal';
 import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
+import Table from '../../../../components/Common/Table';
 import Form from 'react-bootstrap/Form';
 import './Roles.css';
 
@@ -107,6 +108,61 @@ const RoleManagement = ({ resources = [] }) => {
         }
     };
 
+    const columns = [
+        {
+            header: 'Tên vai trò',
+            key: 'name',
+            className: 'fw-bold'
+        },
+        {
+            header: 'Mô tả',
+            key: 'description'
+        },
+        {
+            header: 'Quyền hạn',
+            render: (role) => {
+                const groupedPerms = (role.permissions || []).reduce((acc, p) => {
+                    const [res, type] = p.split('.');
+                    if (!acc[res]) acc[res] = [];
+                    acc[res].push(type === 'view' ? 'Xem' : 'Sửa');
+                    return acc;
+                }, {});
+
+                return (
+                    <div className="role-permissions-wrap">
+                        {Object.keys(groupedPerms).length > 0 ? (
+                            Object.entries(groupedPerms).map(([res, types]) => {
+                                const resLabel = resources.find(r => r.id === res)?.label || res;
+                                return (
+                                    <Badge
+                                        key={res}
+                                        variant="light"
+                                        className="me-1 mb-1"
+                                    >
+                                        <span>{resLabel}:</span> {types.join(', ')}
+                                    </Badge>
+                                );
+                            })
+                        ) : (
+                            <span className="text-muted small">Không có quyền</span>
+                        )}
+                    </div>
+                );
+            }
+        },
+        {
+            header: 'Hành động',
+            render: (role) => (
+                <div className="d-flex gap-2">
+                    <EditButton onClick={() => handleEdit(role)} />
+                    {!role.isDefault && (
+                        <DeleteButton onClick={() => handleDelete(role._id)} />
+                    )}
+                </div>
+            )
+        }
+    ];
+
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-4 pt-4">
@@ -114,69 +170,13 @@ const RoleManagement = ({ resources = [] }) => {
                 <AddButton onClick={() => { setIsEdit(false); handleShow(); }} />
             </div>
 
-            <div className="table-responsive bg-white rounded shadow-sm p-4">
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Tên vai trò</th>
-                            <th>Mô tả</th>
-                            <th>Quyền hạn</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loading ? (
-                            <tr><td colSpan="4" className="text-center">Đang tải...</td></tr>
-                        ) : roles && roles.length > 0 ? (
-                            roles.map((role) => {
-                                // Group permissions
-                                const groupedPerms = (role.permissions || []).reduce((acc, p) => {
-                                    const [res, type] = p.split('.');
-                                    if (!acc[res]) acc[res] = [];
-                                    acc[res].push(type === 'view' ? 'Xem' : 'Sửa');
-                                    return acc;
-                                }, {});
-
-                                return (
-                                    <tr key={role._id}>
-                                        <td>{role.name}</td>
-                                        <td>{role.description}</td>
-                                        <td>
-                                            <div className="role-permissions-wrap">
-                                                {Object.keys(groupedPerms).length > 0 ? (
-                                                    Object.entries(groupedPerms).map(([res, types]) => {
-                                                        const resLabel = resources.find(r => r.id === res)?.label || res;
-                                                        return (
-                                                            <Badge
-                                                                key={res}
-                                                                variant="light"
-                                                                className="me-1 mb-1"
-                                                            >
-                                                                <span>{resLabel}:</span> {types.join(', ')}
-                                                            </Badge>
-                                                        );
-                                                    })
-                                                ) : (
-                                                    <span className="text-muted small">Không có quyền</span>
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="d-flex gap-2">
-                                                <EditButton onClick={() => handleEdit(role)} />
-                                                {!role.isDefault && (
-                                                    <DeleteButton onClick={() => handleDelete(role._id)} />
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                        ) : (
-                            <tr><td colSpan="4" className="text-center">Chưa có vai trò nào</td></tr>
-                        )}
-                    </tbody>
-                </table>
+            <div className="bg-white rounded shadow-sm p-4">
+                <Table 
+                    columns={columns}
+                    data={roles}
+                    loading={loading}
+                    emptyMessage="Chưa có vai trò nào được tạo"
+                />
             </div>
 
             {/* Modal */}

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { FiPlus } from 'react-icons/fi';
 import Button, { AddButton, EditButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
+import Table from '../../../../components/Common/Table';
 import RestockModal from '../../components/RestockModal';
 import IngredientFormModal from '../../components/IngredientFormModal';
 import './Ingredient.css';
@@ -98,6 +99,75 @@ const Ingredient = () => {
         setShowRestockModal(true);
     };
 
+    const columns = [
+        {
+            header: 'Mã',
+            className: 'ps-4 fw-bold text-muted small',
+            render: (ing) => `#${ing._id.slice(-6).toUpperCase()}`
+        },
+        {
+            header: 'Tên nguyên liệu',
+            className: 'fw-bold',
+            key: 'name'
+        },
+        {
+            header: 'Danh mục',
+            render: (ing) => <Badge variant="light" className="text-dark">{ing.category}</Badge>
+        },
+        {
+            header: 'Nhà cung cấp',
+            render: (ing) => (
+                <>
+                    <div className="fw-bold small">{ing.supplier || '---'}</div>
+                    <div className="text-muted">{ing.supplierContact || ''}</div>
+                </>
+            )
+        },
+        {
+            header: 'Đơn vị',
+            className: 'text-center',
+            key: 'unit'
+        },
+        {
+            header: 'Hiện có',
+            className: 'text-end fw-bold',
+            render: (ing) => (
+                <span className={ing.stock <= ing.minStock ? 'text-danger' : ''}>
+                    {ing.stock}
+                </span>
+            )
+        },
+        {
+            header: 'Trạng thái',
+            className: 'text-center',
+            render: (ing) => {
+                const status = getStockStatus(ing.stock, ing.minStock);
+                return <Badge variant={status.variant}>{status.label}</Badge>;
+            }
+        },
+        {
+            header: 'Thao tác',
+            className: 'text-end pe-4',
+            render: (ing) => (
+                <>
+                    <EditButton
+                        className="me-2"
+                        onClick={() => openEditModal(ing)}
+                    />
+                    <Button
+                        size="sm"
+                        variant="outline-success"
+                        title="Nhập kho"
+                        aria-label="Nhập kho"
+                        onClick={() => openRestockModal(ing)}
+                    >
+                        <FiPlus />
+                    </Button>
+                </>
+            )
+        }
+    ];
+
     return (
         <>
             <div className="page-header d-flex justify-content-between align-items-center">
@@ -109,80 +179,13 @@ const Ingredient = () => {
 
             <div className="card">
                 <div className="card-header">Danh mục nguyên liệu</div>
-                <div className="table-responsive">
-                    <table className="table align-middle">
-                        <thead>
-                            <tr>
-                                <th scope="col" className="ps-4">Mã</th>
-                                <th scope="col">Tên nguyên liệu</th>
-                                <th scope="col">Danh mục</th>
-                                <th scope="col">Nhà cung cấp</th>
-                                <th scope="col" className="text-center">Đơn vị</th>
-                                <th scope="col" className="text-end">Hiện có</th>
-                                <th scope="col" className="text-center">Trạng thái</th>
-                                <th scope="col" className="text-end pe-4">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loading && (
-                                <tr>
-                                    <td colSpan="8" className="text-center py-4 text-muted">Đang tải dữ liệu...</td>
-                                </tr>
-                            )}
-
-                            {!loading && ingredients && ingredients.length === 0 && (
-                                <tr>
-                                    <td colSpan="8" className="text-center py-4 text-muted">Không có nguyên liệu nào</td>
-                                </tr>
-                            )}
-
-                            {!loading && ingredients && ingredients.map((ing, i) => {
-                                const status = getStockStatus(ing.stock, ing.minStock);
-                                const isLow = ing.stock <= ing.minStock;
-
-                                return (
-                                    <tr key={ing._id} className={isLow ? 'row-alert' : ''}>
-                                        <td className="ps-4 fw-bold text-muted small">#{ing._id.slice(-6).toUpperCase()}</td>
-                                        <td>
-                                            <div className="fw-bold">{ing.name}</div>
-                                        </td>
-                                        <td><Badge variant="light" className="text-dark">{ing.category}</Badge></td>
-                                        <td>
-                                            <div className="fw-bold small">{ing.supplier || '---'}</div>
-                                            <div className="text-muted">{ing.supplierContact || ''}</div>
-                                        </td>
-                                        <td className="text-center">{ing.unit}</td>
-                                        <td className="text-end fw-bold">
-                                            <span className={isLow ? 'text-danger' : ''}>
-                                                {ing.stock}
-                                            </span>
-                                        </td>
-                                        <td className="text-center">
-                                            <Badge variant={status.variant}>
-                                                {status.label}
-                                            </Badge>
-                                        </td>
-                                        <td className="text-end pe-4">
-                                            <EditButton
-                                                className="me-2"
-                                                onClick={() => openEditModal(ing)}
-                                            />
-                                            <Button
-                                                size="sm"
-                                                variant="outline-success"
-                                                title="Nhập kho"
-                                                aria-label="Nhập kho"
-                                                onClick={() => openRestockModal(ing)}
-                                            >
-                                                <FiPlus />
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                        </tbody>
-                    </table>
-                </div>
+                <Table 
+                    columns={columns}
+                    data={ingredients}
+                    loading={loading}
+                    emptyMessage="Không có nguyên liệu nào"
+                    rowClassName={(ing) => ing.stock <= ing.minStock ? 'row-alert' : ''}
+                />
             </div>
 
             <RestockModal

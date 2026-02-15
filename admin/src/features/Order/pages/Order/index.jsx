@@ -6,6 +6,7 @@ import { getAllOrders, updateOrderStatus } from '../../orderSlice';
 import { toast } from 'react-toastify';
 import StatusModal from '../../../../components/Common/StatusModal';
 import Button from '../../../../components/Common/Button';
+import Table from '../../../../components/Common/Table';
 import OrderStatusBadge from '../../components/OrderStatusBadge';
 import { getOrderStatusMeta } from '../../components/OrderStatusBadge/orderStatus';
 import { formatCurrency } from '../../../../utils/formatters';
@@ -126,6 +127,39 @@ const Order = () => {
     openUpdateModal(id, 'cancelled');
   };
 
+  const columns = [
+    {
+      header: 'Mã đơn hàng',
+      render: (order) => <span className="fw-bold">#{order._id?.substring(-6).toUpperCase() || 'N/A'}</span>
+    },
+    {
+      header: 'Khách hàng',
+      render: (order) => <OrderCustomerCell order={order} />
+    },
+    {
+      header: 'Sản phẩm',
+      render: (order) => <OrderItemsCell items={order.items} />
+    },
+    {
+      header: 'Tổng tiền',
+      render: (order) => <span className="fw-bold text-primary">{formatCurrency(order.totalAmount)}</span>
+    },
+    {
+      header: 'Trạng thái',
+      render: (order) => <OrderStatusBadge status={order.status} />
+    },
+    {
+      header: 'Thao tác',
+      render: (order) => (
+        <OrderActionButtons 
+          order={order} 
+          onOpenUpdateModal={openUpdateModal} 
+          onCancelClick={handleCancelClick} 
+        />
+      )
+    }
+  ];
+
   return (
     <>
       <div className="page-header">
@@ -134,44 +168,12 @@ const Order = () => {
 
       <div className="card">
         <div className="card-header">Danh sách đơn hàng</div>
-        <div className="table-responsive">
-          <table className="table align-middle">
-            <thead>
-              <tr>
-                <th scope="col">Mã đơn hàng</th>
-                <th scope="col">Khách hàng</th>
-                <th scope="col">Sản phẩm</th>
-                <th scope="col">Tổng tiền</th>
-                <th scope="col">Trạng thái</th>
-                <th scope="col">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr><td colSpan="6" className="text-center">Đang tải...</td></tr>
-              ) : orders && orders.length > 0 ? (
-                orders.map(order => (
-                  <tr key={order._id}>
-                    <td className="fw-bold">{order.orderNumber || order._id.substring(0, 8).toUpperCase()}</td>
-                    <OrderCustomerCell order={order} />
-                    <OrderItemsCell items={order.items} />
-                    <td className="fw-bold text-danger">{formatCurrency(order.totalAmount)}</td>
-                    <td><OrderStatusBadge status={order.status} /></td>
-                    <td>
-                      <OrderActionButtons
-                        order={order}
-                        onOpenUpdateModal={openUpdateModal}
-                        onCancelClick={handleCancelClick}
-                      />
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr><td colSpan="6" className="text-center">Chưa có đơn hàng nào</td></tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <Table 
+          columns={columns}
+          data={orders}
+          loading={loading}
+          emptyMessage="Chưa có đơn hàng nào"
+        />
       </div>
 
       <StatusModal

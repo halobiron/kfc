@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllStores, deleteStore } from '../../storeSlice';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
+import Table from '../../../../components/Common/Table';
 import './Stores.css';
 import { FiPhone, FiClock } from 'react-icons/fi';
 
@@ -38,6 +39,57 @@ const Stores = () => {
         setSelectedStore(null);
     };
 
+    const columns = [
+        {
+            header: '#',
+            className: 'ps-4',
+            render: (_, i) => <span className="fw-bold">STR{1000 + i + 1}</span>
+        },
+        {
+            header: 'Tên cửa hàng',
+            className: 'fw-bold',
+            key: 'name'
+        },
+        {
+            header: 'Địa chỉ',
+            className: 'text-muted small store-address-cell',
+            key: 'address'
+        },
+        {
+            header: 'Điện thoại',
+            render: (store) => (
+                <div className="d-flex align-items-center gap-1">
+                    <FiPhone size={14} className="text-secondary" />
+                    <span>{store.phone}</span>
+                </div>
+            )
+        },
+        {
+            header: 'Giờ mở cửa',
+            render: (store) => (
+                <div className="d-flex align-items-center gap-1">
+                    <FiClock size={14} className="text-secondary" />
+                    <span>{store.openTime}</span>
+                </div>
+            )
+        },
+        {
+            header: 'Thao tác',
+            className: 'text-end pe-4',
+            render: (store) => (
+                <>
+                    <EditButton
+                        className="me-2"
+                        onClick={() => handleEdit(store)}
+                    />
+                    <DeleteButton
+                        onClick={() => handleDelete(store._id)}
+                    />
+                </>
+            )
+        }
+    ];
+
     return (
         <>
             <div className="page-header d-flex justify-content-between align-items-center">
@@ -52,72 +104,12 @@ const Stores = () => {
 
             <div className="card">
                 <div className="card-header">Danh sách cửa hàng</div>
-                <div className="table-responsive">
-                    <table className="table align-middle">
-                        <thead>
-                            <tr>
-                                <th scope="col" className="ps-4">#</th>
-                                <th scope="col">Tên cửa hàng</th>
-                                <th scope="col">Địa chỉ</th>
-                                <th scope="col">Điện thoại</th>
-                                <th scope="col">Giờ mở cửa</th>
-                                <th scope="col" className="text-end pe-4">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loading ? (
-                                <tr>
-                                    <td colSpan="6" className="text-center py-5 text-muted">
-                                        Đang tải dữ liệu...
-                                    </td>
-                                </tr>
-                            ) : error ? (
-                                <tr>
-                                    <td colSpan="6" className="text-center py-5 text-danger">
-                                        {error || 'Có lỗi xảy ra khi tải danh sách'}
-                                    </td>
-                                </tr>
-                            ) : stores.length === 0 ? (
-                                <tr>
-                                    <td colSpan="6" className="text-center py-5 text-muted">
-                                        Chưa có cửa hàng nào được tạo.
-                                    </td>
-                                </tr>
-                            ) : (
-                                stores.map((store, i) => (
-                                    <tr key={store._id}>
-                                        <td className="ps-4 fw-bold">STR{1000 + i + 1}</td>
-                                        <td>
-                                            <div className="fw-bold">{store.name}</div>
-                                        </td>
-                                        <td className="text-muted small store-address-cell">{store.address}</td>
-                                        <td>
-                                            <div className="d-flex align-items-center gap-1">
-                                                <FiPhone size={14} className="text-secondary" />
-                                                <span>{store.phone}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="d-flex align-items-center gap-1">
-                                                <FiClock size={14} className="text-secondary" />
-                                                <span>{store.openTime}</span>
-                                            </div>
-                                        </td>
-                                        <td className="text-end pe-4">
-                                            <EditButton
-                                                className="me-2"
-                                                onClick={() => handleEdit(store)}
-                                            />
-                                            <DeleteButton
-                                                onClick={() => handleDelete(store._id)}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                <Table 
+                    columns={columns}
+                    data={stores}
+                    loading={loading}
+                    emptyMessage={error ? error : "Chưa có cửa hàng nào được tạo."}
+                />
             </div>
 
             {showModal && (

@@ -7,6 +7,7 @@ import { MdRestaurant } from 'react-icons/md';
 import StatCard from '../../../../components/Common/StatCard';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
+import Table from '../../../../components/Common/Table';
 import { formatDate } from '../../../../utils/formatters';
 import UserModal from './UserModal';
 import './Users.css';
@@ -98,6 +99,92 @@ const Users = () => {
         }));
     };
 
+    const columns = [
+        {
+            header: '#',
+            className: 'ps-4',
+            render: (_, index) => <span className="fw-bold">USR{1000 + index + 1}</span>
+        },
+        {
+            header: 'Họ và tên',
+            render: (user) => (
+                <div>
+                    <div className="fw-bold">{user.name}</div>
+                    <small className="text-muted">Tham gia: {formatDate(user.createdAt)}</small>
+                </div>
+            )
+        },
+        {
+            header: 'Email',
+            render: (user) => (
+                <div className="d-flex align-items-center gap-2 text-muted">
+                    <FiMail size={14} />
+                    {user.email}
+                </div>
+            )
+        },
+        {
+            header: 'Số điện thoại',
+            render: (user) => (
+                <div className="d-flex align-items-center gap-2 text-muted">
+                    <FiPhone size={14} />
+                    {user.phone}
+                </div>
+            )
+        },
+        {
+            header: 'Vai trò',
+            className: 'text-center',
+            render: (user) => {
+                const roleName = user.role?.name || user.role || 'customer';
+                return (
+                    <Badge variant={ROLE_LABELS[roleName]?.color || 'secondary'}>
+                        <span className="me-1">{ROLE_LABELS[roleName]?.icon || <FiUsers size={20} />}</span>
+                        {ROLE_LABELS[roleName]?.label || roleName}
+                    </Badge>
+                );
+            }
+        },
+        {
+            header: 'Trạng thái',
+            className: 'text-center',
+            render: (user) => {
+                const roleName = user.role?.name || user.role || 'customer';
+                return (
+                    <div className="form-check form-switch d-flex justify-content-center">
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            checked={user.isActive}
+                            onChange={() => handleToggleActive(user._id)}
+                            disabled={roleName === 'admin'}
+                            title={roleName === 'admin' ? "Không thể vô hiệu hóa Quản trị viên" : ""}
+                        />
+                    </div>
+                );
+            }
+        },
+        {
+            header: 'Thao tác',
+            className: 'text-end pe-4',
+            render: (user) => {
+                const roleName = user.role?.name || user.role || 'customer';
+                return (
+                    <>
+                        <EditButton
+                            className="me-2"
+                            onClick={() => handleOpenModal(user)}
+                        />
+                        <DeleteButton
+                            onClick={() => handleDelete(user._id)}
+                            disabled={roleName === 'admin'}
+                        />
+                    </>
+                );
+            }
+        }
+    ];
+
     return (
         <>
             <div className="page-header d-flex justify-content-between align-items-center">
@@ -122,79 +209,10 @@ const Users = () => {
             {/* Users Table */}
             <div className="card">
                 <div className="card-header">Danh sách người dùng</div>
-                <div className="table-responsive">
-                    <table className="table align-middle">
-                        <thead>
-                            <tr>
-                                <th scope="col" className="ps-4">#</th>
-                                <th scope="col">Họ và tên</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Số điện thoại</th>
-                                <th scope="col" className="text-center">Vai trò</th>
-                                <th scope="col" className="text-center">Trạng thái</th>
-                                <th scope="col" className="text-end pe-4">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {usersList.map((user, index) => {
-                                const roleName = user.role?.name || user.role || 'customer';
-                                return (
-                                    <tr key={user._id}>
-                                        <td className="ps-4 fw-bold">USR{1000 + index + 1}</td>
-                                        <td>
-                                            <div>
-                                                <div className="fw-bold">{user.name}</div>
-                                                <small className="text-muted">Tham gia: {formatDate(user.createdAt)}</small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="d-flex align-items-center gap-2 text-muted">
-                                                <FiMail size={14} />
-                                                {user.email}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="d-flex align-items-center gap-2 text-muted">
-                                                <FiPhone size={14} />
-                                                {user.phone}
-                                            </div>
-                                        </td>
-                                        <td className="text-center">
-                                            <Badge
-                                                variant={ROLE_LABELS[roleName]?.color || 'secondary'}
-                                            >
-                                                <span className="me-1">{ROLE_LABELS[roleName]?.icon || <FiUsers size={20} />}</span>
-                                                {ROLE_LABELS[roleName]?.label || roleName}
-                                            </Badge>
-                                        </td>
-                                        <td className="text-center">
-                                            <div className="form-check form-switch d-flex justify-content-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    checked={user.isActive}
-                                                    onChange={() => handleToggleActive(user._id)}
-                                                    disabled={roleName === 'admin'}
-                                                    title={roleName === 'admin' ? "Không thể vô hiệu hóa Quản trị viên" : ""}
-                                                />
-                                            </div>
-                                        </td>
-                                        <td className="text-end pe-4">
-                                            <EditButton
-                                                className="me-2"
-                                                onClick={() => handleOpenModal(user)}
-                                            />
-                                            <DeleteButton
-                                                onClick={() => handleDelete(user._id)}
-                                                disabled={roleName === 'admin'}
-                                            />
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
+                <Table 
+                    columns={columns}
+                    data={usersList}
+                />
             </div>
 
             {/* Modal */}

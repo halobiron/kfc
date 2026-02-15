@@ -1,135 +1,73 @@
-import React from 'react'
+import React from 'react';
 
-const Table = () => {
-  return (
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,002</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>data</td>
-              <td>rich</td>
-              <td>dashboard</td>
-              <td>tabular</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>information</td>
-              <td>placeholder</td>
-              <td>illustrative</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,004</td>
-              <td>text</td>
-              <td>random</td>
-              <td>layout</td>
-              <td>dashboard</td>
-            </tr>
-            <tr>
-              <td>1,005</td>
-              <td>dashboard</td>
-              <td>irrelevant</td>
-              <td>text</td>
-              <td>placeholder</td>
-            </tr>
-            <tr>
-              <td>1,006</td>
-              <td>dashboard</td>
-              <td>illustrative</td>
-              <td>rich</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,007</td>
-              <td>placeholder</td>
-              <td>tabular</td>
-              <td>information</td>
-              <td>irrelevant</td>
-            </tr>
-            <tr>
-              <td>1,008</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,009</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            <tr>
-              <td>1,010</td>
-              <td>data</td>
-              <td>rich</td>
-              <td>dashboard</td>
-              <td>tabular</td>
-            </tr>
-            <tr>
-              <td>1,011</td>
-              <td>information</td>
-              <td>placeholder</td>
-              <td>illustrative</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,012</td>
-              <td>text</td>
-              <td>placeholder</td>
-              <td>layout</td>
-              <td>dashboard</td>
-            </tr>
-            <tr>
-              <td>1,013</td>
-              <td>dashboard</td>
-              <td>irrelevant</td>
-              <td>text</td>
-              <td>visual</td>
-            </tr>
-            <tr>
-              <td>1,014</td>
-              <td>dashboard</td>
-              <td>illustrative</td>
-              <td>rich</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,015</td>
-              <td>random</td>
-              <td>tabular</td>
-              <td>information</td>
-              <td>text</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-  )
-}
+/**
+ * Reusable Table Component
+ * @param {Array} columns - Array of column objects: { header: 'Name', key: 'field', render: (item) => JSX, className: '', style: {} }
+ * @param {Array} data - Array of data objects to display
+ * @param {Boolean} loading - Loading state
+ * @param {String} emptyMessage - Message to show when data is empty
+ * @param {String} className - Additional CSS classes for the wrapper
+ */
+const Table = ({ 
+    columns = [], 
+    data = [], 
+    loading = false, 
+    emptyMessage = "Không tìm thấy dữ liệu phù hợp",
+    className = "",
+    rowClassName = (item) => ""
+}) => {
+    return (
+        <div className={`table-responsive ${className}`}>
+            <table className="table align-middle table-hover">
+                <thead className="table-light">
+                    <tr>
+                        {columns.map((col, idx) => (
+                            <th 
+                                key={idx} 
+                                scope="col" 
+                                className={col.className || ""}
+                                style={col.style || {}}
+                            >
+                                {col.header}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {loading ? (
+                        <tr>
+                            <td colSpan={columns.length} className="text-center py-5">
+                                <div className="spinner-border spinner-border-sm text-primary me-2"></div>
+                                Đang tải dữ liệu...
+                            </td>
+                        </tr>
+                    ) : data.length === 0 ? (
+                        <tr>
+                            <td colSpan={columns.length} className="text-center py-5 text-muted">
+                                {emptyMessage}
+                            </td>
+                        </tr>
+                    ) : (
+                        data.map((item, rowIdx) => (
+                            <tr 
+                                key={item._id || item.id || rowIdx}
+                                className={rowClassName(item, rowIdx)}
+                            >
+                                {columns.map((col, colIdx) => (
+                                    <td key={colIdx} className={col.className || ""}>
+                                        {col.render 
+                                            ? col.render(item, rowIdx) 
+                                            : (item[col.key] || "-")
+                                        }
+                                    </td>
+                                ))}
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
+        </div>
+    );
+};
 
-export default Table
+export default Table;

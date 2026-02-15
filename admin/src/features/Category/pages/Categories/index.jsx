@@ -7,6 +7,7 @@ import StatCard from '../../../../components/Common/StatCard';
 import { CheckboxField, TextField } from '../../../../components/Common/Form';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
+import Table from '../../../../components/Common/Table';
 import './Categories.css';
 
 const Categories = () => {
@@ -84,6 +85,57 @@ const Categories = () => {
     }
   };
 
+  const columns = [
+    {
+      header: '#',
+      className: 'ps-4',
+      render: (_, index) => <span className="fw-bold">CAT{1000 + index + 1}</span>
+    },
+    {
+      header: 'Tên danh mục',
+      render: (category) => (
+        <div className="d-flex align-items-center gap-2">
+          <i className={`bi ${category.icon || 'bi-tag'} text-primary`}></i>
+          <span className="fw-bold">{category.name}</span>
+        </div>
+      )
+    },
+    {
+      header: 'Mô tả',
+      className: 'text-muted',
+      key: 'description'
+    },
+    {
+      header: 'Số sản phẩm',
+      className: 'text-center',
+      render: (category) => <Badge variant="light">{category.productCount || 0} món</Badge>
+    },
+    {
+      header: 'Trạng thái',
+      className: 'text-center',
+      render: (category) => (
+        <div className="form-check form-switch categories-switch-wrap d-flex justify-content-center">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            checked={category.isActive}
+            onChange={() => handleToggleActive(category)}
+          />
+        </div>
+      )
+    },
+    {
+      header: 'Thao tác',
+      className: 'text-end pe-4',
+      render: (category) => (
+        <>
+          <EditButton onClick={() => handleOpenModal(category)} className="me-2" />
+          <DeleteButton onClick={() => handleDelete(category._id)} />
+        </>
+      )
+    }
+  ];
+
   return (
     <>
       <>
@@ -125,55 +177,12 @@ const Categories = () => {
         {/* Categories Table */}
         <div className="card">
           <div className="card-header">Danh sách danh mục</div>
-          <div className="table-responsive">
-            <table className="table align-middle">
-              <thead>
-                <tr>
-                  <th scope="col" className="ps-4">#</th>
-                  <th scope="col">Tên danh mục</th>
-                  <th scope="col">Mô tả</th>
-                  <th scope="col" className="text-center">Số sản phẩm</th>
-                  <th scope="col" className="text-center">Trạng thái</th>
-                  <th scope="col" className="text-end pe-4">Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {categories.map((category, index) => (
-                  <tr key={category._id}>
-                    <td className="ps-4 fw-bold">CAT{1000 + index + 1}</td>
-                    <td>
-                      <div className="d-flex align-items-center gap-2">
-                        <FiTag className="text-primary" />
-                        <span className="fw-bold">{category.name}</span>
-                      </div>
-                    </td>
-                    <td className="text-muted">{category.description}</td>
-                    <td className="text-center">
-                      <Badge variant="light">{category.productCount || 0} món</Badge>
-                    </td>
-                    <td className="text-center">
-                      <div className="form-check form-switch categories-switch-wrap">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          checked={category.isActive}
-                          onChange={() => handleToggleActive(category)}
-                        />
-                      </div>
-                    </td>
-                    <td className="text-end pe-4">
-                      <EditButton
-                        onClick={() => handleOpenModal(category)}
-                      />
-                      <DeleteButton
-                        onClick={() => handleDelete(category._id)}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table 
+            columns={columns}
+            data={categories}
+            loading={loading}
+            emptyMessage="Không tìm thấy danh mục nào"
+          />
         </div>
       </>
 

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import StatCard from '../../../../components/Common/StatCard';
 import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
+import Table from '../../../../components/Common/Table';
 import { getAllCoupons, createCoupon, updateCoupon, deleteCoupon, clearErrors, resetSuccess } from '../../couponSlice';
 import { formatCurrency, formatDate } from '../../../../utils/formatters';
 import PromotionModal from '../../components/PromotionModal';
@@ -110,6 +111,103 @@ const Promotions = () => {
     return Math.round((used / max) * 100);
   };
 
+  const columns = [
+    {
+      header: '#',
+      className: 'ps-4',
+      render: (_, index) => <span className="fw-bold">{index + 1}</span>
+    },
+    {
+      header: 'Mã khuyến mãi',
+      render: (promotion) => (
+        <div className="d-flex align-items-center gap-2">
+          <FiGift className="text-primary" />
+          <span className="fw-bold">{promotion.code}</span>
+        </div>
+      )
+    },
+    {
+      header: 'Tiêu đề',
+      className: 'text-muted',
+      key: 'title'
+    },
+    {
+      header: 'Loại giảm giá',
+      className: 'text-center',
+      render: (promotion) => <Badge variant="light">{discountTypeLabels[promotion.type]}</Badge>
+    },
+    {
+      header: 'Giá trị',
+      className: 'text-center fw-bold text-danger',
+      render: (promotion) => (
+        <>
+          {promotion.type === 'percent' && `${promotion.discount}%`}
+          {promotion.type === 'fixed' && formatCurrency(promotion.discount)}
+          {promotion.type === 'shipping' && 'Free ship'}
+        </>
+      )
+    },
+    {
+      header: 'Lượt dùng',
+      className: 'text-center',
+      render: (promotion) => {
+        const usagePercent = getUsagePercentage(promotion.usedCount || 0, promotion.maxUsage);
+        return (
+          <div className="d-flex flex-column align-items-center">
+            <small className="text-muted">
+              {promotion.usedCount || 0}/{promotion.maxUsage}
+            </small>
+            <div className="progress progress-container">
+              <div
+                className={`progress-bar ${usagePercent >= 80 ? 'bg-danger' : usagePercent >= 50 ? 'bg-warning' : 'bg-success'}`}
+                style={{ width: `${usagePercent}%` }}
+              ></div>
+            </div>
+          </div>
+        );
+      }
+    },
+    {
+      header: 'Thời hạn',
+      className: 'text-center',
+      render: (promotion) => (
+        <>
+          <small className="text-muted d-block">{formatDate(promotion.startDate)}</small>
+          <small className="text-muted">→ {formatDate(promotion.expiryDate)}</small>
+        </>
+      )
+    },
+    {
+      header: 'Trạng thái',
+      className: 'text-center',
+      render: (promotion) => (
+        <div className="form-check form-switch d-flex justify-content-center">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            checked={promotion.isActive}
+            onChange={() => handleToggleActive(promotion)}
+          />
+        </div>
+      )
+    },
+    {
+      header: 'Thao tác',
+      className: 'text-end pe-4',
+      render: (promotion) => (
+        <>
+          <EditButton 
+            className="me-2"
+            onClick={() => handleOpenModal(promotion)}
+          />
+          <DeleteButton
+            onClick={() => handleDelete(promotion._id)}
+          />
+        </>
+      )
+    }
+  ];
+
   return (
     <>
       <>
@@ -149,91 +247,12 @@ const Promotions = () => {
         {/* Promotions Table */}
         <div className="card">
           <div className="card-header">Danh sách khuyến mãi</div>
-          <div className="table-responsive">
-            <table className="table align-middle">
-              <thead>
-                <tr>
-                  <th scope="col" className="ps-4">#</th>
-                  <th scope="col">Mã khuyến mãi</th>
-                  <th scope="col">Tiêu đề</th>
-                  <th scope="col" className="text-center">Loại giảm giá</th>
-                  <th scope="col" className="text-center">Giá trị</th>
-                  <th scope="col" className="text-center">Lượt dùng</th>
-                  <th scope="col" className="text-center">Thời hạn</th>
-                  <th scope="col" className="text-center">Trạng thái</th>
-                  <th scope="col" className="text-end pe-4">Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan="9" className="text-center py-4">Đang tải dữ liệu...</td></tr>
-                ) : coupons.length === 0 ? (
-                  <tr><td colSpan="9" className="text-center py-4">Chưa có khuyến mãi nào</td></tr>
-                ) : (
-                  coupons.map((promotion, index) => {
-                    const usagePercent = getUsagePercentage(promotion.usedCount || 0, promotion.maxUsage);
-                    return (
-                      <tr key={promotion._id}>
-                        <td className="ps-4 fw-bold">{index + 1}</td>
-                        <td>
-                          <div className="d-flex align-items-center gap-2">
-                            <FiGift className="text-primary" />
-                            <span className="fw-bold">{promotion.code}</span>
-                          </div>
-                        </td>
-                        <td className="text-muted">{promotion.title}</td>
-                        <td className="text-center">
-                          <Badge variant="light">
-                            {discountTypeLabels[promotion.type]}
-                          </Badge>
-                        </td>
-                        <td className="text-center fw-bold text-danger">
-                          {promotion.type === 'percent' && `${promotion.discount}%`}
-                          {promotion.type === 'fixed' && formatCurrency(promotion.discount)}
-                          {promotion.type === 'shipping' && 'Free ship'}
-                        </td>
-                        <td className="text-center">
-                          <div className="d-flex flex-column align-items-center">
-                            <small className="text-muted">
-                              {promotion.usedCount || 0}/{promotion.maxUsage}
-                            </small>
-                            <div className="progress progress-container">
-                              <div
-                                className={`progress-bar ${usagePercent >= 80 ? 'bg-danger' : usagePercent >= 50 ? 'bg-warning' : 'bg-success'}`}
-                                style={{ width: `${usagePercent}%` }}
-                              ></div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="text-center">
-                          <small className="text-muted d-block">{formatDate(promotion.startDate)}</small>
-                          <small className="text-muted">→ {formatDate(promotion.expiryDate)}</small>
-                        </td>
-                        <td className="text-center">
-                          <div className="form-check form-switch d-flex justify-content-center">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              checked={promotion.isActive}
-                              onChange={() => handleToggleActive(promotion)}
-                            />
-                          </div>
-                        </td>
-                        <td className="text-end pe-4">
-                          <EditButton 
-                            className="me-2"
-                            onClick={() => handleOpenModal(promotion)}
-                          />
-                          <DeleteButton
-                            onClick={() => handleDelete(promotion._id)}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  }))}
-              </tbody>
-            </table>
-          </div>
+          <Table 
+            columns={columns}
+            data={coupons}
+            loading={loading}
+            emptyMessage="Chưa có khuyến mãi nào"
+          />
         </div>
       </>
 

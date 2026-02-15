@@ -7,6 +7,7 @@ import { getAllProducts, deleteProduct } from '../../productSlice'
 import { getAllCategories } from '../../../Category/categorySlice'
 import AddModal from './AddModal';
 import Badge from '../../../../components/Common/Badge';
+import Table from '../../../../components/Common/Table';
 import './Product.css';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import { formatCurrency } from '../../../../utils/formatters';
@@ -24,6 +25,70 @@ const Product = () => {
     dispatch(getAllCategories());
   }, [dispatch])
 
+  const columns = [
+    {
+      header: '#',
+      className: 'ps-4',
+      render: (_, i) => <span className="fw-bold">PRD{1000 + i + 1}</span>
+    },
+    {
+      header: 'Tên món',
+      render: (product) => (
+        <div className="d-flex align-items-center gap-3">
+          <div className="product-img-wrapper">
+            <img
+              src={product.productImage || product.image}
+              alt={product.title}
+              className="product-thumbnail"
+              onError={(e) => {
+                e.target.src = 'https://via.placeholder.com/50x50?text=KFC';
+              }}
+            />
+          </div>
+          <div className="fw-bold">{product.title}</div>
+        </div>
+      )
+    },
+    {
+      header: 'Mô tả',
+      className: 'text-muted small product-description-cell',
+      key: 'description'
+    },
+    {
+      header: 'Giá bán',
+      className: 'text-end fw-bold text-danger',
+      render: (product) => formatCurrency(product.price)
+    },
+    {
+      header: 'Tồn kho',
+      className: 'text-center',
+      render: (product) => (
+        <Badge variant={product.stock > 10 ? 'success' : 'warning'}>
+          {product.stock > 0 ? 'Còn hàng' : 'Hết hàng'} ({product.stock})
+        </Badge>
+      )
+    },
+    {
+      header: 'Thao tác',
+      className: 'text-end pe-4',
+      render: (product) => (
+        <>
+          <EditButton
+            onClick={() => navigate(`/products/${product._id}`)}
+            className="me-2"
+          />
+          <DeleteButton
+            onClick={() => {
+              if (window.confirm('Bạn có chắc chắn muốn xóa món này?')) {
+                dispatch(deleteProduct(product._id));
+              }
+            }}
+          />
+        </>
+      )
+    }
+  ];
+
   return (
     <>
       <div className="page-header d-flex justify-content-between align-items-center">
@@ -33,67 +98,10 @@ const Product = () => {
 
       <div className="card">
           <div className="card-header">Danh sách món ăn</div>
-          <div className="table-responsive">
-            <table className="table align-middle">
-              <thead>
-                <tr>
-                  <th scope="col" className="ps-4">#</th>
-                  <th scope="col">Tên món</th>
-                  <th scope="col">Mô tả</th>
-                  <th scope="col" className="text-end">Giá bán</th>
-                  <th scope="col" className="text-center">Tồn kho</th>
-                  <th scope="col" className="text-end pe-4">Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  products && Array.isArray(products) && products.map((product, i) => {
-                    return (
-                      <tr key={product._id}>
-                        <td className="ps-4 fw-bold">PRD{1000 + i + 1}</td>
-                        <td>
-                          <div className="d-flex align-items-center gap-3">
-                            <div className="product-img-wrapper">
-                              <img
-                                src={product.productImage || product.image}
-                                alt={product.title}
-                                className="product-thumbnail"
-                                onError={(e) => {
-                                  e.target.src = 'https://via.placeholder.com/50x50?text=KFC';
-                                }}
-                              />
-                            </div>
-                            <div className="fw-bold">{product.title}</div>
-                          </div>
-                        </td>
-                        <td className="text-muted small product-description-cell">{product.description}</td>
-                        <td className="text-end fw-bold text-danger">
-                          {formatCurrency(product.price)}
-                        </td>
-                        <td className="text-center">
-                          <Badge variant={product.stock > 10 ? 'success' : 'warning'}>
-                            {product.stock > 0 ? 'Còn hàng' : 'Hết hàng'} ({product.stock})
-                          </Badge>
-                        </td>
-                        <td className="text-end pe-4">
-                          <EditButton
-                            onClick={() => navigate(`/products/${product._id}`)}
-                          />
-                          <DeleteButton
-                            onClick={() => {
-                              if (window.confirm('Bạn có chắc chắn muốn xóa món này?')) {
-                                dispatch(deleteProduct(product._id));
-                              }
-                            }}
-                          />
-                        </td>
-                      </tr>
-                    )
-                  })
-                }
-              </tbody>
-            </table>
-          </div>
+          <Table 
+            columns={columns}
+            data={products}
+          />
         </div>
       {showModal ? <AddModal setShowModal={setShowModal} /> : null}
     </>
