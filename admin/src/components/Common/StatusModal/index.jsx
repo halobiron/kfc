@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 const StatusModal = ({ show, onHide, onConfirm, status, statusLabel, loading, title }) => {
     const [note, setNote] = useState('');
@@ -16,16 +17,21 @@ const StatusModal = ({ show, onHide, onConfirm, status, statusLabel, loading, ti
         }
     }, [show]);
 
+    const handleConfirm = () => {
+        if (loading) return;
+        onConfirm(note);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent form submission refresh
-        onConfirm(note);
+        handleConfirm();
     };
 
     const handleKeyDown = (e) => {
         // Submit on Enter (without Shift)
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            onConfirm(note);
+            handleConfirm();
         }
     };
 
@@ -33,8 +39,8 @@ const StatusModal = ({ show, onHide, onConfirm, status, statusLabel, loading, ti
     const displayStatusLabel = statusLabel || status;
 
     return (
-        <Modal show={show} onHide={onHide} centered>
-            <Modal.Header closeButton className={isCancelAction ? 'bg-danger text-white' : ''}>
+        <Modal show={show} onHide={onHide} centered backdrop={loading ? 'static' : true} keyboard={!loading}>
+            <Modal.Header closeButton={!loading} className={isCancelAction ? 'bg-danger text-white' : ''}>
                 <Modal.Title>{title || 'Cập nhật trạng thái'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -54,6 +60,7 @@ const StatusModal = ({ show, onHide, onConfirm, status, statusLabel, loading, ti
                             onChange={(e) => setNote(e.target.value)}
                             onKeyDown={handleKeyDown}
                             ref={inputRef}
+                            disabled={loading}
                         />
                         <Form.Text className="text-muted">
                             Nhấn <strong>Enter</strong> để xác nhận nhanh.
@@ -67,7 +74,7 @@ const StatusModal = ({ show, onHide, onConfirm, status, statusLabel, loading, ti
                 </Button>
                 <Button
                     variant={isCancelAction ? 'danger' : 'primary'}
-                    onClick={() => onConfirm(note)}
+                    onClick={handleConfirm}
                     disabled={loading}
                 >
                     {loading ? 'Đang xử lý...' : (isCancelAction ? 'Xác nhận Hủy' : 'Cập nhật')}
@@ -75,6 +82,16 @@ const StatusModal = ({ show, onHide, onConfirm, status, statusLabel, loading, ti
             </Modal.Footer>
         </Modal>
     );
+};
+
+StatusModal.propTypes = {
+    show: PropTypes.bool.isRequired,
+    onHide: PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+    status: PropTypes.string,
+    statusLabel: PropTypes.string,
+    loading: PropTypes.bool,
+    title: PropTypes.string
 };
 
 export default StatusModal;
