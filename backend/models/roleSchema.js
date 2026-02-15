@@ -5,7 +5,13 @@ const roleSchema = new Schema({
     name: {
         type: String,
         required: [true, 'Tên vai trò là bắt buộc'],
+        trim: true
+    },
+    code: {
+        type: String,
+        required: [true, 'Mã vai trò là bắt buộc'],
         unique: true,
+        uppercase: true,
         trim: true
     },
     description: {

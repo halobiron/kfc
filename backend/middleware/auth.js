@@ -30,10 +30,8 @@ exports.isAuthenticatedUser = async (req, res, next) => {
 
 exports.authorizeRoles = (...roles) => {
     return (req, res, next) => {
-        // Check if role is object (new) or string (old)
-        const userRole = req.user.role && req.user.role.name ? req.user.role.name : req.user.role;
-
-        if (!roles.includes(userRole)) {
+        // req.user.role is now a string code (e.g. 'ADMIN', 'CUSTOMER')
+        if (!roles.includes(req.user.role)) {
             return res.status(403).json({
                 status: false,
                 message: `Chỉ có ${roles.join(', ')} mới có quyền truy cập`
@@ -45,15 +43,15 @@ exports.authorizeRoles = (...roles) => {
 
 exports.authorizePermission = (permission) => {
     return (req, res, next) => {
-        const userRole = req.user.role; // This is the populated role object from authController.getCurrentUser / login
-        const roleName = userRole?.name || userRole; // Handle if it's just a string string (legacy)
+        const userRole = req.user.role; // Now role is a string code (e.g. 'ADMIN')
 
-        // Admin always has access
-        if (roleName === 'admin') {
+        // Admin always has full access
+        if (userRole === 'ADMIN') {
             return next();
         }
 
-        const userPermissions = userRole?.permissions || [];
+        // Check permissions from token payload
+        const userPermissions = req.user.permissions || [];
 
         if (userPermissions.includes(permission)) {
             return next();

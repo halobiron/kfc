@@ -9,10 +9,11 @@ const sendToken = async (user, statusCode, res) => {
         permissions = user.role.permissions;
     }
 
-    const roleName = user.role?.name || 'customer';
+    // Role is now just the code string (e.g., 'ADMIN', 'CUSTOMER')
+    const roleCode = user.role?.code || 'CUSTOMER';
 
     const token = jwt.sign(
-        { id: user._id, role: roleName, storeId: user.storeId, permissions },
+        { id: user._id, role: roleCode, storeId: user.storeId, permissions },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRE }
     );
@@ -33,8 +34,8 @@ const sendToken = async (user, statusCode, res) => {
             name: user.name,
             email: user.email,
             phone: user.phone,
-            role: roleName,
-            roleId: user.role, // keeping roleId for compatibility
+            role: roleCode,
+            roleId: user.role._id || user.role, // role might be object or ID
             permissions,
             storeId: user.storeId,
             position: user.position
@@ -72,7 +73,7 @@ exports.registerUser = async (req, res, next) => {
         }
 
         const Role = require('../models/roleSchema');
-        const customerRole = await Role.findOne({ name: 'customer' });
+        let customerRole = await Role.findOne({ code: 'CUSTOMER' });
 
         // Create user
         const user = await User.create({

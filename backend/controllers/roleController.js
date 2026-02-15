@@ -4,10 +4,11 @@ const User = require('../models/userSchema');
 // Create new role
 exports.createRole = async (req, res, next) => {
     try {
-        const { name, description, permissions } = req.body;
+        const { name, code, description, permissions } = req.body;
 
         const role = await Role.create({
             name,
+            code: code ? code.toUpperCase() : undefined,
             description,
             permissions
         });
@@ -39,11 +40,11 @@ exports.getAllRoles = async (req, res, next) => {
 // Update role
 exports.updateRole = async (req, res, next) => {
     try {
-        const { name, description, permissions } = req.body;
+        const { name, code, description, permissions } = req.body;
 
         const role = await Role.findByIdAndUpdate(
             req.params.id,
-            { name, description, permissions, updatedAt: Date.now() },
+            { name, code, description, permissions, updatedAt: Date.now() },
             { new: true, runValidators: true }
         );
 
