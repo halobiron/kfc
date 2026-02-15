@@ -1,5 +1,3 @@
-import mapApi from '../api/mapApi';
-
 export const calculateDistance = (lat1, lon1, lat2, lon2) => {
     if (!lat1 || !lon1 || !lat2 || !lon2) return 99999;
     const R = 6371;
@@ -22,39 +20,14 @@ export const getCurrentLocation = () => {
             (err) => {
                 console.error(err);
                 if (err.code === err.PERMISSION_DENIED) {
-                     reject(new Error("Bạn đã từ chối quyền truy cập vị trí."));
+                    reject(new Error("Bạn đã từ chối quyền truy cập vị trí."));
                 } else {
-                     reject(new Error("Không thể lấy vị trí hiện tại."));
+                    reject(new Error("Không thể lấy vị trí hiện tại."));
                 }
             }
         );
     });
 };
-
-export const resolveLocationFromValue = async (value, savedAddresses) => {
-    if (value === 'current') {
-        const loc = await getCurrentLocation();
-        return loc ? { ...loc, address: 'Vị trí hiện tại' } : null;
-    }
-
-    if (typeof value === 'string' && value.startsWith('saved-')) {
-        const index = parseInt(value.split('-')[1]);
-        const addr = savedAddresses[index];
-        if (!addr) return null;
-
-        if (addr.latitude && addr.longitude) {
-            return { lat: addr.latitude, lng: addr.longitude, address: addr.fullAddress };
-        }
-
-        // Fallback geocode
-        const geo = await mapApi.geocodeAddress(addr.fullAddress);
-        if (geo) return { ...geo, address: addr.fullAddress };
-
-        throw new Error("Không tìm thấy tọa độ của địa chỉ này.");
-    }
-    return null;
-};
-
 
 export const getStoresWithDistance = (lat, lng, stores = []) => {
     if (!lat || !lng) return stores.map(s => ({ ...s, distance: null }));
