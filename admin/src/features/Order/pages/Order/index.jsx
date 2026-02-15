@@ -9,6 +9,7 @@ import Button from '../../../../components/Common/Button';
 import OrderStatusBadge from '../../components/OrderStatusBadge';
 import { getOrderStatusMeta } from '../../components/OrderStatusBadge/orderStatus';
 import { formatCurrency } from '../../../../utils/formatters';
+import './Order.css';
 
 const OrderCustomerCell = ({ order }) => {
   const shortAddress = order.deliveryInfo?.address && order.deliveryInfo.address.length > 30
@@ -39,7 +40,7 @@ const OrderItemsCell = ({ items = [] }) => (
 );
 
 const OrderActionButtons = ({ order, onOpenUpdateModal, onCancelClick }) => (
-  <div className="btn-group">
+  <div className="order-actions">
     <Link
       to={`/orders/${order._id}`}
       className="btn btn-sm btn-outline-dark"

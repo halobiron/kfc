@@ -8,11 +8,6 @@
   letter-spacing: 0.5px;
 }
 
-.badge-primary {
-  background-color: var(--kfc-red);
-  color: var(--kfc-white);
-}
-
 .badge-danger {
   background-color: #dc3545;
   color: #fff;
@@ -31,10 +26,4 @@
 .badge-info {
   background-color: var(--kfc-red);
   color: var(--kfc-white);
-}
-
-.badge-light {
-  background-color: #f8f9fa;
-  color: #212529;
-  border: 1px solid #dee2e6;
 }
