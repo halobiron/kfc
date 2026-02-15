@@ -1,7 +1,5 @@
-/* Form Enhancements */
-.form-group {
-  margin-bottom: 20px;
-}
+/* Form Elements */
+.form-group { margin-bottom: 20px; }
 
 .form-label {
   display: block;
@@ -17,10 +15,29 @@
   border: 1px solid var(--kfc-border-grey);
   border-radius: 0;
   font-size: 15px;
-  transition: all var(--transition-fast);
+  transition: var(--transition-fast);
 }
 
-/* Custom Minimalist Search Bar */
+/* Rounded Controls (Search & Select) */
+.form-control-search,
+.form-select-custom {
+  height: 50px;
+  padding: 0 20px;
+  border-radius: 100px !important;
+  border: 1px solid var(--kfc-border-grey);
+  background: var(--kfc-white);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-base);
+  font-size: 15px;
+}
+
+.form-control-search:focus,
+.form-select-custom:focus {
+  border-color: var(--kfc-red);
+  box-shadow: 0 4px 12px rgba(228, 0, 43, 0.15);
+}
+
+/* Search Group */
 .input-group-search {
   position: relative;
   width: 100%;
@@ -39,20 +56,6 @@
 
 .form-control-search {
   padding-left: 50px;
-  padding-right: 20px;
-  height: 50px;
-  border-radius: 100px !important;
-  border: 1px solid var(--kfc-border-grey);
-  background-color: var(--kfc-white);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  font-size: 15px;
-}
-
-.form-control-search:focus {
-  background-color: var(--kfc-white);
-  border-color: var(--kfc-red);
-  box-shadow: 0 4px 12px rgba(228, 0, 43, 0.15);
 }
 
 .form-control-search::placeholder {
@@ -62,27 +65,9 @@
 
 /* Custom Select */
 .form-select-custom {
-  height: 50px;
-  border-radius: 100px !important;
-  border: 1px solid var(--kfc-border-grey);
-  background-color: var(--kfc-white);
-  padding-left: 20px;
   padding-right: 40px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   cursor: pointer;
   appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 1.5rem center;
-  background-size: 12px;
-  transition: all 0.3s ease;
-  font-size: 15px;
-}
-
-.form-select-custom:focus {
-  border-color: var(--kfc-red);
-  box-shadow: 0 4px 12px rgba(228, 0, 43, 0.15);
-  outline: none;
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") 
+    no-repeat right 1.5rem center / 12px var(--kfc-white);
 }
