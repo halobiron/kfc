@@ -7,9 +7,8 @@ import Button, { AddButton, EditButton, DeleteButton } from '../../../../compone
 import Badge from '../../../../components/Common/Badge';
 import Form from 'react-bootstrap/Form';
 import './Roles.css';
-import { RESOURCES, ROLE_DEFINITIONS } from '../../../../utils/constants';
 
-const RoleManagement = () => {
+const RoleManagement = ({ resources = [] }) => {
     const dispatch = useDispatch();
     const { roles, loading, error, success } = useSelector((state) => state.roles);
 
@@ -130,11 +129,6 @@ const RoleManagement = () => {
                             <tr><td colSpan="4" className="text-center">Đang tải...</td></tr>
                         ) : roles && roles.length > 0 ? (
                             roles.map((role) => {
-                                // Translate standard roles using definitions
-                                const def = ROLE_DEFINITIONS[role.name];
-                                const roleName = def ? def.name : role.name;
-                                const roleDesc = def ? def.desc : role.description;
-
                                 // Group permissions
                                 const groupedPerms = (role.permissions || []).reduce((acc, p) => {
                                     const [res, type] = p.split('.');
@@ -145,13 +139,13 @@ const RoleManagement = () => {
 
                                 return (
                                     <tr key={role._id}>
-                                        <td>{roleName}</td>
-                                        <td>{roleDesc}</td>
+                                        <td>{role.name}</td>
+                                        <td>{role.description}</td>
                                         <td>
                                             <div className="role-permissions-wrap">
                                                 {Object.keys(groupedPerms).length > 0 ? (
                                                     Object.entries(groupedPerms).map(([res, types]) => {
-                                                        const resLabel = RESOURCES.find(r => r.id === res)?.label || res;
+                                                        const resLabel = resources.find(r => r.id === res)?.label || res;
                                                         return (
                                                             <Badge
                                                                 key={res}
@@ -224,7 +218,7 @@ const RoleManagement = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {RESOURCES.map(resource => (
+                                        {resources.map(resource => (
                                             <tr key={resource.id}>
                                                 <td className="align-middle px-3">{resource.label}</td>
                                                 <td className="text-center">
