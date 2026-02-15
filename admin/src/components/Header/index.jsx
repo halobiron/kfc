@@ -17,21 +17,21 @@ const Header = () => {
   };
 
   return (
-    <header className="navbar navbar-dark sticky-top flex-md-nowrap p-0 shadow-sm" style={{ backgroundColor: 'var(--kfc-red)', borderBottom: 'none' }}>
-      <a className="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#" style={{ color: 'var(--kfc-red)' }}>
-        <img src={kfcLogo} alt="KFC" style={{ height: '30px' }} />
+    <header className="navbar navbar-dark sticky-top flex-md-nowrap p-0 shadow-sm header-container">
+      <a className="navbar-brand col-md-3 col-lg-2 me-0 px-3 header-brand-link" href="#">
+        <img src={kfcLogo} alt="KFC" className="header-logo" />
       </a>
       <button className="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>
       <div className="w-100 d-flex align-items-center px-3">
-        <FiSearch style={{ marginRight: '10px', color: 'var(--kfc-white)' }} />
-        <input className="form-control form-control-dark w-100" type="text" placeholder="Tìm kiếm..." aria-label="Search" style={{ borderRadius: '4px' }} />
+        <FiSearch className="header-search-icon" />
+        <input className="form-control form-control-dark w-100 header-search-input" type="text" placeholder="Tìm kiếm..." aria-label="Search" />
       </div>
       <div className="navbar-nav">
         <div className="nav-item text-nowrap">
-          <a className="nav-link px-3 d-flex align-items-center" href="#" onClick={handleLogout} style={{ color: 'var(--kfc-white)' }}>
-            <FiLogOut style={{ marginRight: '5px' }} />
+          <a className="nav-link px-3 d-flex align-items-center header-logout-link" href="#" onClick={handleLogout}>
+            <FiLogOut className="header-logout-icon" />
             Đăng xuất
           </a>
         </div>

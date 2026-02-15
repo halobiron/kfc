@@ -1,42 +1,30 @@
-/*
- * Navbar - KFC Style
- */
-
 .navbar-brand {
-  padding-top: .75rem;
-  padding-bottom: .75rem;
-  font-size: 1.2rem;
+  padding: .75rem;
   background-color: var(--kfc-white);
-  color: var(--kfc-red) !important;
-  box-shadow: none;
-}
-
-.navbar .navbar-toggler {
-  top: .25rem;
-  right: 1rem;
 }
 
 .navbar .form-control {
-  padding: .75rem 1rem;
-  border: 1px solid var(--kfc-border-grey);
-  border-radius: 0;
-  background-color: var(--kfc-bg-light);
+  padding: .75rem;
 }
 
-.navbar .form-control:focus {
-  border-color: var(--kfc-red);
-  box-shadow: none;
-  outline: none;
+.header-container {
+  background-color: var(--kfc-red);
+  border-bottom: none;
 }
 
-.form-control-dark {
-  color: var(--kfc-black);
-  background-color: var(--kfc-bg-light);
-  border-color: var(--kfc-border-grey);
+.header-logo {
+  height: 30px;
 }
 
-.form-control-dark:focus {
-  border-color: var(--kfc-red);
-  box-shadow: none;
+.header-search-icon {
+  margin-right: 15px;
+  color: var(--kfc-white);
 }
 
+.header-logout-link {
+  color: var(--kfc-white);
+}
+
+.header-logout-icon {
+  margin-right: 5px;
+}
