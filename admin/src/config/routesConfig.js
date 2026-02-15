@@ -15,7 +15,7 @@ import ChangePassword from '../features/Auth/pages/ChangePassword';
 import Roles from '../features/Role/pages/Roles';
 import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiBox, FiTag, FiPackage, FiMapPin, FiLock } from 'react-icons/fi';
 
-export const routesMetadata = [
+const baseRoutes = [
     { 
         path: '/home', 
         id: 'dashboard', 
@@ -77,8 +77,7 @@ export const routesMetadata = [
         id: 'roles', 
         label: 'Phân quyền',
         icon: <FiLock />,
-        permission: 'roles.view',
-        component: null // Placeholder, will set below to avoid circular dependency
+        permission: 'roles.view'
     },
     { 
         path: '/promotions', 
@@ -106,11 +105,11 @@ export const routesMetadata = [
     }
 ];
 
-// Set the component for Roles separately to pass the metadata
-const rolesRoute = routesMetadata.find(r => r.id === 'roles');
-if (rolesRoute) {
-    rolesRoute.component = <Roles resources={routesMetadata} />;
-}
+export const routesMetadata = baseRoutes.map(route =>
+    route.id === 'roles'
+        ? { ...route, component: <Roles resources={baseRoutes} /> }
+        : route
+);
 
 export const routesConfig = routesMetadata;
 
