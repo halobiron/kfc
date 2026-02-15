@@ -1,20 +1,10 @@
-/*
- * Sidebar - KFC Style
- */
-
 .sidebar {
   position: fixed;
   top: 0;
-  /* rtl:raw:
-  right: 0;
-  */
   bottom: 0;
-  /* rtl:remove */
   left: 0;
   z-index: 100;
-  /* Behind the navbar */
   padding: 48px 0 0;
-  /* Height of navbar */
   background-color: var(--kfc-white);
   border-right: 1px solid var(--kfc-border-grey);
   box-shadow: none;
@@ -33,7 +23,6 @@
   padding-top: .5rem;
   overflow-x: hidden;
   overflow-y: auto;
-  /* Scrollable contents if viewport is shorter than content. */
 }
 
 .sidebar .nav-link {
@@ -52,6 +41,10 @@
   width: 16px;
   height: 16px;
   vertical-align: text-bottom;
+}
+
+.sidebar .nav-link .nav-icon {
+  margin-right: 8px;
 }
 
 .sidebar .nav-link.active {

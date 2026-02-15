@@ -7,17 +7,12 @@ import { useSelector } from 'react-redux';
 
 const Nav = () => {
   const { user } = useSelector(state => state.auth);
-  // Extract role name safely (handle both string and object)
   const roleName = user?.role?.name || user?.role;
 
   // Default to empty array if permissions not loaded/available yet or for legacy users
   const permissions = user?.permissions || user?.role?.permissions || user?.roleId?.permissions || [];
 
-  // Helper to check permission
-  // For Admin (legacy string role), allow all. Or check specific permission.
-  // The seed script gave 'admin' role all permissions.
   const hasPermission = (perm) => {
-    // If user is admin by string role (legacy) or object name, allow all
     if (roleName === 'admin') return true;
     return permissions.includes(perm);
   };
@@ -33,7 +28,7 @@ const Nav = () => {
         <ul className="nav flex-column">
           <li className="nav-item">
             <Link className="nav-link active" aria-current="page" to="/home">
-              <FiHome style={{ marginRight: '8px' }} />
+              <FiHome className="nav-icon" />
               Tổng quan
             </Link>
           </li>
@@ -41,7 +36,7 @@ const Nav = () => {
           {hasPermission('orders.view') && (
             <li className="nav-item">
               <Link className="nav-link" to="/orders">
-                <FiFileText style={{ marginRight: '8px' }} />
+                <FiFileText className="nav-icon" />
                 Đơn hàng
               </Link>
             </li>
@@ -50,7 +45,7 @@ const Nav = () => {
           {hasPermission('kitchen.view') && (
             <li className="nav-item">
               <Link className="nav-link" to="/kitchen">
-                <FiPackage style={{ marginRight: '8px' }} />
+                <FiPackage className="nav-icon" />
                 Bếp
               </Link>
             </li>
@@ -59,7 +54,7 @@ const Nav = () => {
           {hasPermission('products.view') && (
             <li className="nav-item">
               <Link className="nav-link" to="/products">
-                <FiShoppingCart style={{ marginRight: '8px' }} />
+                <FiShoppingCart className="nav-icon" />
                 Sản phẩm
               </Link>
             </li>
@@ -68,7 +63,7 @@ const Nav = () => {
           {hasPermission('categories.view') && (
             <li className="nav-item">
               <Link className="nav-link" to="/categories">
-                <FiTag style={{ marginRight: '8px' }} />
+                <FiTag className="nav-icon" />
                 Danh mục
               </Link>
             </li>
@@ -77,7 +72,7 @@ const Nav = () => {
           {hasPermission('ingredients.view') && (
             <li className="nav-item">
               <Link className="nav-link" to="/ingredients">
-                <FiBox style={{ marginRight: '8px' }} />
+                <FiBox className="nav-icon" />
                 Nguyên liệu
               </Link>
             </li>
@@ -86,7 +81,7 @@ const Nav = () => {
           {hasPermission('users.view') && (
             <li className="nav-item">
               <Link className="nav-link" to="/users">
-                <FiUsers style={{ marginRight: '8px' }} />
+                <FiUsers className="nav-icon" />
                 Người dùng
               </Link>
             </li>
@@ -95,7 +90,7 @@ const Nav = () => {
           {(roleName === 'admin' || hasPermission('roles.view')) && (
             <li className="nav-item">
               <Link className="nav-link" to="/roles">
-                <FiLock style={{ marginRight: '8px' }} />
+                <FiLock className="nav-icon" />
                 Phân quyền
               </Link>
             </li>
@@ -104,7 +99,7 @@ const Nav = () => {
           {hasPermission('promotions.view') && (
             <li className="nav-item">
               <Link className="nav-link" to="/promotions">
-                <FiTag style={{ marginRight: '8px' }} />
+                <FiTag className="nav-icon" />
                 Khuyến mãi
               </Link>
             </li>
@@ -113,7 +108,7 @@ const Nav = () => {
           {hasPermission('reports.view') && (
             <li className="nav-item">
               <Link className="nav-link" to="/reports">
-                <FiBarChart2 style={{ marginRight: '8px' }} />
+                <FiBarChart2 className="nav-icon" />
                 Báo cáo
               </Link>
             </li>
@@ -122,7 +117,7 @@ const Nav = () => {
           {hasPermission('stores.view') && (
             <li className="nav-item">
               <Link className="nav-link" to="/stores">
-                <FiMapPin style={{ marginRight: '8px' }} />
+                <FiMapPin className="nav-icon" />
                 Cửa hàng
               </Link>
             </li>
@@ -130,7 +125,7 @@ const Nav = () => {
 
           <li className="nav-item">
             <Link className="nav-link" to="/change-password">
-              <FiLock style={{ marginRight: '8px' }} />
+              <FiLock className="nav-icon" />
               Đổi mật khẩu
             </Link>
           </li>
