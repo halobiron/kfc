@@ -27,3 +27,8 @@
   background-color: var(--kfc-red);
   color: var(--kfc-white);
 }
+
+.badge-light {
+    background-color: #f8f9fa;
+    color: #212529;
+}

@@ -150,9 +150,9 @@ const RoleManagement = ({ resources = [] }) => {
                                                             <Badge
                                                                 key={res}
                                                                 variant="light"
-                                                                className="border me-1 mb-1 text-dark role-permission-badge"
+                                                                className="me-1 mb-1"
                                                             >
-                                                                <strong>{resLabel}:</strong> {types.join(', ')}
+                                                                <span>{resLabel}:</span> {types.join(', ')}
                                                             </Badge>
                                                         );
                                                     })

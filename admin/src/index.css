@@ -92,10 +92,6 @@ code {
 }
 
 /* --- Refactored Global Styles --- */
-
-/* No duplicate feather class needed, but keeping placeholder comment if you need to add things later */
-
-
 /* KFC Button Styles */
 .btn {
   border-radius: 4px !important;

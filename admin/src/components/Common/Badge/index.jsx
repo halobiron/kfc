@@ -3,17 +3,11 @@ import PropTypes from 'prop-types';
 import './badge.css';
 
 const Badge = ({ variant = 'light', children, className = '', ...props }) => {
-    let badgeClass = `badge badge-${variant}`;
-    
-    if (variant === 'light' || variant === 'warning') {
-        if (!className.includes('text-')) {
-            badgeClass += ' text-dark';
-        }
-    }
+    const badgeClass = `badge badge-${variant}`;
 
     return (
         <span 
-            className={`${badgeClass} ${className}`}
+            className={`${badgeClass}${className ? ` ${className}` : ''}`}
             {...props}
         >
             {children}
