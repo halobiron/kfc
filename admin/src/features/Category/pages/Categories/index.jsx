@@ -13,6 +13,7 @@ import './Categories.css';
 const Categories = () => {
   const dispatch = useDispatch();
   const { categories, loading } = useSelector(state => state.categories);
+  const { keyword } = useSelector(state => state.search);
 
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -27,6 +28,10 @@ const Categories = () => {
   useEffect(() => {
     dispatch(getAllCategories());
   }, [dispatch]);
+
+  const filteredCategories = categories.filter(category => 
+    (category.name && category.name.toLowerCase().includes((keyword || '').toLowerCase()))
+  );
 
   const handleOpenModal = (category = null) => {
     if (category) {
@@ -179,7 +184,7 @@ const Categories = () => {
           <div className="card-header">Danh sách danh mục</div>
           <Table 
             columns={columns}
-            data={categories}
+            data={filteredCategories}
             loading={loading}
             emptyMessage="Không tìm thấy danh mục nào"
           />

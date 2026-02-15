@@ -13,10 +13,17 @@ const Stores = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedStore, setSelectedStore] = useState(null);
     const { stores, loading, error } = useSelector(state => state.stores);
+    const { keyword } = useSelector(state => state.search);
 
     useEffect(() => {
         dispatch(getAllStores());
     }, [dispatch]);
+
+    const filteredStores = stores.filter(store => 
+        (store.name && store.name.toLowerCase().includes((keyword || '').toLowerCase())) ||
+        (store.address && store.address.toLowerCase().includes((keyword || '').toLowerCase())) ||
+        (store.phone && store.phone.includes(keyword))
+    );
 
     const handleDelete = async (id) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa cửa hàng này?')) {
@@ -106,7 +113,7 @@ const Stores = () => {
                 <div className="card-header">Danh sách cửa hàng</div>
                 <Table 
                     columns={columns}
-                    data={stores}
+                    data={filteredStores}
                     loading={loading}
                     emptyMessage={error ? error : "Chưa có cửa hàng nào được tạo."}
                 />

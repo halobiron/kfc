@@ -91,6 +91,7 @@ const OrderActionButtons = ({ order, onOpenUpdateModal, onCancelClick }) => (
 const Order = () => {
   const dispatch = useDispatch();
   const { orders, loading } = useSelector(state => state.orders);
+  const { keyword } = useSelector(state => state.search);
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -101,6 +102,15 @@ const Order = () => {
   useEffect(() => {
     dispatch(getAllOrders());
   }, [dispatch]);
+
+  const filteredOrders = orders.filter(order => {
+    const searchLower = (keyword || '').toLowerCase();
+    return (
+      (order._id && order._id.toLowerCase().includes(searchLower)) ||
+      (order.deliveryInfo?.fullName && order.deliveryInfo.fullName.toLowerCase().includes(searchLower)) ||
+      (order.deliveryInfo?.phone && order.deliveryInfo.phone.includes(keyword))
+    );
+  });
 
   const openUpdateModal = (orderId, status) => {
     setSelectedOrder(orderId);
@@ -170,7 +180,7 @@ const Order = () => {
         <div className="card-header">Danh sách đơn hàng</div>
         <Table 
           columns={columns}
-          data={orders}
+          data={filteredOrders}
           loading={loading}
           emptyMessage="Chưa có đơn hàng nào"
         />

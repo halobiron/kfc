@@ -1,14 +1,40 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Header.css';
 import { FiSearch, FiLogOut } from 'react-icons/fi';
 import kfcLogo from '@shared-assets/images/logos/footer-logo.png';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../features/Auth/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { setSearchKeyword } from '../../store/searchSlice';
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchKeyword = useSelector((state) => state.search.keyword);
+
+  const [placeholder, setPlaceholder] = useState('Tìm kiếm...');
+
+  useEffect(() => {
+    dispatch(setSearchKeyword(''));
+    
+    // Cập nhật placeholder dựa trên đường dẫn hiện tại
+    const path = location.pathname;
+    if (path.includes('/products')) setPlaceholder('Tìm kiếm sản phẩm theo tên...');
+    else if (path.includes('/orders')) setPlaceholder('Tìm kiếm đơn hàng theo mã, khách hàng...');
+    else if (path.includes('/users')) setPlaceholder('Tìm kiếm người dùng theo email, tên...');
+    else if (path.includes('/categories')) setPlaceholder('Tìm kiếm danh mục...');
+    else if (path.includes('/promotions')) setPlaceholder('Tìm kiếm khuyến mãi...');
+    else if (path.includes('/ingredients')) setPlaceholder('Tìm kiếm nguyên liệu...');
+    else if (path.includes('/stores')) setPlaceholder('Tìm kiếm cửa hàng...');
+    else if (path.includes('/roles')) setPlaceholder('Tìm kiếm vai trò...');
+    else setPlaceholder('Tìm kiếm...');
+
+  }, [location.pathname, dispatch]);
+
+  const handleSearchChange = (e) => {
+    dispatch(setSearchKeyword(e.target.value));
+  };
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -26,7 +52,14 @@ const Header = () => {
       </button>
       <div className="w-100 d-flex align-items-center px-3">
         <FiSearch className="header-search-icon" />
-        <input className="form-control form-control-dark w-100 header-search-input" type="text" placeholder="Tìm kiếm..." aria-label="Search" />
+        <input 
+          className="form-control form-control-dark w-100 header-search-input" 
+          type="text" 
+          placeholder={placeholder}
+          aria-label="Search"
+          value={searchKeyword}
+          onChange={handleSearchChange} 
+        />
       </div>
       <div className="navbar-nav">
         <div className="nav-item text-nowrap">

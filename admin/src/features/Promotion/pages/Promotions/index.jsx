@@ -14,6 +14,7 @@ import './Promotions.css';
 const Promotions = () => {
   const dispatch = useDispatch();
   const { coupons, loading, error, success } = useSelector((state) => state.coupons);
+  const { keyword } = useSelector(state => state.search);
 
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -33,6 +34,11 @@ const Promotions = () => {
   useEffect(() => {
     dispatch(getAllCoupons());
   }, [dispatch]);
+
+  const filteredCoupons = coupons.filter(coupon => 
+    (coupon.code && coupon.code.toLowerCase().includes((keyword || '').toLowerCase())) ||
+    (coupon.title && coupon.title.toLowerCase().includes((keyword || '').toLowerCase()))
+  );
 
   useEffect(() => {
     if (error) {
@@ -249,7 +255,7 @@ const Promotions = () => {
           <div className="card-header">Danh sách khuyến mãi</div>
           <Table 
             columns={columns}
-            data={coupons}
+            data={filteredCoupons}
             loading={loading}
             emptyMessage="Chưa có khuyến mãi nào"
           />

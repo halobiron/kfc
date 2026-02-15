@@ -19,6 +19,7 @@ const getStockStatus = (stock, minStock) => {
 const Ingredient = () => {
     const dispatch = useDispatch();
     const { ingredients, loading } = useSelector(state => state.ingredients);
+    const { keyword } = useSelector(state => state.search);
     
     // UI State
     const [showRestockModal, setShowRestockModal] = useState(false);
@@ -32,6 +33,13 @@ const Ingredient = () => {
     useEffect(() => {
         dispatch(getAllIngredients());
     }, [dispatch]);
+
+    const filteredIngredients = ingredients.filter(ing => 
+        (ing.name && ing.name.toLowerCase().includes((keyword || '').toLowerCase())) ||
+        (ing._id && ing._id.toLowerCase().includes((keyword || '').toLowerCase())) ||
+        (ing.supplier && ing.supplier.toLowerCase().includes((keyword || '').toLowerCase())) ||
+        (ing.category && ing.category.toLowerCase().includes((keyword || '').toLowerCase()))
+    );
 
     const handleRestockSubmit = useCallback(({ amount, updates }) => {
         if (selectedIng && amount > 0) {
@@ -181,7 +189,7 @@ const Ingredient = () => {
                 <div className="card-header">Danh mục nguyên liệu</div>
                 <Table 
                     columns={columns}
-                    data={ingredients}
+                    data={filteredIngredients}
                     loading={loading}
                     emptyMessage="Không có nguyên liệu nào"
                     rowClassName={(ing) => ing.stock <= ing.minStock ? 'row-alert' : ''}

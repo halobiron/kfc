@@ -17,6 +17,7 @@ const Product = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { products } = useSelector(state => state.products)
+  const { keyword } = useSelector(state => state.search);
 
   const [showModal, setShowModal] = useState(false)
 
@@ -24,6 +25,10 @@ const Product = () => {
     dispatch(getAllProducts());
     dispatch(getAllCategories());
   }, [dispatch])
+
+  const filteredProducts = products.filter(product => 
+    product.title.toLowerCase().includes((keyword || '').toLowerCase())
+  );
 
   const columns = [
     {
@@ -100,7 +105,7 @@ const Product = () => {
           <div className="card-header">Danh sách món ăn</div>
           <Table 
             columns={columns}
-            data={products}
+            data={filteredProducts}
           />
         </div>
       {showModal ? <AddModal setShowModal={setShowModal} /> : null}

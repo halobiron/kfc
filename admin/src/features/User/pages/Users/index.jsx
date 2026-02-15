@@ -25,6 +25,7 @@ const Users = () => {
     const dispatch = useDispatch();
     const { users: usersList } = useSelector((state) => state.users);
     const { roles } = useSelector((state) => state.roles);
+    const { keyword } = useSelector(state => state.search);
 
     const [showModal, setShowModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -33,6 +34,15 @@ const Users = () => {
         dispatch(getAllUsers());
         dispatch(getAllRoles());
     }, [dispatch]);
+
+    const filteredUsers = useMemo(() => {
+        const searchLower = (keyword || '').toLowerCase();
+        return usersList.filter(user => 
+            (user.name && user.name.toLowerCase().includes(searchLower)) ||
+            (user.email && user.email.toLowerCase().includes(searchLower)) ||
+            (user.phone && user.phone.includes(keyword))
+        );
+    }, [usersList, keyword]);
 
     // Optimize stats calculation
     const stats = useMemo(() => {
@@ -211,7 +221,7 @@ const Users = () => {
                 <div className="card-header">Danh sách người dùng</div>
                 <Table 
                     columns={columns}
-                    data={usersList}
+                    data={filteredUsers}
                 />
             </div>
 

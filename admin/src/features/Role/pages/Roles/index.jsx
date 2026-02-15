@@ -12,6 +12,7 @@ import './Roles.css';
 const RoleManagement = ({ resources = [] }) => {
     const dispatch = useDispatch();
     const { roles, loading, error, success } = useSelector((state) => state.roles);
+    const { keyword } = useSelector(state => state.search);
 
     const [showModal, setShowModal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
@@ -26,6 +27,11 @@ const RoleManagement = ({ resources = [] }) => {
     useEffect(() => {
         dispatch(getAllRoles());
     }, [dispatch]);
+
+    const filteredRoles = roles.filter(role => 
+        role.name.toLowerCase().includes((keyword || '').toLowerCase()) ||
+        (role.description && role.description.toLowerCase().includes((keyword || '').toLowerCase()))
+    );
 
     useEffect(() => {
         if (error) {
@@ -173,7 +179,7 @@ const RoleManagement = ({ resources = [] }) => {
             <div className="bg-white rounded shadow-sm p-4">
                 <Table 
                     columns={columns}
-                    data={roles}
+                    data={filteredRoles}
                     loading={loading}
                     emptyMessage="Chưa có vai trò nào được tạo"
                 />

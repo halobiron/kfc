@@ -10,6 +10,7 @@ import userReducer from '../features/User/userSlice';
 import roleReducer from '../features/Role/roleSlice';
 import couponReducer from '../features/Promotion/couponSlice';
 import statsReducer from '../features/Dashboard/statsSlice';
+import searchReducer from './searchSlice';
 
 export const store = configureStore({
     reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
         users: userReducer,
         roles: roleReducer,
         coupons: couponReducer,
-        stats: statsReducer
+        stats: statsReducer,
+        search: searchReducer,
     },
 });
