@@ -11,10 +11,6 @@
 }
 
 .page-title {
-  font-family: 'Oswald', sans-serif;
   font-size: 2rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--kfc-black);
   margin: 0;
 }

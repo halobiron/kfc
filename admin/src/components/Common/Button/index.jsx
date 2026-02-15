@@ -1,23 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
-
-/**
- * Reusable Button Component for Admin Panel
- * Standardizes button styles and behaviors across the application.
- * 
- * Props:
- * - variant: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'link'
- *            'outline-primary' | 'outline-secondary' | etc.
- * - size: 'sm' | 'lg' | 'default'
- * - type: 'button' | 'submit' | 'reset'
- * - loading: boolean (shows spinner, disables button)
- * - disabled: boolean
- * - className: string (additional classes)
- * - icon: ReactNode (icon to display before text)
- * - children: ReactNode (button content)
- * - onClick: function
- */
 const Button = ({ 
     children, 
     variant = 'primary', 

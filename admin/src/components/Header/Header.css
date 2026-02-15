@@ -6,9 +6,6 @@
   padding-top: .75rem;
   padding-bottom: .75rem;
   font-size: 1.2rem;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
   background-color: var(--kfc-white);
   color: var(--kfc-red) !important;
   box-shadow: none;
