@@ -1,3 +1,4 @@
+import React from 'react';
 import Home from '../features/Dashboard/pages/Home';
 import Product from '../features/Product/pages/Product';
 import ProductDetails from '../features/Product/pages/ProductDetails';
@@ -12,93 +13,107 @@ import Kitchen from '../features/Order/pages/Kitchen';
 import Stores from '../features/Store/pages/Stores';
 import ChangePassword from '../features/Auth/pages/ChangePassword';
 import Roles from '../features/Role/pages/Roles';
+import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiBox, FiTag, FiPackage, FiMapPin, FiLock } from 'react-icons/fi';
 
-// Định nghĩa danh sách các route và resource tương ứng
-// File này giúp đồng bộ giữa App.js và phần phân quyền
-
-// 1. Define routes WITHOUT components first to avoid circular dependency
-// This array contains all metadata needed for Roles page
-const routesMetadata = [
+export const routesMetadata = [
     { 
         path: '/home', 
         id: 'dashboard', 
-        label: 'Tổng quan'
+        label: 'Tổng quan',
+        icon: <FiHome />,
+        permission: '',
+        component: <Home />
     },
     { 
         path: '/orders', 
         id: 'orders', 
-        label: 'Đơn hàng'
+        label: 'Đơn hàng',
+        icon: <FiFileText />,
+        permission: 'orders.view',
+        component: <Order />
     },
     { 
         path: '/kitchen', 
         id: 'kitchen', 
-        label: 'Bếp'
+        label: 'Bếp',
+        icon: <FiPackage />,
+        permission: 'kitchen.view',
+        component: <Kitchen />
     },
     { 
         path: '/products', 
         id: 'products', 
-        label: 'Sản phẩm'
+        label: 'Sản phẩm',
+        icon: <FiShoppingCart />,
+        permission: 'products.view',
+        component: <Product />
     },
     { 
         path: '/categories', 
         id: 'categories', 
-        label: 'Danh mục'
+        label: 'Danh mục',
+        icon: <FiTag />,
+        permission: 'categories.view',
+        component: <Categories />
     },
     { 
         path: '/ingredients', 
         id: 'ingredients', 
-        label: 'Nguyên liệu'
+        label: 'Nguyên liệu',
+        icon: <FiBox />,
+        permission: 'ingredients.view',
+        component: <Ingredient />
     },
     { 
         path: '/users', 
         id: 'users', 
-        label: 'Người dùng'
+        label: 'Người dùng',
+        icon: <FiUsers />,
+        permission: 'users.view',
+        component: <Users />
     },
     { 
         path: '/roles', 
         id: 'roles', 
-        label: 'Phân quyền'
+        label: 'Phân quyền',
+        icon: <FiLock />,
+        permission: 'roles.view',
+        component: null // Placeholder, will set below to avoid circular dependency
     },
     { 
         path: '/promotions', 
         id: 'promotions', 
-        label: 'Khuyến mãi'
+        label: 'Khuyến mãi',
+        icon: <FiTag />, 
+        permission: 'promotions.view',
+        component: <Promotions />
     },
     { 
         path: '/reports', 
         id: 'reports', 
-        label: 'Báo cáo'
+        label: 'Báo cáo',
+        icon: <FiBarChart2 />,
+        permission: 'reports.view',
+        component: <Reports />
     },
     { 
         path: '/stores', 
         id: 'stores', 
-        label: 'Cửa hàng'
+        label: 'Cửa hàng',
+        icon: <FiMapPin />,
+        permission: 'stores.view',
+        component: <Stores />
     }
 ];
 
-// 2. Map components to IDs
-// Roles component receives the metadata as props!
-const components = {
-    'dashboard': <Home />,
-    'orders': <Order />,
-    'kitchen': <Kitchen />,
-    'products': <Product />,
-    'categories': <Categories />,
-    'ingredients': <Ingredient />,
-    'users': <Users />,
-    'roles': <Roles resources={routesMetadata} />, // Pass metadata here
-    'promotions': <Promotions />,
-    'reports': <Reports />,
-    'stores': <Stores />
-};
+// Set the component for Roles separately to pass the metadata
+const rolesRoute = routesMetadata.find(r => r.id === 'roles');
+if (rolesRoute) {
+    rolesRoute.component = <Roles resources={routesMetadata} />;
+}
 
-// 3. Export the final config with components
-export const routesConfig = routesMetadata.map(route => ({
-    ...route,
-    component: components[route.id]
-}));
+export const routesConfig = routesMetadata;
 
-// Các route con hoặc route không cần hiển thị trong bảng phân quyền
 export const otherRoutes = [
     { path: '/products/:id', component: <ProductDetails /> },
     { path: '/orders/:id', component: <OrderDetails /> },
