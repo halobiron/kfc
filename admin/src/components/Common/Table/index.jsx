@@ -1,13 +1,5 @@
 import React from 'react';
 
-/**
- * Reusable Table Component
- * @param {Array} columns - Array of column objects: { header: 'Name', key: 'field', render: (item) => JSX, className: '', style: {} }
- * @param {Array} data - Array of data objects to display
- * @param {Boolean} loading - Loading state
- * @param {String} emptyMessage - Message to show when data is empty
- * @param {String} className - Additional CSS classes for the wrapper
- */
 const Table = ({ 
     columns = [], 
     data = [], 
