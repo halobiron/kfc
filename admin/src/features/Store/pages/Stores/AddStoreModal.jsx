@@ -19,8 +19,14 @@ L.Icon.Default.mergeOptions({
 const AddStoreModal = ({ setShowModal, initialStore }) => {
     const dispatch = useDispatch();
     const formik = useFormik({
-        initialValues: { name: '', address: '', phone: '', openTime: '', lat: '', lng: '' },
-        validationSchema: Yup.object({ name: Yup.string().required('Bắt buộc'), address: Yup.string().required('Bắt buộc'), phone: Yup.string().required('Bắt buộc'), openTime: Yup.string().required('Bắt buộc') }),
+        initialValues: { name: '', address: '', phone: '', openTime: '08:00', closeTime: '22:00', lat: '', lng: '' },
+        validationSchema: Yup.object({
+            name: Yup.string().required('Bắt buộc'),
+            address: Yup.string().required('Bắt buộc'),
+            phone: Yup.string().required('Bắt buộc'),
+            openTime: Yup.string().required('Bắt buộc'),
+            closeTime: Yup.string().required('Bắt buộc')
+        }),
         onSubmit: async (v) => {
             try {
                 const data = { ...v, latitude: v.lat, longitude: v.lng };
@@ -34,8 +40,13 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
 
     useEffect(() => {
         if (initialStore) setValues({
-            name: initialStore.name || '', address: initialStore.address || '', phone: initialStore.phone || '',
-            openTime: initialStore.openTime || '', lat: initialStore.latitude || '', lng: initialStore.longitude || ''
+            name: initialStore.name || '',
+            address: initialStore.address || '',
+            phone: initialStore.phone || '',
+            openTime: initialStore.openTime || '08:00',
+            closeTime: initialStore.closeTime || '22:00',
+            lat: initialStore.latitude || '',
+            lng: initialStore.longitude || ''
         });
     }, [initialStore, setValues]);
 
@@ -70,7 +81,14 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
                 <form className="row g-3" onSubmit={formik.handleSubmit}>
                     <div className="col-8"><label className="form-label">Tên</label><input className="form-control" name="name" onChange={formik.handleChange} value={values.name} /></div>
                     <div className="col-4"><label className="form-label">SĐT</label><input className="form-control" name="phone" onChange={formik.handleChange} value={values.phone} /></div>
-                    <div className="col-12"><label className="form-label">Giờ</label><input className="form-control" name="openTime" onChange={formik.handleChange} value={values.openTime} /></div>
+                    <div className="col-6">
+                        <label className="form-label">Giờ mở cửa</label>
+                        <input type="time" className="form-control" name="openTime" onChange={formik.handleChange} value={values.openTime} />
+                    </div>
+                    <div className="col-6">
+                        <label className="form-label">Giờ đóng cửa</label>
+                        <input type="time" className="form-control" name="closeTime" onChange={formik.handleChange} value={values.closeTime} />
+                    </div>
 
                     <div className="col-12"><label className="form-label fw-bold">Bản đồ (Click chọn vị trí)</label>
                         <div style={{ height: '230px', borderRadius: '8px', border: '1px solid #ddd', overflow: 'hidden' }}>

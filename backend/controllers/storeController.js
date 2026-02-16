@@ -38,7 +38,7 @@ exports.getStoreById = async (req, res, next) => {
 // CREATE STORE (ADMIN)
 exports.createStore = async (req, res, next) => {
     try {
-        const { name, address, phone } = req.body;
+        const { name, address, phone, openTime, closeTime, latitude, longitude } = req.body;
 
         if (!name || !address || !phone) {
             return res.status(400).json({
@@ -51,7 +51,10 @@ exports.createStore = async (req, res, next) => {
             name,
             address,
             phone,
-            phone
+            openTime,
+            closeTime,
+            latitude,
+            longitude
         });
 
         res.status(201).json({

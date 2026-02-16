@@ -5,22 +5,22 @@ const { Schema } = mongoose;
 const couponSchema = new Schema({
     code: {
         type: String,
-        required: [true, 'Coupon code is required'],
+        required: [true, 'Mã giảm giá là bắt buộc'],
         unique: true,
         uppercase: true,
         trim: true
     },
     title: {
         type: String,
-        required: [true, 'Title is required']
+        required: [true, 'Tiêu đề là bắt buộc']
     },
     description: {
         type: String,
-        required: true
+        required: [true, 'Mô tả là bắt buộc']
     },
     discount: {
         type: Number,
-        required: [true, 'Discount amount is required']
+        required: [true, 'Giá trị giảm giá là bắt buộc']
     },
     type: {
         type: String,

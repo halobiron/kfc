@@ -19,7 +19,7 @@ const Stores = () => {
         dispatch(getAllStores());
     }, [dispatch]);
 
-    const filteredStores = stores.filter(store => 
+    const filteredStores = stores.filter(store =>
         (store.name && store.name.toLowerCase().includes((keyword || '').toLowerCase())) ||
         (store.address && store.address.toLowerCase().includes((keyword || '').toLowerCase())) ||
         (store.phone && store.phone.includes(keyword))
@@ -76,7 +76,7 @@ const Stores = () => {
             render: (store) => (
                 <div className="d-flex align-items-center gap-1">
                     <FiClock size={14} className="text-secondary" />
-                    <span>{store.openTime}</span>
+                    <span>{store.openTime} - {store.closeTime}</span>
                 </div>
             )
         },
@@ -101,7 +101,7 @@ const Stores = () => {
         <>
             <div className="page-header d-flex justify-content-between align-items-center">
                 <h1 className="page-title">Quản lý Cửa Hàng</h1>
-                <AddButton 
+                <AddButton
                     onClick={() => {
                         setSelectedStore(null);
                         setShowModal(true);
@@ -111,7 +111,7 @@ const Stores = () => {
 
             <div className="card">
                 <div className="card-header">Danh sách cửa hàng</div>
-                <Table 
+                <Table
                     columns={columns}
                     data={filteredStores}
                     loading={loading}

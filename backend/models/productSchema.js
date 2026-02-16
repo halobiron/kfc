@@ -5,23 +5,23 @@ const { Schema } = mongoose;
 const productSchema = new Schema({
     title: {
         type: String,
-        required: [true, 'Title is required'],
-        minlength: [4, 'At least 4 characters required']
+        required: [true, 'Tên sản phẩm là bắt buộc'],
+        minlength: [4, 'Tên phải có ít nhất 4 ký tự']
     },
     description: {
         type: String
     },
     price: {
         type: Number,
-        required: [true, 'price is requird']
+        required: [true, 'Giá sản phẩm là bắt buộc']
     },
     stock: {
         type: Number,
-        required: [true, 'stock is required']
+        required: [true, 'Số lượng trong kho là bắt buộc']
     },
     category: {
         type: String,
-        required: [true, 'Category is required']
+        required: [true, 'Danh mục là bắt buộc']
     },
     productImage: {
         type: String

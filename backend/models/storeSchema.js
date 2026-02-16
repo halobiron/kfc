@@ -18,7 +18,11 @@ const storeSchema = new Schema({
     },
     openTime: {
         type: String,
-        default: '08:00 - 22:00'
+        default: '08:00'
+    },
+    closeTime: {
+        type: String,
+        default: '22:00'
     },
     latitude: {
         type: Number

@@ -243,7 +243,7 @@ const StoreSystem = () => {
                                     <div className="store-item-details" onClick={(e) => e.stopPropagation()}>
                                         <div className="detail-section">
                                             <h6><i className="bi bi-clock me-2"></i>Giờ hoạt động</h6>
-                                            <p>{store.openTime}</p>
+                                            <p>{store.openTime} - {store.closeTime}</p>
                                         </div>
                                         <div className="detail-section">
                                             <h6><i className="bi bi-telephone me-2"></i>Điện thoại</h6>
