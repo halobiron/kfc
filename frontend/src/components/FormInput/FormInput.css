@@ -19,7 +19,6 @@
 .form-input-kfc:disabled {
   cursor: not-allowed;
   background: #f5f5f5;
-  border-color: #eee;
 }
 
 .form-input-kfc.underlined {
@@ -63,7 +62,7 @@
   color: var(--kfc-red);
 }
 
-.form-input-kfc.underlined + .btn-password-toggle {
+.form-input-kfc.underlined+.btn-password-toggle {
   right: 0;
 }
 
@@ -103,11 +102,11 @@
   transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
 }
 
-.form-check:hover input ~ label::before {
+.form-check:hover input~label::before {
   border-color: #999;
 }
 
-.form-check input:checked ~ label::before {
+.form-check input:checked~label::before {
   background: var(--kfc-red);
   border-color: var(--kfc-red);
 }
@@ -123,6 +122,6 @@
   transform: rotate(45deg);
 }
 
-.form-check input:checked ~ label::after {
+.form-check input:checked~label::after {
   opacity: 1;
 }

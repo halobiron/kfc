@@ -2,7 +2,7 @@ import axiosClient from './axiosClient';
 
 const userApi = {
     getProfile: () => {
-        const url = '/users/profile';
+        const url = '/auth/me';
         return axiosClient.get(url);
     },
     updateProfile: (data) => {

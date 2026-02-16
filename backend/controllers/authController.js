@@ -29,7 +29,7 @@ const sendToken = async (user, statusCode, res) => {
     res.status(statusCode).json({
         status: true,
         token,
-        user: {
+        data: {
             id: user._id,
             name: user.name,
             email: user.email,
@@ -167,7 +167,7 @@ exports.getCurrentUser = async (req, res, next) => {
         const user = await User.findById(req.user.id).populate('role');
         res.status(200).json({
             status: true,
-            user: user
+            data: user
         });
     } catch (error) {
         next(error);

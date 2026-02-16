@@ -88,8 +88,6 @@ exports.createOrder = async (req, res, next) => {
         for (const item of items) {
             const product = productMap.get(item.productId);
             if (!product) return res.status(404).json({ status: false, message: `Sản phẩm ${item.productId} không tìm thấy` });
-            if (product.stock < item.quantity) return res.status(400).json({ status: false, message: `Sản phẩm ${product.title} không đủ số lượng` });
-
             subtotal += product.price * item.quantity;
             orderItems.push({
                 productId: product._id,
@@ -97,7 +95,6 @@ exports.createOrder = async (req, res, next) => {
                 price: product.price,
                 quantity: item.quantity
             });
-            product.stock -= item.quantity;
         }
 
         // 2. Shipping Fee
@@ -115,8 +112,7 @@ exports.createOrder = async (req, res, next) => {
         const totalAmount = Math.max(0, subtotal - couponDiscount + shippingFee);
 
         // 4. Save Order
-        // Save updated product stocks first (Optimistic)
-        await Promise.all(products.map(p => p.save()));
+
 
         const order = await Order.create({
             userId: req.user?.id || null,
@@ -296,16 +292,7 @@ exports.updateOrderStatus = async (req, res, next) => {
             order.paidAt = new Date();
         }
 
-        if (status === 'Đã hủy') {
-            // Restore product stock
-            for (const item of order.items) {
-                const product = await Product.findById(item.productId);
-                if (product) {
-                    product.stock += item.quantity;
-                    await product.save();
-                }
-            }
-        }
+
 
         await order.save();
 
@@ -391,14 +378,7 @@ exports.cancelOrder = async (req, res, next) => {
             });
         }
 
-        // Restore stock
-        for (const item of order.items) {
-            const product = await Product.findById(item.productId);
-            if (product) {
-                product.stock += item.quantity;
-                await product.save();
-            }
-        }
+
 
         order.status = 'Đã hủy';
         order.statusHistory.push({

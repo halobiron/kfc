@@ -15,10 +15,7 @@ const productSchema = new Schema({
         type: Number,
         required: [true, 'Giá sản phẩm là bắt buộc']
     },
-    stock: {
-        type: Number,
-        required: [true, 'Số lượng trong kho là bắt buộc']
-    },
+
     category: {
         type: String,
         required: [true, 'Danh mục là bắt buộc']

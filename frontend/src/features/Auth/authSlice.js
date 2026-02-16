@@ -9,7 +9,7 @@ export const loginUser = createAsyncThunk(
             const response = await authApi.login(userData);
             if (response.status) {
                 return {
-                    ...response.user,
+                    ...response.data,
                     token: response.token
                 };
             } else {
@@ -28,7 +28,7 @@ export const registerUser = createAsyncThunk(
             const response = await authApi.register(userData);
             if (response.status) {
                 return {
-                    ...response.user,
+                    ...response.data,
                     token: response.token
                 };
             } else {
@@ -47,7 +47,7 @@ export const loginGoogleUser = createAsyncThunk(
             const response = await authApi.googleLogin({ token });
             if (response.status) {
                 return {
-                    ...response.user,
+                    ...response.data,
                     token: response.token
                 };
             } else {

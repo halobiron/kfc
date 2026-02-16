@@ -1,18 +1,8 @@
 const User = require('../models/userSchema');
 
-// GET USER PROFILE
-exports.getUserProfile = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.user.id);
+// GET USER PROFILE (Deprecated - use authController.getCurrentUser)
+// exports.getUserProfile = async (req, res, next) => { ... }
 
-        res.status(200).json({
-            status: true,
-            data: user
-        });
-    } catch (error) {
-        next(error);
-    }
-};
 
 // UPDATE USER PROFILE
 exports.updateUserProfile = async (req, res, next) => {
