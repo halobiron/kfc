@@ -1,0 +1,32 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 48px 0 0;
+}
+
+.sidebar .nav-link {
+  color: var(--kfc-black);
+  text-transform: uppercase;
+  padding: 12px;
+  border-bottom: 3px solid transparent;
+}
+
+.sidebar .nav-link .nav-icon {
+  margin-right: 8px;
+}
+
+.sidebar .nav-link.active {
+  color: var(--kfc-red);
+  border-bottom-color: var(--kfc-red);
+}
+
+.sidebar .nav-link:hover {
+  color: var(--kfc-red);
+}
+
+.sidebar .nav-link:hover .nav-icon,
+.sidebar .nav-link.active .nav-icon {
+  color: var(--kfc-red);
+}
+

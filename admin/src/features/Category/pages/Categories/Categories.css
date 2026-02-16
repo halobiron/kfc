@@ -1,0 +1,19 @@
+.categories-modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.categories-page-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.categories-switch-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.icon-preview-box {
+  width: 48px;
+  justify-content: center;
+  align-items: center;
+}

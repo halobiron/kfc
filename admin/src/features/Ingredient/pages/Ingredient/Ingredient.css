@@ -1,0 +1,20 @@
+.row-alert td {
+    position: relative;
+    background-color: #ffdada !important;
+}
+
+.row-alert td:first-child::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10%;
+    height: 80%;
+    width: 4px;
+    background-color: var(--kfc-red);
+    border-radius: 0 4px 4px 0;
+}
+
+.modal-overlay-wrapper {
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+}

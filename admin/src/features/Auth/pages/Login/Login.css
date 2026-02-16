@@ -1,0 +1,24 @@
+.login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--kfc-bg-light);
+}
+
+.form-signin {
+  padding: 40px;
+  background-color: var(--kfc-white);
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-logo {
+  width: 100px;
+  margin: 0 auto 20px;
+  display: block;
+}
+
+.form-signin .text-muted {
+  color: var(--kfc-grey);
+  text-align: center;
+}

@@ -1,81 +1,47 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiBox, FiTag, FiPackage, FiMapPin, FiLock } from 'react-icons/fi';
+import './Nav.css';
+import { NavLink } from 'react-router-dom'
+import { FiLock } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
+import { routesMetadata } from '../../config/routesConfig';
 
 const Nav = () => {
+  const { user } = useSelector(state => state.auth);
+  const roleName = user?.role?.name || user?.role;
+  const getNavLinkClass = ({ isActive }) => `nav-link${isActive ? ' active' : ''}`;
+
+  const permissions = user?.permissions || user?.role?.permissions || user?.roleId?.permissions || [];
+
+  const hasPermission = (perm) => {
+    if (!perm) return true;
+    if (roleName === 'ADMIN') return true;
+    return permissions.includes(perm);
+  };
+
   return (
     <nav id="sidebarMenu" className="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse">
       <div className="position-sticky pt-3">
         <ul className="nav flex-column">
+          {routesMetadata.map((route) => {
+            if (route.permission && !hasPermission(route.permission)) return null;
+
+            return (
+              <li className="nav-item" key={route.id}>
+                <NavLink className={getNavLinkClass} to={route.path} end={route.path === '/home'}>
+                  {React.cloneElement(route.icon, { className: 'nav-icon' })}
+                  {route.label}
+                </NavLink>
+              </li>
+            );
+          })}
+
           <li className="nav-item">
-            <Link className="nav-link active" aria-current="page" to="/home">
-              <FiHome style={{ marginRight: '8px' }} />
-              Tổng quan
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/orders">
-              <FiFileText style={{ marginRight: '8px' }} />
-              Đơn hàng
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/kitchen">
-              <FiPackage style={{ marginRight: '8px' }} />
-              Bếp
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/products">
-              <FiShoppingCart style={{ marginRight: '8px' }} />
-              Sản phẩm
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/categories">
-              <FiTag style={{ marginRight: '8px' }} />
-              Danh mục
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/ingredients">
-              <FiBox style={{ marginRight: '8px' }} />
-              Nguyên liệu
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/staff">
-              <FiUsers style={{ marginRight: '8px' }} />
-              Người dùng
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/promotions">
-              <FiTag style={{ marginRight: '8px' }} />
-              Khuyến mãi
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/reports">
-              <FiBarChart2 style={{ marginRight: '8px' }} />
-              Báo cáo
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/stores">
-              <FiMapPin style={{ marginRight: '8px' }} />
-              Cửa hàng
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/change-password">
-              <FiLock style={{ marginRight: '8px' }} />
+            <NavLink className={getNavLinkClass} to="/change-password">
+              <FiLock className="nav-icon" />
               Đổi mật khẩu
-            </Link>
+            </NavLink>
           </li>
         </ul>
-
-
       </div>
     </nav>
   )

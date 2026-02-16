@@ -1,0 +1,8 @@
+.progress-container {
+  width: 80px;
+  height: 6px;
+}
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}

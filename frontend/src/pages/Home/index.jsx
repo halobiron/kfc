@@ -1,43 +1,48 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import ProductCard from '../../features/Product/components/ProductCard'
 import Card from '../../components/Card'
+import Spinner from '../../components/Spinner'
 
 import Slider from '../../components/Slider'
 
-import { allProducts } from '../../data/products'
+import { getAllProducts } from '../../features/Product/productSlice'
+import { getAllCategories } from '../../features/Product/categorySlice'
 import './Home.css'
 
 const Home = () => {
-  // Mock Categories to match KFC Vietnam structure
-  const categories = [
-    { title: "Món Mới", icon: "bi-star-fill" },
-    { title: "Combo 1 Người", icon: "bi-person-fill" },
-    { title: "Combo Nhóm", icon: "bi-people-fill" },
-    { title: "Gà Rán", icon: "bi-egg-fried" },
-    { title: "Burger - Cơm", icon: "bi-hdd-stack" },
-    { title: "Thức Uống", icon: "bi-cup-straw" },
-  ];
+  const dispatch = useDispatch();
+  const { products, loading: productsLoading } = useSelector((state) => state.products);
+  const { categories } = useSelector((state) => state.categories);
+
+  useEffect(() => {
+    dispatch(getAllProducts());
+    dispatch(getAllCategories());
+  }, [dispatch]);
+
+  const featuredProducts = products.slice(0, 3);
 
   return (
     <>
       <Slider />
 
-      {/* Category Grid Section */}
       <section className="home-category-section">
         <div className="container">
-          <div className="section-header text-start mt-4">
-            <h3>DANH MỤC MÓN ĂN</h3>
+          <div className="section-header">
+            <h2>DANH MỤC MÓN ĂN</h2>
+            <hr className="section-underline" />
           </div>
           <div className="row g-3">
             {categories.map((cat, index) => (
               <div key={index} className="col-6 col-md-4 col-lg-3">
-                <Link to="/products" className="text-decoration-none text-dark">
-                  <div className="category-card">
-                    <div className="mock-icon">
+                <Link to={`/products?category=${cat.slug}`} className="category-link">
+                  <Card className="category-card" interactive>
+                    <div className="category-icon">
                       <i className={`bi ${cat.icon}`}></i>
                     </div>
-                    <div className="category-title">{cat.title}</div>
-                  </div>
+                    <h4 className="category-title">{cat.name}</h4>
+                  </Card>
                 </Link>
               </div>
             ))}
@@ -45,21 +50,26 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Hot Deals / Recommendations Section */}
-      <section className="home-product-section py-5">
+      <section className="home-product-section">
         <div className="container">
-          <div className="section-header text-center">
-            <h3>CÓ THỂ BẠN SẼ THÍCH</h3>
-            <hr className="w-25 mx-auto text-danger border-2 opacity-100" />
+          <div className="section-header">
+            <h2>CÓ THỂ BẠN SẼ THÍCH</h2>
+            <hr className="section-underline" />
           </div>
 
-          <div className="row">
-            {allProducts.slice(0, 3).map(product => (
-              <div key={product.id} className="col-md-4">
-                <Card product={product} />
-              </div>
-            ))}
-          </div>
+          {productsLoading ? (
+            <div className="text-center py-5">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="row">
+              {featuredProducts.map(product => (
+                <div key={product._id} className="col-md-4">
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

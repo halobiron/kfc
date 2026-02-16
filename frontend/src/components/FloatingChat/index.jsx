@@ -1,10 +1,10 @@
 import React from 'react';
-import './floating-chat.css';
+import './FloatingChat.css';
+import { BsChatDotsFill, BsMessenger } from 'react-icons/bs';
 
 const FloatingChat = () => {
     return (
         <div className="floating-chat">
-            {/* Zalo Chat */}
             <a
                 href="https://zalo.me/kfcvietnam"
                 className="chat-bubble zalo"
@@ -12,10 +12,9 @@ const FloatingChat = () => {
                 rel="noopener noreferrer"
                 aria-label="Chat qua Zalo"
             >
-                <i className="bi bi-chat-dots-fill"></i>
+                <BsChatDotsFill />
             </a>
 
-            {/* Messenger Chat */}
             <a
                 href="https://m.me/KFCVietnam"
                 className="chat-bubble messenger"
@@ -23,7 +22,7 @@ const FloatingChat = () => {
                 rel="noopener noreferrer"
                 aria-label="Chat qua Messenger"
             >
-                <i className="bi bi-messenger"></i>
+                <BsMessenger />
             </a>
         </div>
     );

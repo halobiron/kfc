@@ -1,0 +1,104 @@
+.addresses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.addresses-header h3 {
+    margin: 0;
+}
+
+.addresses-list {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.address-item {
+    border: 1px solid var(--kfc-border-color) !important;
+    padding: 1.2rem !important;
+    box-shadow: none !important;
+    margin-bottom: 0 !important;
+    cursor: default !important;
+    transform: none !important;
+}
+
+.address-item-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+}
+
+.address-label {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.address-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.action-btn {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.action-btn--edit:hover {
+    background-color: #f0f0f0;
+    border-color: #999;
+}
+
+.action-btn--default {
+    border-color: var(--kfc-red);
+    color: var(--kfc-red);
+}
+
+.action-btn--default:hover {
+    background-color: var(--kfc-red);
+    color: white;
+}
+
+.action-btn--delete {
+    color: #cc0000;
+}
+
+.action-btn--delete:hover {
+    background-color: #cc0000;
+    color: white;
+    border-color: #cc0000;
+}
+
+.address-text {
+    color: var(--kfc-text-gray);
+}
+
+.address-empty {
+    min-height: 275px !important;
+    background-size: 275px !important;
+}
+
+@media (max-width: 560px) {
+    .addresses-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .address-item-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .address-actions {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+}

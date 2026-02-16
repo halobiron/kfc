@@ -1,0 +1,112 @@
+.search-filter-section {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 250px;
+}
+
+.filter-box {
+    min-width: 200px;
+}
+
+.order-card {
+    padding: 0;
+    border: 1px solid var(--kfc-border-color);
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--kfc-gray-bg);
+    border-bottom: 1px solid var(--kfc-border-color);
+    gap: 1rem;
+}
+
+.order-info h5 {
+    margin: 0 0 0.25rem 0;
+}
+
+.order-date {
+    color: var(--kfc-text-gray);
+}
+
+.order-body {
+    padding: 1.5rem;
+}
+
+.order-items {
+    margin-bottom: 1rem;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--kfc-border-color);
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item .quantity {
+    margin-left: 0.5rem;
+    color: var(--kfc-text-gray);
+}
+
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--kfc-border-color);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.order-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: var(--kfc-gray-bg);
+    border-top: 1px solid var(--kfc-border-color);
+}
+
+.order-actions .kfc-btn {
+    flex: 1;
+}
+
+@media (max-width: 560px) {
+    .order-actions {
+        flex-direction: column;
+    }
+
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .order-info h5 {
+        white-space: normal;
+        word-break: break-all;
+    }
+
+    .search-filter-section {
+        flex-direction: column;
+    }
+
+    .search-box,
+    .filter-box {
+        width: 100%;
+        min-width: 100%;
+    }
+}

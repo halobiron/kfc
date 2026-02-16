@@ -1,0 +1,96 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(0 0 0 / 50%);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+    --modal-width: 600px;
+    --modal-border: #eee;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: min(var(--modal-width), 95vw);
+    max-height: 90vh;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgb(0 0 0 / 20%);
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-sm {
+    --modal-width: 400px;
+}
+
+.modal-lg {
+    --modal-width: 800px;
+}
+
+.modal-header,
+.modal-footer {
+    padding: 16px 20px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--modal-border);
+}
+
+.btn-close-modal {
+    width: 32px;
+    height: 32px;
+    padding: 2.5px;
+    border: 0;
+    font-size: 1.25rem;
+    cursor: pointer;
+    background: transparent;
+}
+
+.btn-close-modal:hover {
+    opacity: 0.5;
+}
+
+.modal-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+@media (max-width: 576px) {
+    .modal-content {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,12 @@
+/* Card Components */
+.card {
+  background: var(--kfc-white);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+}
+
+.card-header {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--kfc-red);
+}

@@ -1,0 +1,98 @@
+.order-success-card {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.order-success-card.card-kfc {
+    cursor: default;
+}
+
+.success-icon {
+    font-size: 5rem;
+    color: #198754;
+    display: block;
+    animation: zoomIn 0.5s ease-out forwards;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+.order-info-box {
+    max-width: 500px;
+    margin: 0 auto 1.5rem;
+    padding: 1.5rem;
+    background: var(--kfc-gray-bg);
+    border-radius: 1rem;
+}
+
+.order-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--kfc-border-color);
+}
+
+.order-detail-box {
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid var(--kfc-border-color);
+    border-radius: .75rem;
+    transition: .2s;
+    cursor: pointer;
+}
+
+.order-detail-box:hover {
+    border-color: var(--kfc-red);
+    background: #fff5f6;
+}
+
+.detail-label,
+.info-help {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    color: var(--kfc-text-gray);
+}
+
+.detail-value {
+    font: 700 1.25rem var(--font-family);
+    color: var(--kfc-black);
+    margin: 0;
+    word-break: break-all;
+}
+
+.detail-value.highlight {
+    color: var(--kfc-red);
+}
+
+.info-help {
+    grid-column: 1/-1;
+    font-size: .85rem;
+    margin-top: .5rem;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+@media (max-width: 576px) {
+    .order-success-card {
+        padding: 2rem 1rem;
+    }
+
+    .order-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}

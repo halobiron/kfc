@@ -1,0 +1,36 @@
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status-pending {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.status-confirmed,
+.status-preparing {
+    background-color: #0d6efd;
+}
+
+.status-shipping {
+    background-color: #fd7e14;
+}
+
+.status-ready,
+.status-delivered {
+    background-color: #198754;
+}
+
+.status-cancelled {
+    background-color: #dc3545;
+}

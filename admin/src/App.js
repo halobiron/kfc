@@ -1,33 +1,40 @@
-import './App.css';
-import Header from './components/Header';
+import AdminLayout from './components/Layout/AdminLayout';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Login from './pages/Login';
-import Home from './pages/Home';
-import Product from './pages/Product'
-import ProductDetails from './pages/ProductDetails'
-import Ingredient from './pages/Ingredient'
-import Order from './pages/Order'
-import Customers from './pages/Customers';
-import Reports from './pages/Reports';
-import OrderDetails from './pages/OrderDetails';
-import Categories from './pages/Categories';
-import Staff from './pages/Staff';
-import Promotions from './pages/Promotions';
-import Kitchen from './pages/Kitchen';
-import Stores from './pages/Stores';
-import ChangePassword from './pages/ChangePassword';
+import Login from './features/Auth/pages/Login';
+
+// Config
+import { routesConfig, otherRoutes } from './config/routesConfig';
 
 import {
   BrowserRouter,
   Routes,
   Route,
+  Navigate
 } from "react-router-dom";
 
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUser } from './features/Auth/authSlice';
+
+const RequireAuth = ({ children }) => {
+  const { token } = useSelector(state => state.auth);
+  return token ? children : <Navigate to="/" replace />;
+};
+
 function App() {
+  const dispatch = useDispatch();
+  const { token } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(loadUser());
+    }
+  }, [dispatch, token]);
+
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename="/admin">
         <ToastContainer
           position="top-right"
           autoClose={3000}
@@ -41,34 +48,25 @@ function App() {
         />
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route
-            path="*"
-            element={
-              <>
-                <Header />
-                <div className="container-fluid">
-                  <div className="row">
-                    <Routes>
-                      <Route path="/home" element={<Home />} />
-                      <Route path="/products" element={<Product />} />
-                      <Route path="/products/:id" element={<ProductDetails />} />
-                      <Route path="/categories" element={<Categories />} />
-                      <Route path="/ingredients" element={<Ingredient />} />
-                      <Route path="/orders" element={<Order />} />
-                      <Route path="/orders/:id" element={<OrderDetails />} />
-                      <Route path="/kitchen" element={<Kitchen />} />
-                      <Route path="/customers" element={<Customers />} />
-                      <Route path="/staff" element={<Staff />} />
-                      <Route path="/promotions" element={<Promotions />} />
-                      <Route path="/stores" element={<Stores />} />
-                      <Route path="/reports" element={<Reports />} />
-                      <Route path="/change-password" element={<ChangePassword />} />
-                    </Routes>
-                  </div>
-                </div>
-              </>
-            }
-          />
+          <Route element={<RequireAuth><AdminLayout /></RequireAuth>}>
+            {/* Render Main Routes from Config */}
+            {routesConfig.map(route => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={route.component}
+              />
+            ))}
+
+            {/* Render Other Routes */}
+            {otherRoutes.map(route => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={route.component}
+              />
+            ))}
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

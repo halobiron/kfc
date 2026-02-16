@@ -1,0 +1,42 @@
+.recipe-add-row :is(.form-control, .form-select, .btn-primary) {
+    height: 45px;
+    border-radius: 4px;
+}
+
+.recipe-add-row .btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--kfc-border-grey);
+}
+
+.stat-item {
+    border: 1px solid var(--kfc-border-grey);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+}
+
+.stat-item .stat-label {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--kfc-grey);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.stat-item .stat-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 18px;
+}

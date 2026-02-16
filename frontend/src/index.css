@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Outfit:wght@500;700;800&display=swap');
+
 :root {
   --kfc-red: #e4002b;
   --kfc-black: #202124;
@@ -6,27 +8,156 @@
   --spacing-md: 2rem;
   --spacing-lg: 3rem;
   --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Oswald', sans-serif;
+  --kfc-gray-bg: #f6f5f5;
+  --kfc-border-color: #e0e0e0;
+  --kfc-text-gray: #666;
+}
+
+.kfc-page-wrapper {
+  background-color: var(--kfc-gray-bg);
+}
+
+.kfc-container {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  width: 100%;
+  max-width: 1280px;
 }
 
 body {
   margin: 0;
   font-family: var(--font-family);
+  color: var(--kfc-black);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1,
 h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--kfc-black);
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
 h3 {
-  font-weight: 800;
+  font-size: 1.75rem;
+}
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
 }
 
 h4,
 h5,
 h6 {
-  font-weight: 700;
+  font-weight: 500;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+.btn:focus,
+.btn:active:focus {
+  box-shadow: 0 0 0 2px rgba(228, 0, 43, 0.25);
+  background-color: #c40024;
+}
+
+.error {
+  color: #f00;
+}
+
+/* Global Brand Utilities */
+.text-kfc-red {
+  color: var(--kfc-red);
+}
+
+.text-kfc-black {
+  color: var(--kfc-black);
+}
+
+.bg-kfc-red {
+  background-color: var(--kfc-red);
+  color: white;
+}
+
+/* Common Section Header Component */
+.section-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.section-header h2 {
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  font-size: 2.25rem;
+}
+
+.section-underline {
+  width: 80px;
+  margin: 0 auto;
+  border: none;
+  border-top: 3px solid var(--kfc-red);
+  opacity: 1;
+}
+
+
+/* Global Price Utilities */
+.kfc-price {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: var(--kfc-red);
+  white-space: nowrap;
+}
+
+.kfc-price.price-xl {
+  font-size: 2rem;
+}
+
+.kfc-price.price-lg {
+  font-size: 1.5rem;
+}
+
+.kfc-price.price-md {
+  font-size: 1.25rem;
+}
+
+.kfc-price.price-sm {
+  font-size: 0.9rem;
+}
+
+.kfc-price.text-success {
+  color: #198754 !important;
+}
+
+.no-padding-y {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }

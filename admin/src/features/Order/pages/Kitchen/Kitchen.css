@@ -1,0 +1,55 @@
+.order-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.order-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.order-card-header {
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.order-card-body {
+  padding: 12px;
+}
+
+.order-items-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 8px 0;
+}
+
+.order-items-list li {
+  padding: 5px 0;
+}
+
+.item-quantity {
+  display: inline-block;
+  min-width: 30px;
+  font-weight: bold;
+  color: var(--kfc-red);
+}
+
+.orders-column {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.orders-column::-webkit-scrollbar {
+  width: 6px;
+}
+
+.orders-column::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+.orders-column::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}

@@ -1,0 +1,30 @@
+/* Stats Card */
+.stats-card {
+  border-left: 3px solid var(--kfc-red);
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+}
+
+.stats-card:hover {
+  border-left-width: 5px;
+}
+
+.stats-card-value {
+  font-size: 1.5rem;
+  color: var(--kfc-red);
+  line-height: 1.2;
+}
+
+.stats-card-label {
+  font-size: 12px;
+  color: var(--kfc-grey);
+  text-transform: uppercase;
+}
+
+.stats-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+}

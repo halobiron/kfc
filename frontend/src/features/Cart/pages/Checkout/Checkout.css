@@ -1,0 +1,85 @@
+/* Shared Layout & Basic Styles */
+.checkout-layout {
+    display: flex;
+    gap: 30px;
+}
+
+.checkout-form-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.checkout-summary-section {
+    flex: 1;
+}
+
+/* Shared Typography */
+.form-title {
+    font-size: 1.25rem;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.form-title i {
+    color: #e4002b;
+}
+
+/* Shared Options Grid Pattern */
+.checkout-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.checkout-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    text-align: center;
+}
+
+.checkout-option:hover {
+    border-color: #333;
+    background: #f9f9f9;
+}
+
+.checkout-option.selected {
+    border: 2px solid #e4002b;
+    background: #fff5f5;
+    color: #e4002b;
+}
+
+.checkout-option i {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    color: #5f6368;
+}
+
+.checkout-option.selected i {
+    color: #e4002b;
+}
+
+.checkout-option span {
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .checkout-layout {
+        flex-direction: column;
+    }
+
+    .checkout-summary-section {
+        order: -1;
+    }
+}

@@ -1,0 +1,44 @@
+.floating-chat {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+}
+
+.chat-bubble {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    background-color: var(--kfc-red);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.chat-bubble:hover {
+    transform: translateY(-3px);
+    background-color: #cc0026;
+    box-shadow: 0 6px 15px rgba(228, 0, 43, 0.3);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .floating-chat {
+        bottom: 20px;
+        right: 20px;
+        gap: 10px;
+    }
+
+    .chat-bubble {
+        width: 46px;
+        height: 46px;
+        font-size: 20px;
+    }
+}

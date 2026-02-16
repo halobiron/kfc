@@ -7,13 +7,23 @@
   --kfc-black: #202124;
   --kfc-grey: #ABABAB;
   --kfc-white: #FFFFFF;
-  --kfc-border-grey: #EEEEEE;
+  --kfc-border-grey: #DDDDDD;
   --kfc-bg-light: #F8F8F8;
+  
+  /* Missing Variables */
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow-card: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  --transition-base: all 0.2s ease-in-out;
+  --transition-fast: all 0.1s ease-in-out;
+  --font-heading: 'Oswald', sans-serif;
+  --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 body {
   margin: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 15px;
   color: var(--kfc-black);
   line-height: 1.5;
@@ -21,13 +31,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Oswald', sans-serif;
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.page-title,
+.card-header,
+.navbar-brand,
+.table thead th,
+.stats-card-value,
+.stat-value {
+  font-family: var(--font-heading);
   font-weight: 700;
   text-transform: uppercase;
   color: var(--kfc-black);
@@ -36,4 +48,293 @@ h6 {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* Global focus and active states - KFC Brand Overrides */
+*:focus {
+  outline: none !important;
+}
+
+/* Button & Form Focus States */
+.btn:focus,
+.btn:active,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-check:focus+.btn-primary,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(228, 0, 43, 0.25) !important;
+  border-color: var(--kfc-red) !important;
+}
+
+.btn-primary:focus,
+.btn-primary:active,
+.btn-check:focus+.btn-primary {
+  background-color: #c40024 !important;
+  border-color: #c40024 !important;
+}
+
+.form-check-input:checked {
+  background-color: var(--kfc-red) !important;
+  border-color: var(--kfc-red) !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--kfc-bg-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--kfc-grey);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--kfc-red);
+}
+
+/* --- Refactored Global Styles --- */
+/* KFC Button Styles */
+.btn {
+  border-radius: 4px !important;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: var(--kfc-red);
+  border: none;
+  padding: 10px 30px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--kfc-white);
+  text-transform: none;
+  transition: all 0.3s ease;
+}
+
+/* Hover & Active states */
+.btn-primary:hover,
+.btn-primary:active {
+  background-color: #c40024;
+}
+
+/* Focus handled by global rule above to maintain consistency */
+
+.btn-secondary {
+  background-color: #CCCCCC;
+  border: none;
+  padding: 8px 24px;
+  font-weight: 500;
+  color: var(--kfc-black);
+}
+
+.btn-secondary:hover {
+  background-color: var(--kfc-red);
+  color: var(--kfc-white);
+}
+
+/* Button Variants */
+.btn-outline-primary {
+  background-color: transparent;
+  border: 1px solid var(--kfc-red);
+  color: var(--kfc-red);
+  padding: 10px 30px;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all var(--transition-base);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--kfc-red);
+  color: var(--kfc-white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  border: none;
+  color: var(--kfc-red);
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.btn-ghost:hover {
+  background-color: rgba(228, 0, 43, 0.1);
+}
+
+.btn-sm {
+  padding: 6px 20px;
+  font-size: 14px;
+}
+
+.btn-lg {
+  padding: 14px 40px;
+  font-size: 16px;
+}
+
+
+
+
+
+/* Alert Components */
+.alert {
+  padding: 16px 20px;
+  border-radius: 0;
+  border-left: 4px solid;
+  margin-bottom: 20px;
+  animation: slideIn var(--transition-base);
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border-color: var(--kfc-success);
+  color: #155724;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  border-color: var(--kfc-danger);
+  color: #721c24;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  border-color: var(--kfc-warning);
+  color: #856404;
+}
+
+.alert-info {
+  background-color: #fbeaea;
+  border-color: var(--kfc-red);
+  color: var(--kfc-red);
+}
+
+/* Loading Spinner */
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(228, 0, 43, 0.2);
+  border-top-color: var(--kfc-red);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.spinner-lg {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+}
+
+
+
+
+/* Grid System */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.col {
+  flex: 1;
+  padding: 0 15px;
+}
+
+.col-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding: 0 15px;
+}
+
+.col-4 {
+  flex: 0 0 33.333%;
+  max-width: 33.333%;
+  padding: 0 15px;
+}
+
+.col-3 {
+  flex: 0 0 25%;
+  max-width: 25%;
+  padding: 0 15px;
+}
+
+@media (max-width: 768px) {
+
+  .col-6,
+  .col-4,
+  .col-3 {
+    flex: 0 0 100%;
+  }
+}
+
+/* Global Red Overrides for KFC Brand */
+.bg-primary {
+  background-color: var(--kfc-red) !important;
+}
+
+.text-primary {
+  color: var(--kfc-red) !important;
+}
+
+.border-primary {
+  border-color: var(--kfc-red) !important;
+}
+
+.bg-info {
+  background-color: var(--kfc-red) !important;
+  color: var(--kfc-white) !important;
+}
+
+.text-info {
+  color: var(--kfc-red) !important;
+}
+
+/* Utilities for bg-opacity and standard colors */
+.bg-opacity-10.bg-primary,
+.bg-opacity-10.bg-info {
+  background-color: rgba(228, 0, 43, 0.1) !important;
+}
+
+.bg-success {
+  background-color: #28a745 !important;
+}
+
+.text-success {
+  color: #28a745 !important;
+}
+
+.bg-opacity-10.bg-success {
+  background-color: rgba(40, 167, 69, 0.1) !important;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+}
+
+.text-warning {
+  color: #ffc107 !important;
+}
+
+.bg-opacity-10.bg-warning {
+  background-color: rgba(255, 193, 7, 0.1) !important;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+.bg-opacity-10.bg-danger {
+  background-color: rgba(220, 53, 69, 0.1) !important;
 }

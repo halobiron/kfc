@@ -1,0 +1,61 @@
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.detail-card,
+.modal-total {
+    background: var(--kfc-gray-bg);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.detail-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.detail-label {
+    font-size: 0.85rem;
+    color: var(--kfc-text-gray);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.detail-value {
+    font-weight: 600;
+    color: var(--kfc-black);
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+}
+
+.detail-item .quantity {
+    margin-left: 0.5rem;
+    color: var(--kfc-text-gray);
+}
+
+.modal-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Timeline Styles */
+.timeline-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px dashed var(--kfc-border-color);
+}

@@ -1,0 +1,259 @@
+.store-system-container {
+    display: flex;
+    height: calc(100vh - 70px);
+}
+
+.store-sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 24px;
+}
+
+.search-wrapper {
+    position: relative;
+}
+
+.store-search-input {
+    width: 100%;
+    padding: 10px 45px 10px 18px;
+    border: 1px solid var(--kfc-border-color);
+    border-radius: 50px;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.2s;
+    background-color: var(--kfc-gray-bg);
+}
+
+.store-search-input:focus {
+    border-color: var(--kfc-red);
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(228, 0, 43, 0.1);
+}
+
+.search-btn-trigger {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--kfc-red);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.search-btn-trigger:hover {
+    background-color: #c40025;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.search-btn-trigger:disabled {
+    background-color: #eebdc5;
+    cursor: wait;
+}
+
+.search-hint {
+    font-size: 11px;
+    color: #6c757d;
+    margin: 10px 0 15px;
+    padding-left: 5px;
+}
+
+.store-list-container {
+    overflow-y: auto;
+}
+
+.results-count {
+    padding: 12px;
+    font-size: 13px;
+    color: #5f6368;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.results-count strong {
+    color: var(--kfc-red);
+}
+
+.store-item-card {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent;
+}
+
+.store-item-card:hover {
+    background-color: #fff9fa;
+    border-left-color: #ffccd5;
+}
+
+.store-item-card.expanded {
+    border-left-color: var(--kfc-red);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    z-index: 1;
+    position: relative;
+}
+
+.store-item-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.kfc-sprite {
+    background: url("../../../../assets/images/common/sprite.png") no-repeat transparent;
+}
+
+.store-index-popcorn {
+    width: 28px;
+    height: 37px;
+    background-position: -70px -59px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 4px;
+    font: 700 13px 'Oswald', sans-serif;
+    flex-shrink: 0;
+    margin-right: -5px;
+}
+
+.store-item-name {
+    font-size: 15px;
+    margin: 0;
+}
+
+.store-item-address {
+    font-size: 13px;
+    color: #5f6368;
+    margin: 5px 0 0 0;
+}
+
+.store-distance {
+    padding: 6px 10px;
+    border-radius: 20px;
+}
+
+.expand-icon {
+    color: #bdc1c6;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.store-item-details {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed #e0e0e0;
+}
+
+.store-item-info {
+    flex: 1;
+}
+
+.detail-section {
+    margin-bottom: 15px;
+}
+
+.detail-section h6 {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.detail-section p {
+    font-size: 13px;
+    color: #5f6368;
+    margin: 0;
+}
+
+.service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.service-tag {
+    background: #f1f3f4;
+    color: var(--kfc-text-gray);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+
+
+.store-map-view {
+    flex: 1;
+    position: relative;
+}
+
+.no-results {
+    text-align: center;
+    padding: 50px 24px;
+    color: #9aa0a6;
+}
+
+.store-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.store-list-container::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+@media (max-width: 992px) {
+    .store-system-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .store-map-view {
+        height: 400px;
+    }
+}
+
+/* Map Marker Styles */
+.custom-kfc-marker-inner {
+    width: 50px;
+    height: 65px;
+    background-position: -70px -50px;
+    transform: scale(1.1);
+    transform-origin: bottom center;
+    position: relative;
+}
+
+.custom-kfc-marker-inner.active {
+    background-position: -120px -50px;
+}
+
+.marker-number {
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-family: Arial, sans-serif;
+}
+
+/* No Results Icon Style */
+.no-results-icon {
+    font-size: 2rem;
+    opacity: 0.3;
+}
+
+.map-container-full {
+    height: 100%;
+    width: 100%;
+}

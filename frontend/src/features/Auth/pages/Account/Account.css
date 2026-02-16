@@ -1,0 +1,121 @@
+.page-wrapper {
+    padding: 2rem 1rem;
+    max-width: 1440px;
+}
+
+.page-block {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 992px) {
+    .page-block {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 2rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .block-left {
+        flex: 0 0 30%;
+    }
+}
+
+.account-left {
+    background: var(--kfc-black);
+    padding: 3.2rem 1rem 1rem;
+    position: relative;
+    border-radius: 10px;
+}
+
+@media (min-width: 992px) {
+    .block-right {
+        flex: 0 0 70%;
+    }
+}
+
+.page-with-bar.medium-bar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 85px;
+    width: 12px;
+    height: 30px;
+    box-shadow: inset 0 0 0 32px var(--kfc-red), -22px 0 var(--kfc-red), 22px 0 var(--kfc-red);
+}
+
+@media (min-width: 992px) {
+    .account-profile {
+        display: block;
+        padding-left: 35px;
+    }
+}
+
+.profile-avatar-img {
+    width: 86px;
+    height: 87px;
+    margin-right: 1.5rem;
+    border-radius: 50%;
+}
+
+@media (min-width: 992px) {
+    .profile-avatar-img {
+        display: block;
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+}
+
+.account-profile h2 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.account-profile a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.account-profile a.link-underline {
+    border-bottom: 1px solid #fff;
+}
+
+/* Account Navigation Menu */
+
+.account-left ul li {
+    margin: 1.3rem 0;
+}
+
+.account-left ul li a {
+    color: hsla(0, 0%, 100%, 0.5);
+    text-decoration: none;
+}
+
+.account-left ul li.active a,
+.account-left ul li a:hover {
+    color: #fff;
+}
+
+/* Mobile Horizontal Scroll Menu */
+@media (max-width: 991px) {
+    .account-left ul {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        margin: 0 -1rem;
+        padding-top: 20px;
+        padding-bottom: 0.5rem;
+    }
+
+    .account-left ul li {
+        display: inline-block;
+        margin: 0 1rem;
+    }
+
+    .account-profile {
+        padding-left: 30px;
+    }
+}

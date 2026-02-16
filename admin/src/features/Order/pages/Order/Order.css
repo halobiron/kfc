@@ -1,0 +1,14 @@
+.order-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.order-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 34px;
+  padding: 0;
+}

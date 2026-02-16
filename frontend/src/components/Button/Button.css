@@ -1,0 +1,95 @@
+.kfc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    position: relative;
+    text-decoration: none;
+
+    /* Typography */
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+
+    /* Appearance */
+    padding: 14px 25px;
+    border: 1px solid transparent;
+    border-radius: 99px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease-in-out;
+}
+
+/* --- Variants --- */
+.kfc-btn--primary {
+    background-color: var(--kfc-red, #E4002B);
+    color: white;
+}
+
+.kfc-btn--primary:hover:not(.disabled) {
+    background-color: #b00020;
+    box-shadow: 0 4px 12px rgba(228, 0, 43, 0.2);
+    color: white;
+}
+
+.kfc-btn--secondary {
+    background-color: var(--kfc-black);
+    border-color: var(--kfc-black);
+    color: white;
+}
+
+.kfc-btn--secondary:hover:not(.disabled) {
+    background-color: #333;
+    border-color: #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+/* --- Sizes --- */
+.kfc-btn--sm {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+}
+
+.kfc-btn--lg {
+    padding: 16px 32px;
+    font-size: 1.1rem;
+}
+
+.kfc-btn--full {
+    width: 100%;
+}
+
+/* --- States --- */
+.kfc-btn:active:not(.disabled),
+.kfc-btn:focus {
+    transform: translateY(1px);
+}
+
+.kfc-btn.disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+/* --- Spinner --- */
+.kfc-btn-spinner {
+    width: 1.2em;
+    height: 1.2em;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: kfc-spin 0.8s linear infinite;
+}
+
+@keyframes kfc-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Helper to ensure icons center nicely */
+.kfc-btn-start-icon {
+    display: flex;
+}

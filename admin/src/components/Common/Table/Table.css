@@ -1,0 +1,21 @@
+.table thead th {
+  background-color: var(--kfc-black) !important;
+  color: var(--kfc-white) !important;
+  padding: 12px;
+  text-align: left;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid var(--kfc-border-grey);
+}
+
+.table tbody tr:hover {
+  background-color: #FFF5F5;
+  transform: scale(1.01);
+  box-shadow: var(--shadow-sm);
+}
+
+.table tbody td {
+  padding: 14px 16px;
+  font-size: 14px;
+}

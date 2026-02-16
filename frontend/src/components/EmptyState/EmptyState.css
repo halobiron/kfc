@@ -1,0 +1,40 @@
+.empty-state {
+    display: flex;
+    align-items: center;
+    min-height: 450px;
+    padding: 3rem 3.5rem;
+    border-radius: 0.5rem;
+    background: #f8f7f5 url("https://static.kfcvietnam.com.vn/images/web/empty-cart.png?v=5.0") no-repeat right 1.25rem center / 40%;
+}
+
+.empty-state-content {
+    max-width: 500px;
+}
+
+.empty-state-title {
+    font-size: 2.5rem;
+}
+
+.empty-state-message {
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .empty-state {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        min-height: 600px;
+        padding: 3rem 1rem 15rem;
+        background-position: center bottom;
+        background-size: 60%;
+    }
+
+    .empty-state-content {
+        max-width: 100%;
+    }
+
+    .empty-state-title {
+        font-size: 2rem;
+    }
+}
