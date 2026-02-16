@@ -207,46 +207,10 @@ exports.updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
 
     // START: Logic trừ nguyên liệu khi bắt đầu nấu (status: preparing)
     if (status === 'Đang chuẩn bị' && order.status !== 'Đang chuẩn bị') {
-        const ingredientsToUpdate = [];
-
-        // 1. Tính toán tổng nguyên liệu cần thiết
-        for (const item of order.items) {
-            const product = await Product.findById(item.productId);
-            if (product && product.recipe && product.recipe.length > 0) {
-                for (const recipeItem of product.recipe) {
-                    const ingredient = await Ingredient.findById(recipeItem.ingredientId);
-                    if (ingredient) {
-                        const quantityNeeded = recipeItem.quantity * item.quantity;
-
-                        // Gom nhóm nguyên liệu (xử lý trường hợp nhiều món dùng cùng nguyên liệu)
-                        const existing = ingredientsToUpdate.find(i => i.id.toString() === ingredient._id.toString());
-                        if (existing) {
-                            existing.needed += quantityNeeded;
-                        } else {
-                            ingredientsToUpdate.push({
-                                id: ingredient._id,
-                                needed: quantityNeeded,
-                                name: ingredient.name,
-                                unit: ingredient.unit,
-                                doc: ingredient
-                            });
-                        }
-                    }
-                }
-            }
-        }
-
-        // 2. Kiểm tra tồn kho
-        for (const update of ingredientsToUpdate) {
-            if (update.doc.stock < update.needed) {
-                return next(new ErrorHandler(`Không đủ nguyên liệu: ${update.name} (Cần: ${update.needed} ${update.unit}, Tồn: ${update.doc.stock})`, 400));
-            }
-        }
-
-        // 3. Trừ kho
-        for (const update of ingredientsToUpdate) {
-            update.doc.stock -= update.needed;
-            await update.doc.save();
+        try {
+            await order.deductIngredients();
+        } catch (error) {
+            return next(new ErrorHandler(error.message, 400));
         }
     }
     // END: Logic trừ nguyên liệu

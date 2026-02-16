@@ -119,5 +119,52 @@ orderSchema.pre('save', async function () {
     }
 });
 
+orderSchema.methods.deductIngredients = async function () {
+    const Product = require('./productSchema');
+    const Ingredient = require('./ingredientSchema');
+
+    const ingredientsToUpdate = [];
+
+    // 1. Tính toán tổng nguyên liệu cần thiết
+    for (const item of this.items) {
+        const product = await Product.findById(item.productId);
+        if (product && product.recipe && product.recipe.length > 0) {
+            for (const recipeItem of product.recipe) {
+                const ingredient = await Ingredient.findById(recipeItem.ingredientId);
+                if (ingredient) {
+                    const quantityNeeded = recipeItem.quantity * item.quantity;
+
+                    // Gom nhóm nguyên liệu
+                    const existing = ingredientsToUpdate.find(i => i.id.toString() === ingredient._id.toString());
+                    if (existing) {
+                        existing.needed += quantityNeeded;
+                    } else {
+                        ingredientsToUpdate.push({
+                            id: ingredient._id,
+                            needed: quantityNeeded,
+                            name: ingredient.name,
+                            unit: ingredient.unit,
+                            doc: ingredient
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    // 2. Kiểm tra tồn kho
+    for (const update of ingredientsToUpdate) {
+        if (update.doc.stock < update.needed) {
+            throw new Error(`Không đủ nguyên liệu: ${update.name} (Cần: ${update.needed} ${update.unit}, Tồn: ${update.doc.stock})`);
+        }
+    }
+
+    // 3. Trừ kho
+    for (const update of ingredientsToUpdate) {
+        update.doc.stock -= update.needed;
+        await update.doc.save();
+    }
+};
+
 const Order = mongoose.model('Order', orderSchema);
 module.exports = Order;
