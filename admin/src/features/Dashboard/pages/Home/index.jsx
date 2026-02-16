@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDashboardStats } from '../../statsSlice'
+import Loading from '../../../../components/Common/Loading';
 import StatCard from '../../../../components/Common/StatCard';
 import { FiShoppingBag, FiDollarSign, FiUsers, FiAlertCircle } from 'react-icons/fi'
 import {
@@ -157,7 +158,7 @@ const Home = () => {
               <div style={{ height: '300px' }}>
                 {loading ? (
                   <div className="d-flex align-items-center justify-content-center h-100">
-                    <span className="text-muted">Đang tải biểu đồ...</span>
+                    <Loading />
                   </div>
                 ) : (
                   <Line options={chartOptions} data={chartData} />
@@ -175,7 +176,9 @@ const Home = () => {
             </div>
             <div className="card-body p-3">
               {loading ? (
-                <div className="text-center text-muted">Đang tải...</div>
+                <div className="d-flex justify-content-center py-4">
+                  <Loading />
+                </div>
               ) : stats.topProducts && stats.topProducts.length > 0 ? (
                 stats.topProducts.map((product, index) => (
                   <div key={index} className="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">

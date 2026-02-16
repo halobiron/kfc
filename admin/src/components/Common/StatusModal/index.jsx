@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import Loading from '../Loading';
 
 const StatusModal = ({ show, onHide, onConfirm, status, statusLabel, loading, title }) => {
     const [note, setNote] = useState('');
@@ -77,7 +78,12 @@ const StatusModal = ({ show, onHide, onConfirm, status, statusLabel, loading, ti
                     onClick={handleConfirm}
                     disabled={loading}
                 >
-                    {loading ? 'Đang xử lý...' : (isCancelAction ? 'Xác nhận Hủy' : 'Cập nhật')}
+                    {loading ? (
+                        <>
+                            <Loading size="sm" text="" />
+                            <span className="ms-2">Đang xử lý...</span>
+                        </>
+                    ) : (isCancelAction ? 'Xác nhận Hủy' : 'Cập nhật')}
                 </Button>
             </Modal.Footer>
         </Modal>

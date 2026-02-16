@@ -7,6 +7,7 @@ import { login, clearErrors } from '../../authSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { TextField } from '../../../../components/Common/Form';
+import Button from '../../../../components/Common/Button';
 import '../../../../components/Common/Form/Form.css';
 
 const Login = () => {
@@ -73,9 +74,11 @@ const Login = () => {
                         containerClassName="mb-3"
                     />
 
-                    <button className="w-100 btn btn-lg btn-primary" type="submit" disabled={loading}>
-                        {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
-                    </button>
+                    <div className="d-grid gap-2">
+                        <Button size="lg" type="submit" loading={loading}>
+                            Đăng nhập
+                        </Button>
+                    </div>
                     <p className="mt-5 mb-3 text-muted">&copy; 2026 - KFC Admin</p>
                 </form>
             </main>

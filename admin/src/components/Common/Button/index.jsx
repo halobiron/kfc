@@ -1,57 +1,54 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
-const Button = ({ 
-    children, 
-    variant = 'primary', 
-    size, 
-    type = 'button', 
-    className = '', 
-    loading = false, 
-    disabled = false, 
+import Loading from '../Loading';
+const Button = ({
+    children,
+    variant = 'primary',
+    size,
+    type = 'button',
+    className = '',
+    loading = false,
+    disabled = false,
     icon,
     onClick,
-    ...props 
+    ...props
 }) => {
     // Base bootstrap class
     let btnClasses = ['btn'];
-    
+
     // Add variant class
     if (variant) {
         btnClasses.push(`btn-${variant}`);
     }
-    
+
     // Add size class
     if (size && size !== 'default') {
         btnClasses.push(`btn-${size}`);
     }
-    
+
     // Add custom classes
     if (className) {
         btnClasses.push(className);
     }
-    
+
     // Join all classes
     const combinedClassName = btnClasses.join(' ');
     const hasText = children !== undefined && children !== null && children !== '';
 
     return (
-        <button 
-            type={type} 
+        <button
+            type={type}
             className={combinedClassName}
             disabled={disabled || loading}
             onClick={onClick}
             {...props}
         >
             {loading ? (
-                <>
-                    <span 
-                        className="spinner-border spinner-border-sm me-2" 
-                        role="status" 
-                        aria-hidden="true"
-                    ></span>
-                    {children || 'Loading...'}
-                </>
+                <div className="d-flex align-items-center justify-content-center">
+                    <Loading size="sm" text="" />
+                    <span className="ms-2">{children || 'Loading...'}</span>
+                </div>
             ) : (
                 <>
                     {icon && <span className={hasText ? 'me-2 d-inline-flex' : 'd-inline-flex'}>{icon}</span>}
@@ -75,8 +72,8 @@ Button.propTypes = {
 };
 
 export const AddButton = ({ onClick, ...props }) => (
-    <Button 
-        variant="primary" 
+    <Button
+        variant="primary"
         className="d-flex align-items-center gap-2 shadow-sm"
         icon={<FiPlus size={20} />}
         onClick={onClick}
@@ -87,23 +84,23 @@ export const AddButton = ({ onClick, ...props }) => (
 );
 
 export const EditButton = ({ onClick, children, ...props }) => (
-    <Button 
-        size="sm" 
-        variant="outline-dark" 
+    <Button
+        size="sm"
+        variant="outline-dark"
         icon={<FiEdit2 />}
         onClick={onClick}
         title={props.title || 'Sửa'}
         aria-label={props['aria-label'] || 'Sửa'}
-        {...props} 
+        {...props}
     >
         {children}
     </Button>
 );
 
 export const DeleteButton = ({ onClick, children, ...props }) => (
-    <Button 
-        size="sm" 
-        variant="outline-danger" 
+    <Button
+        size="sm"
+        variant="outline-danger"
         icon={<FiTrash2 />}
         onClick={onClick}
         title={props.title || 'Xóa'}

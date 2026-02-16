@@ -11,6 +11,7 @@ import { FiArrowLeft, FiSave, FiX, FiImage, FiBox, FiTrash2, FiActivity } from '
 import { AddButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
 import { formatCurrency } from '../../../../utils/formatters';
+import Loading from '../../../../components/Common/Loading';
 import './ProductDetails.css';
 
 const ProductDetails = () => {
@@ -107,13 +108,7 @@ const ProductDetails = () => {
 
     if (loading) {
         return (
-            <>
-                <div className="text-center p-5">
-                    <div className="spinner-border text-primary" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-            </>
+            <Loading center size="lg" text="Đang tải thông tin món ăn..." />
         );
     }
 

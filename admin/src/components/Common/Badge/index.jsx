@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './badge.css';
+import './Badge.css';
 
 const Badge = ({ variant = 'light', children, className = '', ...props }) => {
     const badgeClass = `badge badge-${variant}`;
 
     return (
-        <span 
+        <span
             className={`${badgeClass}${className ? ` ${className}` : ''}`}
             {...props}
         >

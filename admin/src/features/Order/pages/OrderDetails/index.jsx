@@ -8,6 +8,7 @@ import Button from '../../../../components/Common/Button';
 import { getOrderStatusMeta, ORDER_STATUS } from '../../components/OrderStatusBadge/orderStatus';
 import { getErrorMessage } from '../../../../utils/errors';
 import { formatDateTime } from '../../../../utils/formatters';
+import Loading from '../../../../components/Common/Loading';
 import './OrderDetails.css';
 
 // Components
@@ -68,7 +69,7 @@ const OrderDetails = () => {
         }
     };
 
-    if (loading) return <div className="text-center p-5"><div className="spinner spinner-lg"></div></div>;
+    if (loading) return <Loading center size="lg" text="Đang tải chi tiết đơn hàng..." />;
     if (!order) return <div className="text-center p-5">Không tìm thấy đơn hàng</div>;
 
     return (

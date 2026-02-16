@@ -23,7 +23,7 @@ const ROLE_LABELS = {
 
 const Users = () => {
     const dispatch = useDispatch();
-    const { users: usersList } = useSelector((state) => state.users);
+    const { users: usersList, loading } = useSelector((state) => state.users);
     const { roles } = useSelector((state) => state.roles);
     const { keyword } = useSelector(state => state.search);
 
@@ -37,7 +37,7 @@ const Users = () => {
 
     const filteredUsers = useMemo(() => {
         const searchLower = (keyword || '').toLowerCase();
-        return usersList.filter(user => 
+        return usersList.filter(user =>
             (user.name && user.name.toLowerCase().includes(searchLower)) ||
             (user.email && user.email.toLowerCase().includes(searchLower)) ||
             (user.phone && user.phone.includes(keyword))
@@ -49,7 +49,7 @@ const Users = () => {
         const counts = {
             admin: 0, cashier: 0, receptionist: 0, chef: 0, warehouse: 0, customer: 0
         };
-        
+
         usersList.forEach(user => {
             if (user.isActive) {
                 const roleName = user.role?.name || user.role || 'customer';
@@ -58,7 +58,7 @@ const Users = () => {
                 }
             }
         });
-        
+
         return counts;
     }, [usersList]);
 
@@ -74,7 +74,7 @@ const Users = () => {
 
     const handleSaveUser = (formData, isEditMode) => {
         if (isEditMode) {
-             if (formData.password === '') {
+            if (formData.password === '') {
                 const { password, ...dataWithoutPassword } = formData;
                 dispatch(updateUser({ id: formData._id, data: dataWithoutPassword }));
             } else {
@@ -219,14 +219,15 @@ const Users = () => {
             {/* Users Table */}
             <div className="card">
                 <div className="card-header">Danh sách người dùng</div>
-                <Table 
+                <Table
                     columns={columns}
                     data={filteredUsers}
+                    loading={loading}
                 />
             </div>
 
             {/* Modal */}
-            <UserModal 
+            <UserModal
                 show={showModal}
                 onClose={handleCloseModal}
                 user={selectedUser}

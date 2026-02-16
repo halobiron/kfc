@@ -1,9 +1,10 @@
 import React from 'react';
+import Loading from '../Loading';
 
-const Table = ({ 
-    columns = [], 
-    data = [], 
-    loading = false, 
+const Table = ({
+    columns = [],
+    data = [],
+    loading = false,
     emptyMessage = "Không tìm thấy dữ liệu phù hợp",
     className = "",
     rowClassName = (item) => ""
@@ -14,9 +15,9 @@ const Table = ({
                 <thead className="table-light">
                     <tr>
                         {columns.map((col, idx) => (
-                            <th 
-                                key={idx} 
-                                scope="col" 
+                            <th
+                                key={idx}
+                                scope="col"
                                 className={col.className || ""}
                                 style={col.style || {}}
                             >
@@ -29,8 +30,7 @@ const Table = ({
                     {loading ? (
                         <tr>
                             <td colSpan={columns.length} className="text-center py-5">
-                                <div className="spinner-border spinner-border-sm text-primary me-2"></div>
-                                Đang tải dữ liệu...
+                                <Loading center text="Đang tải dữ liệu..." />
                             </td>
                         </tr>
                     ) : data.length === 0 ? (
@@ -41,14 +41,14 @@ const Table = ({
                         </tr>
                     ) : (
                         data.map((item, rowIdx) => (
-                            <tr 
+                            <tr
                                 key={item._id || item.id || rowIdx}
                                 className={rowClassName(item, rowIdx)}
                             >
                                 {columns.map((col, colIdx) => (
                                     <td key={colIdx} className={col.className || ""}>
-                                        {col.render 
-                                            ? col.render(item, rowIdx) 
+                                        {col.render
+                                            ? col.render(item, rowIdx)
                                             : (item[col.key] || "-")
                                         }
                                     </td>
