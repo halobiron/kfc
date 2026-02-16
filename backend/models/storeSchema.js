@@ -26,12 +26,7 @@ const storeSchema = new Schema({
     longitude: {
         type: Number
     },
-    services: [
-        {
-            type: String,
-            enum: ['Tại chỗ', 'Mang đi', 'Giao hàng', 'Drive-thru', 'Wifi', 'Khu vui chơi trẻ em']
-        }
-    ],
+
     isActive: {
         type: Boolean,
         default: true

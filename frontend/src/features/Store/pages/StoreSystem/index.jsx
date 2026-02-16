@@ -252,7 +252,7 @@ const StoreSystem = () => {
                                         <div className="detail-section">
                                             <h6><i className="bi bi-gear me-2"></i>Dịch vụ</h6>
                                             <div className="service-tags">
-                                                {store.services.map((s, idx) => (
+                                                {['Wifi miễn phí', 'Điều hòa', 'Giữ xe miễn phí', 'Thanh toán thẻ'].map((s, idx) => (
                                                     <span key={idx} className="service-tag">{s}</span>
                                                 ))}
                                             </div>

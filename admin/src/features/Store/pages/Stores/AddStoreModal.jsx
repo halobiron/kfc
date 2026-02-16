@@ -16,7 +16,7 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
             address: '',
             phone: '',
             openTime: '',
-            services: '',
+
             lat: '',
             lng: ''
         },
@@ -30,7 +30,7 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
             try {
                 const submissionValues = {
                     ...values,
-                    services: values.services ? values.services.split(',').map(s => s.trim()) : [],
+
                     latitude: values.lat || undefined,
                     longitude: values.lng || undefined
                 };
@@ -62,7 +62,7 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
                 address: initialStore.address || '',
                 phone: initialStore.phone || '',
                 openTime: initialStore.openTime || '',
-                services: initialStore.services ? initialStore.services.join(', ') : '',
+
                 lat: initialStore.latitude || '',
                 lng: initialStore.longitude || ''
             });
@@ -126,19 +126,6 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
                             placeholder="08:00 - 22:00"
                         />
                         {touched.openTime && errors.openTime && <div className="invalid-feedback">{errors.openTime}</div>}
-                    </div>
-                    <div className="col-12">
-                        <label htmlFor="services" className="form-label">Dịch vụ (phân cách bằng dấu phẩy)</label>
-                        <input
-                            type="text"
-                            name='services'
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.services}
-                            className="form-control"
-                            id="services"
-                            placeholder="Giao hàng, Tại chỗ, Mang đi"
-                        />
                     </div>
                     <div className="col-md-6">
                         <label htmlFor="lat" className="form-label">Vĩ độ (Latitude)</label>
