@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../../../components/Common/Button';
 
+const DEFAULT_DATA = {
+    name: '',
+    category: 'Thực phẩm tươi',
+    unit: 'Kg',
+    minStock: 10,
+    cost: '',
+    stock: 0
+};
+
 const IngredientFormModal = ({ show, onHide, onSubmit, initialData, isEditing }) => {
-    const DEFAULT_DATA = {
-        name: '',
-        category: 'Thực phẩm tươi',
-        unit: 'Kg',
-        minStock: 10,
-        cost: '',
-        stock: 0
-    };
 
     const [formData, setFormData] = useState(DEFAULT_DATA);
 

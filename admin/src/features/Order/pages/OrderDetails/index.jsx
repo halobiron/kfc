@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import orderApi from '../../../../api/orderApi';
 import { FiArrowLeft, FiXCircle, FiCheckCircle, FiTruck, FiClock } from 'react-icons/fi';
@@ -28,11 +28,7 @@ const OrderDetails = () => {
     const [targetStatus, setTargetStatus] = useState('');
     const [updating, setUpdating] = useState(false);
 
-    useEffect(() => {
-        fetchOrderDetails();
-    }, [id]);
-
-    const fetchOrderDetails = async () => {
+    const fetchOrderDetails = useCallback(async () => {
         try {
             const data = await orderApi.get(id);
             const orderData = data.data || data;
@@ -45,7 +41,11 @@ const OrderDetails = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [id, navigate]);
+
+    useEffect(() => {
+        fetchOrderDetails();
+    }, [fetchOrderDetails]);
 
     const openStatusModal = (newStatus) => {
         setTargetStatus(newStatus);

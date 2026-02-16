@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiPlus, FiTag } from 'react-icons/fi';
+import { FiTag } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategories, addCategory, updateCategory, deleteCategory } from '../../categorySlice';
@@ -29,7 +29,7 @@ const Categories = () => {
     dispatch(getAllCategories());
   }, [dispatch]);
 
-  const filteredCategories = categories.filter(category => 
+  const filteredCategories = categories.filter(category =>
     (category.name && category.name.toLowerCase().includes((keyword || '').toLowerCase()))
   );
 
@@ -182,7 +182,7 @@ const Categories = () => {
         {/* Categories Table */}
         <div className="card">
           <div className="card-header">Danh sách danh mục</div>
-          <Table 
+          <Table
             columns={columns}
             data={filteredCategories}
             loading={loading}

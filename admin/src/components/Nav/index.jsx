@@ -14,7 +14,7 @@ const Nav = () => {
 
   const hasPermission = (perm) => {
     if (!perm) return true;
-    if (roleName === 'admin') return true;
+    if (roleName === 'ADMIN') return true;
     return permissions.includes(perm);
   };
 
@@ -24,7 +24,7 @@ const Nav = () => {
         <ul className="nav flex-column">
           {routesMetadata.map((route) => {
             if (route.permission && !hasPermission(route.permission)) return null;
-            
+
             return (
               <li className="nav-item" key={route.id}>
                 <NavLink className={getNavLinkClass} to={route.path} end={route.path === '/home'}>

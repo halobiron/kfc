@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FiGift, FiPercent } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import StatCard from '../../../../components/Common/StatCard';
-import Button, { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
+import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
 import Table from '../../../../components/Common/Table';
 import { getAllCoupons, createCoupon, updateCoupon, deleteCoupon, clearErrors, resetSuccess } from '../../couponSlice';
@@ -35,7 +35,7 @@ const Promotions = () => {
     dispatch(getAllCoupons());
   }, [dispatch]);
 
-  const filteredCoupons = coupons.filter(coupon => 
+  const filteredCoupons = coupons.filter(coupon =>
     (coupon.code && coupon.code.toLowerCase().includes((keyword || '').toLowerCase())) ||
     (coupon.title && coupon.title.toLowerCase().includes((keyword || '').toLowerCase()))
   );
@@ -202,7 +202,7 @@ const Promotions = () => {
       className: 'text-end pe-4',
       render: (promotion) => (
         <>
-          <EditButton 
+          <EditButton
             className="me-2"
             onClick={() => handleOpenModal(promotion)}
           />
@@ -253,7 +253,7 @@ const Promotions = () => {
         {/* Promotions Table */}
         <div className="card">
           <div className="card-header">Danh sách khuyến mãi</div>
-          <Table 
+          <Table
             columns={columns}
             data={filteredCoupons}
             loading={loading}

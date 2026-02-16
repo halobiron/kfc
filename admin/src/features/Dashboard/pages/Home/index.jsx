@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDashboardStats } from '../../statsSlice'
 import StatCard from '../../../../components/Common/StatCard';
-import { FiShoppingBag, FiDollarSign, FiUsers, FiAlertCircle, FiCheckCircle, FiClock } from 'react-icons/fi'
+import { FiShoppingBag, FiDollarSign, FiUsers, FiAlertCircle } from 'react-icons/fi'
 import {
   Chart as ChartJS,
   CategoryScale,

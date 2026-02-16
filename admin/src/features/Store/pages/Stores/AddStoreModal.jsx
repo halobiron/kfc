@@ -8,13 +8,34 @@ import Button from '../../../../components/Common/Button';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 
-// Leaflet marker fix
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
     iconUrl: require('leaflet/dist/images/marker-icon.png'),
     shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
+
+const LocationMarker = ({ lat, lng, setFieldValue }) => {
+    const map = useMap();
+
+    useEffect(() => {
+        if (lat && lng) map.setView([lat, lng], 15);
+    }, [lat, lng, map]);
+
+    useMapEvents({
+        click: async (e) => {
+            const newLat = e.latlng.lat.toFixed(6);
+            const newLng = e.latlng.lng.toFixed(6);
+            setFieldValue('lat', newLat);
+            setFieldValue('lng', newLng);
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`);
+            const data = await res.json();
+            if (data?.display_name) setFieldValue('address', data.display_name);
+        }
+    });
+
+    return lat && lng ? <Marker position={[lat, lng]} /> : null;
+};
 
 const AddStoreModal = ({ setShowModal, initialStore }) => {
     const dispatch = useDispatch();
@@ -60,20 +81,6 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
         } else toast.error('Không tìm thấy');
     };
 
-    const MapEvents = () => {
-        const map = useMap();
-        useEffect(() => { if (values.lat && values.lng) map.setView([values.lat, values.lng], 15); }, [values.lat, values.lng, map]);
-        useMapEvents({
-            click: async (e) => {
-                setFieldValue('lat', e.latlng.lat.toFixed(6)); setFieldValue('lng', e.latlng.lng.toFixed(6));
-                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`);
-                const data = await res.json();
-                if (data?.display_name) setFieldValue('address', data.display_name);
-            }
-        });
-        return values.lat ? <Marker position={[values.lat, values.lng]} /> : null;
-    };
-
     return (
         <div className="modal-overlay-wrapper">
             <div className="modal-overlay-inner modal-overlay-inner-wide p-4">
@@ -93,7 +100,8 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
                     <div className="col-12"><label className="form-label fw-bold">Bản đồ (Click chọn vị trí)</label>
                         <div style={{ height: '230px', borderRadius: '8px', border: '1px solid #ddd', overflow: 'hidden' }}>
                             <MapContainer center={[values.lat || 10.7, values.lng || 106.6]} zoom={13} style={{ height: '100%' }}>
-                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" /><MapEvents />
+                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                                <LocationMarker lat={values.lat} lng={values.lng} setFieldValue={setFieldValue} />
                             </MapContainer>
                         </div>
                     </div>

@@ -8,7 +8,6 @@ import './Kitchen.css';
 
 const Kitchen = () => {
   const {
-    loading,
     refreshOrders,
     handleStatusChange,
     getOrdersByStatus
