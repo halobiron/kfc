@@ -4,6 +4,8 @@ const Coupon = require('../models/couponSchema');
 const Ingredient = require('../models/ingredientSchema');
 const payos = require('../utils/payosClient');
 const { calculateShippingFee } = require('../utils/shipping');
+const { catchAsyncErrors } = require('../middleware/errors');
+const ErrorHandler = require('../utils/errorHandler');
 
 // --- HELPER FUNCTIONS ---
 
@@ -67,412 +69,331 @@ const handlePayOSPayment = async (order, totalAmount) => {
 };
 
 // CREATE ORDER (Refactored)
-exports.createOrder = async (req, res, next) => {
+exports.createOrder = catchAsyncErrors(async (req, res, next) => {
     const { items, deliveryType, deliveryInfo, paymentMethod, couponCode } = req.body;
 
-    try {
-        // Validate items
-        if (!items || items.length === 0) {
-            return res.status(400).json({ status: false, message: 'Đơn hàng phải có ít nhất một sản phẩm' });
-        }
-
-        let subtotal = 0;
-        const orderItems = [];
-
-        // 1. Get products and calculate subtotal
-        const productIds = items.map(item => item.productId);
-        const products = await Product.find({ _id: { $in: productIds } });
-        const productMap = new Map();
-        products.forEach(p => productMap.set(p._id.toString(), p));
-
-        for (const item of items) {
-            const product = productMap.get(item.productId);
-            if (!product) return res.status(404).json({ status: false, message: `Sản phẩm ${item.productId} không tìm thấy` });
-            subtotal += product.price * item.quantity;
-            orderItems.push({
-                productId: product._id,
-                name: product.title,
-                price: product.price,
-                quantity: item.quantity
-            });
-        }
-
-        // 2. Shipping Fee
-        const shippingFee = calculateShippingFee({ deliveryType, subtotal });
-
-        // 3. Coupon Logic (Extracted)
-        const { couponDiscount, coupon, error: couponError } = await validateAndCalculateCoupon(couponCode, subtotal, shippingFee);
-        if (couponError) return res.status(400).json({ status: false, message: couponError });
-
-        if (coupon) {
-            coupon.usedCount += 1;
-            await coupon.save();
-        }
-
-        const totalAmount = Math.max(0, subtotal - couponDiscount + shippingFee);
-
-        // 4. Save Order
-
-
-        const order = await Order.create({
-            userId: req.user?.id || null,
-            items: orderItems,
-            deliveryType,
-            deliveryInfo: {
-                fullName: deliveryInfo?.name || '',
-                phone: deliveryInfo?.phone || '',
-                address: deliveryInfo?.address || null,
-                storeId: deliveryInfo?.storeId || null,
-                note: req.body.note || ''
-            },
-            paymentMethod,
-            couponCode: couponCode || null,
-            couponDiscount,
-            subtotal,
-            shippingFee,
-            totalAmount,
-            statusHistory: [{ status: 'Chờ xác nhận', timestamp: new Date(), note: 'Đơn hàng vừa được tạo' }]
-        });
-
-        // 5. Payment Handling
-        if (paymentMethod === 'Cổng thanh toán PayOS') {
-            const paymentResult = await handlePayOSPayment(order, totalAmount);
-            if (!paymentResult.success) {
-                return res.status(500).json({
-                    status: false,
-                    message: 'Lỗi khi tạo link thanh toán PayOS. Vui lòng thử lại hoặc chọn phương thức khác.',
-                    error: paymentResult.error
-                });
-            }
-            return res.status(201).json({
-                status: true,
-                message: 'Tạo đơn hàng thành công',
-                data: order,
-                checkoutUrl: paymentResult.checkoutUrl
-            });
-        }
-
-        res.status(201).json({ status: true, message: 'Tạo đơn hàng thành công', data: order });
-
-    } catch (error) {
-        next(error);
+    // Validate items
+    if (!items || items.length === 0) {
+        return next(new ErrorHandler('Đơn hàng phải có ít nhất một sản phẩm', 400));
     }
-};
+
+    let subtotal = 0;
+    const orderItems = [];
+
+    // 1. Get products and calculate subtotal
+    const productIds = items.map(item => item.productId);
+    const products = await Product.find({ _id: { $in: productIds } });
+    const productMap = new Map();
+    products.forEach(p => productMap.set(p._id.toString(), p));
+
+    for (const item of items) {
+        const product = productMap.get(item.productId);
+        if (!product) {
+            return next(new ErrorHandler(`Sản phẩm ${item.productId} không tìm thấy`, 404));
+        }
+        subtotal += product.price * item.quantity;
+        orderItems.push({
+            productId: product._id,
+            name: product.title,
+            price: product.price,
+            quantity: item.quantity
+        });
+    }
+
+    // 2. Shipping Fee
+    const shippingFee = calculateShippingFee({ deliveryType, subtotal });
+
+    // 3. Coupon Logic (Extracted)
+    const { couponDiscount, coupon, error: couponError } = await validateAndCalculateCoupon(couponCode, subtotal, shippingFee);
+    if (couponError) {
+        return next(new ErrorHandler(couponError, 400));
+    }
+
+    if (coupon) {
+        coupon.usedCount += 1;
+        await coupon.save();
+    }
+
+    const totalAmount = Math.max(0, subtotal - couponDiscount + shippingFee);
+
+    // 4. Save Order
+    const order = await Order.create({
+        userId: req.user?.id || null,
+        items: orderItems,
+        deliveryType,
+        deliveryInfo: {
+            fullName: deliveryInfo?.name || '',
+            phone: deliveryInfo?.phone || '',
+            address: deliveryInfo?.address || null,
+            storeId: deliveryInfo?.storeId || null,
+            note: req.body.note || ''
+        },
+        paymentMethod,
+        couponCode: couponCode || null,
+        couponDiscount,
+        subtotal,
+        shippingFee,
+        totalAmount,
+        statusHistory: [{ status: 'Chờ xác nhận', timestamp: new Date(), note: 'Đơn hàng vừa được tạo' }]
+    });
+
+    // 5. Payment Handling
+    if (paymentMethod === 'Cổng thanh toán PayOS') {
+        const paymentResult = await handlePayOSPayment(order, totalAmount);
+        if (!paymentResult.success) {
+            return next(new ErrorHandler(`Lỗi khi tạo link thanh toán PayOS: ${paymentResult.error}`, 500));
+        }
+        return res.status(201).json({
+            status: true,
+            message: 'Tạo đơn hàng thành công',
+            data: order,
+            checkoutUrl: paymentResult.checkoutUrl
+        });
+    }
+
+    res.status(201).json({ status: true, message: 'Tạo đơn hàng thành công', data: order });
+});
 
 // GET USER ORDERS
-exports.getUserOrders = async (req, res, next) => {
-    try {
-        const orders = await Order.find({ userId: req.user.id }).sort({ createdAt: -1 });
-        res.status(200).json({
-            status: true,
-            data: orders
-        });
-    } catch (error) {
-        next(error);
-    }
-};
+exports.getUserOrders = catchAsyncErrors(async (req, res, next) => {
+    const orders = await Order.find({ userId: req.user.id }).sort({ createdAt: -1 });
+    res.status(200).json({
+        status: true,
+        data: orders
+    });
+});
 
 // GET ORDER BY ID
-exports.getOrderById = async (req, res, next) => {
-    try {
-        const order = await Order.findById(req.params.id).populate('items.productId');
+exports.getOrderById = catchAsyncErrors(async (req, res, next) => {
+    const order = await Order.findById(req.params.id).populate('items.productId');
 
-        if (!order) {
-            return res.status(404).json({
-                status: false,
-                message: 'Đơn hàng không tìm thấy'
-            });
-        }
+    if (!order) {
+        return next(new ErrorHandler('Đơn hàng không tìm thấy', 404));
+    }
 
-        // 1. If it's a guest order (no userId), allow viewing (can add phone verification later for security)
-        if (!order.userId) {
-            return res.status(200).json({
-                status: true,
-                data: order
-            });
-        }
-
-        // 2. If it's a registered order, require login and ownership/admin
-        if (!req.user) {
-            return res.status(401).json({
-                status: false,
-                message: 'Vui lòng đăng nhập để xem đơn hàng này'
-            });
-        }
-
-        const isOwner = order.userId.toString() === req.user.id;
-        if (!isOwner && req.user.role.toUpperCase() !== 'ADMIN') {
-            return res.status(403).json({
-                status: false,
-                message: 'Bạn không có quyền xem đơn hàng này'
-            });
-        }
-
-        res.status(200).json({
+    // 1. If it's a guest order (no userId), allow viewing (can add phone verification later for security)
+    if (!order.userId) {
+        return res.status(200).json({
             status: true,
             data: order
         });
-    } catch (error) {
-        next(error);
     }
-};
+
+    // 2. If it's a registered order, require login and ownership/admin
+    if (!req.user) {
+        return next(new ErrorHandler('Vui lòng đăng nhập để xem đơn hàng này', 401));
+    }
+
+    const isOwner = order.userId.toString() === req.user.id;
+    if (!isOwner && req.user.role.toUpperCase() !== 'ADMIN') {
+        return next(new ErrorHandler('Bạn không có quyền xem đơn hàng này', 403));
+    }
+
+    res.status(200).json({
+        status: true,
+        data: order
+    });
+});
 
 // UPDATE ORDER STATUS (ADMIN)
-exports.updateOrderStatus = async (req, res, next) => {
+exports.updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
     const { status, note } = req.body;
 
-    try {
-        const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id);
 
-        if (!order) {
-            return res.status(404).json({
-                status: false,
-                message: 'Đơn hàng không tìm thấy'
-            });
-        }
+    if (!order) {
+        return next(new ErrorHandler('Đơn hàng không tìm thấy', 404));
+    }
 
-        // START: Logic trừ nguyên liệu khi bắt đầu nấu (status: preparing)
-        if (status === 'Đang chuẩn bị' && order.status !== 'Đang chuẩn bị') {
-            const ingredientsToUpdate = [];
+    // START: Logic trừ nguyên liệu khi bắt đầu nấu (status: preparing)
+    if (status === 'Đang chuẩn bị' && order.status !== 'Đang chuẩn bị') {
+        const ingredientsToUpdate = [];
 
-            // 1. Tính toán tổng nguyên liệu cần thiết
-            for (const item of order.items) {
-                const product = await Product.findById(item.productId);
-                if (product && product.recipe && product.recipe.length > 0) {
-                    for (const recipeItem of product.recipe) {
-                        const ingredient = await Ingredient.findById(recipeItem.ingredientId);
-                        if (ingredient) {
-                            const quantityNeeded = recipeItem.quantity * item.quantity;
+        // 1. Tính toán tổng nguyên liệu cần thiết
+        for (const item of order.items) {
+            const product = await Product.findById(item.productId);
+            if (product && product.recipe && product.recipe.length > 0) {
+                for (const recipeItem of product.recipe) {
+                    const ingredient = await Ingredient.findById(recipeItem.ingredientId);
+                    if (ingredient) {
+                        const quantityNeeded = recipeItem.quantity * item.quantity;
 
-                            // Gom nhóm nguyên liệu (xử lý trường hợp nhiều món dùng cùng nguyên liệu)
-                            const existing = ingredientsToUpdate.find(i => i.id.toString() === ingredient._id.toString());
-                            if (existing) {
-                                existing.needed += quantityNeeded;
-                            } else {
-                                ingredientsToUpdate.push({
-                                    id: ingredient._id,
-                                    needed: quantityNeeded,
-                                    name: ingredient.name,
-                                    unit: ingredient.unit,
-                                    doc: ingredient
-                                });
-                            }
+                        // Gom nhóm nguyên liệu (xử lý trường hợp nhiều món dùng cùng nguyên liệu)
+                        const existing = ingredientsToUpdate.find(i => i.id.toString() === ingredient._id.toString());
+                        if (existing) {
+                            existing.needed += quantityNeeded;
+                        } else {
+                            ingredientsToUpdate.push({
+                                id: ingredient._id,
+                                needed: quantityNeeded,
+                                name: ingredient.name,
+                                unit: ingredient.unit,
+                                doc: ingredient
+                            });
                         }
                     }
                 }
             }
-
-            // 2. Kiểm tra tồn kho
-            for (const update of ingredientsToUpdate) {
-                if (update.doc.stock < update.needed) {
-                    return res.status(400).json({
-                        status: false,
-                        message: `Không đủ nguyên liệu: ${update.name} (Cần: ${update.needed} ${update.unit}, Tồn: ${update.doc.stock})`
-                    });
-                }
-            }
-
-            // 3. Trừ kho
-            for (const update of ingredientsToUpdate) {
-                update.doc.stock -= update.needed;
-                await update.doc.save();
-            }
-        }
-        // END: Logic trừ nguyên liệu
-
-        order.status = status;
-        order.statusHistory.push({
-            status,
-            timestamp: new Date(),
-            note: note || ''
-        });
-
-        if (status === 'Đã giao hàng') {
-            order.isPaid = true;
-            order.paidAt = new Date();
         }
 
+        // 2. Kiểm tra tồn kho
+        for (const update of ingredientsToUpdate) {
+            if (update.doc.stock < update.needed) {
+                return next(new ErrorHandler(`Không đủ nguyên liệu: ${update.name} (Cần: ${update.needed} ${update.unit}, Tồn: ${update.doc.stock})`, 400));
+            }
+        }
 
-
-        await order.save();
-
-        res.status(200).json({
-            status: true,
-            message: 'Cập nhật trạng thái đơn hàng thành công',
-            data: order
-        });
-    } catch (error) {
-        next(error);
+        // 3. Trừ kho
+        for (const update of ingredientsToUpdate) {
+            update.doc.stock -= update.needed;
+            await update.doc.save();
+        }
     }
-};
+    // END: Logic trừ nguyên liệu
+
+    order.status = status;
+    order.statusHistory.push({
+        status,
+        timestamp: new Date(),
+        note: note || ''
+    });
+
+    if (status === 'Đã giao hàng') {
+        order.isPaid = true;
+        order.paidAt = new Date();
+    }
+
+    await order.save();
+
+    res.status(200).json({
+        status: true,
+        message: 'Cập nhật trạng thái đơn hàng thành công',
+        data: order
+    });
+});
 
 // GET ALL ORDERS (ADMIN)
-exports.getAllOrders = async (req, res, next) => {
-    try {
-        const filter = {};
+exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
+    const filter = {};
 
-        // Filter by store if user is restricted to a store
-        if (req.user && req.user.storeId) {
-            filter['deliveryInfo.storeId'] = req.user.storeId;
-        }
-        // Allow creating/switching filters if user is not restricted (e.g. Super Admin)
-        else if (req.query.storeId) {
-            filter['deliveryInfo.storeId'] = req.query.storeId;
-        }
-
-        const orders = await Order.find(filter).sort({ createdAt: -1 });
-        res.status(200).json({
-            status: true,
-            data: orders
-        });
-    } catch (error) {
-        next(error);
+    // Filter by store if user is restricted to a store
+    if (req.user && req.user.storeId) {
+        filter['deliveryInfo.storeId'] = req.user.storeId;
     }
-};
+    // Allow creating/switching filters if user is not restricted (e.g. Super Admin)
+    else if (req.query.storeId) {
+        filter['deliveryInfo.storeId'] = req.query.storeId;
+    }
+
+    const orders = await Order.find(filter).sort({ createdAt: -1 });
+    res.status(200).json({
+        status: true,
+        data: orders
+    });
+});
 
 // DELETE ORDER (ADMIN)
-exports.deleteOrder = async (req, res, next) => {
-    try {
-        const order = await Order.findByIdAndDelete(req.params.id);
+exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
+    const order = await Order.findByIdAndDelete(req.params.id);
 
-        if (!order) {
-            return res.status(404).json({
-                status: false,
-                message: 'Đơn hàng không tìm thấy'
-            });
-        }
-
-        res.status(200).json({
-            status: true,
-            message: 'Xóa đơn hàng thành công'
-        });
-    } catch (error) {
-        next(error);
+    if (!order) {
+        return next(new ErrorHandler('Đơn hàng không tìm thấy', 404));
     }
-};
+
+    res.status(200).json({
+        status: true,
+        message: 'Xóa đơn hàng thành công'
+    });
+});
 
 // CANCEL ORDER (USER)
-exports.cancelOrder = async (req, res, next) => {
-    try {
-        const reason = typeof req.body?.reason === 'string' ? req.body.reason.trim() : '';
-        const order = await Order.findById(req.params.id);
+exports.cancelOrder = catchAsyncErrors(async (req, res, next) => {
+    const reason = typeof req.body?.reason === 'string' ? req.body.reason.trim() : '';
+    const order = await Order.findById(req.params.id);
 
-        if (!order) {
-            return res.status(404).json({
-                status: false,
-                message: 'Đơn hàng không tìm thấy'
-            });
-        }
-
-        if (!order.userId || order.userId.toString() !== req.user.id) {
-            return res.status(403).json({
-                status: false,
-                message: 'Bạn không có quyền hủy đơn hàng này'
-            });
-        }
-
-        if (['Đang giao hàng', 'Đã giao hàng', 'Đã hủy'].includes(order.status)) {
-            return res.status(400).json({
-                status: false,
-                message: `Không thể hủy đơn hàng ở trạng thái ${order.status}`
-            });
-        }
-
-
-
-        order.status = 'Đã hủy';
-        order.statusHistory.push({
-            status: 'Đã hủy',
-            timestamp: new Date(),
-            note: reason ? `Khách hàng hủy đơn hàng - Lý do: ${reason}` : 'Khách hàng hủy đơn hàng'
-        });
-
-        await order.save();
-
-        res.status(200).json({
-            status: true,
-            message: 'Hủy đơn hàng thành công',
-            data: order
-        });
-    } catch (error) {
-        next(error);
+    if (!order) {
+        return next(new ErrorHandler('Đơn hàng không tìm thấy', 404));
     }
-};
+
+    if (!order.userId || order.userId.toString() !== req.user.id) {
+        return next(new ErrorHandler('Bạn không có quyền hủy đơn hàng này', 403));
+    }
+
+    if (['Đang giao hàng', 'Đã giao hàng', 'Đã hủy'].includes(order.status)) {
+        return next(new ErrorHandler(`Không thể hủy đơn hàng ở trạng thái ${order.status}`, 400));
+    }
+
+    order.status = 'Đã hủy';
+    order.statusHistory.push({
+        status: 'Đã hủy',
+        timestamp: new Date(),
+        note: reason ? `Khách hàng hủy đơn hàng - Lý do: ${reason}` : 'Khách hàng hủy đơn hàng'
+    });
+
+    await order.save();
+
+    res.status(200).json({
+        status: true,
+        message: 'Hủy đơn hàng thành công',
+        data: order
+    });
+});
 
 // VERIFY PAYMENT (PAYOS)
-exports.verifyPayment = async (req, res, next) => {
-    try {
-        const order = await Order.findById(req.params.id);
-        if (!order) {
-            return res.status(404).json({
-                status: false,
-                message: 'Không tìm thấy đơn hàng'
-            });
-        }
+exports.verifyPayment = catchAsyncErrors(async (req, res, next) => {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+        return next(new ErrorHandler('Không tìm thấy đơn hàng', 404));
+    }
 
-        if (order.paymentMethod === 'Cổng thanh toán PayOS' && order.paymentCode) {
-            const paymentLinkInfo = await payos.paymentRequests.get(order.paymentCode);
+    if (order.paymentMethod === 'Cổng thanh toán PayOS' && order.paymentCode) {
+        const paymentLinkInfo = await payos.paymentRequests.get(order.paymentCode);
 
-            if (paymentLinkInfo && paymentLinkInfo.status === 'PAID') {
-                if (!order.isPaid) {
-                    order.isPaid = true;
-                    order.paidAt = new Date();
-                    if (order.status === 'Chờ xác nhận') {
-                        order.status = 'Đã xác nhận';
-                        order.statusHistory.push({
-                            status: 'Đã xác nhận',
-                            timestamp: new Date(),
-                            note: 'Thanh toán thành công qua PayOS'
-                        });
-                    }
-                    await order.save();
+        if (paymentLinkInfo && paymentLinkInfo.status === 'PAID') {
+            if (!order.isPaid) {
+                order.isPaid = true;
+                order.paidAt = new Date();
+                if (order.status === 'Chờ xác nhận') {
+                    order.status = 'Đã xác nhận';
+                    order.statusHistory.push({
+                        status: 'Đã xác nhận',
+                        timestamp: new Date(),
+                        note: 'Thanh toán thành công qua PayOS'
+                    });
                 }
+                await order.save();
             }
         }
-
-        res.status(200).json({
-            status: true,
-            data: order
-        });
-    } catch (error) {
-        // PayOS might throw if orderCode not found or other API errors
-        console.error("Payment verification failed:", error);
-        res.status(200).json({ status: true, data: await Order.findById(req.params.id) });
     }
-};
+
+    res.status(200).json({
+        status: true,
+        data: order
+    });
+});
 
 // LOOKUP GUEST ORDER
-exports.lookupOrder = async (req, res, next) => {
+exports.lookupOrder = catchAsyncErrors(async (req, res, next) => {
     const { orderNumber, phone } = req.body;
 
-    try {
-        if (!orderNumber || !phone) {
-            return res.status(400).json({
-                status: false,
-                message: 'Vui lòng nhập Mã đơn hàng và Số điện thoại'
-            });
-        }
-
-        const order = await Order.findOne({
-            orderNumber: orderNumber.toUpperCase(),
-            'deliveryInfo.phone': phone
-        }).populate('items.productId');
-
-        if (!order) {
-            return res.status(404).json({
-                status: false,
-                message: 'Không tìm thấy đơn hàng với thông tin trên'
-            });
-        }
-
-        res.status(200).json({
-            status: true,
-            data: order
-        });
-    } catch (error) {
-        next(error);
+    if (!orderNumber || !phone) {
+        return next(new ErrorHandler('Vui lòng nhập Mã đơn hàng và Số điện thoại', 400));
     }
-};
+
+    const order = await Order.findOne({
+        orderNumber: orderNumber.toUpperCase(),
+        'deliveryInfo.phone': phone
+    }).populate('items.productId');
+
+    if (!order) {
+        return next(new ErrorHandler('Không tìm thấy đơn hàng với thông tin trên', 404));
+    }
+
+    res.status(200).json({
+        status: true,
+        data: order
+    });
+});
 
 // GET SHIPPING CONFIG
 exports.getShippingConfig = (req, res) => {

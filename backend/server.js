@@ -5,6 +5,14 @@ const cookieParser = require('cookie-parser');
 const { connectDatabase } = require('./config/config');
 const cloudinary = require('cloudinary').v2
 const cors = require('cors')
+const { errorMiddleware } = require('./middleware/errors');
+
+// Handle Uncaught exceptions
+process.on('uncaughtException', err => {
+  console.log(`ERROR: ${err.stack}`);
+  console.log('Shutting down server due to Uncaught Exception');
+  process.exit(1)
+})
 
 // Routes
 const authRoutes = require('./routes/auth');
@@ -35,43 +43,19 @@ app.use('/api/v1', storeRoutes);
 app.use('/api/v1', ingredientRoutes);
 app.use('/api/v1', roleRoutes);
 app.use('/api/v1', statsRoutes);
-// app.use('/api/v1', configRoutes);
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-})
+// Middleware to handle errors
+app.use(errorMiddleware);
 
-app.use((err, req, res, next) => {
-  let error = { ...err }
-
-  error.message = err.message;
-
-  // Wrong Mongoose Object ID Error
-  if (err.name === 'CastError') {
-    const message = `Resource not found. Invalid: ${err.path}`
-    error = new Error(message)
-  }
-
-  // Handling Mongoose Validation Error
-  if (err.name === 'ValidationError') {
-    const message = Object.values(err.errors).map(value => value.message);
-    error = new Error(message)
-  }
-
-  // Handling Mongoose duplicate key errors
-  if (err.code === 11000) {
-    const message = `Duplicate ${Object.keys(err.keyValue)} entered`
-    error = new Error(message)
-  }
-
-  res.status(error.statusCode || 500).json({
-    success: false,
-    message: error.message || 'Internal Server Error'
-  })
-})
-
-app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, () => {
   console.log(`Server listening on port ${process.env.PORT}`)
+})
+
+// Handle Unhandled Promise rejections
+process.on('unhandledRejection', err => {
+  console.log(`ERROR: ${err.message}`);
+  console.log('Shutting down the server due to Unhandled Promise rejection');
+  server.close(() => {
+    process.exit(1)
+  })
 })
