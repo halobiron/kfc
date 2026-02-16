@@ -47,15 +47,23 @@ app.use('/api/v1', statsRoutes);
 // Middleware to handle errors
 app.use(errorMiddleware);
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(`Server listening on port ${process.env.PORT}`)
-})
+if (require.main === module) {
+  if (process.env.NODE_ENV !== 'PRODUCTION') {
+    require('dotenv').config({ path: 'backend/config/config.env' })
+  }
 
-// Handle Unhandled Promise rejections
-process.on('unhandledRejection', err => {
-  console.log(`ERROR: ${err.message}`);
-  console.log('Shutting down the server due to Unhandled Promise rejection');
-  server.close(() => {
-    process.exit(1)
+  const server = app.listen(process.env.PORT || 4000, () => {
+    console.log(`Server started on PORT: ${process.env.PORT || 4000} in ${process.env.NODE_ENV} mode.`)
   })
-})
+
+  // Handle Unhandled Promise rejections
+  process.on('unhandledRejection', err => {
+    console.log(`ERROR: ${err.message}`);
+    console.log('Shutting down the server due to Unhandled Promise rejection');
+    server.close(() => {
+      process.exit(1)
+    })
+  })
+}
+
+module.exports = app;

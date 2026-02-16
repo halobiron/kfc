@@ -34,7 +34,7 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename="/admin">
         <ToastContainer
           position="top-right"
           autoClose={3000}
@@ -51,19 +51,19 @@ function App() {
           <Route element={<RequireAuth><AdminLayout /></RequireAuth>}>
             {/* Render Main Routes from Config */}
             {routesConfig.map(route => (
-              <Route 
-                key={route.path} 
-                path={route.path} 
-                element={route.component} 
+              <Route
+                key={route.path}
+                path={route.path}
+                element={route.component}
               />
             ))}
 
             {/* Render Other Routes */}
             {otherRoutes.map(route => (
-              <Route 
-                key={route.path} 
-                path={route.path} 
-                element={route.component} 
+              <Route
+                key={route.path}
+                path={route.path}
+                element={route.component}
               />
             ))}
           </Route>
