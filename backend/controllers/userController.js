@@ -221,7 +221,7 @@ exports.createUser = async (req, res, next) => {
     try {
         const { name, email, password, role, phone } = req.body;
         const Role = require('../models/roleSchema');
-        const roleObj = await Role.findOne({ name: role });
+        const roleObj = await Role.findOne({ code: role });
 
         const user = await User.create({
             name,
@@ -260,7 +260,7 @@ exports.updateUser = async (req, res, next) => {
         // If role changed, find the role object
         if (req.body.role) {
             const Role = require('../models/roleSchema');
-            const roleObj = await Role.findOne({ name: req.body.role });
+            const roleObj = await Role.findOne({ code: req.body.role });
             if (roleObj) {
                 newData.role = roleObj._id;
             } else {

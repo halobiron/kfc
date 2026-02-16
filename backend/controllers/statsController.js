@@ -48,7 +48,7 @@ exports.getDashboardStats = async (req, res, next) => {
 
         // 3. New Customers
         // Find 'user' role first
-        const userRole = await Role.findOne({ name: 'user' });
+        const userRole = await Role.findOne({ code: 'CUSTOMER' });
         let newCustomers = 0;
 
         if (userRole) {

@@ -5,38 +5,90 @@ const Ingredient = require('../models/ingredientSchema');
 const payos = require('../utils/payosClient');
 const { calculateShippingFee } = require('../utils/shipping');
 
-// CREATE ORDER
+// --- HELPER FUNCTIONS ---
+
+// Helper: Validate and Calculate Coupon Discount
+const validateAndCalculateCoupon = async (couponCode, subtotal, shippingFee) => {
+    if (!couponCode) return { couponDiscount: 0, error: null };
+
+    const coupon = await Coupon.findOne({ code: couponCode });
+    if (!coupon) return { couponDiscount: 0, error: 'Mã khuyến mãi không tìm thấy' };
+
+    if (!coupon.isActive) return { couponDiscount: 0, error: 'Mã khuyến mãi đã ngưng hoạt động' };
+
+    const now = new Date();
+    if (coupon.startDate && new Date(coupon.startDate) > now) return { couponDiscount: 0, error: 'Mã khuyến mãi chưa đến đợt sử dụng' };
+    if (coupon.expiryDate && new Date(coupon.expiryDate) < now) return { couponDiscount: 0, error: 'Mã khuyến mãi đã hết hạn' };
+    if (coupon.usedCount >= coupon.maxUsage) return { couponDiscount: 0, error: 'Mã khuyến mãi đã hết lượt sử dụng' };
+    if (subtotal < coupon.minOrder) return { couponDiscount: 0, error: `Mã khuyến mãi yêu cầu đơn hàng tối thiểu ${coupon.minOrder}` };
+
+    let couponDiscount = 0;
+    if (coupon.type === 'percent') {
+        couponDiscount = Math.floor(subtotal * (coupon.discount / 100));
+    } else if (coupon.type === 'shipping') {
+        couponDiscount = shippingFee;
+    } else {
+        couponDiscount = coupon.discount;
+    }
+
+    return { couponDiscount, coupon, error: null };
+};
+
+// Helper: Handle PayOS Payment Creation
+const handlePayOSPayment = async (order, totalAmount) => {
+    // Generate numeric order code for PayOS (using timestamp + random part if needed, max 53 bit)
+    const paymentCode = Number(String(Date.now()).slice(-10));
+
+    order.paymentCode = paymentCode;
+    await order.save();
+
+    const parsedAmount = parseInt(totalAmount);
+    const returnUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/order-success?orderId=${order._id}&status=success`;
+    const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/checkout?status=cancelled`;
+
+    const orderBody = {
+        orderCode: paymentCode,
+        amount: parsedAmount,
+        description: `Order ${order.orderNumber}`,
+        returnUrl: returnUrl,
+        cancelUrl: cancelUrl
+    };
+
+    try {
+        const paymentLinkResponse = await payos.paymentRequests.create(orderBody);
+        return { success: true, checkoutUrl: paymentLinkResponse.checkoutUrl };
+    } catch (payOsError) {
+        console.error('PayOS create link error:', payOsError);
+        // Clean up checking order if payment link fails? 
+        // Strategy: Delete order and return error
+        await Order.findByIdAndDelete(order._id);
+        return { success: false, error: payOsError.message };
+    }
+};
+
+// CREATE ORDER (Refactored)
 exports.createOrder = async (req, res, next) => {
     const { items, deliveryType, deliveryInfo, paymentMethod, couponCode } = req.body;
 
     try {
         // Validate items
         if (!items || items.length === 0) {
-            return res.status(400).json({
-                status: false,
-                message: 'Đơn hàng phải có ít nhất một sản phẩm'
-            });
+            return res.status(400).json({ status: false, message: 'Đơn hàng phải có ít nhất một sản phẩm' });
         }
 
         let subtotal = 0;
         const orderItems = [];
 
-        // Verify products and calculate subtotal
-        for (const item of items) {
-            const product = await Product.findById(item.productId);
-            if (!product) {
-                return res.status(404).json({
-                    status: false,
-                    message: `Sản phẩm ${item.productId} không tìm thấy`
-                });
-            }
+        // 1. Get products and calculate subtotal
+        const productIds = items.map(item => item.productId);
+        const products = await Product.find({ _id: { $in: productIds } });
+        const productMap = new Map();
+        products.forEach(p => productMap.set(p._id.toString(), p));
 
-            if (product.stock < item.quantity) {
-                return res.status(400).json({
-                    status: false,
-                    message: `Sản phẩm ${product.title} không đủ số lượng`
-                });
-            }
+        for (const item of items) {
+            const product = productMap.get(item.productId);
+            if (!product) return res.status(404).json({ status: false, message: `Sản phẩm ${item.productId} không tìm thấy` });
+            if (product.stock < item.quantity) return res.status(400).json({ status: false, message: `Sản phẩm ${product.title} không đủ số lượng` });
 
             subtotal += product.price * item.quantity;
             orderItems.push({
@@ -45,79 +97,27 @@ exports.createOrder = async (req, res, next) => {
                 price: product.price,
                 quantity: item.quantity
             });
-
-            // Reduce stock
             product.stock -= item.quantity;
-            await product.save();
         }
 
-        // Calculate shipping fee
+        // 2. Shipping Fee
         const shippingFee = calculateShippingFee({ deliveryType, subtotal });
 
-        // Apply coupon if provided
-        let couponDiscount = 0;
-        if (couponCode) {
-            const coupon = await Coupon.findOne({ code: couponCode });
-            if (!coupon) {
-                return res.status(404).json({
-                    status: false,
-                    message: 'Mã khuyến mãi không tìm thấy'
-                });
-            }
+        // 3. Coupon Logic (Extracted)
+        const { couponDiscount, coupon, error: couponError } = await validateAndCalculateCoupon(couponCode, subtotal, shippingFee);
+        if (couponError) return res.status(400).json({ status: false, message: couponError });
 
-            if (!coupon.isActive) {
-                return res.status(400).json({
-                    status: false,
-                    message: 'Mã khuyến mãi đã ngưng hoạt động'
-                });
-            }
-
-            const now = new Date();
-            if (coupon.startDate && new Date(coupon.startDate) > now) {
-                return res.status(400).json({
-                    status: false,
-                    message: 'Mã khuyến mãi chưa đến đợt sử dụng'
-                });
-            }
-
-            if (coupon.expiryDate && new Date(coupon.expiryDate) < now) {
-                return res.status(400).json({
-                    status: false,
-                    message: 'Mã khuyến mãi đã hết hạn'
-                });
-            }
-
-            if (coupon.usedCount >= coupon.maxUsage) {
-                return res.status(400).json({
-                    status: false,
-                    message: 'Mã khuyến mãi đã hết lượt sử dụng'
-                });
-            }
-
-            if (subtotal < coupon.minOrder) {
-                return res.status(400).json({
-                    status: false,
-                    message: `Mã khuyến mãi yêu cầu đơn hàng tối thiểu ${coupon.minOrder}`
-                });
-            }
-
-            // Calculate discount
-            if (coupon.type === 'percent') {
-                couponDiscount = Math.floor(subtotal * (coupon.discount / 100));
-            } else if (coupon.type === 'shipping') {
-                couponDiscount = shippingFee;
-            } else {
-                couponDiscount = coupon.discount;
-            }
-
-            // Update coupon usage
+        if (coupon) {
             coupon.usedCount += 1;
             await coupon.save();
         }
 
         const totalAmount = Math.max(0, subtotal - couponDiscount + shippingFee);
 
-        // Create order
+        // 4. Save Order
+        // Save updated product stocks first (Optimistic)
+        await Promise.all(products.map(p => p.save()));
+
         const order = await Order.create({
             userId: req.user?.id || null,
             items: orderItems,
@@ -135,62 +135,29 @@ exports.createOrder = async (req, res, next) => {
             subtotal,
             shippingFee,
             totalAmount,
-            statusHistory: [
-                {
-                    status: 'Chờ xác nhận',
-                    timestamp: new Date(),
-                    note: 'Đơn hàng vừa được tạo'
-                }
-            ]
+            statusHistory: [{ status: 'Chờ xác nhận', timestamp: new Date(), note: 'Đơn hàng vừa được tạo' }]
         });
 
+        // 5. Payment Handling
         if (paymentMethod === 'Cổng thanh toán PayOS') {
-            // Generate numeric order code for PayOS (using timestamp + random part if needed, max 53 bit)
-            // PayOS orderCode must be integer
-            const paymentCode = Number(String(Date.now()).slice(-10));
-
-            order.paymentCode = paymentCode;
-            await order.save();
-
-            const parsedAmount = parseInt(totalAmount);
-            const returnUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/order-success?orderId=${order._id}&status=success`;
-            const cancelUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/checkout?status=cancelled`;
-
-            const orderBody = {
-                orderCode: paymentCode,
-                amount: parsedAmount,
-                description: `Order ${order.orderNumber}`,
-                returnUrl: returnUrl,
-                cancelUrl: cancelUrl
-            };
-
-            try {
-                const paymentLinkResponse = await payos.paymentRequests.create(orderBody);
-                return res.status(201).json({
-                    status: true,
-                    message: 'Tạo đơn hàng thành công',
-                    data: order,
-                    checkoutUrl: paymentLinkResponse.checkoutUrl
-                });
-            } catch (payOsError) {
-                console.error('PayOS create link error:', payOsError);
-                // If PayOS link generation fails, we should delete the order 
-                // and inform the user so they can try again or choose another method.
-                await Order.findByIdAndDelete(order._id);
-
+            const paymentResult = await handlePayOSPayment(order, totalAmount);
+            if (!paymentResult.success) {
                 return res.status(500).json({
                     status: false,
                     message: 'Lỗi khi tạo link thanh toán PayOS. Vui lòng thử lại hoặc chọn phương thức khác.',
-                    error: payOsError.message
+                    error: paymentResult.error
                 });
             }
+            return res.status(201).json({
+                status: true,
+                message: 'Tạo đơn hàng thành công',
+                data: order,
+                checkoutUrl: paymentResult.checkoutUrl
+            });
         }
 
-        res.status(201).json({
-            status: true,
-            message: 'Tạo đơn hàng thành công',
-            data: order
-        });
+        res.status(201).json({ status: true, message: 'Tạo đơn hàng thành công', data: order });
+
     } catch (error) {
         next(error);
     }
