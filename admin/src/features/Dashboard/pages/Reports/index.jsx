@@ -17,6 +17,7 @@ import {
 } from 'chart.js';
 import { Line, Doughnut } from 'react-chartjs-2';
 import { formatCurrency } from '../../../../utils/formatters';
+import Loading from '../../../../components/Common/Loading';
 
 const TIME_RANGES = [
     { value: 'week', label: 'Tuần' },
@@ -187,11 +188,7 @@ const Reports = () => {
             </div>
 
             {loading ? (
-                <div className="d-flex justify-content-center my-5">
-                    <div className="spinner-border text-primary" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
+                <Loading center text="Đang tải báo cáo..." />
             ) : (
                 <>
                     {/* Stats Cards */}

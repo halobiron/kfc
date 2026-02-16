@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -7,26 +6,20 @@ import './Loading.css';
 const Loading = ({
     size = 'md',
     center = false,
-    fullScreen = false,
     text = 'Đang tải...',
     className = ''
 }) => {
-    // Determine size class
-    const sizeClass = size === 'lg' ? 'spinner-lg' :
-        size === 'sm' ? 'spinner-sm' : '';
+    const sizeClass = size === 'sm' ? 'spinner-border-sm' :
+        size === 'lg' ? 'spinner-lg' : '';
 
-    // Determine container class based on props
-    let containerClass = 'loading-inline';
-    if (fullScreen) {
-        containerClass = 'loading-fullscreen';
-    } else if (center) {
-        containerClass = 'loading-center';
-    }
+    const containerClass = center ? 'loading-center' : 'loading-inline';
 
     return (
         <div className={`${containerClass} ${className}`}>
-            <div className={`spinner ${sizeClass}`}></div>
-            {text && <span className={(fullScreen || center) ? "mt-2 text-muted" : "text-muted"}>{text}</span>}
+            <div className={`spinner-border text-primary ${sizeClass}`} role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
+            {text && <div className={center ? "mt-2 text-muted fw-medium" : "text-muted small"}>{text}</div>}
         </div>
     );
 };
@@ -34,7 +27,6 @@ const Loading = ({
 Loading.propTypes = {
     size: PropTypes.oneOf(['sm', 'md', 'lg']),
     center: PropTypes.bool,
-    fullScreen: PropTypes.bool,
     text: PropTypes.string,
     className: PropTypes.string
 };
