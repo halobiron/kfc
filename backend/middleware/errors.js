@@ -14,7 +14,7 @@ exports.errorMiddleware = (err, req, res, next) => {
     }
 
     // Production mode: cleaner errors
-    if (process.env.NODE_ENV === 'PRODUCTION' || true) { // Defaulting to cleaner errors for now
+    if (process.env.NODE_ENV === 'PRODUCTION') {
         let error = { ...err }
         error.message = err.message;
 
