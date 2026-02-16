@@ -12,25 +12,13 @@ const storeSchema = new Schema({
         type: String,
         required: [true, 'Địa chỉ là bắt buộc']
     },
-    city: {
-        type: String,
-        required: [true, 'Thành phố là bắt buộc']
-    },
     phone: {
         type: String,
         required: [true, 'Số điện thoại là bắt buộc']
     },
-    email: {
-        type: String,
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Email không hợp lệ']
-    },
     openTime: {
         type: String,
         default: '08:00 - 22:00'
-    },
-    closeTime: {
-        type: String,
-        default: '22:00'
     },
     latitude: {
         type: Number
@@ -41,17 +29,7 @@ const storeSchema = new Schema({
     services: [
         {
             type: String,
-            enum: ['dine-in', 'takeaway', 'delivery', 'drive-through']
-        }
-    ],
-    manager: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    staff: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
+            enum: ['Tại chỗ', 'Mang đi', 'Giao hàng', 'Drive-thru', 'Wifi', 'Khu vui chơi trẻ em']
         }
     ],
     isActive: {

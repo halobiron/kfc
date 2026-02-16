@@ -8,7 +8,7 @@ import StatusModal from '../../../../components/Common/StatusModal';
 import Button from '../../../../components/Common/Button';
 import Table from '../../../../components/Common/Table';
 import OrderStatusBadge from '../../components/OrderStatusBadge';
-import { getOrderStatusMeta } from '../../components/OrderStatusBadge/orderStatus';
+import { getOrderStatusMeta, ORDER_STATUS } from '../../components/OrderStatusBadge/orderStatus';
 import { formatCurrency } from '../../../../utils/formatters';
 import './Order.css';
 
@@ -23,7 +23,7 @@ const OrderCustomerCell = ({ order }) => {
       <small className="text-muted d-block">{order.deliveryInfo?.phone}</small>
       <small className="text-muted d-block" style={{ fontSize: '0.8rem', maxWidth: '200px' }}>
         <FiMapPin className="me-1" size={12} />
-        {order.deliveryType === 'pickup' ? 'Tại cửa hàng' : shortAddress}
+        {order.deliveryType === 'Đến lấy' ? 'Tại cửa hàng' : shortAddress}
       </small>
     </td>
   );
@@ -49,34 +49,34 @@ const OrderActionButtons = ({ order, onOpenUpdateModal, onCancelClick }) => (
     >
       <FiEye />
     </Link>
-    {order.status === 'pending' && (
+    {order.status === ORDER_STATUS.PENDING && (
       <Button
         size="sm"
         variant="outline-success"
-        onClick={() => onOpenUpdateModal(order._id, 'confirmed')}
+        onClick={() => onOpenUpdateModal(order._id, ORDER_STATUS.CONFIRMED)}
         title="Duyệt đơn"
         icon={<FiCheck />}
       />
     )}
-    {order.status === 'ready' && (
+    {order.status === ORDER_STATUS.READY && (
       <Button
         size="sm"
         variant="outline-primary"
-        onClick={() => onOpenUpdateModal(order._id, 'shipping')}
+        onClick={() => onOpenUpdateModal(order._id, ORDER_STATUS.SHIPPING)}
         title="Giao hàng"
         icon={<FiTruck />}
       />
     )}
-    {order.status === 'shipping' && (
+    {order.status === ORDER_STATUS.SHIPPING && (
       <Button
         size="sm"
         variant="outline-success"
-        onClick={() => onOpenUpdateModal(order._id, 'delivered')}
+        onClick={() => onOpenUpdateModal(order._id, ORDER_STATUS.DELIVERED)}
         title="Hoàn thành"
         icon={<FiCheckCircle />}
       />
     )}
-    {(order.status !== 'cancelled' && order.status !== 'delivered') && (
+    {(order.status !== ORDER_STATUS.CANCELLED && order.status !== ORDER_STATUS.DELIVERED) && (
       <Button
         size="sm"
         variant="outline-danger"
@@ -134,7 +134,7 @@ const Order = () => {
   };
 
   const handleCancelClick = (id) => {
-    openUpdateModal(id, 'cancelled');
+    openUpdateModal(id, ORDER_STATUS.CANCELLED);
   };
 
   const columns = [
@@ -161,10 +161,10 @@ const Order = () => {
     {
       header: 'Thao tác',
       render: (order) => (
-        <OrderActionButtons 
-          order={order} 
-          onOpenUpdateModal={openUpdateModal} 
-          onCancelClick={handleCancelClick} 
+        <OrderActionButtons
+          order={order}
+          onOpenUpdateModal={openUpdateModal}
+          onCancelClick={handleCancelClick}
         />
       )
     }
@@ -178,7 +178,7 @@ const Order = () => {
 
       <div className="card">
         <div className="card-header">Danh sách đơn hàng</div>
-        <Table 
+        <Table
           columns={columns}
           data={filteredOrders}
           loading={loading}
@@ -193,7 +193,7 @@ const Order = () => {
         status={targetStatus}
         statusLabel={getOrderStatusMeta(targetStatus).label}
         loading={updating}
-        title={targetStatus === 'cancelled' ? 'Xác nhận Hủy đơn hàng' : 'Cập nhật trạng thái'}
+        title={targetStatus === ORDER_STATUS.CANCELLED ? 'Xác nhận Hủy đơn hàng' : 'Cập nhật trạng thái'}
       />
     </>
   )

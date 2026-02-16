@@ -11,8 +11,8 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
             </h3>
             <div className="checkout-options-grid payment-methods">
                 {[
-                    { id: 'cod', icon: 'bi bi-cash-coin', label: 'Thanh toán khi nhận hàng (COD)' },
-                    { id: 'payos', icon: 'bi bi-qr-code-scan', label: 'Thanh toán Online (QR/Thẻ/Ví)' }
+                    { id: 'Tiền mặt', icon: 'bi bi-cash-coin', label: 'Thanh toán khi nhận hàng (COD)' },
+                    { id: 'Cổng thanh toán PayOS', icon: 'bi bi-qr-code-scan', label: 'Thanh toán Online (QR/Thẻ/Ví)' }
                 ].map(method => (
                     <div
                         key={method.id}

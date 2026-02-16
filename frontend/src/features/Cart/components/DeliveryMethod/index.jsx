@@ -10,8 +10,8 @@ const DeliveryMethod = ({ deliveryType, setDeliveryType }) => {
             </h3>
             <div className="checkout-options-grid">
                 <div
-                    className={`checkout-option ${deliveryType === 'delivery' ? 'selected' : ''}`}
-                    onClick={() => setDeliveryType('delivery')}
+                    className={`checkout-option ${deliveryType === 'Giao hàng' ? 'selected' : ''}`}
+                    onClick={() => setDeliveryType('Giao hàng')}
                 >
                     <i className="bi bi-house-door-fill"></i>
                     <span>Giao hàng tận nơi</span>
@@ -19,8 +19,8 @@ const DeliveryMethod = ({ deliveryType, setDeliveryType }) => {
                 </div>
 
                 <div
-                    className={`checkout-option ${deliveryType === 'pickup' ? 'selected' : ''}`}
-                    onClick={() => setDeliveryType('pickup')}
+                    className={`checkout-option ${deliveryType === 'Đến lấy' ? 'selected' : ''}`}
+                    onClick={() => setDeliveryType('Đến lấy')}
                 >
                     <i className="bi bi-shop"></i>
                     <span>Đặt Hẹn Đến Lấy</span>

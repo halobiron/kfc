@@ -19,14 +19,6 @@ L.Icon.Default.mergeOptions({
     shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-const SERVICE_MAP = {
-    'dine-in': 'Tại chỗ',
-    'takeaway': 'Mang đi',
-    'delivery': 'Giao hàng',
-    'drive-through': 'Drive-thru',
-    'wifi': 'Wifi',
-    'kids': 'Khu vui chơi trẻ em'
-};
 
 const createKfcIcon = (isActive, index) => L.divIcon({
     className: 'custom-kfc-marker',
@@ -261,7 +253,7 @@ const StoreSystem = () => {
                                             <h6><i className="bi bi-gear me-2"></i>Dịch vụ</h6>
                                             <div className="service-tags">
                                                 {store.services.map((s, idx) => (
-                                                    <span key={idx} className="service-tag">{SERVICE_MAP[s] || s}</span>
+                                                    <span key={idx} className="service-tag">{s}</span>
                                                 ))}
                                             </div>
                                         </div>

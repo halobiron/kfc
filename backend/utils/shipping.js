@@ -19,7 +19,7 @@ const getShippingConfig = () => {
 const calculateShippingFee = ({ deliveryType, subtotal }) => {
     const { freeShippingThreshold, shippingFee, pickupFee } = getShippingConfig();
 
-    if (deliveryType === 'pickup') return pickupFee;
+    if (deliveryType === 'Đến lấy') return pickupFee;
     if (subtotal >= freeShippingThreshold) return 0;
     return shippingFee;
 };

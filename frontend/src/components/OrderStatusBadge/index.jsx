@@ -1,7 +1,7 @@
 import React from 'react';
 import './OrderStatusBadge.css';
 import { STATUS_CONFIG } from './orderStatus';
-export { STATUS_OPTIONS } from './orderStatus';
+export { STATUS_OPTIONS, ORDER_STATUS } from './orderStatus';
 
 const OrderStatusBadge = ({ status }) => {
     const config = STATUS_CONFIG[status];

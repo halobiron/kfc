@@ -81,7 +81,7 @@ const OrderSummary = ({
             <div className="d-flex justify-content-between mb-2">
                 <span className="text-muted">Phí giao hàng</span>
                 <div className="text-end">
-                    {deliveryType === 'pickup' ? (
+                    {deliveryType === 'Đến lấy' ? (
                         <span className="kfc-price text-success">Miễn phí</span>
                     ) : (
                         <>

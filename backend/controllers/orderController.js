@@ -137,14 +137,14 @@ exports.createOrder = async (req, res, next) => {
             totalAmount,
             statusHistory: [
                 {
-                    status: 'pending',
+                    status: 'Chờ xác nhận',
                     timestamp: new Date(),
                     note: 'Đơn hàng vừa được tạo'
                 }
             ]
         });
 
-        if (paymentMethod === 'payos') {
+        if (paymentMethod === 'Cổng thanh toán PayOS') {
             // Generate numeric order code for PayOS (using timestamp + random part if needed, max 53 bit)
             // PayOS orderCode must be integer
             const paymentCode = Number(String(Date.now()).slice(-10));
@@ -269,7 +269,7 @@ exports.updateOrderStatus = async (req, res, next) => {
         }
 
         // START: Logic trừ nguyên liệu khi bắt đầu nấu (status: preparing)
-        if (status === 'preparing' && order.status !== 'preparing') {
+        if (status === 'Đang chuẩn bị' && order.status !== 'Đang chuẩn bị') {
             const ingredientsToUpdate = [];
 
             // 1. Tính toán tổng nguyên liệu cần thiết
@@ -324,12 +324,12 @@ exports.updateOrderStatus = async (req, res, next) => {
             note: note || ''
         });
 
-        if (status === 'delivered') {
+        if (status === 'Đã giao hàng') {
             order.isPaid = true;
             order.paidAt = new Date();
         }
 
-        if (status === 'cancelled') {
+        if (status === 'Đã hủy') {
             // Restore product stock
             for (const item of order.items) {
                 const product = await Product.findById(item.productId);
@@ -417,7 +417,7 @@ exports.cancelOrder = async (req, res, next) => {
             });
         }
 
-        if (['shipping', 'delivered', 'cancelled'].includes(order.status)) {
+        if (['Đang giao hàng', 'Đã giao hàng', 'Đã hủy'].includes(order.status)) {
             return res.status(400).json({
                 status: false,
                 message: `Không thể hủy đơn hàng ở trạng thái ${order.status}`
@@ -433,9 +433,9 @@ exports.cancelOrder = async (req, res, next) => {
             }
         }
 
-        order.status = 'cancelled';
+        order.status = 'Đã hủy';
         order.statusHistory.push({
-            status: 'cancelled',
+            status: 'Đã hủy',
             timestamp: new Date(),
             note: reason ? `Khách hàng hủy đơn hàng - Lý do: ${reason}` : 'Khách hàng hủy đơn hàng'
         });
@@ -463,17 +463,17 @@ exports.verifyPayment = async (req, res, next) => {
             });
         }
 
-        if (order.paymentMethod === 'payos' && order.paymentCode) {
+        if (order.paymentMethod === 'Cổng thanh toán PayOS' && order.paymentCode) {
             const paymentLinkInfo = await payos.paymentRequests.get(order.paymentCode);
 
             if (paymentLinkInfo && paymentLinkInfo.status === 'PAID') {
                 if (!order.isPaid) {
                     order.isPaid = true;
                     order.paidAt = new Date();
-                    if (order.status === 'pending') {
-                        order.status = 'confirmed';
+                    if (order.status === 'Chờ xác nhận') {
+                        order.status = 'Đã xác nhận';
                         order.statusHistory.push({
-                            status: 'confirmed',
+                            status: 'Đã xác nhận',
                             timestamp: new Date(),
                             note: 'Thanh toán thành công qua PayOS'
                         });

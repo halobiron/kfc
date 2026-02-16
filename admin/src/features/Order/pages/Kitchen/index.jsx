@@ -3,6 +3,7 @@ import { FiClock, FiCheckCircle, FiAlertCircle, FiPackage } from 'react-icons/fi
 import StatCard from '../../../../components/Common/StatCard';
 import OrderCard from '../../components/OrderCard/OrderCard';
 import useKitchenOrders from '../../hooks/useKitchenOrders';
+import { ORDER_STATUS } from '../../components/OrderStatusBadge/orderStatus';
 import './Kitchen.css';
 
 const Kitchen = () => {
@@ -28,7 +29,7 @@ const Kitchen = () => {
         <div className="col-md-4">
           <StatCard
             label="Cần chế biến"
-            value={getOrdersByStatus('confirmed').length}
+            value={getOrdersByStatus(ORDER_STATUS.CONFIRMED).length}
             icon={<FiClock size={24} />}
             color="warning"
           />
@@ -36,7 +37,7 @@ const Kitchen = () => {
         <div className="col-md-4">
           <StatCard
             label="Đang nấu"
-            value={getOrdersByStatus('preparing').length}
+            value={getOrdersByStatus(ORDER_STATUS.PREPARING).length}
             icon={<FiAlertCircle size={24} />}
             color="info"
           />
@@ -44,7 +45,7 @@ const Kitchen = () => {
         <div className="col-md-4">
           <StatCard
             label="Sẵn sàng (Chờ giao)"
-            value={getOrdersByStatus('ready').length}
+            value={getOrdersByStatus(ORDER_STATUS.READY).length}
             icon={<FiCheckCircle size={24} />}
             color="success"
           />
@@ -57,17 +58,17 @@ const Kitchen = () => {
           <div className="card h-100">
             <div className="card-header bg-warning text-dark fw-bold">
               <FiClock className="me-2" />
-              CHỜ CHẾ BIẾN ({getOrdersByStatus('confirmed').length})
+              CHỜ CHẾ BIẾN ({getOrdersByStatus(ORDER_STATUS.CONFIRMED).length})
             </div>
             <div className="card-body p-2 bg-light">
               <div className="orders-column">
-                {getOrdersByStatus('confirmed').length === 0 ? (
+                {getOrdersByStatus(ORDER_STATUS.CONFIRMED).length === 0 ? (
                   <div className="text-center text-muted py-5">
                     <FiClock size={40} className="mb-3 opacity-25" />
                     <p className="mb-0">Không có đơn mới cần làm</p>
                   </div>
                 ) : (
-                  getOrdersByStatus('confirmed').map(order => (
+                  getOrdersByStatus(ORDER_STATUS.CONFIRMED).map(order => (
                     <OrderCard
                       key={order._id}
                       order={order}
@@ -85,17 +86,17 @@ const Kitchen = () => {
           <div className="card h-100">
             <div className="card-header bg-info text-dark fw-bold">
               <FiAlertCircle className="me-2" />
-              ĐANG NẤU ({getOrdersByStatus('preparing').length})
+              ĐANG NẤU ({getOrdersByStatus(ORDER_STATUS.PREPARING).length})
             </div>
             <div className="card-body p-2 bg-light">
               <div className="orders-column">
-                {getOrdersByStatus('preparing').length === 0 ? (
+                {getOrdersByStatus(ORDER_STATUS.PREPARING).length === 0 ? (
                   <div className="text-center text-muted py-5">
                     <FiAlertCircle size={40} className="mb-3 opacity-25" />
                     <p className="mb-0">Bếp đang rảnh</p>
                   </div>
                 ) : (
-                  getOrdersByStatus('preparing').map(order => (
+                  getOrdersByStatus(ORDER_STATUS.PREPARING).map(order => (
                     <OrderCard
                       key={order._id}
                       order={order}
@@ -113,17 +114,17 @@ const Kitchen = () => {
           <div className="card h-100">
             <div className="card-header bg-success text-white fw-bold">
               <FiCheckCircle className="me-2" />
-              SẴN SÀNG GIAO ({getOrdersByStatus('ready').length})
+              SẴN SÀNG GIAO ({getOrdersByStatus(ORDER_STATUS.READY).length})
             </div>
             <div className="card-body p-2 bg-light">
               <div className="orders-column">
-                {getOrdersByStatus('ready').length === 0 ? (
+                {getOrdersByStatus(ORDER_STATUS.READY).length === 0 ? (
                   <div className="text-center text-muted py-5">
                     <FiPackage size={40} className="mb-3 opacity-25" />
                     <p className="mb-0">Chưa có món chờ giao</p>
                   </div>
                 ) : (
-                  getOrdersByStatus('ready').map(order => (
+                  getOrdersByStatus(ORDER_STATUS.READY).map(order => (
                     <OrderCard
                       key={order._id}
                       order={order}

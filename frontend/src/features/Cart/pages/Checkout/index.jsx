@@ -61,9 +61,9 @@ const Checkout = () => {
         note: ''
     });
 
-    const [deliveryType, setDeliveryType] = useState('delivery');
+    const [deliveryType, setDeliveryType] = useState('Giao hàng');
     const [selectedStore, setSelectedStore] = useState('');
-    const [paymentMethod, setPaymentMethod] = useState('cod');
+    const [paymentMethod, setPaymentMethod] = useState('Tiền mặt');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [couponCode, setCouponCode] = useState('');

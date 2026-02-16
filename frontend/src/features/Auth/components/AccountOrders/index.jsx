@@ -7,7 +7,7 @@ import Button from '../../../../components/Button';
 import EmptyState from '../../../../components/EmptyState';
 import Spinner from '../../../../components/Spinner';
 import Card from '../../../../components/Card';
-import OrderStatusBadge, { STATUS_OPTIONS } from '../../../../components/OrderStatusBadge';
+import OrderStatusBadge, { STATUS_OPTIONS, ORDER_STATUS } from '../../../../components/OrderStatusBadge';
 import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
 import OrderDetailModal from '../OrderDetailModal';
 import CancelOrderModal from '../CancelOrderModal';
@@ -161,7 +161,7 @@ const AccountOrders = () => {
                                 >
                                     Xem chi tiết
                                 </Button>
-                                {order.status === 'pending' && (
+                                {order.status === ORDER_STATUS.PENDING && (
                                     <Button
                                         variant="primary"
                                         onClick={() => setOrderToCancel(order)}

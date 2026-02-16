@@ -22,7 +22,7 @@ const DeliveryInfo = ({
         <Card>
             <h3 className="form-title">
                 <i className="bi bi-geo-alt-fill"></i>
-                {deliveryType === 'delivery' ? 'Thông Tin Giao Hàng' : 'Thông Tin Nhận Hàng'}
+                {deliveryType === 'Giao hàng' ? 'Thông Tin Giao Hàng' : 'Thông Tin Nhận Hàng'}
             </h3>
             <div className="row">
                 <FormInput
@@ -46,7 +46,7 @@ const DeliveryInfo = ({
                     required
                 />
 
-                {deliveryType === 'delivery' ? (
+                {deliveryType === 'Giao hàng' ? (
                     <>
                         {savedAddresses && savedAddresses.length > 0 && (
                             <CustomSelect

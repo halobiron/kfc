@@ -26,28 +26,15 @@ const ingredientSchema = new Schema({
         required: true,
         min: 0
     },
-    maxStock: {
-        type: Number
-    },
     cost: {
         type: Number,
         required: true
     },
-    supplier: {
-        type: String
-    },
-    supplierContact: {
-        type: String
-    },
-    expiryDate: Date,
-    batchNumber: String,
-    storageLocation: String,
     description: String,
     isActive: {
         type: Boolean,
         default: true
     },
-    lastRestockDate: Date,
     createdAt: {
         type: Date,
         default: Date.now

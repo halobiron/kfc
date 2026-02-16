@@ -32,7 +32,7 @@ const orderSchema = new Schema({
     ],
     deliveryType: {
         type: String,
-        enum: ['delivery', 'pickup'],
+        enum: ['Giao hàng', 'Đến lấy'],
         required: true
     },
     deliveryInfo: {
@@ -46,8 +46,8 @@ const orderSchema = new Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ['cod', 'card', 'bank', 'payos'],
-        default: 'cod'
+        enum: ['Tiền mặt', 'Thẻ', 'Chuyển khoản', 'Cổng thanh toán PayOS'],
+        default: 'Tiền mặt'
     },
     paymentCode: {
         type: Number
@@ -74,8 +74,8 @@ const orderSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'confirmed', 'preparing', 'ready', 'shipping', 'delivered', 'cancelled'],
-        default: 'pending'
+        enum: ['Chờ xác nhận', 'Đã xác nhận', 'Đang chuẩn bị', 'Sẵn sàng', 'Đang giao hàng', 'Đã giao hàng', 'Đã hủy'],
+        default: 'Chờ xác nhận'
     },
     statusHistory: [
         {

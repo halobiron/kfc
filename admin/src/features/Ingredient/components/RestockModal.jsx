@@ -6,22 +6,18 @@ const RestockModal = ({ show, onHide, onSubmit, ingredient }) => {
     const [importMethod, setImportMethod] = useState('pack');
     const [restockAmount, setRestockAmount] = useState('');
     const [packSize, setPackSize] = useState('1');
-    const [editSupplier, setEditSupplier] = useState('');
-    const [editSupplierContact, setEditSupplierContact] = useState('');
 
     useEffect(() => {
         if (show && ingredient) {
             setImportMethod('pack');
             setRestockAmount('');
             setPackSize('');
-            setEditSupplier(ingredient.supplier || '');
-            setEditSupplierContact(ingredient.supplierContact || '');
         }
     }, [show, ingredient]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         let finalAmount = 0;
         if (importMethod === 'amount') {
             finalAmount = parseFloat(restockAmount);
@@ -29,13 +25,8 @@ const RestockModal = ({ show, onHide, onSubmit, ingredient }) => {
             finalAmount = parseFloat(restockAmount) * parseFloat(packSize);
         }
 
-        const updates = {};
-        if (editSupplier && editSupplier !== ingredient.supplier) updates.supplier = editSupplier;
-        if (editSupplierContact && editSupplierContact !== ingredient.supplierContact) updates.supplierContact = editSupplierContact;
-
         onSubmit({
-            amount: finalAmount,
-            updates
+            amount: finalAmount
         });
     };
 
@@ -124,33 +115,6 @@ const RestockModal = ({ show, onHide, onSubmit, ingredient }) => {
                             />
                         </div>
                     )}
-
-                    <div className="mb-4">
-                        <label className="form-label small">Thông tin Nhà cung cấp</label>
-                        <div className="row g-2">
-                            <div className="col-md-6">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    value={editSupplier}
-                                    onChange={(e) => setEditSupplier(e.target.value)}
-                                    placeholder="Tên NCC (VD: CP Food)"
-                                />
-                            </div>
-                            <div className="col-md-6">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    value={editSupplierContact}
-                                    onChange={(e) => setEditSupplierContact(e.target.value)}
-                                    placeholder="SĐT/Liên hệ"
-                                />
-                            </div>
-                        </div>
-                        <div className="form-text small text-muted">
-                            Cập nhật thông tin nhà cung cấp nếu có thay đổi.
-                        </div>
-                    </div>
 
                     <div className="d-flex gap-2">
                         <Button type="submit" variant="primary" className="w-100 py-2">

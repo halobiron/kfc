@@ -1,11 +1,11 @@
 export const ORDER_STATUS = {
-    PENDING: 'pending',
-    CONFIRMED: 'confirmed',
-    PREPARING: 'preparing',
-    SHIPPING: 'shipping',
-    READY: 'ready',
-    DELIVERED: 'delivered',
-    CANCELLED: 'cancelled',
+    PENDING: 'Chờ xác nhận',
+    CONFIRMED: 'Đã xác nhận',
+    PREPARING: 'Đang chuẩn bị',
+    SHIPPING: 'Đang giao hàng',
+    READY: 'Sẵn sàng',
+    DELIVERED: 'Đã giao hàng',
+    CANCELLED: 'Đã hủy',
 };
 
 const STATUS_DEFINITIONS = [

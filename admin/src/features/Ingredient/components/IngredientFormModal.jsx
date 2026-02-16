@@ -8,8 +8,6 @@ const IngredientFormModal = ({ show, onHide, onSubmit, initialData, isEditing })
         unit: 'Kg',
         minStock: 10,
         cost: '',
-        supplier: '',
-        supplierContact: '',
         stock: 0
     };
 
@@ -112,30 +110,6 @@ const IngredientFormModal = ({ show, onHide, onSubmit, initialData, isEditing })
                                 value={formData.minStock}
                                 onChange={(e) => setFormData({ ...formData, minStock: e.target.value })}
                             />
-                        </div>
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="form-label">Thông tin Nhà cung cấp</label>
-                        <div className="row g-2">
-                            <div className="col-md-6">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    value={formData.supplier}
-                                    onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
-                                    placeholder="Tên nhà cung cấp"
-                                />
-                            </div>
-                            <div className="col-md-6">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    value={formData.supplierContact}
-                                    onChange={(e) => setFormData({ ...formData, supplierContact: e.target.value })}
-                                    placeholder="SĐT/Liên hệ"
-                                />
-                            </div>
                         </div>
                     </div>
 

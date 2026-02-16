@@ -37,7 +37,7 @@ exports.getIngredientById = async (req, res, next) => {
 // CREATE INGREDIENT
 exports.createIngredient = async (req, res, next) => {
     try {
-        const { name, category, unit, stock, minStock, cost, supplier, supplierContact } = req.body;
+        const { name, category, unit, stock, minStock, cost } = req.body;
 
         if (!name || !category || !unit || !stock || !cost) {
             return res.status(400).json({
@@ -52,9 +52,7 @@ exports.createIngredient = async (req, res, next) => {
             unit,
             stock,
             minStock: minStock || 10,
-            cost,
-            supplier,
-            supplierContact
+            cost
         });
 
         res.status(201).json({
@@ -155,10 +153,6 @@ exports.updateStock = async (req, res, next) => {
             });
         }
 
-        if (supplier) ingredient.supplier = supplier;
-        if (supplierContact) ingredient.supplierContact = supplierContact;
-
-        ingredient.lastRestockDate = new Date();
         ingredient.updatedAt = new Date();
         await ingredient.save();
 
