@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { 
-    createOrder, 
-    getUserOrders, 
-    getOrderById, 
-    updateOrderStatus, 
+const {
+    createOrder,
+    getUserOrders,
+    getOrderById,
+    updateOrderStatus,
     getAllOrders,
     deleteOrder,
     cancelOrder,
     verifyPayment,
     lookupOrder
 } = require('../controllers/orderController');
-const { isAuthenticatedUser, authorizeRoles, getUserFromToken } = require('../middleware/auth');
+const { isAuthenticatedUser, getUserFromToken, authorizePermission } = require('../middleware/auth');
 
 // User routes
 router.post('/order/new', getUserFromToken, createOrder);
@@ -21,9 +21,9 @@ router.get('/order/:id', getUserFromToken, getOrderById);
 router.post('/order/:id/cancel', isAuthenticatedUser, cancelOrder);
 router.get('/order/:id/verify-payment', verifyPayment);
 
-// Admin routes
-router.get('/orders', isAuthenticatedUser, authorizeRoles('admin'), getAllOrders);
-router.put('/order/update/:id', isAuthenticatedUser, authorizeRoles('admin'), updateOrderStatus);
-router.delete('/order/delete/:id', isAuthenticatedUser, authorizeRoles('admin'), deleteOrder);
+// Admin/Kitchen/Staff routes
+router.get('/orders', isAuthenticatedUser, authorizePermission('orders.view', 'kitchen.view'), getAllOrders);
+router.put('/order/update/:id', isAuthenticatedUser, authorizePermission('orders.edit', 'kitchen.view'), updateOrderStatus);
+router.delete('/order/delete/:id', isAuthenticatedUser, authorizePermission('orders.edit'), deleteOrder);
 
 module.exports = router;

@@ -28,22 +28,17 @@ exports.isAuthenticatedUser = async (req, res, next) => {
     }
 };
 
-exports.authorizeRoles = (...roles) => {
+
+exports.authorizePermission = (...permissions) => {
     return (req, res, next) => {
-        // req.user.role is now a string code (e.g. 'ADMIN', 'CUSTOMER')
-        if (!roles.includes(req.user.role)) {
+        if (!req.user || !req.user.role) {
             return res.status(403).json({
                 status: false,
-                message: `Chỉ có ${roles.join(', ')} mới có quyền truy cập`
+                message: 'Bạn không có quyền truy cập'
             });
         }
-        next();
-    };
-};
 
-exports.authorizePermission = (permission) => {
-    return (req, res, next) => {
-        const userRole = req.user.role; // Now role is a string code (e.g. 'ADMIN')
+        const userRole = req.user.role.toUpperCase();
 
         // Admin always has full access
         if (userRole === 'ADMIN') {
@@ -52,14 +47,15 @@ exports.authorizePermission = (permission) => {
 
         // Check permissions from token payload
         const userPermissions = req.user.permissions || [];
+        const hasPermission = permissions.some(permission => userPermissions.includes(permission));
 
-        if (userPermissions.includes(permission)) {
+        if (hasPermission) {
             return next();
         }
 
         return res.status(403).json({
             status: false,
-            message: `Bạn không có quyền thực hiện hành động này. Cần quyền: ${permission}`
+            message: `Bạn không có quyền thực hiện hành động này. Cần một trong các quyền: ${permissions.join(', ')}`
         });
     };
 };

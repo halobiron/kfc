@@ -205,7 +205,7 @@ exports.getOrderById = async (req, res, next) => {
         }
 
         const isOwner = order.userId.toString() === req.user.id;
-        if (!isOwner && req.user.role !== 'admin') {
+        if (!isOwner && req.user.role.toUpperCase() !== 'ADMIN') {
             return res.status(403).json({
                 status: false,
                 message: 'Bạn không có quyền xem đơn hàng này'
