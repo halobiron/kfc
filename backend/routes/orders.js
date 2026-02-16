@@ -9,7 +9,8 @@ const {
     deleteOrder,
     cancelOrder,
     verifyPayment,
-    lookupOrder
+    lookupOrder,
+    getShippingConfig
 } = require('../controllers/orderController');
 const { isAuthenticatedUser, getUserFromToken, authorizePermission } = require('../middleware/auth');
 
@@ -20,6 +21,7 @@ router.get('/user/orders', isAuthenticatedUser, getUserOrders);
 router.get('/order/:id', getUserFromToken, getOrderById);
 router.post('/order/:id/cancel', isAuthenticatedUser, cancelOrder);
 router.get('/order/:id/verify-payment', verifyPayment);
+router.get('/config/shipping', getShippingConfig);
 
 // Admin/Kitchen/Staff routes
 router.get('/orders', isAuthenticatedUser, authorizePermission('orders.view', 'kitchen.view'), getAllOrders);

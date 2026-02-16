@@ -473,3 +473,13 @@ exports.lookupOrder = async (req, res, next) => {
         next(error);
     }
 };
+
+// GET SHIPPING CONFIG
+exports.getShippingConfig = (req, res) => {
+    const { getShippingConfig } = require('../utils/shipping');
+    const config = getShippingConfig();
+    res.status(200).json({
+        status: true,
+        data: config
+    });
+};
