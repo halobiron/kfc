@@ -2,8 +2,7 @@ const User = require('../models/userSchema');
 const { catchAsyncErrors } = require('../middleware/errors');
 const ErrorHandler = require('../utils/errorHandler');
 
-// GET USER PROFILE (Deprecated - use authController.getCurrentUser)
-// exports.getUserProfile = async (req, res, next) => { ... }
+
 
 
 // UPDATE USER PROFILE
@@ -221,7 +220,7 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findByIdAndUpdate(req.params.id, newData, {
         new: true,
         runValidators: true,
-        useFindAndModify: false
+
     });
 
     if (!user) {

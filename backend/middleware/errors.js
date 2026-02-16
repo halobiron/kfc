@@ -6,7 +6,7 @@ exports.errorMiddleware = (err, req, res, next) => {
     // Development mode: show stack trace
     if (process.env.NODE_ENV === 'DEVELOPMENT') {
         res.status(err.statusCode).json({
-            success: false,
+            status: false,
             error: err,
             errMessage: err.message,
             stack: err.stack
@@ -49,7 +49,7 @@ exports.errorMiddleware = (err, req, res, next) => {
         }
 
         res.status(error.statusCode || 500).json({
-            success: false,
+            status: false,
             message: error.message || 'Internal Server Error'
         })
     }
