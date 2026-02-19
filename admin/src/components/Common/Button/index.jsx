@@ -36,8 +36,6 @@ const Button = ({
 
     // Join all classes
     const combinedClassName = btnClasses.join(' ');
-    const hasText = children !== undefined && children !== null && children !== '';
-
     return (
         <button
             type={type}
