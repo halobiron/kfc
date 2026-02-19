@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers, createUser, updateUser, deleteUser } from '../../userSlice';
 import { getAllRoles } from '../../../Role/roleSlice';
-import { FiMail, FiPhone, FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell } from 'react-icons/fi';
+import { FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell } from 'react-icons/fi';
 import { MdRestaurant } from 'react-icons/md';
 import StatCard from '../../../../components/Common/StatCard';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
