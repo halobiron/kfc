@@ -208,12 +208,12 @@ const Checkout = () => {
             return;
         }
 
-        if (deliveryType === 'delivery' && !formData.address) {
+        if (deliveryType === 'Giao hàng' && !formData.address) {
             toast.error("Vui lòng nhập địa chỉ giao hàng!");
             return;
         }
 
-        if (deliveryType === 'pickup' && !selectedStore) {
+        if (deliveryType === 'Đến lấy' && !selectedStore) {
             toast.error("Vui lòng chọn cửa hàng để lấy món!");
             return;
         }
@@ -229,8 +229,8 @@ const Checkout = () => {
                 deliveryInfo: {
                     name: formData.fullName,
                     phone: formData.phone,
-                    address: deliveryType === 'delivery' ? formData.address : null,
-                    storeId: deliveryType === 'pickup' ? selectedStore : null
+                    address: deliveryType === 'Giao hàng' ? formData.address : null,
+                    storeId: deliveryType === 'Đến lấy' ? selectedStore : null
                 },
                 deliveryType,
                 paymentMethod,

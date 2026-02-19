@@ -24,7 +24,7 @@ const CustomerInfoCard = ({ order }) => {
                     <div className="d-flex align-items-start mb-2">
                         <FiMapPin className="me-2 mt-1 text-muted flex-shrink-0" />
                         <span>
-                            {order.deliveryType === 'pickup'
+                            {order.deliveryType === 'Đến lấy'
                                 ? 'Nhận tại cửa hàng'
                                 : order.deliveryInfo?.address || 'Chưa cập nhật địa chỉ'}
                             {order.deliveryInfo?.city ? `, ${order.deliveryInfo?.city}` : ''}

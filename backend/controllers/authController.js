@@ -8,23 +8,18 @@ const sendEmail = require('../utils/sendEmail');
 
 // Create JWT Token
 const sendToken = async (user, statusCode, res) => {
-    // Populate role permissions if available
-    let permissions = [];
-    if (user.role && user.role.permissions) {
-        permissions = user.role.permissions;
-    }
-
-    // Role is now just the code string (e.g., 'ADMIN', 'CUSTOMER')
-    const roleCode = user.role?.code || 'CUSTOMER';
-
     const token = jwt.sign(
-        { id: user._id, role: roleCode, storeId: user.storeId, permissions },
+        {
+            id: user._id,
+            role: user.role?.code || 'CUSTOMER',
+            permissions: user.role?.permissions || []
+        },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRE }
     );
 
     const cookieOptions = {
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+        expires: new Date(Date.now() + parseInt(process.env.JWT_EXPIRE) * 24 * 60 * 60 * 1000),
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production'
     };
@@ -39,11 +34,7 @@ const sendToken = async (user, statusCode, res) => {
             name: user.name,
             email: user.email,
             phone: user.phone,
-            role: roleCode,
-            roleId: user.role._id || user.role, // role might be object or ID
-            permissions,
-            storeId: user.storeId,
-            position: user.position
+            role: user.role
         }
     });
 };

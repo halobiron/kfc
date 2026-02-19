@@ -37,7 +37,7 @@ const Cart = () => {
     };
 
     const deliveryFee = useMemo(
-        () => calculateDeliveryFee({ subtotal, deliveryType: 'delivery', config: shippingConfig }),
+        () => calculateDeliveryFee({ subtotal, deliveryType: 'Giao hàng', config: shippingConfig }),
         [subtotal, shippingConfig]
     );
     const total = subtotal + deliveryFee;

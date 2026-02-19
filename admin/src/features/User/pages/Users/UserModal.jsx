@@ -1,40 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../../../../components/Common/Button';
 
-const UserModal = ({ show, onClose, user, roles, onSubmit, roleLabels }) => {
+const UserModal = ({ show, onClose, user, roles, onSubmit }) => {
     const isEditMode = !!user;
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        role: 'customer',
-        password: '',
-        isActive: true
+        name: '', email: '', phone: '', role: '', password: '', isActive: true
     });
 
     useEffect(() => {
         if (show) {
             if (user) {
-                // Edit mode setup
-                const roleName = user.role?.name || user.role || 'customer';
-                setFormData({ 
-                    ...user, 
-                    role: roleName, 
-                    password: '' // Reset password field on partial update
+                setFormData({
+                    ...user,
+                    role: user.role?._id || user.role,
+                    password: ''
                 });
             } else {
-                // Add mode reset
-                setFormData({ 
-                    name: '', 
-                    email: '', 
-                    phone: '', 
-                    role: 'customer', 
-                    password: '', 
-                    isActive: true 
+                setFormData({
+                    name: '', email: '', phone: '',
+                    role: roles?.[0]?._id,
+                    password: '', isActive: true
                 });
             }
         }
-    }, [show, user]);
+    }, [show, user, roles]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -48,119 +37,50 @@ const UserModal = ({ show, onClose, user, roles, onSubmit, roleLabels }) => {
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">
-                            {isEditMode ? 'Chỉnh sửa người dùng' : 'Thêm người dùng mới'}
-                        </h5>
+                        <h5 className="modal-title">{isEditMode ? 'Chỉnh sửa' : 'Thêm mới'}</h5>
                         <button type="button" className="btn-close" onClick={onClose}></button>
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div className="modal-body">
                             <div className="mb-3">
-                                <label className="form-label">Họ và tên <span className="text-danger">*</span></label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    required
-                                    placeholder="VD: Nguyễn Văn A"
-                                />
+                                <label className="form-label">Họ và tên</label>
+                                <input type="text" className="form-control" value={formData.name}
+                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Email <span className="text-danger">*</span></label>
-                                <input
-                                    type="email"
-                                    className="form-control"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    required
-                                    placeholder="email@example.com"
-                                />
+                                <label className="form-label">Email</label>
+                                <input type="email" className="form-control" value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Số điện thoại <span className="text-danger">*</span></label>
-                                <input
-                                    type="tel"
-                                    className="form-control"
-                                    value={formData.phone}
-                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                    required
-                                    placeholder="0901234567"
-                                />
+                                <label className="form-label">Số điện thoại</label>
+                                <input type="tel" className="form-control" value={formData.phone}
+                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })} required />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Vai trò <span className="text-danger">*</span></label>
-                                <select
-                                    className="form-select"
-                                    value={formData.role}
-                                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                    required
-                                >
-                                    {roles && roles.length > 0 ? (
-                                        roles.map(role => (
-                                            <option key={role._id} value={role.name}>{role.name}</option>
-                                        ))
-                                    ) : (
-                                        <>
-                                            <option value="customer">customer</option>
-                                            <option value="admin">admin</option>
-                                        </>
-                                    )}
+                                <label className="form-label">Vai trò</label>
+                                <select className="form-select" value={formData.role}
+                                    onChange={(e) => setFormData({ ...formData, role: e.target.value })} required>
+                                    {roles?.map(role => (
+                                        <option key={role._id} value={role._id}>{role.name}</option>
+                                    ))}
                                 </select>
-                                <small className="text-muted d-block mt-1">
-                                    {roles?.find(r => r.name === formData.role)?.description ||
-                                        (roleLabels[formData.role]?.label ? `Vai trò: ${roleLabels[formData.role]?.label}` : '')}
-                                </small>
                             </div>
-                            {!isEditMode && (
-                                <div className="mb-3">
-                                    <label className="form-label">Mật khẩu <span className="text-danger">*</span></label>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        value={formData.password}
-                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                        required={!isEditMode}
-                                        placeholder="Tối thiểu 6 ký tự"
-                                        minLength="6"
-                                    />
-                                </div>
-                            )}
-                            {isEditMode && (
-                                <div className="mb-3">
-                                    <label className="form-label">Đổi mật khẩu</label>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        value={formData.password}
-                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                        placeholder="Để trống nếu không đổi"
-                                        minLength="6"
-                                    />
-                                    <small className="text-muted">Chỉ nhập nếu muốn thay đổi mật khẩu</small>
-                                </div>
-                            )}
+                            <div className="mb-3">
+                                <label className="form-label">{isEditMode ? 'Đổi mật khẩu (để trống nếu không đổi)' : 'Mật khẩu'}</label>
+                                <input type="password" className="form-control" value={formData.password}
+                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                    required={!isEditMode} minLength="6" />
+                            </div>
                             <div className="form-check">
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    checked={formData.isActive}
-                                    onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                                    id="isActiveCheck"
-                                    disabled={formData.role === 'admin'}
-                                />
-                                <label className="form-check-label" htmlFor="isActiveCheck">
-                                    {formData.role === 'admin' ? 'Tài khoản Quản trị viên luôn hoạt động' : 'Kích hoạt tài khoản này'}
-                                </label>
+                                <input className="form-check-input" type="checkbox" checked={formData.isActive}
+                                    onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })} id="isActiveCheck" />
+                                <label className="form-check-label" htmlFor="isActiveCheck">Kích hoạt tài khoản</label>
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <Button variant="secondary" onClick={onClose}>
-                                Hủy
-                            </Button>
-                            <Button type="submit" variant="primary">
-                                {isEditMode ? 'Cập nhật' : 'Thêm mới'}
-                            </Button>
+                            <Button variant="secondary" onClick={onClose}>Hủy</Button>
+                            <Button type="submit" variant="primary">{isEditMode ? 'Cập nhật' : 'Thêm mới'}</Button>
                         </div>
                     </form>
                 </div>

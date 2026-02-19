@@ -77,6 +77,15 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Đơn hàng phải có ít nhất một sản phẩm', 400));
     }
 
+    // Validate delivery info
+    if (deliveryType === 'Giao hàng' && (!deliveryInfo || !deliveryInfo.address)) {
+        return next(new ErrorHandler('Vui lòng cung cấp địa chỉ giao hàng', 400));
+    }
+
+    if (deliveryType === 'Đến lấy' && (!deliveryInfo || !deliveryInfo.storeId)) {
+        return next(new ErrorHandler('Vui lòng chọn cửa hàng để nhận món', 400));
+    }
+
     let subtotal = 0;
     const orderItems = [];
 

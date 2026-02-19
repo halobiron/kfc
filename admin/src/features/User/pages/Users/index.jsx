@@ -13,12 +13,12 @@ import UserModal from './UserModal';
 import './Users.css';
 
 const ROLE_LABELS = {
-    admin: { label: 'Quản trị viên', color: 'primary', icon: <FiUserCheck size={20} /> },
-    cashier: { label: 'Thu ngân', color: 'success', icon: <FiDollarSign size={20} /> },
-    receptionist: { label: 'Lễ tân', color: 'warning', icon: <FiBell size={20} /> },
-    chef: { label: 'Đầu bếp', color: 'danger', icon: <MdRestaurant size={20} /> },
-    warehouse: { label: 'Thủ kho', color: 'secondary', icon: <FiPackage size={20} /> },
-    customer: { label: 'Khách hàng', color: 'info', icon: <FiUsers size={20} /> }
+    'Quản trị viên': { label: 'Quản trị viên', color: 'primary', icon: <FiUserCheck size={20} /> },
+    'Thu ngân': { label: 'Thu ngân', color: 'success', icon: <FiDollarSign size={20} /> },
+    'Lễ tân': { label: 'Lễ tân', color: 'warning', icon: <FiBell size={20} /> },
+    'Đầu bếp': { label: 'Đầu bếp', color: 'danger', icon: <MdRestaurant size={20} /> },
+    'Thủ kho': { label: 'Thủ kho', color: 'secondary', icon: <FiPackage size={20} /> },
+    'Khách hàng': { label: 'Khách hàng', color: 'info', icon: <FiUsers size={20} /> }
 };
 
 const Users = () => {
@@ -44,21 +44,13 @@ const Users = () => {
         );
     }, [usersList, keyword]);
 
-    // Optimize stats calculation
+    // Thống kê đơn giản
     const stats = useMemo(() => {
-        const counts = {
-            admin: 0, cashier: 0, receptionist: 0, chef: 0, warehouse: 0, customer: 0
-        };
-
+        const counts = {};
         usersList.forEach(user => {
-            if (user.isActive) {
-                const roleName = user.role?.name || user.role || 'customer';
-                if (counts[roleName] !== undefined) {
-                    counts[roleName]++;
-                }
-            }
+            const name = user.role?.name || 'Khách hàng';
+            counts[name] = (counts[name] || 0) + 1;
         });
-
         return counts;
     }, [usersList]);
 
@@ -74,12 +66,7 @@ const Users = () => {
 
     const handleSaveUser = (formData, isEditMode) => {
         if (isEditMode) {
-            if (formData.password === '') {
-                const { password, ...dataWithoutPassword } = formData;
-                dispatch(updateUser({ id: formData._id, data: dataWithoutPassword }));
-            } else {
-                dispatch(updateUser({ id: formData._id, data: formData }));
-            }
+            dispatch(updateUser({ id: formData._id, data: formData }));
         } else {
             dispatch(createUser(formData));
         }
@@ -87,70 +74,37 @@ const Users = () => {
     };
 
     const handleDelete = (id) => {
-        if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
-            dispatch(deleteUser(id));
-        }
+        if (window.confirm('Xóa người dùng này?')) dispatch(deleteUser(id));
     };
 
     const handleToggleActive = (id) => {
-        const userToToggle = usersList.find(u => u._id === id);
-        if (!userToToggle) return;
-
-        const roleName = userToToggle.role?.name || userToToggle.role;
-
-        if (roleName === 'admin') {
-            alert("Không thể vô hiệu hóa tài khoản Quản trị viên!");
-            return;
-        }
-
-        dispatch(updateUser({
-            id: id,
-            data: { isActive: !userToToggle.isActive }
-        }));
+        const user = usersList.find(u => u._id === id);
+        if (user?.role?.code === 'ADMIN') return alert("Không thể chặn Admin");
+        dispatch(updateUser({ id, data: { isActive: !user.isActive } }));
     };
 
     const columns = [
-        {
-            header: '#',
-            className: 'ps-4',
-            render: (_, index) => <span className="fw-bold">USR{1000 + index + 1}</span>
-        },
+        { header: '#', render: (_, index) => index + 1 },
         {
             header: 'Họ và tên',
             render: (user) => (
                 <div>
                     <div className="fw-bold">{user.name}</div>
-                    <small className="text-muted">Tham gia: {formatDate(user.createdAt)}</small>
+                    <small className="text-muted">{formatDate(user.createdAt)}</small>
                 </div>
             )
         },
-        {
-            header: 'Email',
-            render: (user) => (
-                <div className="d-flex align-items-center gap-2 text-muted">
-                    <FiMail size={14} />
-                    {user.email}
-                </div>
-            )
-        },
-        {
-            header: 'Số điện thoại',
-            render: (user) => (
-                <div className="d-flex align-items-center gap-2 text-muted">
-                    <FiPhone size={14} />
-                    {user.phone}
-                </div>
-            )
-        },
+        { header: 'Email', render: (u) => u.email },
+        { header: 'Số điện thoại', render: (u) => u.phone },
         {
             header: 'Vai trò',
             className: 'text-center',
             render: (user) => {
-                const roleName = user.role?.name || user.role || 'customer';
+                const name = user.role?.name || 'Khách hàng';
+                const style = ROLE_LABELS[name] || ROLE_LABELS['Khách hàng'];
                 return (
-                    <Badge variant={ROLE_LABELS[roleName]?.color || 'secondary'}>
-                        <span className="me-1">{ROLE_LABELS[roleName]?.icon || <FiUsers size={20} />}</span>
-                        {ROLE_LABELS[roleName]?.label || roleName}
+                    <Badge variant={style.color}>
+                        {style.icon} <span className="ms-1">{name}</span>
                     </Badge>
                 );
             }
@@ -158,40 +112,30 @@ const Users = () => {
         {
             header: 'Trạng thái',
             className: 'text-center',
-            render: (user) => {
-                const roleName = user.role?.name || user.role || 'customer';
-                return (
-                    <div className="form-check form-switch d-flex justify-content-center">
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={user.isActive}
-                            onChange={() => handleToggleActive(user._id)}
-                            disabled={roleName === 'admin'}
-                            title={roleName === 'admin' ? "Không thể vô hiệu hóa Quản trị viên" : ""}
-                        />
-                    </div>
-                );
-            }
+            render: (user) => (
+                <div className="form-check form-switch d-flex justify-content-center">
+                    <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={user.isActive}
+                        onChange={() => handleToggleActive(user._id)}
+                        disabled={user.role?.code === 'ADMIN'}
+                    />
+                </div>
+            )
         },
         {
             header: 'Thao tác',
             className: 'text-end pe-4',
-            render: (user) => {
-                const roleName = user.role?.name || user.role || 'customer';
-                return (
-                    <>
-                        <EditButton
-                            className="me-2"
-                            onClick={() => handleOpenModal(user)}
-                        />
-                        <DeleteButton
-                            onClick={() => handleDelete(user._id)}
-                            disabled={roleName === 'admin'}
-                        />
-                    </>
-                );
-            }
+            render: (user) => (
+                <>
+                    <EditButton className="me-2" onClick={() => handleOpenModal(user)} />
+                    <DeleteButton
+                        onClick={() => handleDelete(user._id)}
+                        disabled={user.role?.code === 'ADMIN'}
+                    />
+                </>
+            )
         }
     ];
 
