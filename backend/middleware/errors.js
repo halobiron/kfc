@@ -3,16 +3,6 @@ const ErrorHandler = require('../utils/errorHandler');
 exports.errorMiddleware = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
 
-    // Development mode: show stack trace
-    if (process.env.NODE_ENV === 'DEVELOPMENT') {
-        res.status(err.statusCode).json({
-            status: false,
-            error: err,
-            errMessage: err.message,
-            stack: err.stack
-        })
-    }
-
     // Production mode: cleaner errors
     if (process.env.NODE_ENV === 'PRODUCTION') {
         let error = { ...err }
@@ -51,6 +41,13 @@ exports.errorMiddleware = (err, req, res, next) => {
         res.status(error.statusCode || 500).json({
             status: false,
             message: error.message || 'Internal Server Error'
+        })
+    } else {
+        res.status(err.statusCode).json({
+            status: false,
+            error: err,
+            errMessage: err.message,
+            stack: err.stack
         })
     }
 }

@@ -30,19 +30,15 @@ const Login = () => {
 
     const handleGoogleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
-            try {
-                const resultAction = await dispatch(loginGoogleUser(tokenResponse.access_token));
-                if (loginGoogleUser.fulfilled.match(resultAction)) {
-                    toast.success('Đăng nhập thành công!');
-                } else {
-                    toast.error(resultAction.payload || 'Đăng nhập Google thất bại');
-                }
-            } catch (error) {
-                toast.error('Đăng nhập Google thất bại');
+            const resultAction = await dispatch(loginGoogleUser(tokenResponse.access_token));
+            if (loginGoogleUser.fulfilled.match(resultAction)) {
+                toast.success('Đăng nhập thành công!');
+            } else {
+                toast.error(resultAction.payload);
             }
         },
-        onError: () => {
-            toast.error('Đăng nhập Google thất bại');
+        onError: (error) => {
+            toast.error(error.error);
         }
     });
 

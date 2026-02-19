@@ -162,24 +162,27 @@ exports.googleLogin = catchAsyncErrors(async (req, res, next) => {
 
     const { name, email } = userRes.data;
 
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email }).populate('role');
 
     if (!user) {
         // Generate a random password for google users
         const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
 
         const Role = require('../models/roleSchema');
-        const customerRole = await Role.findOne({ name: 'customer' });
+        const customerRole = await Role.findOne({ code: 'CUSTOMER' });
+
+        if (!customerRole) {
+            return next(new ErrorHandler('Không tìm thấy vai trò khách hàng (CUSTOMER)', 500));
+        }
 
         user = await User.create({
             name,
             email,
             password: randomPassword,
-            role: customerRole ? customerRole._id : null
+            role: customerRole._id
         });
-        if (customerRole) user.role = customerRole;
+        user.role = customerRole;
     } else {
-        // If user exists, check if active
         if (user.isActive === false) {
             return next(new ErrorHandler('Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.', 403));
         }
