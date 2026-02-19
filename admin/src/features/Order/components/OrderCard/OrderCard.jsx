@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiChevronRight, FiCheckCircle } from 'react-icons/fi';
+import { FiPlay, FiCheckCircle } from 'react-icons/fi';
 import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
 import OrderStatusBadge from '../OrderStatusBadge';
 import { ORDER_STATUS } from '../OrderStatusBadge/orderStatus';
@@ -46,8 +46,9 @@ const OrderCard = ({ order, onStatusChange }) => {
                 variant="primary"
                 size="sm"
                 onClick={() => onStatusChange(order._id, ORDER_STATUS.PREPARING)}
+                icon={<FiPlay size={14} />}
               >
-                Bắt đầu nấu <FiChevronRight size={14} className="ms-1" />
+                Bắt đầu nấu
               </Button>
             )}
             {order.status === ORDER_STATUS.PREPARING && (
@@ -55,8 +56,9 @@ const OrderCard = ({ order, onStatusChange }) => {
                 variant="success"
                 size="sm"
                 onClick={() => onStatusChange(order._id, ORDER_STATUS.READY)}
+                icon={<FiCheckCircle size={14} />}
               >
-                Món đã xong <FiCheckCircle size={14} className="ms-1" />
+                Món đã xong
               </Button>
             )}
           </div>
