@@ -2,6 +2,7 @@ import React from 'react';
 import { FiChevronRight, FiCheckCircle } from 'react-icons/fi';
 import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
 import OrderStatusBadge from '../OrderStatusBadge';
+import { ORDER_STATUS } from '../OrderStatusBadge/orderStatus';
 
 const OrderCard = ({ order, onStatusChange }) => {
   return (
@@ -39,18 +40,18 @@ const OrderCard = ({ order, onStatusChange }) => {
         <div className="d-flex justify-content-between align-items-center mt-auto">
           <strong className="text-secondary">{formatCurrency(order.totalAmount)}</strong>
           <div className="btn-group btn-group-sm">
-            {order.status === 'confirmed' && (
+            {order.status === ORDER_STATUS.CONFIRMED && (
               <button
                 className="btn btn-primary"
-                onClick={() => onStatusChange(order._id, 'preparing')}
+                onClick={() => onStatusChange(order._id, ORDER_STATUS.PREPARING)}
               >
                 Bắt đầu nấu <FiChevronRight size={14} />
               </button>
             )}
-            {order.status === 'preparing' && (
+            {order.status === ORDER_STATUS.PREPARING && (
               <button
                 className="btn btn-success"
-                onClick={() => onStatusChange(order._id, 'ready')}
+                onClick={() => onStatusChange(order._id, ORDER_STATUS.READY)}
               >
                 Món đã xong <FiCheckCircle size={14} />
               </button>
