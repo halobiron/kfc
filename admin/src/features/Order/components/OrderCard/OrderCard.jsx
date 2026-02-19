@@ -3,6 +3,7 @@ import { FiChevronRight, FiCheckCircle } from 'react-icons/fi';
 import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
 import OrderStatusBadge from '../OrderStatusBadge';
 import { ORDER_STATUS } from '../OrderStatusBadge/orderStatus';
+import Button from '../../../../components/Common/Button';
 
 const OrderCard = ({ order, onStatusChange }) => {
   return (
@@ -41,20 +42,22 @@ const OrderCard = ({ order, onStatusChange }) => {
           <strong className="text-secondary">{formatCurrency(order.totalAmount)}</strong>
           <div className="btn-group btn-group-sm">
             {order.status === ORDER_STATUS.CONFIRMED && (
-              <button
-                className="btn btn-primary"
+              <Button
+                variant="primary"
+                size="sm"
                 onClick={() => onStatusChange(order._id, ORDER_STATUS.PREPARING)}
               >
-                Bắt đầu nấu <FiChevronRight size={14} />
-              </button>
+                Bắt đầu nấu <FiChevronRight size={14} className="ms-1" />
+              </Button>
             )}
             {order.status === ORDER_STATUS.PREPARING && (
-              <button
-                className="btn btn-success"
+              <Button
+                variant="success"
+                size="sm"
                 onClick={() => onStatusChange(order._id, ORDER_STATUS.READY)}
               >
-                Món đã xong <FiCheckCircle size={14} />
-              </button>
+                Món đã xong <FiCheckCircle size={14} className="ms-1" />
+              </Button>
             )}
           </div>
         </div>

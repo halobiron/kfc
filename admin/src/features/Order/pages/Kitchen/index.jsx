@@ -4,6 +4,7 @@ import StatCard from '../../../../components/Common/StatCard';
 import OrderCard from '../../components/OrderCard/OrderCard';
 import useKitchenOrders from '../../hooks/useKitchenOrders';
 import { ORDER_STATUS } from '../../components/OrderStatusBadge/orderStatus';
+import Button from '../../../../components/Common/Button';
 import './Kitchen.css';
 
 const Kitchen = () => {
@@ -19,9 +20,9 @@ const Kitchen = () => {
         <div>
           <h1 className="page-title">Điều phối Chế biến</h1>
         </div>
-        <button className="btn btn-outline-primary btn-sm" onClick={refreshOrders}>
+        <Button variant="outline-primary" size="sm" onClick={refreshOrders}>
           Làm mới
-        </button>
+        </Button>
       </div>
 
       <div className="row mb-4 g-3">
