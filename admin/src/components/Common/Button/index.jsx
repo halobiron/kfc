@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import Loading from '../Loading';
+import './Button.css';
+
 const Button = ({
     children,
     variant = 'primary',
@@ -15,7 +17,7 @@ const Button = ({
     ...props
 }) => {
     // Base bootstrap class
-    let btnClasses = ['btn'];
+    let btnClasses = ['btn', 'common-btn'];
 
     // Add variant class
     if (variant) {
@@ -51,7 +53,7 @@ const Button = ({
                 </div>
             ) : (
                 <>
-                    {icon && <span className={hasText ? 'me-2 d-inline-flex' : 'd-inline-flex'}>{icon}</span>}
+                    {icon && <span className="d-inline-flex">{icon}</span>}
                     {children}
                 </>
             )}
@@ -74,7 +76,7 @@ Button.propTypes = {
 export const AddButton = ({ onClick, ...props }) => (
     <Button
         variant="primary"
-        className="d-flex align-items-center gap-2 shadow-sm"
+        className="shadow-sm"
         icon={<FiPlus size={20} />}
         onClick={onClick}
         title={props.title || 'Thêm mới'}

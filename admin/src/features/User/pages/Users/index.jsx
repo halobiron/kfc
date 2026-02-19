@@ -104,7 +104,7 @@ const Users = () => {
                 const style = ROLE_LABELS[name] || ROLE_LABELS['Khách hàng'];
                 return (
                     <Badge variant={style.color}>
-                        {style.icon} <span className="ms-1">{name}</span>
+                        {style.icon} <span>{name}</span>
                     </Badge>
                 );
             }
