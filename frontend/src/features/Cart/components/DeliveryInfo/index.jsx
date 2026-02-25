@@ -1,4 +1,3 @@
-import React from 'react';
 import Card from '../../../../components/Card';
 import FormInput from '../../../../components/FormInput';
 import CustomSelect from '../../../../components/CustomSelect';

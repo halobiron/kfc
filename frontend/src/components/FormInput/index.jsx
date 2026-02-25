@@ -1,4 +1,4 @@
-import React, { forwardRef, useId } from 'react';
+import { forwardRef, useId, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './FormInput.css';
 
@@ -14,7 +14,7 @@ const FormInput = forwardRef(({
 }, ref) => {
     const generatedId = useId();
     const inputId = id || generatedId;
-    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const isPassword = type === 'password';
     const inputType = isPassword && showPassword ? 'text' : type;

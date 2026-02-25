@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -275,7 +275,6 @@ const Checkout = () => {
             </div>
 
             <div className="checkout-layout">
-                {/* Left Column: Information & Payment */}
                 <div className="checkout-form-section">
                     <DeliveryMethod
                         deliveryType={deliveryType}
@@ -302,7 +301,6 @@ const Checkout = () => {
                     />
                 </div>
 
-                {/* Right Column: Order Summary */}
                 <div className="checkout-summary-section">
                     <OrderSummary
                         cartItems={cartItems}

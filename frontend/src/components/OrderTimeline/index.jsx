@@ -1,4 +1,3 @@
-import React from 'react';
 import { formatDateTime } from '../../utils/formatters';
 import { STATUS_OPTIONS } from '../OrderStatusBadge';
 import './OrderTimeline.css';

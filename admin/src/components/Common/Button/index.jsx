@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import Loading from '../Loading';

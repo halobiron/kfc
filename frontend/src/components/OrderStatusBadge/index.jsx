@@ -1,4 +1,3 @@
-import React from 'react';
 import './OrderStatusBadge.css';
 import { STATUS_CONFIG } from './orderStatus';
 export { STATUS_OPTIONS, ORDER_STATUS } from './orderStatus';

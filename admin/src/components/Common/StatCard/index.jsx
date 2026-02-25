@@ -1,4 +1,3 @@
-import React from 'react';
 import './StatCard.css';
 
 const StatCard = ({ label, value, icon, trend, color = 'primary', className = '' }) => {

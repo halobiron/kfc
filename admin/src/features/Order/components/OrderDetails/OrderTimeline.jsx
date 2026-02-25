@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { getOrderStatusMeta } from '../OrderStatusBadge/orderStatus';
 import OrderStatusBadge from '../OrderStatusBadge';
 import { formatDateTime } from '../../../../utils/formatters';
 
 const OrderTimeline = ({ order, status }) => {
-    
+
     const sortedStatusHistory = useMemo(() => {
         if (!order?.statusHistory) return [];
         return [...order.statusHistory].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));

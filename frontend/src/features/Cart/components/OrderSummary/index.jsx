@@ -1,4 +1,3 @@
-import React from 'react';
 import Card from '../../../../components/Card';
 import FormInput from '../../../../components/FormInput';
 import Button from '../../../../components/Button';
@@ -41,7 +40,6 @@ const OrderSummary = ({
 
             <div className="summary-divider"></div>
 
-            {/* Promotion Section */}
             <div className="mb-3">
                 <label className="form-label d-flex justify-content-between align-items-center">
                     <span className="fw-bold"><i className="bi bi-ticket-perforated-fill me-1 text-danger"></i>Mã khuyến mãi</span>

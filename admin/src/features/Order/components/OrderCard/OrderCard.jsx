@@ -1,4 +1,3 @@
-import React from 'react';
 import { FiPlay, FiCheckCircle } from 'react-icons/fi';
 import { formatCurrency, formatDateTime } from '../../../../utils/formatters';
 import OrderStatusBadge from '../OrderStatusBadge';

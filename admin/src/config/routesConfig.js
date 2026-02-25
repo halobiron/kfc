@@ -1,4 +1,3 @@
-import React from 'react';
 import Home from '../features/Dashboard/pages/Home';
 import Product from '../features/Product/pages/Product';
 import ProductDetails from '../features/Product/pages/ProductDetails';
@@ -16,88 +15,88 @@ import Roles from '../features/Role/pages/Roles';
 import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiBox, FiTag, FiPackage, FiMapPin, FiLock } from 'react-icons/fi';
 
 const baseRoutes = [
-    { 
-        path: '/home', 
-        id: 'dashboard', 
+    {
+        path: '/home',
+        id: 'dashboard',
         label: 'Tổng quan',
         icon: <FiHome />,
         permission: '',
         component: <Home />
     },
-    { 
-        path: '/orders', 
-        id: 'orders', 
+    {
+        path: '/orders',
+        id: 'orders',
         label: 'Đơn hàng',
         icon: <FiFileText />,
         permission: 'orders.view',
         component: <Order />
     },
-    { 
-        path: '/kitchen', 
-        id: 'kitchen', 
+    {
+        path: '/kitchen',
+        id: 'kitchen',
         label: 'Bếp',
         icon: <FiPackage />,
         permission: 'kitchen.view',
         component: <Kitchen />
     },
-    { 
-        path: '/products', 
-        id: 'products', 
+    {
+        path: '/products',
+        id: 'products',
         label: 'Sản phẩm',
         icon: <FiShoppingCart />,
         permission: 'products.view',
         component: <Product />
     },
-    { 
-        path: '/categories', 
-        id: 'categories', 
+    {
+        path: '/categories',
+        id: 'categories',
         label: 'Danh mục',
         icon: <FiTag />,
         permission: 'categories.view',
         component: <Categories />
     },
-    { 
-        path: '/ingredients', 
-        id: 'ingredients', 
+    {
+        path: '/ingredients',
+        id: 'ingredients',
         label: 'Nguyên liệu',
         icon: <FiBox />,
         permission: 'ingredients.view',
         component: <Ingredient />
     },
-    { 
-        path: '/users', 
-        id: 'users', 
+    {
+        path: '/users',
+        id: 'users',
         label: 'Người dùng',
         icon: <FiUsers />,
         permission: 'users.view',
         component: <Users />
     },
-    { 
-        path: '/roles', 
-        id: 'roles', 
+    {
+        path: '/roles',
+        id: 'roles',
         label: 'Phân quyền',
         icon: <FiLock />,
         permission: 'roles.view'
     },
-    { 
-        path: '/promotions', 
-        id: 'promotions', 
+    {
+        path: '/promotions',
+        id: 'promotions',
         label: 'Khuyến mãi',
-        icon: <FiTag />, 
+        icon: <FiTag />,
         permission: 'promotions.view',
         component: <Promotions />
     },
-    { 
-        path: '/reports', 
-        id: 'reports', 
+    {
+        path: '/reports',
+        id: 'reports',
         label: 'Báo cáo',
         icon: <FiBarChart2 />,
         permission: 'reports.view',
         component: <Reports />
     },
-    { 
-        path: '/stores', 
-        id: 'stores', 
+    {
+        path: '/stores',
+        id: 'stores',
         label: 'Cửa hàng',
         icon: <FiMapPin />,
         permission: 'stores.view',

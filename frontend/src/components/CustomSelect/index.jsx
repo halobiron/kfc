@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo, Fragment } from 'react';
 import './CustomSelect.css';
 
 const CustomSelect = ({
@@ -54,10 +54,10 @@ const CustomSelect = ({
       {isOpen && (
         <ul className="select-dropdown">
           {options.map((opt, i) => opt.options ? (
-            <React.Fragment key={i}>
+            <Fragment key={i}>
               <li className="select-header">{opt.label}</li>
               {opt.options.map((sub, si) => renderOption(sub, `${i}-${si}`))}
-            </React.Fragment>
+            </Fragment>
           ) : renderOption(opt, i))}
         </ul>
       )}

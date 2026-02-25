@@ -1,4 +1,4 @@
-import React from 'react'
+import { cloneElement } from 'react'
 import './Nav.css';
 import { NavLink } from 'react-router-dom'
 import { FiLock } from 'react-icons/fi';
@@ -28,7 +28,7 @@ const Nav = () => {
             return (
               <li className="nav-item" key={route.id}>
                 <NavLink className={getNavLinkClass} to={route.path} end={route.path === '/home'}>
-                  {React.cloneElement(route.icon, { className: 'nav-icon' })}
+                  {cloneElement(route.icon, { className: 'nav-icon' })}
                   {route.label}
                 </NavLink>
               </li>

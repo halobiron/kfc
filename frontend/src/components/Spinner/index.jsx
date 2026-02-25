@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import './Spinner.css';
 
@@ -7,8 +6,8 @@ const Spinner = ({ variant = 'danger', size = 'md', className = '', center = fal
     const variantClass = variant ? `text-${variant}` : '';
 
     const spinner = (
-        <div 
-            className={`spinner-border ${variantClass} ${sizeClass} ${className}`} 
+        <div
+            className={`spinner-border ${variantClass} ${sizeClass} ${className}`}
             role="status"
         >
             <span className="visually-hidden">Loading...</span>

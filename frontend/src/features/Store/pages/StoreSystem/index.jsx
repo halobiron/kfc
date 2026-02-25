@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import storeApi from '../../../../api/storeApi';
 import mapApi from '../../../../api/mapApi';
 import Button from '../../../../components/Button';

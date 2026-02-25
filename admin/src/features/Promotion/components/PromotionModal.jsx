@@ -1,13 +1,12 @@
-import React from 'react';
 import Button from '../../../components/Common/Button';
 
-const PromotionModal = ({ 
-  show, 
-  handleClose, 
-  handleSubmit, 
-  editMode, 
-  currentPromotion, 
-  setCurrentPromotion 
+const PromotionModal = ({
+  show,
+  handleClose,
+  handleSubmit,
+  editMode,
+  currentPromotion,
+  setCurrentPromotion
 }) => {
   if (!show) return null;
 

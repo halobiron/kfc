@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import './Login.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';

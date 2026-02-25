@@ -1,4 +1,3 @@
-import React from 'react';
 
 import kfcerror from '../../assets/images/common/kfc-error.jpg';
 import Button from '../../components/Button';

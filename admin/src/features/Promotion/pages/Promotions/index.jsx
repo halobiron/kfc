@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FiGift, FiPercent } from 'react-icons/fi';
 import { toast } from 'react-toastify';

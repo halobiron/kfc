@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import slide1 from '../../assets/images/banners/slide1.png'
 import slide2 from '../../assets/images/banners/slide2.png'

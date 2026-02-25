@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FiEye, FiCheck, FiMapPin, FiXCircle, FiTruck, FiCheckCircle } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';

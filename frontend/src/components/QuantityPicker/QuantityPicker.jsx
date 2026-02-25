@@ -1,4 +1,3 @@
-import React from 'react';
 import './QuantityPicker.css';
 import { BsDash, BsPlus } from 'react-icons/bs';
 

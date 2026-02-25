@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllIngredients, updateIngredientStock, createIngredient, updateIngredient } from '../../ingredientSlice';
 import { toast } from 'react-toastify';
@@ -20,7 +20,7 @@ const Ingredient = () => {
     const dispatch = useDispatch();
     const { ingredients, loading } = useSelector(state => state.ingredients);
     const { keyword } = useSelector(state => state.search);
-    
+
     // UI State
     const [showRestockModal, setShowRestockModal] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -34,7 +34,7 @@ const Ingredient = () => {
         dispatch(getAllIngredients());
     }, [dispatch]);
 
-    const filteredIngredients = ingredients.filter(ing => 
+    const filteredIngredients = ingredients.filter(ing =>
         (ing.name && ing.name.toLowerCase().includes((keyword || '').toLowerCase())) ||
         (ing._id && ing._id.toLowerCase().includes((keyword || '').toLowerCase())) ||
         (ing.supplier && ing.supplier.toLowerCase().includes((keyword || '').toLowerCase())) ||
@@ -187,7 +187,7 @@ const Ingredient = () => {
 
             <div className="card">
                 <div className="card-header">Danh mục nguyên liệu</div>
-                <Table 
+                <Table
                     columns={columns}
                     data={filteredIngredients}
                     loading={loading}

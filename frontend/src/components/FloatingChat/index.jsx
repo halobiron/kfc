@@ -1,4 +1,3 @@
-import React from 'react';
 import './FloatingChat.css';
 import { BsChatDotsFill, BsMessenger } from 'react-icons/bs';
 

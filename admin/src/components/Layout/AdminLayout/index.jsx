@@ -1,4 +1,3 @@
-import React from 'react';
 import './AdminLayout.css';
 import '../../Common/Table/Table.css';
 import '../../Common/Card/Card.css';

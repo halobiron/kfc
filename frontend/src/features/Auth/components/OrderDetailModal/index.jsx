@@ -1,4 +1,3 @@
-import React from 'react';
 import OrderStatusBadge from '../../../../components/OrderStatusBadge';
 import OrderTimeline from '../../../../components/OrderTimeline';
 import { formatCurrency, formatDateTime } from '../../../../utils/formatters';

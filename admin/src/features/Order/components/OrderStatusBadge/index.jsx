@@ -1,4 +1,3 @@
-import React from 'react';
 import Badge from '../../../../components/Common/Badge';
 import { getOrderStatusMeta } from './orderStatus';
 

@@ -1,9 +1,9 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import './Button.css';
 
-const Button = React.forwardRef(({
+const Button = forwardRef(({
     children,
     variant = 'primary',
     size = 'md',

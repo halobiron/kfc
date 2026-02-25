@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllRoles, createRole, updateRole, deleteRole, clearErrors, resetSuccess } from '../../roleSlice';
 import { toast } from 'react-toastify';
@@ -28,7 +28,7 @@ const RoleManagement = ({ resources = [] }) => {
         dispatch(getAllRoles());
     }, [dispatch]);
 
-    const filteredRoles = roles.filter(role => 
+    const filteredRoles = roles.filter(role =>
         role.name.toLowerCase().includes((keyword || '').toLowerCase()) ||
         (role.description && role.description.toLowerCase().includes((keyword || '').toLowerCase()))
     );
@@ -177,7 +177,7 @@ const RoleManagement = ({ resources = [] }) => {
             </div>
 
             <div className="bg-white rounded shadow-sm p-4">
-                <Table 
+                <Table
                     columns={columns}
                     data={filteredRoles}
                     loading={loading}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './Header.css';
 import { FiSearch, FiLogOut } from 'react-icons/fi';
 import kfcLogo from '@shared-assets/images/logos/footer-logo.png';

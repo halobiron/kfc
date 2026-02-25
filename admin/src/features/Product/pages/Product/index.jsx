@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,7 +25,7 @@ const Product = () => {
     dispatch(getAllCategories());
   }, [dispatch])
 
-  const filteredProducts = products.filter(product => 
+  const filteredProducts = products.filter(product =>
     product.title.toLowerCase().includes((keyword || '').toLowerCase())
   );
 
@@ -102,12 +101,12 @@ const Product = () => {
       </div>
 
       <div className="card">
-          <div className="card-header">Danh sách món ăn</div>
-          <Table 
-            columns={columns}
-            data={filteredProducts}
-          />
-        </div>
+        <div className="card-header">Danh sách món ăn</div>
+        <Table
+          columns={columns}
+          data={filteredProducts}
+        />
+      </div>
       {showModal ? <AddModal setShowModal={setShowModal} /> : null}
     </>
   )
