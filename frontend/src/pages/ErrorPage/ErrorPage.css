@@ -6,6 +6,11 @@
     min-height: 80vh;
 }
 
+.not-found-image {
+    margin-bottom: 30px;
+    mix-blend-mode: multiply;
+}
+
 .not-found-details {
     color: #999;
     font-size: 12px;

@@ -13,7 +13,7 @@ const ErrorPage = ({
 }) => {
     return (
         <div className="not-found-container">
-            <img src={kfcerror} alt="KFC Error" />
+            <img src={kfcerror} alt="KFC Error" className="not-found-image" />
             <h2>{title}</h2>
             <p>{message}</p>
 
