@@ -10,7 +10,7 @@ import ResetPassword from './features/Auth/pages/ResetPassword';
 import Account from './features/Auth/pages/Account';
 import Checkout from './features/Cart/pages/Checkout';
 import StoreSystem from './features/Store/pages/StoreSystem';
-import TrackOrder from './pages/TrackOrder';
+
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfUse from './pages/TermsOfUse';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -51,9 +51,9 @@ const AnimatedRoutes = () => {
         <Route path="/account" element={<ProtectedRoute><AnimatedPage><Account /></AnimatedPage></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><AnimatedPage><Account /></AnimatedPage></ProtectedRoute>} />
         <Route path="/my-orders" element={<ProtectedRoute><AnimatedPage><Account /></AnimatedPage></ProtectedRoute>} />
-        <Route path="/checkout" element={<AnimatedPage><Checkout /></AnimatedPage>} />
+        <Route path="/checkout" element={<ProtectedRoute><AnimatedPage><Checkout /></AnimatedPage></ProtectedRoute>} />
         <Route path="/stores" element={<AnimatedPage><StoreSystem /></AnimatedPage>} />
-        <Route path="/track-order" element={<AnimatedPage><TrackOrder /></AnimatedPage>} />
+
         <Route path="/privacy-policy" element={<AnimatedPage><PrivacyPolicy /></AnimatedPage>} />
         <Route path="/terms-of-use" element={<AnimatedPage><TermsOfUse /></AnimatedPage>} />
         <Route path="/order-success" element={<AnimatedPage><OrderSuccess /></AnimatedPage>} />

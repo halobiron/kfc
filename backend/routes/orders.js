@@ -9,14 +9,12 @@ const {
     deleteOrder,
     cancelOrder,
     verifyPayment,
-    lookupOrder,
     getShippingConfig
 } = require('../controllers/orderController');
 const { isAuthenticatedUser, getUserFromToken, authorizePermission } = require('../middleware/auth');
 
 // User routes
-router.post('/order/new', getUserFromToken, createOrder);
-router.post('/order/lookup', lookupOrder);
+router.post('/order/new', isAuthenticatedUser, createOrder);
 router.get('/user/orders', isAuthenticatedUser, getUserOrders);
 router.get('/order/:id', getUserFromToken, getOrderById);
 router.post('/order/:id/cancel', isAuthenticatedUser, cancelOrder);

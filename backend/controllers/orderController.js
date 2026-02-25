@@ -127,7 +127,7 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
 
     // 4. Save Order
     const order = await Order.create({
-        userId: req.user?.id || null,
+        userId: req.user.id,
         items: orderItems,
         deliveryType,
         deliveryInfo: {
@@ -180,15 +180,7 @@ exports.getOrderById = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Đơn hàng không tìm thấy', 404));
     }
 
-    // 1. If it's a guest order (no userId), allow viewing (can add phone verification later for security)
-    if (!order.userId) {
-        return res.status(200).json({
-            status: true,
-            data: order
-        });
-    }
-
-    // 2. If it's a registered order, require login and ownership/admin
+    // Require login and ownership/admin
     if (!req.user) {
         return next(new ErrorHandler('Vui lòng đăng nhập để xem đơn hàng này', 401));
     }
@@ -337,29 +329,6 @@ exports.verifyPayment = catchAsyncErrors(async (req, res, next) => {
                 await order.save();
             }
         }
-    }
-
-    res.status(200).json({
-        status: true,
-        data: order
-    });
-});
-
-// LOOKUP GUEST ORDER
-exports.lookupOrder = catchAsyncErrors(async (req, res, next) => {
-    const { orderNumber, phone } = req.body;
-
-    if (!orderNumber || !phone) {
-        return next(new ErrorHandler('Vui lòng nhập Mã đơn hàng và Số điện thoại', 400));
-    }
-
-    const order = await Order.findOne({
-        orderNumber: orderNumber.toUpperCase(),
-        'deliveryInfo.phone': phone
-    }).populate('items.productId');
-
-    if (!order) {
-        return next(new ErrorHandler('Không tìm thấy đơn hàng với thông tin trên', 404));
     }
 
     res.status(200).json({

@@ -46,12 +46,7 @@ const Header = () => {
                 <li className="nav-item">
                   <Link className="nav-link" to="/stores">Cửa hàng</Link>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link text-danger" to="/track-order">
-                    <BsGeoAlt className="me-1" />
-                    Tra cứu đơn
-                  </Link>
-                </li>
+
               </ul>
 
               <div className="header-actions">

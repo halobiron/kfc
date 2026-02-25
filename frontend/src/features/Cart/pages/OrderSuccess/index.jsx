@@ -86,23 +86,13 @@ const OrderSuccess = () => {
                     >
                         Về Trang Chủ
                     </Button>
-                    {isAuthenticated ? (
-                        <Button
-                            to="/my-orders"
-                            variant="primary"
-                            startIcon={<i className="bi bi-receipt"></i>}
-                        >
-                            Xem Đơn Hàng
-                        </Button>
-                    ) : (
-                        <Button
-                            to="/track-order"
-                            variant="primary"
-                            startIcon={<i className="bi bi-search"></i>}
-                        >
-                            Tra Cứu Đơn
-                        </Button>
-                    )}
+                    <Button
+                        to="/my-orders"
+                        variant="primary"
+                        startIcon={<i className="bi bi-receipt"></i>}
+                    >
+                        Xem Đơn Hàng
+                    </Button>
                 </div>
             </Card>
         </>
