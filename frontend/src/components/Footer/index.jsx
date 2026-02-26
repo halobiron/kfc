@@ -18,7 +18,7 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    {/* Quick Links (Functional) */}
+                    {/* Quick Links */}
                     <div className="col-lg-3 col-md-6 mb-4">
                         <h5 className="footer-heading">Liên Kết Nhanh</h5>
                         <ul className="footer-links">
@@ -38,7 +38,7 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Contact Info (Static but realistic) */}
+                    {/* Contact Info */}
                     <div className="col-lg-3 col-md-6 mb-4">
                         <h5 className="footer-heading">Liên Hệ</h5>
                         <ul className="footer-links">

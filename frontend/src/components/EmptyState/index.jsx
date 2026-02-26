@@ -16,7 +16,7 @@ const EmptyState = ({
     return (
         <div
             className={`empty-state ${className}`}
-            style={image ? { backgroundImage: `url(${image})` } : undefined}
+            style={image && { backgroundImage: `url(${image})` }}
         >
             <div className="empty-state-content">
                 {title && <h2 className="empty-state-title">{title}</h2>}

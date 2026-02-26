@@ -15,25 +15,20 @@ const Button = ({
     onClick,
     ...props
 }) => {
-    // Base bootstrap class
     let btnClasses = ['btn', 'common-btn'];
 
-    // Add variant class
     if (variant) {
         btnClasses.push(`btn-${variant}`);
     }
 
-    // Add size class
     if (size && size !== 'default') {
         btnClasses.push(`btn-${size}`);
     }
 
-    // Add custom classes
     if (className) {
         btnClasses.push(className);
     }
 
-    // Join all classes
     const combinedClassName = btnClasses.join(' ');
     return (
         <button
