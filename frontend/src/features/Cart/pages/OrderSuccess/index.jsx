@@ -13,7 +13,6 @@ const OrderSuccess = () => {
     const orderId = searchParams.get('orderId');
     const status = searchParams.get('status');
     const [orderData, setOrderData] = useState(null);
-    const { isAuthenticated } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
     const handleCopy = (text, label) => {

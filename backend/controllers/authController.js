@@ -6,7 +6,6 @@ const crypto = require('crypto');
 const { OAuth2Client } = require('google-auth-library');
 const sendEmail = require('../utils/sendEmail');
 
-// Create JWT Token
 const sendToken = async (user, statusCode, res) => {
     const token = jwt.sign(
         {
@@ -39,11 +38,9 @@ const sendToken = async (user, statusCode, res) => {
     });
 };
 
-// REGISTER
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     const { name, email, phone, password, confirmPassword } = req.body;
 
-    // Validation
     if (!name || !email || !phone || !password || !confirmPassword) {
         return next(new ErrorHandler('Vui lòng điền đầy đủ thông tin', 400));
     }
@@ -52,7 +49,6 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Mật khẩu không khớp', 400));
     }
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         return next(new ErrorHandler('Email này đã được đăng ký', 409));
@@ -61,7 +57,6 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     const Role = require('../models/roleSchema');
     let customerRole = await Role.findOne({ code: 'CUSTOMER' });
 
-    // Create user
     const user = await User.create({
         name,
         email,
@@ -70,10 +65,8 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
         role: customerRole ? customerRole._id : null
     });
 
-    // Populate role for sendToken
     if (customerRole) user.role = customerRole;
 
-    // Send token
     await sendToken(user, 201, res);
 });
 

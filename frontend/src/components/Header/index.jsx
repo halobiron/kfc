@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCartTotalQuantity } from '../../features/Cart/cartSlice';
 import logo from '../../assets/images/logos/kfc-logo.png';
-import { BsGeoAlt, BsPersonCircle } from 'react-icons/bs';
+import {BsPersonCircle } from 'react-icons/bs';
 
 import './Header.css';
 
