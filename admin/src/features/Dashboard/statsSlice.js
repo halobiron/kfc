@@ -21,7 +21,9 @@ const initialState = {
         avgOrderValue: 0,
         chart: [],
         topProducts: [],
-        categoryStats: []
+        categoryStats: [],
+        pendingOrders: 0,
+        lowStockIngredients: 0
     },
     loading: false,
     error: null

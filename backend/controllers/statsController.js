@@ -1,6 +1,7 @@
 const Order = require('../models/orderSchema');
 const User = require('../models/userSchema');
 const Product = require('../models/productSchema');
+const Ingredient = require('../models/ingredientSchema');
 
 exports.getDashboardStats = async (req, res, next) => {
     try {
@@ -25,7 +26,7 @@ exports.getDashboardStats = async (req, res, next) => {
         const revenueAggregation = await Order.aggregate([
             {
                 $match: {
-                    status: 'delivered',
+                    status: 'Đã giao hàng',
                     createdAt: { $gte: startDate }
                 }
             },
@@ -65,7 +66,7 @@ exports.getDashboardStats = async (req, res, next) => {
         const revenueChart = await Order.aggregate([
             {
                 $match: {
-                    status: 'delivered',
+                    status: 'Đã giao hàng',
                     createdAt: { $gte: startDate }
                 }
             },
@@ -82,7 +83,7 @@ exports.getDashboardStats = async (req, res, next) => {
         const topProducts = await Order.aggregate([
             {
                 $match: {
-                    status: 'delivered',
+                    status: 'Đã giao hàng',
                     createdAt: { $gte: startDate }
                 }
             },
@@ -103,7 +104,7 @@ exports.getDashboardStats = async (req, res, next) => {
         const categoryStats = await Order.aggregate([
             {
                 $match: {
-                    status: 'delivered',
+                    status: 'Đã giao hàng',
                     createdAt: { $gte: startDate }
                 }
             },
@@ -144,6 +145,16 @@ exports.getDashboardStats = async (req, res, next) => {
             }
         ]);
 
+        // 8. Pending Orders (awaiting confirmation)
+        const pendingOrders = await Order.countDocuments({
+            status: 'Chờ xác nhận'
+        });
+
+        // 9. Low Stock Ingredients
+        const lowStockIngredients = await Ingredient.countDocuments({
+            $expr: { $lte: ['$stock', '$minStock'] },
+            isActive: true
+        });
 
         // Calculate trends (comparing to previous period) - SIMPLIFIED for now: just random or static trends
         // To do real trends, we'd need to query the previous period as well. 
@@ -158,7 +169,9 @@ exports.getDashboardStats = async (req, res, next) => {
                 avgOrderValue: avgOrderValue,
                 chart: revenueChart,
                 topProducts: topProducts,
-                categoryStats: categoryStats
+                categoryStats: categoryStats,
+                pendingOrders: pendingOrders,
+                lowStockIngredients: lowStockIngredients
             }
         });
 

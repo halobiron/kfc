@@ -107,7 +107,7 @@ const Home = () => {
           <div className="alert alert-warning border-0 shadow-sm mb-0 d-flex align-items-center gap-3" role="alert">
             <FiAlertCircle size={24} className="flex-shrink-0" />
             <div>
-              <strong>Cần xử lý ngay:</strong> 3 đơn hàng chờ xác nhận | 2 nguyên liệu sắp hết
+              <strong>Cần xử lý ngay:</strong> {loading ? "..." : stats.pendingOrders} đơn hàng chờ xác nhận | {loading ? "..." : stats.lowStockIngredients} nguyên liệu sắp hết
               <br />
               <small className="text-muted">Vui lòng kiểm tra để cập nhật kịp thời</small>
             </div>
