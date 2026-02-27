@@ -82,8 +82,9 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Vui lòng cung cấp địa chỉ giao hàng', 400));
     }
 
-    if (deliveryType === 'Đến lấy' && (!deliveryInfo || !deliveryInfo.storeId)) {
-        return next(new ErrorHandler('Vui lòng chọn cửa hàng để nhận món', 400));
+    // Always require storeId (for tracking which store prepared the order)
+    if (!deliveryInfo || !deliveryInfo.storeId) {
+        return next(new ErrorHandler('Vui lòng chọn cửa hàng chế biến', 400));
     }
 
     let subtotal = 0;
@@ -241,12 +242,8 @@ exports.updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
 exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
     const filter = {};
 
-    // Filter by store if user is restricted to a store
-    if (req.user && req.user.storeId) {
-        filter['deliveryInfo.storeId'] = req.user.storeId;
-    }
-    // Allow creating/switching filters if user is not restricted (e.g. Super Admin)
-    else if (req.query.storeId) {
+    // Optional filter by store via query parameter (for admin/manager to view specific store orders)
+    if (req.query.storeId) {
         filter['deliveryInfo.storeId'] = req.query.storeId;
     }
 

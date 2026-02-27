@@ -104,6 +104,13 @@ const Checkout = () => {
         }
     }, [profile, savedAddresses]);
 
+    // Auto-select first store when delivery type changes to 'Giao hàng'
+    useEffect(() => {
+        if (deliveryType === 'Giao hàng' && stores.length > 0 && !selectedStore) {
+            setSelectedStore(stores[0].id || stores[0]._id);
+        }
+    }, [deliveryType, stores]);
+
     const handleApplyCoupon = () => {
         if (!couponCode) return;
 
@@ -161,6 +168,10 @@ const Checkout = () => {
                 ...prev,
                 address: location.address
             }));
+            // Auto-select nearest store for delivery
+            if (location.lat && location.lng) {
+                handleFindNearestStore(location.lat, location.lng);
+            }
             toast.info(`Đã chọn địa chỉ!`, { autoClose: 2000 });
         }
     };
@@ -213,8 +224,8 @@ const Checkout = () => {
             return;
         }
 
-        if (deliveryType === 'Đến lấy' && !selectedStore) {
-            toast.error("Vui lòng chọn cửa hàng để lấy món!");
+        if (!selectedStore) {
+            toast.error("Vui lòng chọn cửa hàng chế biến!");
             return;
         }
 
@@ -230,7 +241,7 @@ const Checkout = () => {
                     name: formData.fullName,
                     phone: formData.phone,
                     address: deliveryType === 'Giao hàng' ? formData.address : null,
-                    storeId: deliveryType === 'Đến lấy' ? selectedStore : null
+                    storeId: selectedStore
                 },
                 deliveryType,
                 paymentMethod,

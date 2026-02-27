@@ -4,9 +4,9 @@ import { toast } from 'react-toastify';
 
 export const getAllOrders = createAsyncThunk(
   'orders/getAllOrders',
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
-      const data = await orderApi.getAll();
+      const data = await orderApi.getAll(params);
       return data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi lấy danh sách đơn hàng');

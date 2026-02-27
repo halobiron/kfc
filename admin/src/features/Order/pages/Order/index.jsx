@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllOrders, updateOrderStatus } from '../../orderSlice';
 import { toast } from 'react-toastify';
+import storeApi from '../../../../api/storeApi';
 import StatusModal from '../../../../components/Common/StatusModal';
 import Button from '../../../../components/Common/Button';
 import Table from '../../../../components/Common/Table';
@@ -99,9 +100,31 @@ const Order = () => {
   const [targetStatus, setTargetStatus] = useState('');
   const [updating, setUpdating] = useState(false);
 
+  // Store Filter
+  const [stores, setStores] = useState([]);
+  const [selectedStore, setSelectedStore] = useState('');
+  const [loadingStores, setLoadingStores] = useState(true);
+
+  // Load stores
   useEffect(() => {
-    dispatch(getAllOrders());
-  }, [dispatch]);
+    const fetchStores = async () => {
+      try {
+        const data = await storeApi.getAll();
+        setStores(data.data || []);
+      } catch (error) {
+        console.error('Lỗi tải danh sách cửa hàng:', error);
+      } finally {
+        setLoadingStores(false);
+      }
+    };
+    fetchStores();
+  }, []);
+
+  // Load orders with store filter
+  useEffect(() => {
+    const params = selectedStore ? { storeId: selectedStore } : {};
+    dispatch(getAllOrders(params));
+  }, [dispatch, selectedStore]);
 
   const filteredOrders = orders.filter(order => {
     const searchLower = (keyword || '').toLowerCase();
@@ -177,7 +200,21 @@ const Order = () => {
       </div>
 
       <div className="card">
-        <div className="card-header">Danh sách đơn hàng</div>
+        <div className="card-header d-flex justify-content-between align-items-center">
+          <span>Danh sách đơn hàng</span>
+          <select
+            className="form-select form-select-sm"
+            style={{ maxWidth: '200px' }}
+            value={selectedStore}
+            onChange={(e) => setSelectedStore(e.target.value)}
+            disabled={loadingStores}
+          >
+            <option value="">Tất cả cửa hàng</option>
+            {stores.map(store => (
+              <option key={store._id} value={store._id}>{store.name}</option>
+            ))}
+          </select>
+        </div>
         <Table
           columns={columns}
           data={filteredOrders}

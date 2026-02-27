@@ -3,13 +3,14 @@ import { toast } from 'react-toastify';
 import orderApi from '../../../api/orderApi';
 import { getErrorMessage } from '../../../utils/errors';
 
-const useKitchenOrders = () => {
+const useKitchenOrders = (storeId = null) => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchOrders = useCallback(async () => {
         try {
-            const data = await orderApi.getAll();
+            const params = storeId ? { storeId } : {};
+            const data = await orderApi.getAll(params);
             setOrders(data.data || []);
         } catch (error) {
             console.error('Lỗi khi tải đơn hàng:', error);
@@ -17,7 +18,7 @@ const useKitchenOrders = () => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [storeId]);
 
     useEffect(() => {
         fetchOrders();

@@ -1,17 +1,38 @@
+import { useState, useEffect } from 'react';
 import { FiClock, FiCheckCircle, FiAlertCircle, FiPackage } from 'react-icons/fi';
 import StatCard from '../../../../components/Common/StatCard';
 import OrderCard from '../../components/OrderCard/OrderCard';
 import useKitchenOrders from '../../hooks/useKitchenOrders';
+import storeApi from '../../../../api/storeApi';
 import { ORDER_STATUS } from '../../components/OrderStatusBadge/orderStatus';
 import Button from '../../../../components/Common/Button';
 import './Kitchen.css';
 
 const Kitchen = () => {
+  const [selectedStore, setSelectedStore] = useState('');
+  const [stores, setStores] = useState([]);
+  const [loadingStores, setLoadingStores] = useState(true);
+
   const {
     refreshOrders,
     handleStatusChange,
     getOrdersByStatus
-  } = useKitchenOrders();
+  } = useKitchenOrders(selectedStore);
+
+  // Load stores
+  useEffect(() => {
+    const fetchStores = async () => {
+      try {
+        const data = await storeApi.getAll();
+        setStores(data.data || []);
+      } catch (error) {
+        console.error('Lỗi tải danh sách cửa hàng:', error);
+      } finally {
+        setLoadingStores(false);
+      }
+    };
+    fetchStores();
+  }, []);
 
   return (
     <>
@@ -19,9 +40,23 @@ const Kitchen = () => {
         <div>
           <h1 className="page-title">Điều phối Chế biến</h1>
         </div>
-        <Button variant="outline-primary" size="sm" onClick={refreshOrders}>
-          Làm mới
-        </Button>
+        <div className="d-flex gap-3 align-items-center">
+          <select
+            className="form-select form-select-sm"
+            style={{ maxWidth: '200px' }}
+            value={selectedStore}
+            onChange={(e) => setSelectedStore(e.target.value)}
+            disabled={loadingStores}
+          >
+            <option value="">Tất cả cửa hàng</option>
+            {stores.map(store => (
+              <option key={store._id} value={store._id}>{store.name}</option>
+            ))}
+          </select>
+          <Button variant="outline-primary" size="sm" onClick={refreshOrders}>
+            Làm mới
+          </Button>
+        </div>
       </div>
 
       <div className="row mb-4 g-3">

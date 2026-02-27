@@ -68,6 +68,22 @@ const DeliveryInfo = ({
                             onChange={handleInputChange}
                             required
                         />
+
+                        <CustomSelect
+                            className="col-12 mb-3"
+                            label="Chế biến tại cửa hàng *"
+                            options={[
+                                { value: '', label: '-- Chọn cửa hàng --' },
+                                ...stores.map(store => ({
+                                    value: store.id || store._id,
+                                    label: `${store.name} - ${store.address}`
+                                }))
+                            ]}
+                            value={selectedStore}
+                            onChange={(val) => setSelectedStore(val)}
+                            placeholder="Chọn cửa hàng"
+                        />
+
                         <FormInput
                             containerClass="col-12"
                             label="Ghi chú cho tài xế"
