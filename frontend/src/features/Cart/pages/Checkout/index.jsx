@@ -109,7 +109,7 @@ const Checkout = () => {
         if (deliveryType === 'Giao hàng' && stores.length > 0 && !selectedStore) {
             setSelectedStore(stores[0].id || stores[0]._id);
         }
-    }, [deliveryType, stores]);
+    }, [deliveryType, stores, selectedStore]);
 
     const handleApplyCoupon = () => {
         if (!couponCode) return;
