@@ -123,46 +123,65 @@ orderSchema.methods.deductIngredients = async function () {
     const Product = require('./productSchema');
     const Ingredient = require('./ingredientSchema');
 
-    const ingredientsToUpdate = [];
+    // 1. Lấy tất cả Product ID từ đơn hàng
+    const productIds = this.items.map(item => item.productId);
+    const products = await Product.find({ _id: { $in: productIds } });
+    
+    // Map để truy xuất nhanh thông tin sản phẩm
+    const productMap = new Map(products.map(p => [p._id.toString(), p]));
 
-    // 1. Tính toán tổng nguyên liệu cần thiết
+    // 2. Tính toán tổng nguyên liệu cần thiết
+    const neededMap = new Map();
+
     for (const item of this.items) {
-        const product = await Product.findById(item.productId);
-        if (product && product.recipe && product.recipe.length > 0) {
+        const product = productMap.get(item.productId.toString());
+        if (product && product.recipe) {
             for (const recipeItem of product.recipe) {
-                const ingredient = await Ingredient.findById(recipeItem.ingredientId);
-                if (ingredient) {
-                    const quantityNeeded = recipeItem.quantity * item.quantity;
-
-                    // Gom nhóm nguyên liệu
-                    const existing = ingredientsToUpdate.find(i => i.id.toString() === ingredient._id.toString());
-                    if (existing) {
-                        existing.needed += quantityNeeded;
-                    } else {
-                        ingredientsToUpdate.push({
-                            id: ingredient._id,
-                            needed: quantityNeeded,
-                            name: ingredient.name,
-                            unit: ingredient.unit,
-                            doc: ingredient
-                        });
-                    }
+                const id = recipeItem.ingredientId.toString();
+                const qty = recipeItem.quantity * item.quantity;
+                
+                if (neededMap.has(id)) {
+                    neededMap.get(id).needed += qty;
+                } else {
+                    neededMap.set(id, { 
+                        needed: qty, 
+                        name: recipeItem.name, 
+                        unit: recipeItem.unit 
+                    });
                 }
             }
         }
     }
 
-    // 2. Kiểm tra tồn kho
-    for (const update of ingredientsToUpdate) {
-        if (update.doc.stock < update.needed) {
-            throw new Error(`Không đủ nguyên liệu: ${update.name} (Cần: ${update.needed} ${update.unit}, Tồn: ${update.doc.stock})`);
+    if (neededMap.size === 0) return;
+
+    // 3. Lấy thông tin tồn kho hiện tại của tất cả nguyên liệu cần thiết
+    const ingredientIds = Array.from(neededMap.keys());
+    const currentIngredients = await Ingredient.find({ _id: { $in: ingredientIds } });
+    const stockMap = new Map(currentIngredients.map(i => [i._id.toString(), i]));
+
+    // 4. Kiểm tra tồn kho trước khi trừ
+    const bulkOps = [];
+    for (const [id, info] of neededMap) {
+        const ingredient = stockMap.get(id);
+        if (!ingredient) {
+            throw new Error(`Nguyên liệu không tồn tại: ${info.name}`);
         }
+        if (ingredient.stock < info.needed) {
+            throw new Error(`Không đủ nguyên liệu: ${info.name} (Cần: ${info.needed} ${info.unit}, Tồn: ${ingredient.stock})`);
+        }
+
+        bulkOps.push({
+            updateOne: {
+                filter: { _id: id },
+                update: { $inc: { stock: -info.needed } }
+            }
+        });
     }
 
-    // 3. Trừ kho
-    for (const update of ingredientsToUpdate) {
-        update.doc.stock -= update.needed;
-        await update.doc.save();
+    // 5. Thực thi trừ kho hàng loạt (Atomic-like operation)
+    if (bulkOps.length > 0) {
+        await Ingredient.bulkWrite(bulkOps);
     }
 };
 
