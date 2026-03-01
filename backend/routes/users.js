@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {
-    // getUserProfile,
+    
     updateUserProfile,
     changePassword,
     addAddress,
@@ -16,7 +16,6 @@ const {
 const { isAuthenticatedUser, authorizePermission } = require('../middleware/auth');
 
 // User routes
-// router.get('/users/profile', isAuthenticatedUser, getUserProfile); // Deprecated, use /auth/me
 
 router.put('/users/profile/update', isAuthenticatedUser, updateUserProfile);
 router.post('/users/change-password', isAuthenticatedUser, changePassword);

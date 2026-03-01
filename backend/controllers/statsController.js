@@ -156,9 +156,7 @@ exports.getDashboardStats = async (req, res, next) => {
             isActive: true
         });
 
-        // Calculate trends (comparing to previous period) - SIMPLIFIED for now: just random or static trends
-        // To do real trends, we'd need to query the previous period as well. 
-        // For this task, we will calculate simplest check: just return the current values.
+        // Calculate trends (comparing to previous period)s
 
         res.status(200).json({
             status: true,

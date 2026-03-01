@@ -7,8 +7,6 @@ const { calculateShippingFee } = require('../utils/shipping');
 const { catchAsyncErrors } = require('../middleware/errors');
 const ErrorHandler = require('../utils/errorHandler');
 
-// --- HELPER FUNCTIONS ---
-
 // Helper: Validate and Calculate Coupon Discount
 const validateAndCalculateCoupon = async (couponCode, subtotal, shippingFee) => {
     if (!couponCode) return { couponDiscount: 0, error: null };
@@ -61,8 +59,6 @@ const handlePayOSPayment = async (order, totalAmount) => {
         return { success: true, checkoutUrl: paymentLinkResponse.checkoutUrl };
     } catch (payOsError) {
         console.error('PayOS create link error:', payOsError);
-        // Clean up checking order if payment link fails? 
-        // Strategy: Delete order and return error
         await Order.findByIdAndDelete(order._id);
         return { success: false, error: payOsError.message };
     }
@@ -207,7 +203,6 @@ exports.updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Đơn hàng không tìm thấy', 404));
     }
 
-    // START: Logic trừ nguyên liệu khi bắt đầu nấu (status: preparing)
     if (status === 'Đang chuẩn bị' && order.status !== 'Đang chuẩn bị') {
         try {
             await order.deductIngredients();
@@ -215,7 +210,6 @@ exports.updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
             return next(new ErrorHandler(error.message, 400));
         }
     }
-    // END: Logic trừ nguyên liệu
 
     order.status = status;
     order.statusHistory.push({

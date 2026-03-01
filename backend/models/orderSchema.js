@@ -6,7 +6,6 @@ const orderSchema = new Schema({
     orderNumber: {
         type: String,
         unique: true,
-        // Remove required: true because it's generated in pre-save hook
     },
     userId: {
         type: Schema.Types.ObjectId,
