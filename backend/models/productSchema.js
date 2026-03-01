@@ -28,9 +28,7 @@ const productSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Ingredient'
         },
-        name: String,
-        quantity: Number,
-        unit: String
+        quantity: Number
     }]
 },
     {

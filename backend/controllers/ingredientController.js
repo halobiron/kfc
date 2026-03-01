@@ -37,12 +37,12 @@ exports.getIngredientById = async (req, res, next) => {
 // CREATE INGREDIENT
 exports.createIngredient = async (req, res, next) => {
     try {
-        const { name, category, unit, stock, minStock, cost } = req.body;
+        const { name, category, unit, stock, minStock } = req.body;
 
-        if (!name || !category || !unit || !stock || !cost) {
+        if (!name || !category || !unit || stock === undefined) {
             return res.status(400).json({
                 status: false,
-                message: 'Vui lòng điền đầy đủ thông tin bắt buộc'
+                message: 'Vui lòng điền đầy đủ thông tin bắt buộc (Tên, Danh mục, Đơn vị, Tồn kho)'
             });
         }
 
@@ -51,8 +51,7 @@ exports.createIngredient = async (req, res, next) => {
             category,
             unit,
             stock,
-            minStock: minStock || 10,
-            cost
+            minStock: minStock || 10
         });
 
         res.status(201).json({

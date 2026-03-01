@@ -23,7 +23,7 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
-    const products = await Product.find({});
+    const products = await Product.find({}).populate('recipe.ingredientId');
     res.json({
         status: true,
         data: products
@@ -32,7 +32,7 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
 
 exports.getProductById = catchAsyncErrors(async (req, res, next) => {
     const id = req.params.id;
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate('recipe.ingredientId');
 
     if (!product) {
         return next(new ErrorHandler('Product not found', 404));

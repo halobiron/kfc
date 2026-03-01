@@ -104,19 +104,14 @@ const orderSchema = new Schema({
 });
 
 // Auto generate order number
-orderSchema.pre('save', async function () {
-    if (!this.isNew) return;
+orderSchema.pre('save', function (next) {
+    if (!this.isNew) return next();
 
-    try {
-        const count = await this.constructor.countDocuments();
-        const date = new Date();
-        const dateStr = date.getFullYear() + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
-        // Add random suffix to prevent "Duplicate orderNumber" errors from simultaneous saves
-        const randomSuffix = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-        this.orderNumber = `ORD${dateStr}${String(count + 1).padStart(5, '0')}${randomSuffix}`;
-    } catch (error) {
-        throw error;
-    }
+    const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD
+    const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase(); // 5 ký tự ngẫu nhiên
+    this.orderNumber = `KFC-${dateStr}-${randomStr}`;
+    
+    next();
 });
 
 orderSchema.methods.deductIngredients = async function () {

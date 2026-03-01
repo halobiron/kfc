@@ -26,10 +26,6 @@ const ingredientSchema = new Schema({
         required: true,
         min: 0
     },
-    cost: {
-        type: Number,
-        required: true
-    },
     description: String,
     isActive: {
         type: Boolean,
