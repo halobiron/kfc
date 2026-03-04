@@ -3,7 +3,6 @@ const ErrorHandler = require('../utils/errorHandler');
 exports.errorMiddleware = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
 
-    // Production mode: cleaner errors
     if (process.env.NODE_ENV === 'PRODUCTION') {
         let error = { ...err }
         error.message = err.message;
