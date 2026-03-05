@@ -103,14 +103,12 @@ const orderSchema = new Schema({
 });
 
 // Auto generate order number
-orderSchema.pre('save', function (next) {
-    if (!this.isNew) return next();
+orderSchema.pre('save', async function () {
+    if (!this.isNew) return;
 
     const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD
     const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase(); // 5 ký tự ngẫu nhiên
     this.orderNumber = `KFC-${dateStr}-${randomStr}`;
-    
-    next();
 });
 
 orderSchema.methods.deductIngredients = async function () {
@@ -120,7 +118,7 @@ orderSchema.methods.deductIngredients = async function () {
     // 1. Lấy tất cả Product ID từ đơn hàng
     const productIds = this.items.map(item => item.productId);
     const products = await Product.find({ _id: { $in: productIds } });
-    
+
     // Map để truy xuất nhanh thông tin sản phẩm
     const productMap = new Map(products.map(p => [p._id.toString(), p]));
 
@@ -133,14 +131,14 @@ orderSchema.methods.deductIngredients = async function () {
             for (const recipeItem of product.recipe) {
                 const id = recipeItem.ingredientId.toString();
                 const qty = recipeItem.quantity * item.quantity;
-                
+
                 if (neededMap.has(id)) {
                     neededMap.get(id).needed += qty;
                 } else {
-                    neededMap.set(id, { 
-                        needed: qty, 
-                        name: recipeItem.name, 
-                        unit: recipeItem.unit 
+                    neededMap.set(id, {
+                        needed: qty,
+                        name: recipeItem.name,
+                        unit: recipeItem.unit
                     });
                 }
             }

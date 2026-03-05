@@ -141,7 +141,7 @@ const Ingredient = () => {
             className: 'text-end fw-bold',
             render: (ing) => (
                 <span className={ing.stock <= ing.minStock ? 'text-danger' : ''}>
-                    {ing.stock}
+                    {parseFloat(Number(ing.stock).toFixed(2))}
                 </span>
             )
         },

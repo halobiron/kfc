@@ -36,7 +36,6 @@ const validateAndCalculateCoupon = async (couponCode, subtotal, shippingFee) => 
 
 // Helper: Handle PayOS Payment Creation
 const handlePayOSPayment = async (order, totalAmount) => {
-    // Generate numeric order code for PayOS (using timestamp + random part if needed, max 53 bit)
     const paymentCode = Number(String(Date.now()).slice(-10));
 
     order.paymentCode = paymentCode;
@@ -64,21 +63,17 @@ const handlePayOSPayment = async (order, totalAmount) => {
     }
 };
 
-// CREATE ORDER (Refactored)
+// CREATE ORDER
 exports.createOrder = catchAsyncErrors(async (req, res, next) => {
     const { items, deliveryType, deliveryInfo, paymentMethod, couponCode } = req.body;
 
-    // Validate items
     if (!items || items.length === 0) {
         return next(new ErrorHandler('Đơn hàng phải có ít nhất một sản phẩm', 400));
     }
 
-    // Validate delivery info
     if (deliveryType === 'Giao hàng' && (!deliveryInfo || !deliveryInfo.address)) {
         return next(new ErrorHandler('Vui lòng cung cấp địa chỉ giao hàng', 400));
     }
-
-    // Always require storeId (for tracking which store prepared the order)
     if (!deliveryInfo || !deliveryInfo.storeId) {
         return next(new ErrorHandler('Vui lòng chọn cửa hàng chế biến', 400));
     }
@@ -106,10 +101,8 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
         });
     }
 
-    // 2. Shipping Fee
     const shippingFee = calculateShippingFee({ deliveryType, subtotal });
 
-    // 3. Coupon Logic (Extracted)
     const { couponDiscount, coupon, error: couponError } = await validateAndCalculateCoupon(couponCode, subtotal, shippingFee);
     if (couponError) {
         return next(new ErrorHandler(couponError, 400));
@@ -122,7 +115,6 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
 
     const totalAmount = Math.max(0, subtotal - couponDiscount + shippingFee);
 
-    // 4. Save Order
     const order = await Order.create({
         userId: req.user.id,
         items: orderItems,
@@ -143,7 +135,6 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
         statusHistory: [{ status: 'Chờ xác nhận', timestamp: new Date(), note: 'Đơn hàng vừa được tạo' }]
     });
 
-    // 5. Payment Handling
     if (paymentMethod === 'Cổng thanh toán PayOS') {
         const paymentResult = await handlePayOSPayment(order, totalAmount);
         if (!paymentResult.success) {

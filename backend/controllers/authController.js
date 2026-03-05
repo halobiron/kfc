@@ -74,33 +74,27 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     const { email, password } = req.body;
 
-    // Validation
     if (!email || !password) {
         return next(new ErrorHandler('Vui lòng nhập email và mật khẩu', 400));
     }
 
-    // Find user and select password
     const user = await User.findOne({ email }).select('+password').populate('role');
     if (!user) {
         return next(new ErrorHandler('Email hoặc mật khẩu không chính xác', 401));
     }
 
-    // Check if user is active
     if (user.isActive === false) {
         return next(new ErrorHandler('Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.', 403));
     }
 
-    // Check password
     const isPasswordMatched = await user.matchPassword(password);
     if (!isPasswordMatched) {
         return next(new ErrorHandler('Email hoặc mật khẩu không chính xác', 401));
     }
 
-    // Update last login
     user.lastLogin = new Date();
     await user.save();
 
-    // Send token
     await sendToken(user, 200, res);
 });
 
