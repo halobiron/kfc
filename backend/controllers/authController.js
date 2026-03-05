@@ -5,6 +5,7 @@ const ErrorHandler = require('../utils/errorHandler');
 const crypto = require('crypto');
 const { OAuth2Client } = require('google-auth-library');
 const sendEmail = require('../utils/sendEmail');
+const { logAction } = require('../utils/logger');
 
 const sendToken = async (user, statusCode, res) => {
     const token = jwt.sign(
@@ -94,6 +95,10 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
     user.lastLogin = new Date();
     await user.save();
+
+    if (user.role && user.role.code !== 'CUSTOMER') {
+        await logAction(user._id, 'LOGIN', 'User', `Tài khoản quản trị đăng nhập: ${user.name}`);
+    }
 
     await sendToken(user, 200, res);
 });

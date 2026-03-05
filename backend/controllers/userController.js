@@ -2,6 +2,7 @@ const User = require('../models/userSchema');
 const Role = require('../models/roleSchema');
 const { catchAsyncErrors } = require('../middleware/errors');
 const ErrorHandler = require('../utils/errorHandler');
+const { logAction } = require('../utils/logger');
 
 // UPDATE USER PROFILE
 exports.updateUserProfile = catchAsyncErrors(async (req, res, next) => {
@@ -45,6 +46,12 @@ exports.getUserById = catchAsyncErrors(async (req, res, next) => {
 exports.createUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.create(req.body);
     const populatedUser = await User.findById(user._id).populate('role');
+
+    if (req.user) {
+        const roleName = populatedUser.role ? populatedUser.role.name : 'Khách hàng';
+        await logAction(req.user.id, 'CREATE', 'User', `Tạo tài khoản mới: ${user.name} (Vai trò: ${roleName})`);
+    }
+
     res.status(201).json({ status: true, message: 'Tạo thành công', data: populatedUser });
 });
 
@@ -63,6 +70,11 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
         new: true, runValidators: true
     }).populate('role');
+
+    if (req.user) {
+        const roleName = user.role ? user.role.name : 'Khách hàng';
+        await logAction(req.user.id, 'UPDATE', 'User', `Cập nhật quyền hạn/thông tin tài khoản: ${user.name} (Vai trò: ${roleName})`);
+    }
 
     res.status(200).json({ status: true, message: 'Cập nhật thành công', data: user });
 });
