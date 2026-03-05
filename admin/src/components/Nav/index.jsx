@@ -4,13 +4,14 @@ import { NavLink } from 'react-router-dom'
 import { FiLock } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { routesMetadata } from '../../config/routesConfig';
+import { selectCurrentUser } from '../../features/Auth/authSlice';
 
 const Nav = () => {
-  const { user } = useSelector(state => state.auth);
-  const roleName = user?.role?.name || user?.role;
+  const user = useSelector(selectCurrentUser);
+  const roleName = user?.roleCode;
   const getNavLinkClass = ({ isActive }) => `nav-link${isActive ? ' active' : ''}`;
 
-  const permissions = user?.permissions || user?.role?.permissions || user?.roleId?.permissions || [];
+  const permissions = user?.flatPermissions || [];
 
   const hasPermission = (perm) => {
     if (!perm) return true;

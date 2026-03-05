@@ -12,7 +12,8 @@ import Kitchen from '../features/Order/pages/Kitchen';
 import Stores from '../features/Store/pages/Stores';
 import ChangePassword from '../features/Auth/pages/ChangePassword';
 import Roles from '../features/Role/pages/Roles';
-import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiBox, FiTag, FiPackage, FiMapPin, FiLock } from 'react-icons/fi';
+import Logs from '../features/SystemLog/pages/Logs';
+import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiBox, FiTag, FiPackage, FiMapPin, FiLock, FiClock } from 'react-icons/fi';
 
 const baseRoutes = [
     {
@@ -101,6 +102,14 @@ const baseRoutes = [
         icon: <FiMapPin />,
         permission: 'stores.view',
         component: <Stores />
+    },
+    {
+        path: '/logs',
+        id: 'logs',
+        label: 'Lịch sử log',
+        icon: <FiClock />,
+        permission: 'system.admin',
+        component: <Logs />
     }
 ];
 

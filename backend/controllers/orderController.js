@@ -6,6 +6,7 @@ const payos = require('../utils/payosClient');
 const { calculateShippingFee } = require('../utils/shipping');
 const { catchAsyncErrors } = require('../middleware/errors');
 const ErrorHandler = require('../utils/errorHandler');
+const { logAction } = require('../utils/logger');
 
 // Helper: Validate and Calculate Coupon Discount
 const validateAndCalculateCoupon = async (couponCode, subtotal, shippingFee) => {
@@ -216,6 +217,8 @@ exports.updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
 
     await order.save();
 
+    await logAction(req.user.id, 'UPDATE', 'Order', `Cập nhật trạng thái đơn hàng ${order.orderNumber} thành: ${status}`);
+
     res.status(200).json({
         status: true,
         message: 'Cập nhật trạng thái đơn hàng thành công',
@@ -246,6 +249,8 @@ exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
     if (!order) {
         return next(new ErrorHandler('Đơn hàng không tìm thấy', 404));
     }
+
+    await logAction(req.user.id, 'DELETE', 'Order', `Xóa đơn hàng ${order.orderNumber}`);
 
     res.status(200).json({
         status: true,

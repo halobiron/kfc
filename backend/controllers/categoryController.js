@@ -1,5 +1,6 @@
 const Category = require('../models/categorySchema');
 const Product = require('../models/productSchema');
+const { logAction } = require('../utils/logger');
 
 const slugify = (text) => {
     return text
@@ -19,6 +20,11 @@ exports.createCategory = async (req, res, next) => {
             req.body.slug = slugify(req.body.name);
         }
         const category = await Category.create(req.body);
+
+        if (req.user) {
+            await logAction(req.user.id, 'CREATE', 'Category', `Tạo danh mục mới: ${category.name}`);
+        }
+
         res.json({
             status: true,
             data: category
@@ -94,6 +100,10 @@ exports.updateCategory = async (req, res, next) => {
             );
         }
 
+        if (req.user) {
+            await logAction(req.user.id, 'UPDATE', 'Category', `Cập nhật danh mục: ${category.name}`);
+        }
+
         res.json({
             status: true,
             data: category
@@ -123,6 +133,11 @@ exports.deleteCategory = async (req, res, next) => {
         }
 
         await Category.findByIdAndDelete(req.params.id);
+
+        if (req.user) {
+            await logAction(req.user.id, 'DELETE', 'Category', `Xóa danh mục: ${category.name}`);
+        }
+
         res.json({
             status: true,
             message: 'Category deleted successfully'

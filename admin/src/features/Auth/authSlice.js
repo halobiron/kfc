@@ -143,3 +143,14 @@ export const selectUser = (state) => state.auth.user;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const selectAuthLoading = (state) => state.auth.loading;
 export const selectAuthError = (state) => state.auth.error;
+
+export const selectCurrentUser = (state) => {
+    const user = state.auth.user;
+    if (!user) return null;
+
+    return {
+        ...user,
+        roleCode: user.role?.code,
+        flatPermissions: user.role?.permissions || []
+    };
+};
