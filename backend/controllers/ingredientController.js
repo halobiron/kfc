@@ -37,7 +37,7 @@ exports.getIngredientById = async (req, res, next) => {
 // CREATE INGREDIENT
 exports.createIngredient = async (req, res, next) => {
     try {
-        const { name, category, unit, stock, minStock } = req.body;
+        const { name, category, unit, stock, minStock, supplier, supplierContact } = req.body;
 
         if (!name || !category || !unit || stock === undefined) {
             return res.status(400).json({
@@ -51,7 +51,9 @@ exports.createIngredient = async (req, res, next) => {
             category,
             unit,
             stock,
-            minStock: minStock || 10
+            minStock: minStock || 10,
+            supplier,
+            supplierContact
         });
 
         res.status(201).json({
@@ -151,6 +153,9 @@ exports.updateStock = async (req, res, next) => {
                 message: 'Loại thay đổi không hợp lệ (add hoặc reduce)'
             });
         }
+
+        if (supplier) ingredient.supplier = supplier;
+        if (supplierContact) ingredient.supplierContact = supplierContact;
 
         ingredient.updatedAt = new Date();
         await ingredient.save();

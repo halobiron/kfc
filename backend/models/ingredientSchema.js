@@ -26,6 +26,8 @@ const ingredientSchema = new Schema({
         required: true,
         min: 0
     },
+    supplier: String,
+    supplierContact: String,
     description: String,
     isActive: {
         type: Boolean,
