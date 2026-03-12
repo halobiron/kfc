@@ -36,7 +36,15 @@ exports.createCategory = async (req, res, next) => {
 
 exports.getAllCategories = async (req, res, next) => {
     try {
-        const categories = await Category.find({});
+        const resPerPage = Number(req.query.limit) || 20;
+        const page = Number(req.query.page) || 1;
+        const skip = resPerPage * (page - 1);
+
+        const totalCategories = await Category.countDocuments({});
+        const categories = await Category.find({})
+            .skip(skip)
+            .limit(resPerPage);
+
         const categoriesWithCount = await Promise.all(categories.map(async (cat) => {
             const productCount = await Product.countDocuments({ category: cat.slug });
             return {
@@ -46,6 +54,9 @@ exports.getAllCategories = async (req, res, next) => {
         }));
         res.json({
             status: true,
+            totalCategories,
+            resPerPage,
+            page,
             data: categoriesWithCount
         });
     } catch (error) {

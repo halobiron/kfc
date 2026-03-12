@@ -47,7 +47,7 @@ const AccountOrders = () => {
     const fetchOrders = async () => {
         try {
             setLoading(true);
-            const response = await orderApi.getMyOrders();
+            const response = await orderApi.getMyOrders({ limit: 50 }); // Load up to 50 recent orders
             setOrders(response.data || []);
         } catch (error) {
             toast.error('Không thể tải đơn hàng. Vui lòng thử lại.');

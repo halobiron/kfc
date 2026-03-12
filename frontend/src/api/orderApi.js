@@ -14,9 +14,9 @@ const orderApi = {
         const url = `/order/${orderId}${verifyPayment ? '/verify-payment' : ''}`;
         return axiosClient.get(url);
     },
-    getMyOrders: () => {
+    getMyOrders: (params) => {
         const url = '/user/orders';
-        return axiosClient.get(url);
+        return axiosClient.get(url, { params });
     },
     cancelOrder: (orderId, data) => {
         const url = `/order/${orderId}/cancel`;

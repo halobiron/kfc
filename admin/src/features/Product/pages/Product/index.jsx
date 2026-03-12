@@ -15,19 +15,22 @@ const Product = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { products } = useSelector(state => state.products)
+  const { products, productsCount, resPerPage, currentPage, loading } = useSelector(state => state.products)
   const { keyword } = useSelector(state => state.search);
 
   const [showModal, setShowModal] = useState(false)
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    dispatch(getAllProducts());
+    dispatch(getAllProducts({ page, limit: 10 }));
     dispatch(getAllCategories());
-  }, [dispatch])
+  }, [dispatch, page])
 
   const filteredProducts = products.filter(product =>
     product.title.toLowerCase().includes((keyword || '').toLowerCase())
   );
+
+  const totalPages = Math.ceil((productsCount || 0) / (resPerPage || 10));
 
   const columns = [
     {
@@ -105,6 +108,12 @@ const Product = () => {
         <Table
           columns={columns}
           data={filteredProducts}
+          loading={loading}
+          pagination={{
+            currentPage: currentPage || page,
+            totalPages: totalPages,
+            onPageChange: (newPage) => setPage(newPage)
+          }}
         />
       </div>
       {showModal ? <AddModal setShowModal={setShowModal} /> : null}

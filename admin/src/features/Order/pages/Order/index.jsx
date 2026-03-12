@@ -91,8 +91,9 @@ const OrderActionButtons = ({ order, onOpenUpdateModal, onCancelClick }) => (
 
 const Order = () => {
   const dispatch = useDispatch();
-  const { orders, loading } = useSelector(state => state.orders);
+  const { orders, ordersCount, resPerPage, currentPage, loading } = useSelector(state => state.orders);
   const { keyword } = useSelector(state => state.search);
+  const [page, setPage] = useState(1);
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -109,7 +110,7 @@ const Order = () => {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const data = await storeApi.getAll();
+        const data = await storeApi.getAll({ limit: 100 });
         setStores(data.data || []);
       } catch (error) {
         console.error('Lỗi tải danh sách cửa hàng:', error);
@@ -122,9 +123,9 @@ const Order = () => {
 
   // Load orders with store filter
   useEffect(() => {
-    const params = selectedStore ? { storeId: selectedStore } : {};
+    const params = selectedStore ? { storeId: selectedStore, page, limit: 10 } : { page, limit: 10 };
     dispatch(getAllOrders(params));
-  }, [dispatch, selectedStore]);
+  }, [dispatch, selectedStore, page]);
 
   const filteredOrders = orders.filter(order => {
     const searchLower = (keyword || '').toLowerCase();
@@ -220,6 +221,11 @@ const Order = () => {
           data={filteredOrders}
           loading={loading}
           emptyMessage="Chưa có đơn hàng nào"
+          pagination={{
+            currentPage: currentPage || page,
+            totalPages: Math.ceil((ordersCount || 0) / (resPerPage || 10)),
+            onPageChange: (newPage) => setPage(newPage)
+          }}
         />
       </div>
 

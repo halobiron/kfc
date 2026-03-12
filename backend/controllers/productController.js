@@ -29,9 +29,21 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
-    const products = await Product.find({}).populate('recipe.ingredientId');
+    const resPerPage = Number(req.query.limit) || 12;
+    const page = Number(req.query.page) || 1;
+    const skip = resPerPage * (page - 1);
+
+    const productsCount = await Product.countDocuments();
+    const products = await Product.find({})
+        .populate('recipe.ingredientId')
+        .skip(skip)
+        .limit(resPerPage);
+
     res.json({
         status: true,
+        productsCount,
+        resPerPage,
+        page,
         data: products
     })
 });

@@ -1,8 +1,8 @@
 import axiosClient from './axiosClient';
 
 const userApi = {
-    getAll() {
-        return axiosClient.get('/users');
+    getAll(params) {
+        return axiosClient.get('/users', { params });
     },
     get(id) {
         return axiosClient.get(`/users/${id}`);

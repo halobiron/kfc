@@ -3,10 +3,20 @@ const Store = require('../models/storeSchema');
 // GET ALL STORES
 exports.getAllStores = async (req, res, next) => {
     try {
-        const stores = await Store.find({ isActive: true });
+        const resPerPage = Number(req.query.limit) || 12;
+        const page = Number(req.query.page) || 1;
+        const skip = resPerPage * (page - 1);
+
+        const storesCount = await Store.countDocuments({ isActive: true });
+        const stores = await Store.find({ isActive: true })
+            .skip(skip)
+            .limit(resPerPage);
 
         res.status(200).json({
             status: true,
+            storesCount,
+            resPerPage,
+            page,
             data: stores
         });
     } catch (error) {

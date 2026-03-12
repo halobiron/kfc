@@ -1,8 +1,8 @@
 import axiosClient from './axiosClient';
 
 const productApi = {
-    getAll() {
-        return axiosClient.get('/products');
+    getAll(params) {
+        return axiosClient.get('/products', { params });
     },
     get(id) {
         return axiosClient.get(`/product/${id}`);

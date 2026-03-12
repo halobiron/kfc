@@ -4,9 +4,9 @@ import productApi from '../../api/productApi';
 // Async Thunks
 export const getAllProducts = createAsyncThunk(
     'products/getAllProducts',
-    async () => {
-        const response = await productApi.getAll();
-        return response.data;
+    async (params) => {
+        const response = await productApi.getAll(params);
+        return response; // Trả về toàn bộ response bao gồm cả pagination info
     }
 );
 
@@ -22,6 +22,9 @@ const productSlice = createSlice({
     name: 'products',
     initialState: {
         products: [],
+        productsCount: 0,
+        resPerPage: 12,
+        currentPage: 1,
         loading: false,
         error: null,
         currentProduct: null,
@@ -35,7 +38,10 @@ const productSlice = createSlice({
             })
             .addCase(getAllProducts.fulfilled, (state, action) => {
                 state.loading = false;
-                state.products = action.payload || [];
+                state.products = action.payload.data || [];
+                state.productsCount = action.payload.productsCount || 0;
+                state.resPerPage = action.payload.resPerPage || 12;
+                state.currentPage = action.payload.page || 1;
             })
             .addCase(getAllProducts.rejected, (state, action) => {
                 state.loading = false;
@@ -58,6 +64,9 @@ const productSlice = createSlice({
 
 // Selectors
 export const selectAllProducts = (state) => state.products.products;
+export const selectProductsCount = (state) => state.products.productsCount;
+export const selectResPerPage = (state) => state.products.resPerPage;
+export const selectCurrentPage = (state) => state.products.currentPage;
 export const selectProductLoading = (state) => state.products.loading;
 export const selectProductError = (state) => state.products.error;
 export const selectCurrentProduct = (state) => state.products.currentProduct;

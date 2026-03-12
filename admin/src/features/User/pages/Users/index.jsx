@@ -23,17 +23,18 @@ const ROLE_LABELS = {
 
 const Users = () => {
     const dispatch = useDispatch();
-    const { users: usersList, loading } = useSelector((state) => state.users);
+    const { users: usersList, usersCount, resPerPage, currentPage, loading } = useSelector((state) => state.users);
     const { roles } = useSelector((state) => state.roles);
     const { keyword } = useSelector(state => state.search);
 
     const [showModal, setShowModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
-        dispatch(getAllUsers());
+        dispatch(getAllUsers({ page, limit: 10 }));
         dispatch(getAllRoles());
-    }, [dispatch]);
+    }, [dispatch, page]);
 
     const filteredUsers = useMemo(() => {
         const searchLower = (keyword || '').toLowerCase();
@@ -167,6 +168,11 @@ const Users = () => {
                     columns={columns}
                     data={filteredUsers}
                     loading={loading}
+                    pagination={{
+                        currentPage: currentPage || page,
+                        totalPages: Math.ceil((usersCount || 0) / (resPerPage || 10)),
+                        onPageChange: (newPage) => setPage(newPage)
+                    }}
                 />
             </div>
 

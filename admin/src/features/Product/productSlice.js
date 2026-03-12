@@ -8,9 +8,9 @@ const handleAsyncError = (error, rejectWithValue) => {
 
 export const getAllProducts = createAsyncThunk(
   'products/getAllProducts',
-  async (_, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
-      const response = await productApi.getAll();
+      const response = await productApi.getAll(params);
       return response;
     } catch (error) {
       return handleAsyncError(error, rejectWithValue);
@@ -70,6 +70,9 @@ const productSlice = createSlice({
   name: 'products',
   initialState: {
     products: [],
+    productsCount: 0,
+    resPerPage: 12,
+    currentPage: 1,
     loading: false,
     error: null,
     currentProduct: null,
@@ -91,7 +94,10 @@ const productSlice = createSlice({
       })
       .addCase(getAllProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload.data || action.payload || [];
+        state.products = action.payload.data || [];
+        state.productsCount = action.payload.productsCount || 0;
+        state.resPerPage = action.payload.resPerPage || 12;
+        state.currentPage = action.payload.page || 1;
       })
       .addCase(getAllProducts.rejected, (state, action) => {
         state.loading = false;

@@ -17,7 +17,7 @@ const Home = () => {
   const { categories } = useSelector((state) => state.categories);
 
   useEffect(() => {
-    dispatch(getAllProducts());
+    dispatch(getAllProducts({ limit: 100 }));
     dispatch(getAllCategories());
   }, [dispatch]);
 

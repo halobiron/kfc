@@ -154,9 +154,21 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
 
 // GET USER ORDERS
 exports.getUserOrders = catchAsyncErrors(async (req, res, next) => {
-    const orders = await Order.find({ userId: req.user.id }).sort({ createdAt: -1 });
+    const resPerPage = Number(req.query.limit) || 10;
+    const page = Number(req.query.page) || 1;
+    const skip = resPerPage * (page - 1);
+
+    const ordersCount = await Order.countDocuments({ userId: req.user.id });
+    const orders = await Order.find({ userId: req.user.id })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(resPerPage);
+
     res.status(200).json({
         status: true,
+        ordersCount,
+        resPerPage,
+        page,
         data: orders
     });
 });
@@ -228,6 +240,10 @@ exports.updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
 
 // GET ALL ORDERS (ADMIN)
 exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
+    const resPerPage = Number(req.query.limit) || 20;
+    const page = Number(req.query.page) || 1;
+    const skip = resPerPage * (page - 1);
+
     const filter = {};
 
     // Optional filter by store via query parameter (for admin/manager to view specific store orders)
@@ -235,9 +251,17 @@ exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
         filter['deliveryInfo.storeId'] = req.query.storeId;
     }
 
-    const orders = await Order.find(filter).sort({ createdAt: -1 });
+    const ordersCount = await Order.countDocuments(filter);
+    const orders = await Order.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(resPerPage);
+
     res.status(200).json({
         status: true,
+        ordersCount,
+        resPerPage,
+        page,
         data: orders
     });
 });

@@ -31,8 +31,23 @@ exports.changePassword = catchAsyncErrors(async (req, res, next) => {
 
 // ADMIN: GET ALL USERS
 exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
-    const users = await User.find().populate('role');
-    res.status(200).json({ status: true, data: users });
+    const resPerPage = Number(req.query.limit) || 20;
+    const page = Number(req.query.page) || 1;
+    const skip = resPerPage * (page - 1);
+
+    const usersCount = await User.countDocuments();
+    const users = await User.find()
+        .populate('role')
+        .skip(skip)
+        .limit(resPerPage);
+
+    res.status(200).json({
+        status: true,
+        usersCount,
+        resPerPage,
+        page,
+        data: users
+    });
 });
 
 // ADMIN: GET USER BY ID

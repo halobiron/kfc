@@ -74,7 +74,7 @@ const Product = () => {
     );
 
     useEffect(() => {
-        dispatch(getAllProducts());
+        dispatch(getAllProducts({ limit: 100 })); // Lấy nhiều để đủ nhóm theo danh mục
         dispatch(getAllCategories());
     }, [dispatch]);
 

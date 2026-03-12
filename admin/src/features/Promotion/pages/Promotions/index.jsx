@@ -13,11 +13,12 @@ import './Promotions.css';
 
 const Promotions = () => {
   const dispatch = useDispatch();
-  const { coupons, loading, error, success } = useSelector((state) => state.coupons);
+  const { coupons, couponsCount, resPerPage, currentPage, loading, error, success } = useSelector((state) => state.coupons);
   const { keyword } = useSelector(state => state.search);
 
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [page, setPage] = useState(1);
   const [currentPromotion, setCurrentPromotion] = useState({
     code: '',
     title: '',
@@ -32,8 +33,8 @@ const Promotions = () => {
   });
 
   useEffect(() => {
-    dispatch(getAllCoupons());
-  }, [dispatch]);
+    dispatch(getAllCoupons({ page, limit: 20 }));
+  }, [dispatch, page]);
 
   const filteredCoupons = coupons.filter(coupon =>
     (coupon.code && coupon.code.toLowerCase().includes((keyword || '').toLowerCase())) ||
@@ -258,6 +259,11 @@ const Promotions = () => {
             data={filteredCoupons}
             loading={loading}
             emptyMessage="Chưa có khuyến mãi nào"
+            pagination={{
+              currentPage: currentPage || page,
+              totalPages: Math.ceil((couponsCount || 0) / (resPerPage || 20)),
+              onPageChange: (newPage) => setPage(newPage)
+            }}
           />
         </div>
       </>

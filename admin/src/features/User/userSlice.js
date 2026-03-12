@@ -9,11 +9,10 @@ const getErrorMessage = (error) => {
 
 export const getAllUsers = createAsyncThunk(
     'users/getAllUsers',
-    async (_, { rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await userApi.getAll();
-            // Chuẩn hóa return data tại đây để reducer gọn hơn
-            return response.users || response.data || response; 
+            const response = await userApi.getAll(params);
+            return response; 
         } catch (error) {
             return rejectWithValue(getErrorMessage(error));
         }
@@ -70,6 +69,9 @@ const userSlice = createSlice({
     name: 'users',
     initialState: {
         users: [],
+        usersCount: 0,
+        resPerPage: 20,
+        currentPage: 1,
         loading: false,
         error: null,
     },
@@ -87,7 +89,10 @@ const userSlice = createSlice({
             })
             .addCase(getAllUsers.fulfilled, (state, action) => {
                 state.loading = false;
-                state.users = action.payload; // Data đã được xử lý ở thunk
+                state.users = action.payload?.data || action.payload || [];
+                state.usersCount = action.payload?.usersCount || 0;
+                state.resPerPage = action.payload?.resPerPage || 20;
+                state.currentPage = action.payload?.page || 1;
             })
             .addCase(getAllUsers.rejected, (state, action) => {
                 state.loading = false;

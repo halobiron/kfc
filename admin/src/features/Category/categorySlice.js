@@ -17,10 +17,10 @@ export const addCategory = createAsyncThunk(
 // Lấy tất cả danh mục
 export const getAllCategories = createAsyncThunk(
     'categories/getAllCategories',
-    async (_, { rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await categoryApi.getAll();
-            return response.data; // Giả sử trả về mảng danh mục
+            const response = await categoryApi.getAll(params);
+            return response; // Trả về cả object
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Không thể tải danh sách danh mục');
         }
@@ -57,6 +57,9 @@ const categorySlice = createSlice({
     name: 'categories',
     initialState: {
         categories: [],
+        totalCategories: 0,
+        resPerPage: 20,
+        currentPage: 1,
         loading: false,
         error: null,
         success: false, // Thêm flag để báo hiệu thao tác thành công (dùng cho useEffect đóng modal)
@@ -73,7 +76,10 @@ const categorySlice = createSlice({
             // --- GET ALL CASES ---
             .addCase(getAllCategories.fulfilled, (state, action) => {
                 state.loading = false;
-                state.categories = action.payload || []; 
+                state.categories = action.payload?.data || action.payload || []; 
+                state.totalCategories = action.payload?.totalCategories || 0;
+                state.resPerPage = action.payload?.resPerPage || 20;
+                state.currentPage = action.payload?.page || 1;
             })
             
             // --- ADD CASES ---

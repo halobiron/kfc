@@ -1,8 +1,8 @@
 import axiosClient from './axiosClient';
 
 const couponApi = {
-    getAll() {
-        return axiosClient.get('/coupons');
+    getAll(params) {
+        return axiosClient.get('/coupons', { params });
     },
     getByCode(code) {
         return axiosClient.get(`/coupon/code/${code}`);

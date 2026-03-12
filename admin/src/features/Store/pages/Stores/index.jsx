@@ -12,12 +12,15 @@ const Stores = () => {
     const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
     const [selectedStore, setSelectedStore] = useState(null);
-    const { stores, loading, error } = useSelector(state => state.stores);
+    const [page, setPage] = useState(1);
+    
+    // Thêm các biến phân trang từ Redux store
+    const { stores, storesCount, resPerPage, currentPage, loading, error } = useSelector(state => state.stores);
     const { keyword } = useSelector(state => state.search);
 
     useEffect(() => {
-        dispatch(getAllStores());
-    }, [dispatch]);
+        dispatch(getAllStores({ page, limit: 12 }));
+    }, [dispatch, page]);
 
     const filteredStores = stores.filter(store =>
         (store.name && store.name.toLowerCase().includes((keyword || '').toLowerCase())) ||
@@ -116,6 +119,11 @@ const Stores = () => {
                     data={filteredStores}
                     loading={loading}
                     emptyMessage={error ? error : "Chưa có cửa hàng nào được tạo."}
+                    pagination={{
+                        currentPage: currentPage || page,
+                        totalPages: Math.ceil((storesCount || 0) / (resPerPage || 12)),
+                        onPageChange: (newPage) => setPage(newPage)
+                    }}
                 />
             </div>
 

@@ -4,10 +4,10 @@ import couponApi from '../../api/couponApi';
 // Async Thunks
 export const getAllCoupons = createAsyncThunk(
     'coupons/getAllCoupons',
-    async (_, { rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const data = await couponApi.getAll();
-            return data.data; // data.data contains the array of coupons
+            const data = await couponApi.getAll(params);
+            return data; 
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Lỗi khi tải danh sách khuyến mãi');
         }
@@ -54,6 +54,9 @@ const couponSlice = createSlice({
     name: 'coupons',
     initialState: {
         coupons: [],
+        couponsCount: 0,
+        resPerPage: 20,
+        currentPage: 1,
         loading: false,
         error: null,
         success: false
@@ -74,7 +77,10 @@ const couponSlice = createSlice({
             })
             .addCase(getAllCoupons.fulfilled, (state, action) => {
                 state.loading = false;
-                state.coupons = action.payload;
+                state.coupons = action.payload?.data || action.payload || [];
+                state.couponsCount = action.payload?.couponsCount || 0;
+                state.resPerPage = action.payload?.resPerPage || 20;
+                state.currentPage = action.payload?.page || 1;
             })
             .addCase(getAllCoupons.rejected, (state, action) => {
                 state.loading = false;

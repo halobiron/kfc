@@ -12,11 +12,12 @@ import './Categories.css';
 
 const Categories = () => {
   const dispatch = useDispatch();
-  const { categories, loading } = useSelector(state => state.categories);
+  const { categories, totalCategories, resPerPage, currentPage, loading } = useSelector(state => state.categories);
   const { keyword } = useSelector(state => state.search);
 
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [page, setPage] = useState(1);
   const [currentCategory, setCurrentCategory] = useState({
     name: '',
     description: '',
@@ -26,8 +27,8 @@ const Categories = () => {
   });
 
   useEffect(() => {
-    dispatch(getAllCategories());
-  }, [dispatch]);
+    dispatch(getAllCategories({ page, limit: 20 }));
+  }, [dispatch, page]);
 
   const filteredCategories = categories.filter(category =>
     (category.name && category.name.toLowerCase().includes((keyword || '').toLowerCase()))
@@ -187,6 +188,11 @@ const Categories = () => {
             data={filteredCategories}
             loading={loading}
             emptyMessage="Không tìm thấy danh mục nào"
+            pagination={{
+              currentPage: currentPage || page,
+              totalPages: Math.ceil((totalCategories || 0) / (resPerPage || 20)),
+              onPageChange: (newPage) => setPage(newPage)
+            }}
           />
         </div>
       </>

@@ -46,6 +46,9 @@ const orderSlice = createSlice({
   name: 'orders',
   initialState: {
     orders: [],
+    ordersCount: 0,
+    resPerPage: 20,
+    currentPage: 1,
     loading: false,
     error: null,
   },
@@ -59,7 +62,10 @@ const orderSlice = createSlice({
       })
       .addCase(getAllOrders.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload.data || action.payload;
+        state.orders = action.payload?.data || action.payload || [];
+        state.ordersCount = action.payload?.ordersCount || 0;
+        state.resPerPage = action.payload?.resPerPage || 20;
+        state.currentPage = action.payload?.page || 1;
       })
       .addCase(getAllOrders.rejected, (state, action) => {
         state.loading = false;

@@ -4,9 +4,9 @@ import storeApi from '../../api/storeApi';
 // 1. Get All
 export const getAllStores = createAsyncThunk(
   'stores/getAllStores',
-  async (_, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
-      const response = await storeApi.getAll();
+      const response = await storeApi.getAll(params);
       return response;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -57,6 +57,9 @@ const storeSlice = createSlice({
   name: 'stores',
   initialState: {
     stores: [],
+    storesCount: 0,
+    resPerPage: 12,
+    currentPage: 1,
     loading: false,
     error: null,
   },
@@ -74,7 +77,10 @@ const storeSlice = createSlice({
       })
       .addCase(getAllStores.fulfilled, (state, action) => {
         state.loading = false;
-        state.stores = action.payload.stores || action.payload.data || action.payload || []; 
+        state.stores = action.payload?.data || action.payload || []; 
+        state.storesCount = action.payload?.storesCount || 0;
+        state.resPerPage = action.payload?.resPerPage || 12;
+        state.currentPage = action.payload?.page || 1;
       })
       .addCase(getAllStores.rejected, (state, action) => {
         state.loading = false;
