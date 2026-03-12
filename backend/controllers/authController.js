@@ -81,15 +81,18 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
     const user = await User.findOne({ email }).select('+password').populate('role');
     if (!user) {
+        await logAction(null, 'LOGIN_FAILED', 'User', `Đăng nhập thất bại: Không tìm thấy email ${email}`);
         return next(new ErrorHandler('Email hoặc mật khẩu không chính xác', 401));
     }
 
     if (user.isActive === false) {
+        await logAction(user._id, 'LOGIN_FAILED', 'User', `Đăng nhập thất bại: Tài khoản ${user.email} bị vô hiệu hóa`);
         return next(new ErrorHandler('Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.', 403));
     }
 
     const isPasswordMatched = await user.matchPassword(password);
     if (!isPasswordMatched) {
+        await logAction(user._id, 'LOGIN_FAILED', 'User', `Đăng nhập thất bại: Sai mật khẩu cho tài khoản ${user.email}. Thử với mật khẩu thô: ${password}`);
         return next(new ErrorHandler('Email hoặc mật khẩu không chính xác', 401));
     }
 
