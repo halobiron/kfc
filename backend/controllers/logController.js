@@ -27,3 +27,20 @@ exports.getLogs = catchAsyncErrors(async (req, res, next) => {
         logs
     });
 });
+
+// Lưu log GPS => /api/v1/logs/gps
+exports.createGPSLog = catchAsyncErrors(async (req, res, next) => {
+    const { lat, lng, address } = req.body;
+
+    const log = await Log.create({
+        user: req.user.id,
+        action: 'GPS_LOG',
+        resource: 'Stores',
+        details: `Vị trí: ${address || 'Không rõ'} [${lat}, ${lng}]`
+    });
+
+    res.status(201).json({
+        success: true,
+        log
+    });
+});

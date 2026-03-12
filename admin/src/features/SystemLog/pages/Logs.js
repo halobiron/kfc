@@ -37,6 +37,7 @@ const Logs = () => {
             case 'CREATE': return 'success';
             case 'UPDATE': return 'warning';
             case 'DELETE': return 'danger';
+            case 'GPS_LOG': return 'primary';
             default: return 'info';
         }
     };
@@ -56,6 +57,7 @@ const Logs = () => {
                                     <option value="CREATE">Thêm mới</option>
                                     <option value="UPDATE">Cập nhật</option>
                                     <option value="DELETE">Xoá</option>
+                                    <option value="GPS_LOG">GPS Log</option>
                                 </Form.Control>
                             </Form.Group>
                         </Col>
@@ -68,6 +70,7 @@ const Logs = () => {
                                     <option value="Product">Sản phẩm</option>
                                     <option value="Category">Danh mục</option>
                                     <option value="Ingredient">Nguyên liệu</option>
+                                    <option value="Stores">Cửa hàng (GPS)</option>
                                     <option value="User">Người dùng</option>
                                 </Form.Control>
                             </Form.Group>

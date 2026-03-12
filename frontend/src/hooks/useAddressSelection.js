@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import useGeoLocation from './useGeoLocation';
 import mapApi from '../api/mapApi';
+import logApi from '../api/logApi';
 
 const useAddressSelection = (savedAddresses = []) => {
     const { getCurrentLocation, isLoading: isGettingCurrentLocation } = useGeoLocation();
@@ -34,6 +35,16 @@ const useAddressSelection = (savedAddresses = []) => {
                 const coords = await getCurrentLocation();
                 if (coords) {
                     locationData = { ...coords, type: 'current', address: 'Vị trí hiện tại' };
+                    // Gửi log GPS về server
+                    try {
+                        await logApi.createGPSLog({
+                            lat: coords.lat,
+                            lng: coords.lng,
+                            address: 'Vị trí hiện tại (GPS)'
+                        });
+                    } catch (logError) {
+                        console.error("Failed to send GPS log:", logError);
+                    }
                 }
             } 
             else if (typeof value === 'string' && value.startsWith('saved-')) {
