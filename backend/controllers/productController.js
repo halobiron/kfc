@@ -6,14 +6,14 @@ const { logAction } = require('../utils/logger');
 
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     const body = req.body;
+    let productImage = body.productImage;
 
-    const productImage = body.productImage;
-
-    const result = await cloudinary.uploader.upload(productImage, {
-        'folder': 'kfc'
-    })
-
-    body.productImage = result.secure_url;
+    if (productImage && productImage.startsWith('data:image')) {
+        const result = await cloudinary.uploader.upload(productImage, {
+            folder: 'kfc'
+        });
+        body.productImage = result.secure_url;
+    }
 
     await Product.create(body);
     const products = await Product.find({});
@@ -53,6 +53,15 @@ exports.getProductById = catchAsyncErrors(async (req, res, next) => {
 exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     const id = req.params.id;
     const body = req.body;
+
+    let productImage = body.productImage;
+
+    if (productImage && productImage.startsWith('data:image')) {
+        const result = await cloudinary.uploader.upload(productImage, {
+            folder: 'kfc'
+        });
+        body.productImage = result.secure_url;
+    }
 
     const product = await Product.findByIdAndUpdate(id, body, {
         new: true,
