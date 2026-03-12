@@ -120,9 +120,7 @@ exports.getDashboardStats = async (req, res, next) => {
             { $unwind: '$product' },
             {
                 $group: {
-                    _id: '$product.category', // assuming category is store as string or objectId in Product
-                    // If category is ObjectId ref to Category model, we might want to lookup Category name too
-                    // For now assuming we can group by category ID or name directly if Product stores it
+                    _id: '$product.category',
                     revenue: { $sum: { $multiply: ['$items.price', '$items.quantity'] } },
                     count: { $sum: '$items.quantity' }
                 }
