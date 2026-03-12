@@ -25,6 +25,12 @@ const userSchema = new Schema({
         type: String,
         required: [true, 'Mật khẩu là bắt buộc'],
         minlength: [6, 'Mật khẩu phải có ít nhất 6 ký tự'],
+        validate: {
+            validator: function (v) {
+                return /[A-Z]/.test(v);
+            },
+            message: 'Mật khẩu phải chứa ít nhất một chữ cái viết hoa'
+        },
         select: false
     },
     addresses: [
