@@ -64,7 +64,7 @@ exports.getDashboardStats = async (req, res, next) => {
         // 4. Average Order Value
         const avgOrderValue = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
 
-        // 5. Chart Data (Revenue over time)
+        // 5. Chart Data (Revenue over time by payment method)
         const revenueChart = await Order.aggregate([
             {
                 $match: {
@@ -74,11 +74,14 @@ exports.getDashboardStats = async (req, res, next) => {
             },
             {
                 $group: {
-                    _id: { $dateToString: { format: groupFormat, date: '$createdAt' } },
+                    _id: {
+                        date: { $dateToString: { format: groupFormat, date: '$createdAt' } },
+                        paymentMethod: '$paymentMethod'
+                    },
                     revenue: { $sum: '$totalAmount' }
                 }
             },
-            { $sort: { _id: 1 } }
+            { $sort: { '_id.date': 1 } }
         ]);
 
         // 6. Top Selling Products
@@ -156,6 +159,31 @@ exports.getDashboardStats = async (req, res, next) => {
             isActive: true
         });
 
+        // 10. Payment Methods Statistics
+        const paymentMethods = await Order.aggregate([
+            {
+                $match: {
+                    status: 'Đã giao hàng',
+                    createdAt: { $gte: startDate }
+                }
+            },
+            {
+                $group: {
+                    _id: '$paymentMethod',
+                    amount: { $sum: '$totalAmount' },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    method: '$_id',
+                    amount: 1,
+                    count: 1,
+                    _id: 0
+                }
+            }
+        ]);
+
         // Calculate trends (comparing to previous period)s
 
         res.status(200).json({
@@ -169,7 +197,8 @@ exports.getDashboardStats = async (req, res, next) => {
                 topProducts: topProducts,
                 categoryStats: categoryStats,
                 pendingOrders: pendingOrders,
-                lowStockIngredients: lowStockIngredients
+                lowStockIngredients: lowStockIngredients,
+                paymentMethods: paymentMethods
             }
         });
 

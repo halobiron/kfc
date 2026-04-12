@@ -10,12 +10,13 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
   Filler
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { formatCurrency } from '../../../../utils/formatters';
 
 ChartJS.register(
@@ -23,6 +24,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -45,22 +47,33 @@ const Home = () => {
   ];
 
   const chartData = useMemo(() => {
-    if (!stats.chart) return { labels: [], datasets: [] };
+    if (!stats.chart || stats.chart.length === 0) return { labels: [], datasets: [] };
 
-    const sortedChart = [...stats.chart]; // Ensure it's sorted if backend doesn't guaranteed it, though controller did sort.
+    // Extract unique dates and payment methods
+    const dates = [...new Set(stats.chart.map(item => item._id.date))].sort();
+    const paymentMethods = [...new Set(stats.chart.map(item => item._id.paymentMethod))];
+
+    // Build datasets for each payment method
+    const datasets = paymentMethods.map((method, index) => {
+      const colors = method === 'Tiền mặt'
+        ? { border: 'rgb(25, 135, 84)', bg: 'rgba(25, 135, 84, 0.7)' }
+        : { border: 'rgb(13, 110, 253)', bg: 'rgba(13, 110, 253, 0.7)' };
+
+      return {
+        label: method,
+        data: dates.map(date => {
+          const found = stats.chart.find(item => item._id.date === date && item._id.paymentMethod === method);
+          return found ? found.revenue : 0;
+        }),
+        backgroundColor: colors.bg,
+        borderColor: colors.border,
+        borderWidth: 1,
+      };
+    });
 
     return {
-      labels: sortedChart.map(item => item._id),
-      datasets: [
-        {
-          label: 'Doanh thu',
-          data: sortedChart.map(item => item.revenue),
-          fill: true,
-          borderColor: 'rgb(75, 192, 192)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          tension: 0.4,
-        },
-      ],
+      labels: dates,
+      datasets: datasets,
     };
   }, [stats.chart]);
 
@@ -76,6 +89,8 @@ const Home = () => {
         text: 'Doanh thu theo thời gian',
       },
       tooltip: {
+        mode: 'index',
+        intersect: false,
         callbacks: {
           label: function (context) {
             let label = context.dataset.label || '';
@@ -91,7 +106,11 @@ const Home = () => {
       }
     },
     scales: {
+      x: {
+        stacked: true,
+      },
       y: {
+        stacked: true,
         beginAtZero: true,
         ticks: {
           callback: function (value) {
@@ -185,7 +204,7 @@ const Home = () => {
                     <Loading />
                   </div>
                 ) : (
-                  <Line options={chartOptions} data={chartData} />
+                  <Bar options={chartOptions} data={chartData} />
                 )}
               </div>
             </div>
