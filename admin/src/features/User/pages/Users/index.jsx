@@ -8,7 +8,7 @@ import StatCard from '../../../../components/Common/StatCard';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
 import Table from '../../../../components/Common/Table';
-import { formatDate } from '../../../../utils/formatters';
+import { formatDate, normalizeVietnamese } from '../../../../utils/formatters';
 import UserModal from './UserModal';
 import './Users.css';
 
@@ -37,12 +37,16 @@ const Users = () => {
     }, [dispatch, page]);
 
     const filteredUsers = useMemo(() => {
-        const searchLower = (keyword || '').toLowerCase();
-        return usersList.filter(user =>
-            (user.name && user.name.toLowerCase().includes(searchLower)) ||
-            (user.email && user.email.toLowerCase().includes(searchLower)) ||
-            (user.phone && user.phone.includes(keyword))
-        );
+        const searchLower = normalizeVietnamese((keyword || '').toLowerCase());
+        return usersList.filter(user => {
+            const name = normalizeVietnamese(user.name?.toLowerCase() || '');
+            const email = user.email?.toLowerCase() || '';
+            const phone = user.phone || '';
+
+            return name.includes(searchLower) ||
+                   email.includes(searchLower) ||
+                   phone.includes(keyword);
+        });
     }, [usersList, keyword]);
 
     // Thống kê đơn giản

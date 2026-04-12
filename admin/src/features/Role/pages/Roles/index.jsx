@@ -7,6 +7,7 @@ import Button, { AddButton, EditButton, DeleteButton } from '../../../../compone
 import Badge from '../../../../components/Common/Badge';
 import Table from '../../../../components/Common/Table';
 import Form from 'react-bootstrap/Form';
+import { normalizeVietnamese } from '../../../../utils/formatters';
 import './Roles.css';
 
 const RoleManagement = ({ resources = [] }) => {
@@ -28,10 +29,14 @@ const RoleManagement = ({ resources = [] }) => {
         dispatch(getAllRoles());
     }, [dispatch]);
 
-    const filteredRoles = roles.filter(role =>
-        role.name.toLowerCase().includes((keyword || '').toLowerCase()) ||
-        (role.description && role.description.toLowerCase().includes((keyword || '').toLowerCase()))
-    );
+    const filteredRoles = roles.filter(role => {
+        const searchLower = normalizeVietnamese((keyword || '').toLowerCase());
+        const name = normalizeVietnamese(role.name?.toLowerCase() || '');
+        const description = normalizeVietnamese(role.description?.toLowerCase() || '');
+
+        return name.includes(searchLower) ||
+               (role.description && description.includes(searchLower));
+    });
 
     useEffect(() => {
         if (error) {

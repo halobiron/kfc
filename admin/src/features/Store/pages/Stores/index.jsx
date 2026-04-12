@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllStores, deleteStore } from '../../storeSlice';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Table from '../../../../components/Common/Table';
+import { normalizeVietnamese } from '../../../../utils/formatters';
 import './Stores.css';
 import { FiPhone, FiClock } from 'react-icons/fi';
 
@@ -22,11 +23,16 @@ const Stores = () => {
         dispatch(getAllStores({ page, limit: 12 }));
     }, [dispatch, page]);
 
-    const filteredStores = stores.filter(store =>
-        (store.name && store.name.toLowerCase().includes((keyword || '').toLowerCase())) ||
-        (store.address && store.address.toLowerCase().includes((keyword || '').toLowerCase())) ||
-        (store.phone && store.phone.includes(keyword))
-    );
+    const filteredStores = stores.filter(store => {
+        const searchLower = normalizeVietnamese((keyword || '').toLowerCase());
+        const name = normalizeVietnamese(store.name?.toLowerCase() || '');
+        const address = normalizeVietnamese(store.address?.toLowerCase() || '');
+        const phone = store.phone || '';
+
+        return name.includes(searchLower) ||
+               address.includes(searchLower) ||
+               phone.includes(keyword);
+    });
 
     const handleDelete = async (id) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa cửa hàng này?')) {

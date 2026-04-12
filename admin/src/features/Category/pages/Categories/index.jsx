@@ -8,6 +8,7 @@ import { CheckboxField, TextField } from '../../../../components/Common/Form';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
 import Table from '../../../../components/Common/Table';
+import { normalizeVietnamese } from '../../../../utils/formatters';
 import './Categories.css';
 
 const Categories = () => {
@@ -30,9 +31,11 @@ const Categories = () => {
     dispatch(getAllCategories({ page, limit: 20 }));
   }, [dispatch, page]);
 
-  const filteredCategories = categories.filter(category =>
-    (category.name && category.name.toLowerCase().includes((keyword || '').toLowerCase()))
-  );
+  const filteredCategories = categories.filter(category => {
+    const searchLower = normalizeVietnamese((keyword || '').toLowerCase());
+    const name = normalizeVietnamese(category.name?.toLowerCase() || '');
+    return name.includes(searchLower);
+  });
 
   const handleOpenModal = (category = null) => {
     if (category) {

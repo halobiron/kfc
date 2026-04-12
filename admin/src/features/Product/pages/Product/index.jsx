@@ -9,7 +9,7 @@ import Badge from '../../../../components/Common/Badge';
 import Table from '../../../../components/Common/Table';
 import './Product.css';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
-import { formatCurrency } from '../../../../utils/formatters';
+import { formatCurrency, normalizeVietnamese } from '../../../../utils/formatters';
 
 const Product = () => {
 
@@ -26,9 +26,11 @@ const Product = () => {
     dispatch(getAllCategories());
   }, [dispatch, page])
 
-  const filteredProducts = products.filter(product =>
-    product.title.toLowerCase().includes((keyword || '').toLowerCase())
-  );
+  const filteredProducts = products.filter(product => {
+    const searchLower = normalizeVietnamese((keyword || '').toLowerCase());
+    const title = normalizeVietnamese(product.title?.toLowerCase() || '');
+    return title.includes(searchLower);
+  });
 
   const totalPages = Math.ceil((productsCount || 0) / (resPerPage || 10));
 

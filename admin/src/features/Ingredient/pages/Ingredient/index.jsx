@@ -9,6 +9,7 @@ import Badge from '../../../../components/Common/Badge';
 import Table from '../../../../components/Common/Table';
 import RestockModal from '../../components/RestockModal';
 import IngredientFormModal from '../../components/IngredientFormModal';
+import { normalizeVietnamese } from '../../../../utils/formatters';
 import './Ingredient.css';
 
 const getStockStatus = (stock, minStock) => {
@@ -36,12 +37,18 @@ const Ingredient = () => {
         dispatch(getAllIngredients());
     }, [dispatch]);
 
-    const filteredIngredients = ingredients.filter(ing =>
-        (ing.name && ing.name.toLowerCase().includes((keyword || '').toLowerCase())) ||
-        (ing._id && ing._id.toLowerCase().includes((keyword || '').toLowerCase())) ||
-        (ing.supplier && ing.supplier.toLowerCase().includes((keyword || '').toLowerCase())) ||
-        (ing.category && ing.category.toLowerCase().includes((keyword || '').toLowerCase()))
-    );
+    const filteredIngredients = ingredients.filter(ing => {
+        const searchLower = normalizeVietnamese((keyword || '').toLowerCase());
+        const name = normalizeVietnamese(ing.name?.toLowerCase() || '');
+        const id = ing._id?.toLowerCase() || '';
+        const supplier = normalizeVietnamese(ing.supplier?.toLowerCase() || '');
+        const category = normalizeVietnamese(ing.category?.toLowerCase() || '');
+
+        return name.includes(searchLower) ||
+               id.includes(searchLower) ||
+               supplier.includes(searchLower) ||
+               category.includes(searchLower);
+    });
 
     const handleRestockSubmit = useCallback(({ amount, updates }) => {
         if (selectedIng && amount > 0) {

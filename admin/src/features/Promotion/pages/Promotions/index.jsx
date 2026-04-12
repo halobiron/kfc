@@ -7,7 +7,7 @@ import { AddButton, EditButton, DeleteButton } from '../../../../components/Comm
 import Badge from '../../../../components/Common/Badge';
 import Table from '../../../../components/Common/Table';
 import { getAllCoupons, createCoupon, updateCoupon, deleteCoupon, clearErrors, resetSuccess } from '../../couponSlice';
-import { formatCurrency, formatDate } from '../../../../utils/formatters';
+import { formatCurrency, formatDate, normalizeVietnamese } from '../../../../utils/formatters';
 import PromotionModal from '../../components/PromotionModal';
 import './Promotions.css';
 
@@ -37,10 +37,13 @@ const Promotions = () => {
     dispatch(getAllCoupons({ page, limit: 20 }));
   }, [dispatch, page]);
 
-  const filteredCoupons = coupons.filter(coupon =>
-    (coupon.code && coupon.code.toLowerCase().includes((keyword || '').toLowerCase())) ||
-    (coupon.title && coupon.title.toLowerCase().includes((keyword || '').toLowerCase()))
-  );
+  const filteredCoupons = coupons.filter(coupon => {
+    const searchLower = normalizeVietnamese((keyword || '').toLowerCase());
+    const code = coupon.code?.toLowerCase() || '';
+    const title = normalizeVietnamese(coupon.title?.toLowerCase() || '');
+
+    return code.includes(searchLower) || title.includes(searchLower);
+  });
 
   useEffect(() => {
     if (error) {

@@ -10,7 +10,7 @@ import Button from '../../../../components/Common/Button';
 import Table from '../../../../components/Common/Table';
 import OrderStatusBadge from '../../components/OrderStatusBadge';
 import { getOrderStatusMeta, ORDER_STATUS } from '../../components/OrderStatusBadge/orderStatus';
-import { formatCurrency } from '../../../../utils/formatters';
+import { formatCurrency, normalizeVietnamese } from '../../../../utils/formatters';
 import './Order.css';
 
 const OrderCustomerCell = ({ order }) => {
@@ -128,11 +128,15 @@ const Order = () => {
   }, [dispatch, selectedStore, page]);
 
   const filteredOrders = orders.filter(order => {
-    const searchLower = (keyword || '').toLowerCase();
+    const searchLower = normalizeVietnamese((keyword || '').toLowerCase());
+    const orderId = normalizeVietnamese(order._id?.toLowerCase() || '');
+    const customerName = normalizeVietnamese(order.deliveryInfo?.fullName?.toLowerCase() || '');
+    const phone = order.deliveryInfo?.phone || '';
+
     return (
-      (order._id && order._id.toLowerCase().includes(searchLower)) ||
-      (order.deliveryInfo?.fullName && order.deliveryInfo.fullName.toLowerCase().includes(searchLower)) ||
-      (order.deliveryInfo?.phone && order.deliveryInfo.phone.includes(keyword))
+      orderId.includes(searchLower) ||
+      customerName.includes(searchLower) ||
+      phone.includes(keyword)
     );
   });
 
