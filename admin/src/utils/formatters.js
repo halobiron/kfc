@@ -33,3 +33,15 @@ export const formatDateTime = (value, fallback = '') => {
         hour12: false
     });
 };
+
+/**
+ * Normalize Vietnamese text by removing diacritics
+ * Example: "Nguyễn Văn A" -> "Nguyen Van A"
+ */
+export const normalizeVietnamese = (text) => {
+    if (!text) return '';
+    return text
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[đĐ]/g, d => d === 'đ' ? 'd' : 'D');
+};

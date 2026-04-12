@@ -22,6 +22,7 @@ const Header = () => {
     const path = location.pathname;
     if (path.includes('/products')) setPlaceholder('Tìm kiếm sản phẩm theo tên...');
     else if (path.includes('/orders')) setPlaceholder('Tìm kiếm đơn hàng theo mã, khách hàng...');
+    else if (path.includes('/kitchen')) setPlaceholder('Tìm kiếm đơn hàng theo mã, khách hàng...');
     else if (path.includes('/users')) setPlaceholder('Tìm kiếm người dùng theo email, tên...');
     else if (path.includes('/categories')) setPlaceholder('Tìm kiếm danh mục...');
     else if (path.includes('/promotions')) setPlaceholder('Tìm kiếm khuyến mãi...');
