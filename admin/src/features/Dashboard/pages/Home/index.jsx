@@ -1,9 +1,9 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDashboardStats } from '../../statsSlice'
 import Loading from '../../../../components/Common/Loading';
 import StatCard from '../../../../components/Common/StatCard';
-import { FiShoppingBag, FiDollarSign, FiUsers, FiAlertCircle } from 'react-icons/fi'
+import { FiShoppingBag, FiDollarSign, FiUsers, FiAlertCircle, FiCalendar } from 'react-icons/fi'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -32,10 +32,17 @@ ChartJS.register(
 const Home = () => {
   const dispatch = useDispatch();
   const { stats, loading } = useSelector((state) => state.stats);
+  const [range, setRange] = useState('month');
 
   useEffect(() => {
-    dispatch(getDashboardStats());
-  }, [dispatch]);
+    dispatch(getDashboardStats(range));
+  }, [dispatch, range]);
+
+  const rangeOptions = [
+    { value: 'week', label: '7 ngày qua' },
+    { value: 'month', label: '30 ngày qua' },
+    { value: 'year', label: '12 tháng qua' }
+  ];
 
   const chartData = useMemo(() => {
     if (!stats.chart) return { labels: [], datasets: [] };
@@ -98,7 +105,24 @@ const Home = () => {
   return (
     <>
       <div className="page-header mb-3">
-        <h1 className="page-title mb-0">Tổng quan</h1>
+        <div className="d-flex justify-content-between align-items-center">
+          <h1 className="page-title mb-0">Tổng quan</h1>
+          <div className="d-flex align-items-center gap-2">
+            <FiCalendar className="text-muted" />
+            <select
+              className="form-select form-select-sm"
+              style={{ width: 'auto' }}
+              value={range}
+              onChange={(e) => setRange(e.target.value)}
+            >
+              {rangeOptions.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
       {/* Critical Alerts */}
