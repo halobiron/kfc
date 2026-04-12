@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers, createUser, updateUser, deleteUser } from '../../userSlice';
+import { getAllUsers, createUser, updateUser, deleteUser, toggleUserVip } from '../../userSlice';
 import { getAllRoles } from '../../../Role/roleSlice';
-import { FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell } from 'react-icons/fi';
+import { FiUsers, FiDollarSign, FiUserCheck, FiPackage, FiBell, FiStar } from 'react-icons/fi';
 import { MdRestaurant } from 'react-icons/md';
 import StatCard from '../../../../components/Common/StatCard';
 import { AddButton, EditButton, DeleteButton } from '../../../../components/Common/Button';
@@ -84,6 +84,12 @@ const Users = () => {
         dispatch(updateUser({ id, data: { isActive: !user.isActive } }));
     };
 
+    const handleToggleVip = (id) => {
+        if (window.confirm('Bạn có chắc muốn thay đổi trạng thái VIP của người dùng này?')) {
+            dispatch(toggleUserVip(id));
+        }
+    };
+
     const columns = [
         { header: '#', render: (_, index) => index + 1 },
         {
@@ -109,6 +115,24 @@ const Users = () => {
                     </Badge>
                 );
             }
+        },
+        {
+            header: 'VIP',
+            className: 'text-center',
+            render: (user) => (
+                user.role?.name === 'Khách hàng' ? (
+                    <div className="form-check form-switch d-flex justify-content-center">
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            checked={user.isVip || false}
+                            onChange={() => handleToggleVip(user._id)}
+                        />
+                    </div>
+                ) : (
+                    <span className="text-muted">-</span>
+                )
+            )
         },
         {
             header: 'Trạng thái',

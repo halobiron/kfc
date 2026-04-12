@@ -2,6 +2,7 @@ const Order = require('../models/orderSchema');
 const Product = require('../models/productSchema');
 const Coupon = require('../models/couponSchema');
 const Ingredient = require('../models/ingredientSchema');
+const User = require('../models/userSchema');
 const payos = require('../utils/payosClient');
 const { calculateShippingFee } = require('../utils/shipping');
 const { catchAsyncErrors } = require('../middleware/errors');
@@ -118,7 +119,22 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
         await coupon.save();
     }
 
-    const totalAmount = Math.max(0, subtotal - couponDiscount + shippingFee);
+    // VIP Discount Logic
+    let vipDiscount = 0;
+    let vipInfo = null;
+    if (req.user && req.user.id) {
+        const user = await User.findById(req.user.id).select('isVip vipDiscount');
+        if (user && user.isVip && user.vipDiscount) {
+            vipDiscount = Math.floor(subtotal * (user.vipDiscount / 100));
+            vipInfo = {
+                isVip: true,
+                discount: user.vipDiscount,
+                discountAmount: vipDiscount
+            };
+        }
+    }
+
+    const totalAmount = Math.max(0, subtotal - couponDiscount - vipDiscount + shippingFee);
 
     const order = await Order.create({
         userId: req.user.id,
@@ -134,11 +150,19 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
         paymentMethod,
         couponCode: couponCode || null,
         couponDiscount,
+        vipInfo,
         subtotal,
         shippingFee,
         totalAmount,
         statusHistory: [{ status: 'Chờ xác nhận', timestamp: new Date(), note: 'Đơn hàng vừa được tạo' }]
     });
+
+    // Update user totalSpent
+    if (req.user && req.user.id) {
+        await User.findByIdAndUpdate(req.user.id, {
+            $inc: { totalSpent: totalAmount }
+        });
+    }
 
     if (paymentMethod === 'Cổng thanh toán PayOS') {
         const paymentResult = await handlePayOSPayment(order, totalAmount);

@@ -91,7 +91,15 @@ const Checkout = () => {
         return 0;
     }, [appliedCoupon, subtotal, deliveryFee]);
 
-    const total = useMemo(() => Math.max(0, subtotal + deliveryFee - discountAmount), [subtotal, deliveryFee, discountAmount]);
+    // VIP Discount
+    const vipDiscount = useMemo(() => {
+        if (profile?.isVip && profile?.vipDiscount) {
+            return Math.floor(subtotal * (profile.vipDiscount / 100));
+        }
+        return 0;
+    }, [profile, subtotal]);
+
+    const total = useMemo(() => Math.max(0, subtotal + deliveryFee - discountAmount - vipDiscount), [subtotal, deliveryFee, discountAmount, vipDiscount]);
 
     // Auto-fill form data from user profile
     useEffect(() => {
@@ -343,10 +351,13 @@ const Checkout = () => {
                         subtotal={subtotal}
                         deliveryFee={deliveryFee}
                         discountAmount={discountAmount}
+                        vipDiscount={vipDiscount}
                         total={total}
                         isSubmitting={isSubmitting}
                         handlePlaceOrder={handlePlaceOrder}
                         deliveryType={deliveryType}
+                        isVip={profile?.isVip}
+                        vipDiscountPercent={profile?.vipDiscount}
                     />
                 </div>
             </div>

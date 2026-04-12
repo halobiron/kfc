@@ -124,3 +124,44 @@ exports.deleteAddress = catchAsyncErrors(async (req, res, next) => {
     await user.save();
     res.status(200).json({ status: true, data: user.addresses });
 });
+
+// ADMIN: GET ALL VIP USERS
+exports.getVipUsers = catchAsyncErrors(async (req, res, next) => {
+    const resPerPage = Number(req.query.limit) || 20;
+    const page = Number(req.query.page) || 1;
+    const skip = resPerPage * (page - 1);
+
+    const vipUsersCount = await User.countDocuments({ isVip: true });
+    const vipUsers = await User.find({ isVip: true })
+        .populate('role')
+        .sort({ totalSpent: -1 })
+        .skip(skip)
+        .limit(resPerPage);
+
+    res.status(200).json({
+        status: true,
+        usersCount: vipUsersCount,
+        resPerPage,
+        page,
+        data: vipUsers
+    });
+});
+
+// ADMIN: TOGGLE USER VIP STATUS
+exports.toggleUserVip = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.params.id).populate('role');
+    if (!user) {
+        return next(new ErrorHandler('Không tìm thấy người dùng', 404));
+    }
+
+    user.isVip = !user.isVip;
+    await user.save();
+
+    await logAction(req.user.id, 'UPDATE', 'User', `${user.isVip ? 'Gán' : 'Thu hồi'} VIP cho tài khoản: ${user.name}`);
+
+    res.status(200).json({
+        status: true,
+        message: user.isVip ? 'Đã gán VIP cho người dùng' : 'Đã thu hồi VIP',
+        data: user
+    });
+});

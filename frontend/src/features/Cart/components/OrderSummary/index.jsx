@@ -15,10 +15,13 @@ const OrderSummary = ({
     subtotal,
     deliveryFee,
     discountAmount,
+    vipDiscount,
     total,
     isSubmitting,
     handlePlaceOrder,
-    deliveryType
+    deliveryType,
+    isVip,
+    vipDiscountPercent
 }) => {
     return (
         <Card className="checkout-summary-sidebar">
@@ -95,6 +98,12 @@ const OrderSummary = ({
                 <div className="d-flex justify-content-between mb-2 text-danger">
                     <span><i className="bi bi-tag-fill me-1"></i>Giảm tiền</span>
                     <span className="kfc-price">-{formatCurrency(discountAmount)}</span>
+                </div>
+            )}
+            {isVip && vipDiscount > 0 && (
+                <div className="d-flex justify-content-between mb-2" style={{ color: '#9333ea' }}>
+                    <span><i className="bi bi-star-fill me-1"></i>Giảm VIP ({vipDiscountPercent}%)</span>
+                    <span className="kfc-price">-{formatCurrency(vipDiscount)}</span>
                 </div>
             )}
 

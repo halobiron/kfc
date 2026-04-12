@@ -15,6 +15,12 @@ const userApi = {
     },
     delete(id) {
         return axiosClient.delete(`/users/delete/${id}`);
+    },
+    getVipUsers(params) {
+        return axiosClient.get('/users/vip/list', { params });
+    },
+    toggleVip(id) {
+        return axiosClient.patch(`/users/${id}/vip/toggle`);
     }
 };
 

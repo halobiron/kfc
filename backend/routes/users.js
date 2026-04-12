@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {
-    
+
     updateUserProfile,
     changePassword,
     addAddress,
@@ -11,7 +11,9 @@ const {
     getUserById,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getVipUsers,
+    toggleUserVip
 } = require('../controllers/userController');
 const { isAuthenticatedUser, authorizePermission } = require('../middleware/auth');
 
@@ -29,5 +31,9 @@ router.get('/users/:id', isAuthenticatedUser, authorizePermission('users.view'),
 router.post('/users/new', isAuthenticatedUser, authorizePermission('users.edit'), createUser);
 router.put('/users/update/:id', isAuthenticatedUser, authorizePermission('users.edit'), updateUser);
 router.delete('/users/delete/:id', isAuthenticatedUser, authorizePermission('users.edit'), deleteUser);
+
+// VIP routes
+router.get('/users/vip/list', isAuthenticatedUser, authorizePermission('users.view'), getVipUsers);
+router.patch('/users/:id/vip/toggle', isAuthenticatedUser, authorizePermission('users.edit'), toggleUserVip);
 
 module.exports = router;

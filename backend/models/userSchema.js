@@ -63,7 +63,20 @@ const userSchema = new Schema({
         default: Date.now
     },
     resetPasswordToken: String,
-    resetPasswordExpire: Date
+    resetPasswordExpire: Date,
+    // VIP Customer Fields
+    isVip: {
+        type: Boolean,
+        default: false
+    },
+    vipDiscount: {
+        type: Number,
+        default: 10
+    },
+    totalSpent: {
+        type: Number,
+        default: 0
+    }
 });
 
 // Hash password trước khi lưu

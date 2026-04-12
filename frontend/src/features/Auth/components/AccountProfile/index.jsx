@@ -85,7 +85,28 @@ const AccountProfile = () => {
 
     return (
         <Card>
-            <h3>Quản lý hồ sơ</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h3>Quản lý hồ sơ</h3>
+                {profile?.isVip && (
+                    <div style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: 'white',
+                        padding: '8px 16px',
+                        borderRadius: '20px',
+                        fontWeight: 'bold',
+                        fontSize: '14px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                    }}>
+                        <span>👑</span>
+                        <span>VIP Member</span>
+                        <span style={{ background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '10px', fontSize: '12px' }}>
+                            -{profile.vipDiscount}%
+                        </span>
+                    </div>
+                )}
+            </div>
 
             <div className="profile-section">
                 <div className="profile-section-header">

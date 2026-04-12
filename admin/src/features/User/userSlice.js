@@ -65,6 +65,23 @@ export const deleteUser = createAsyncThunk(
     }
 );
 
+export const toggleUserVip = createAsyncThunk(
+    'users/toggleUserVip',
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await userApi.toggleVip(id);
+            const user = response.data.data; // Backend trả về { status, message, data: user }
+            const message = user?.isVip ? 'Đã gán VIP!' : 'Đã thu hồi VIP!';
+            toast.success(message);
+            return user; // Trả về user đã cập nhật
+        } catch (error) {
+            const msg = getErrorMessage(error);
+            toast.error(msg);
+            return rejectWithValue(msg);
+        }
+    }
+);
+
 const userSlice = createSlice({
     name: 'users',
     initialState: {
@@ -140,6 +157,23 @@ const userSlice = createSlice({
                 state.users = state.users.filter(u => u._id !== action.payload);
             })
             .addCase(deleteUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // --- Toggle VIP ---
+            .addCase(toggleUserVip.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(toggleUserVip.fulfilled, (state, action) => {
+                state.loading = false;
+                const index = state.users.findIndex(u => u._id === action.payload._id);
+                if (index !== -1) {
+                    state.users[index] = action.payload;
+                }
+            })
+            .addCase(toggleUserVip.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
