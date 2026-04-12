@@ -104,6 +104,28 @@ const PromotionModal = ({
                 </div>
               </div>
 
+              {currentPromotion.type === 'percent' && (
+                <div className="row">
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Giảm tối đa (VNĐ)</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={currentPromotion.maxDiscountAmount || ''}
+                      onChange={(e) => setCurrentPromotion({
+                        ...currentPromotion,
+                        maxDiscountAmount: e.target.value ? Number(e.target.value) : null
+                      })}
+                      min="0"
+                      placeholder="Để trống nếu không giới hạn"
+                    />
+                    <small className="text-muted">
+                      Giới hạn số tiền giảm tối đa. Để trống nếu không muốn giới hạn.
+                    </small>
+                  </div>
+                </div>
+              )}
+
               <div className="row">
                 <div className="col-md-4 mb-3">
                   <label className="form-label">Số lượt dùng tối đa <span className="text-danger">*</span></label>

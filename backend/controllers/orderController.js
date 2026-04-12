@@ -26,6 +26,10 @@ const validateAndCalculateCoupon = async (couponCode, subtotal, shippingFee) => 
     let couponDiscount = 0;
     if (coupon.type === 'percent') {
         couponDiscount = Math.floor(subtotal * (coupon.discount / 100));
+        // Apply max discount amount limit if set
+        if (coupon.maxDiscountAmount && couponDiscount > coupon.maxDiscountAmount) {
+            couponDiscount = coupon.maxDiscountAmount;
+        }
     } else if (coupon.type === 'shipping') {
         couponDiscount = shippingFee;
     } else {

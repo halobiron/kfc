@@ -117,7 +117,7 @@ const Home = () => {
 
       {/* Stats Cards Row */}
       <div className="row mb-4 g-3">
-        <div className="col-md-4 col-sm-6">
+        <div className="col-md-6 col-sm-6">
           <StatCard
             label="Tổng đơn hàng"
             value={loading ? "..." : stats.orders}
@@ -126,7 +126,7 @@ const Home = () => {
             color="primary"
           />
         </div>
-        <div className="col-md-4 col-sm-6">
+        <div className="col-md-6 col-sm-6">
           <StatCard
             label="Doanh thu"
             value={loading ? "..." : formatCurrency(stats.revenue)}
@@ -135,7 +135,7 @@ const Home = () => {
             color="success"
           />
         </div>
-        <div className="col-md-4 col-sm-12">
+        {/* <div className="col-md-4 col-sm-12">
           <StatCard
             label="Khách hàng mới"
             value={loading ? "..." : stats.customers}
@@ -143,7 +143,7 @@ const Home = () => {
             icon={<FiUsers size={20} />}
             color="warning"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* Chart & Recent Activity Row */}

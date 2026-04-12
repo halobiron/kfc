@@ -114,6 +114,7 @@ orderSchema.pre('save', async function () {
 orderSchema.methods.deductIngredients = async function () {
     const Product = require('./productSchema');
     const Ingredient = require('./ingredientSchema');
+    const IngredientUsage = require('./ingredientUsageSchema');
 
     // 1. Lấy tất cả Product ID từ đơn hàng
     const productIds = this.items.map(item => item.productId);
@@ -174,6 +175,26 @@ orderSchema.methods.deductIngredients = async function () {
     // 5. Thực thi trừ kho hàng loạt (Atomic-like operation)
     if (bulkOps.length > 0) {
         await Ingredient.bulkWrite(bulkOps);
+
+        // NEW: Log usage after successful deduction
+        const usageRecords = [];
+        for (const [id, info] of neededMap) {
+            const ingredient = stockMap.get(id);
+            usageRecords.push({
+                orderId: this._id,
+                orderNumber: this.orderNumber,
+                ingredientId: id,
+                ingredientName: ingredient.name,
+                category: ingredient.category,
+                quantity: info.needed,
+                unit: ingredient.unit,
+                storeId: this.deliveryInfo?.storeId || null
+            });
+        }
+
+        if (usageRecords.length > 0) {
+            await IngredientUsage.insertMany(usageRecords);
+        }
     }
 };
 

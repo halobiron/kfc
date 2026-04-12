@@ -123,7 +123,7 @@ const Order = () => {
 
   // Load orders with store filter
   useEffect(() => {
-    const params = selectedStore ? { storeId: selectedStore, page, limit: 10 } : { page, limit: 10 };
+    const params = selectedStore ? { storeId: selectedStore, page, limit: 5 } : { page, limit: 5 };
     dispatch(getAllOrders(params));
   }, [dispatch, selectedStore, page]);
 

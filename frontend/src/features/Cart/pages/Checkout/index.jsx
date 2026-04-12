@@ -4,13 +4,13 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import storeApi from '../../../../api/storeApi';
 import orderApi from '../../../../api/orderApi';
+import couponApi from '../../../../api/couponApi';
 import DeliveryMethod from '../../components/DeliveryMethod';
 import DeliveryInfo from '../../components/DeliveryInfo';
 import PaymentMethod from '../../components/PaymentMethod';
 import OrderSummary from '../../components/OrderSummary';
 
 import './Checkout.css';
-import { getAllCoupons, selectCoupons } from '../../couponSlice';
 import { clearCart, selectCartItems, selectCartTotalPrice } from '../../cartSlice';
 import { formatCurrency } from '../../../../utils/formatters';
 import { calculateDeliveryFee } from '../../../../utils/shipping';
@@ -22,7 +22,6 @@ import useAddressSelection from '../../../../hooks/useAddressSelection';
 const Checkout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const coupons = useSelector(selectCoupons);
     const cartItems = useSelector(selectCartItems);
 
     // Use custom hooks for API data
@@ -38,8 +37,6 @@ const Checkout = () => {
     const [stores, setStores] = useState([]);
 
     useEffect(() => {
-        dispatch(getAllCoupons());
-
         // Fetch stores using storeApi
         const fetchStores = async () => {
             try {
@@ -52,7 +49,7 @@ const Checkout = () => {
         };
 
         fetchStores();
-    }, [dispatch]);
+    }, []);
 
     const [formData, setFormData] = useState({
         fullName: '',
@@ -82,7 +79,12 @@ const Checkout = () => {
         if (appliedCoupon.type === 'fixed') {
             return appliedCoupon.discount;
         } else if (appliedCoupon.type === 'percent') {
-            return (subtotal * appliedCoupon.discount) / 100;
+            const discount = Math.floor((subtotal * appliedCoupon.discount) / 100);
+            // Apply max discount amount limit if set
+            if (appliedCoupon.maxDiscountAmount && discount > appliedCoupon.maxDiscountAmount) {
+                return appliedCoupon.maxDiscountAmount;
+            }
+            return discount;
         } else if (appliedCoupon.type === 'shipping') {
             return deliveryFee;
         }
@@ -111,52 +113,68 @@ const Checkout = () => {
         }
     }, [deliveryType, stores, selectedStore]);
 
-    const handleApplyCoupon = () => {
+    const handleApplyCoupon = async () => {
         if (!couponCode) return;
 
-        const coupon = Array.isArray(coupons)
-            ? coupons.find(c => c.code === couponCode.toUpperCase())
-            : null;
-
-        if (!coupon) {
-            setCouponError('Mã khuyến mãi không hợp lệ!');
-            setAppliedCoupon(null);
-            return;
-        }
-
-        if (!coupon.isActive) {
-            setCouponError('Mã khuyến mãi đã ngưng hoạt động!');
-            setAppliedCoupon(null);
-            return;
-        }
-
-        const now = new Date();
-        if (coupon.startDate && new Date(coupon.startDate) > now) {
-            setCouponError('Mã khuyến mãi chưa đến đợt sử dụng!');
-            setAppliedCoupon(null);
-            return;
-        }
-
-        if (coupon.expiryDate && new Date(coupon.expiryDate) < now) {
-            setCouponError('Mã khuyến mãi đã hết hạn!');
-            setAppliedCoupon(null);
-            return;
-        }
-
-        if (coupon.maxUsage <= coupon.usedCount) {
-            setCouponError('Mã khuyến mãi đã hết lượt sử dụng!');
-            setAppliedCoupon(null);
-            return;
-        }
-
-        if (subtotal < coupon.minOrder) {
-            setCouponError(`Đơn tối thiểu để áp dụng là ${formatCurrency(coupon.minOrder)}`);
-            setAppliedCoupon(null);
-            return;
-        }
-
-        setAppliedCoupon(coupon);
         setCouponError('');
+        const loadingToast = toast.loading('Đang kiểm tra mã khuyến mãi...');
+
+        try {
+            const response = await couponApi.getByCode(couponCode.toUpperCase());
+            const coupon = response.data;
+
+            if (!coupon) {
+                setCouponError('Mã khuyến mãi không hợp lệ!');
+                setAppliedCoupon(null);
+                toast.dismiss(loadingToast);
+                return;
+            }
+
+            if (!coupon.isActive) {
+                setCouponError('Mã khuyến mãi đã ngưng hoạt động!');
+                setAppliedCoupon(null);
+                toast.dismiss(loadingToast);
+                return;
+            }
+
+            const now = new Date();
+            if (coupon.startDate && new Date(coupon.startDate) > now) {
+                setCouponError('Mã khuyến mãi chưa đến đợt sử dụng!');
+                setAppliedCoupon(null);
+                toast.dismiss(loadingToast);
+                return;
+            }
+
+            if (coupon.expiryDate && new Date(coupon.expiryDate) < now) {
+                setCouponError('Mã khuyến mãi đã hết hạn!');
+                setAppliedCoupon(null);
+                toast.dismiss(loadingToast);
+                return;
+            }
+
+            if (coupon.maxUsage <= coupon.usedCount) {
+                setCouponError('Mã khuyến mãi đã hết lượt sử dụng!');
+                setAppliedCoupon(null);
+                toast.dismiss(loadingToast);
+                return;
+            }
+
+            if (subtotal < coupon.minOrder) {
+                setCouponError(`Đơn tối thiểu để áp dụng là ${formatCurrency(coupon.minOrder)}`);
+                setAppliedCoupon(null);
+                toast.dismiss(loadingToast);
+                return;
+            }
+
+            setAppliedCoupon(coupon);
+            setCouponError('');
+            toast.success('Áp dụng mã khuyến mãi thành công!');
+        } catch (error) {
+            setCouponError(error.response?.data?.message || 'Mã khuyến mãi không hợp lệ hoặc đã hết hạn');
+            setAppliedCoupon(null);
+        } finally {
+            toast.dismiss(loadingToast);
+        }
     };
 
     const handleAddressSelect = async (val) => {

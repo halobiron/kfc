@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { getAllIngredients, updateIngredientStock, createIngredient, updateIngredient } from '../../ingredientSlice';
 import { toast } from 'react-toastify';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiBarChart2 } from 'react-icons/fi';
 import Button, { AddButton, EditButton } from '../../../../components/Common/Button';
 import Badge from '../../../../components/Common/Badge';
 import Table from '../../../../components/Common/Table';
@@ -18,6 +19,7 @@ const getStockStatus = (stock, minStock) => {
 
 const Ingredient = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { ingredients, loading } = useSelector(state => state.ingredients);
     const { keyword } = useSelector(state => state.search);
 
@@ -181,6 +183,13 @@ const Ingredient = () => {
             <div className="page-header d-flex justify-content-between align-items-center">
                 <h1 className="page-title">Quản lý Nguyên liệu (Kho)</h1>
                 <div className="d-flex gap-2">
+                    <Button
+                        variant="outline-primary"
+                        onClick={() => navigate('/ingredients/stats')}
+                        title="Xem thống kê nguyên liệu"
+                    >
+                        <FiBarChart2 /> Thống kê
+                    </Button>
                     <AddButton onClick={openCreateModal} />
                 </div>
             </div>

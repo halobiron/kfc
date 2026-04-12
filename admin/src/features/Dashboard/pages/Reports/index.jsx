@@ -39,12 +39,12 @@ const STATS_CONFIG = [
         icon: <FiShoppingBag size={24} />,
         color: 'success'
     },
-    {
+    /* {
         label: 'Khách hàng mới',
         key: 'customers',
         icon: <FiUsers size={24} />,
         color: 'warning'
-    },
+    }, */
     {
         label: 'Trung bình đơn',
         key: 'avgOrderValue',
@@ -230,7 +230,7 @@ const Reports = () => {
 
                     {/* Top Products & Category Overview */}
                     <div className="row g-4">
-                        <div className="col-lg-6">
+                        {/* <div className="col-lg-6">
                             <div className="card h-100">
                                 <div className="card-header">
                                     <h5 className="mb-0 fw-bold">Sản phẩm bán chạy <small className="text-muted fw-normal ms-2">({getDateRangeLabel(dateRange)})</small></h5>
@@ -262,7 +262,7 @@ const Reports = () => {
                                     </table>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="col-lg-6">
                             <div className="card border shadow-sm h-100">
                                 <div className="card-header">

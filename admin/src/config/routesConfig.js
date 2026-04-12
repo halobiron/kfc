@@ -2,6 +2,7 @@ import Home from '../features/Dashboard/pages/Home';
 import Product from '../features/Product/pages/Product';
 import ProductDetails from '../features/Product/pages/ProductDetails';
 import Ingredient from '../features/Ingredient/pages/Ingredient';
+import IngredientStats from '../features/Ingredient/pages/IngredientStats';
 import Order from '../features/Order/pages/Order';
 import Users from '../features/User/pages/Users';
 import Reports from '../features/Dashboard/pages/Reports';
@@ -62,7 +63,21 @@ const baseRoutes = [
         label: 'Nguyên liệu',
         icon: <FiBox />,
         permission: 'ingredients.view',
-        component: <Ingredient />
+        component: <Ingredient />,
+        children: [
+            {
+                path: '/ingredients',
+                id: 'ingredients-list',
+                label: 'Danh sách',
+                component: <Ingredient />
+            },
+            {
+                path: '/ingredients/stats',
+                id: 'ingredients-stats',
+                label: 'Thống kê',
+                component: <IngredientStats />
+            }
+        ]
     },
     {
         path: '/users',
@@ -86,14 +101,6 @@ const baseRoutes = [
         icon: <FiTag />,
         permission: 'promotions.view',
         component: <Promotions />
-    },
-    {
-        path: '/reports',
-        id: 'reports',
-        label: 'Báo cáo',
-        icon: <FiBarChart2 />,
-        permission: 'reports.view',
-        component: <Reports />
     },
     {
         path: '/stores',
@@ -124,5 +131,6 @@ export const routesConfig = routesMetadata;
 export const otherRoutes = [
     { path: '/products/:id', component: <ProductDetails /> },
     { path: '/orders/:id', component: <OrderDetails /> },
+    { path: '/ingredients/stats', component: <IngredientStats /> },
     { path: '/change-password', component: <ChangePassword /> }
 ];

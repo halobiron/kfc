@@ -1,7 +1,9 @@
+const mongoose = require('mongoose');
 const Order = require('../models/orderSchema');
 const User = require('../models/userSchema');
 const Product = require('../models/productSchema');
 const Ingredient = require('../models/ingredientSchema');
+const IngredientUsage = require('../models/ingredientUsageSchema');
 
 exports.getDashboardStats = async (req, res, next) => {
     try {
@@ -168,6 +170,78 @@ exports.getDashboardStats = async (req, res, next) => {
                 categoryStats: categoryStats,
                 pendingOrders: pendingOrders,
                 lowStockIngredients: lowStockIngredients
+            }
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Helper: Get date range based on range parameter
+const getDateRange = (range) => {
+    const startDate = new Date();
+    let groupFormat;
+
+    if (range === 'week') {
+        startDate.setDate(startDate.getDate() - 7);
+        groupFormat = '%Y-%m-%d';
+    } else if (range === 'year') {
+        startDate.setFullYear(startDate.getFullYear() - 1);
+        groupFormat = '%Y-%m';
+    } else {
+        startDate.setMonth(startDate.getMonth() - 1);
+        groupFormat = '%Y-%m-%d';
+    }
+
+    return { startDate, groupFormat };
+};
+
+exports.getIngredientUsageStats = async (req, res, next) => {
+    try {
+        const { range = 'month', ingredientId, unit } = req.query;
+        const { startDate, groupFormat } = getDateRange(range);
+
+        const matchCondition = { deductedAt: { $gte: startDate } };
+        if (ingredientId) matchCondition.ingredientId = new mongoose.Types.ObjectId(ingredientId);
+        if (unit) matchCondition.unit = unit;
+
+        // Parallel queries for better performance
+        const [usageOverTime, topIngredients, unitUsage, totalUsage, uniqueUnits, selectedIngredient] = await Promise.all([
+            IngredientUsage.aggregate([
+                { $match: matchCondition },
+                { $group: { _id: { $dateToString: { format: groupFormat, date: '$deductedAt' } }, totalQuantity: { $sum: '$quantity' } } },
+                { $sort: { _id: 1 } }
+            ]),
+            IngredientUsage.aggregate([
+                { $match: matchCondition },
+                { $group: { _id: '$ingredientId', name: { $first: '$ingredientName' }, unit: { $first: '$unit' }, totalQuantity: { $sum: '$quantity' }, usageCount: { $sum: 1 } } },
+                { $sort: { totalQuantity: -1 } },
+                { $limit: 10 }
+            ]),
+            IngredientUsage.aggregate([
+                { $match: { deductedAt: { $gte: startDate } } },
+                { $group: { _id: '$unit', totalQuantity: { $sum: '$quantity' }, usageCount: { $sum: 1 } } },
+                { $sort: { totalQuantity: -1 } }
+            ]),
+            IngredientUsage.aggregate([
+                { $match: matchCondition },
+                { $group: { _id: null, totalQuantity: { $sum: '$quantity' }, totalDeductions: { $sum: 1 } } }
+            ]),
+            IngredientUsage.distinct('unit', { deductedAt: { $gte: startDate } }),
+            ingredientId ? Ingredient.findById(ingredientId).select('name unit category') : null
+        ]);
+
+        res.status(200).json({
+            status: true,
+            data: {
+                chart: usageOverTime,
+                topIngredients,
+                unitUsage,
+                totalQuantity: totalUsage[0]?.totalQuantity || 0,
+                totalDeductions: totalUsage[0]?.totalDeductions || 0,
+                selectedIngredient,
+                availableUnits: uniqueUnits
             }
         });
 

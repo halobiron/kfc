@@ -101,9 +101,9 @@ const Login = () => {
                         placeholder="••••••••"
                     />
 
-                    <div className="auth-forgot-password">
+                    {/* <div className="auth-forgot-password">
                         <Link to="/forgot-password" className="auth-link">Bạn quên mật khẩu?</Link>
-                    </div>
+                    </div> */}
 
                     <Button
                         type="submit"
@@ -115,14 +115,14 @@ const Login = () => {
                     </Button>
                 </form>
 
-                <div className="social-divider">Hoặc tiếp tục với</div>
+                {/* <div className="social-divider">Hoặc tiếp tục với</div>
 
                 <div>
                     <button className="btn-social" onClick={() => handleGoogleLogin()}>
                         <FcGoogle />
                         Đăng nhập bằng Google
                     </button>
-                </div>
+                </div> */}
 
                 <div className="auth-footer-link">
                     Bạn chưa có tài khoản? <Link to="/register" className="auth-link">Đăng ký</Link>

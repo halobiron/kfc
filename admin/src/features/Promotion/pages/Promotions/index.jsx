@@ -26,6 +26,7 @@ const Promotions = () => {
     type: 'percent', // fixed, percent, shipping
     discount: 0,
     minOrder: 0,
+    maxDiscountAmount: null,
     maxUsage: 100,
     startDate: '',
     expiryDate: '',
@@ -77,6 +78,7 @@ const Promotions = () => {
         type: 'percent',
         discount: 0,
         minOrder: 0,
+        maxDiscountAmount: null,
         maxUsage: 100,
         startDate: '',
         expiryDate: '',
@@ -147,11 +149,18 @@ const Promotions = () => {
       header: 'Giá trị',
       className: 'text-center fw-bold text-danger',
       render: (promotion) => (
-        <>
-          {promotion.type === 'percent' && `${promotion.discount}%`}
-          {promotion.type === 'fixed' && formatCurrency(promotion.discount)}
-          {promotion.type === 'shipping' && 'Free ship'}
-        </>
+        <div className="d-flex flex-column">
+          <span>
+            {promotion.type === 'percent' && `${promotion.discount}%`}
+            {promotion.type === 'fixed' && formatCurrency(promotion.discount)}
+            {promotion.type === 'shipping' && 'Free ship'}
+          </span>
+          {promotion.type === 'percent' && promotion.maxDiscountAmount && (
+            <small className="text-muted fst-italic">
+              Tối đa {formatCurrency(promotion.maxDiscountAmount)}
+            </small>
+          )}
+        </div>
       )
     },
     {

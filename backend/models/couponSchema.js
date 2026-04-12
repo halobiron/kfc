@@ -27,6 +27,10 @@ const couponSchema = new Schema({
         enum: ['fixed', 'percent', 'shipping'],
         default: 'fixed'
     },
+    maxDiscountAmount: {
+        type: Number,
+        default: null
+    },
     minOrder: {
         type: Number,
         default: 0

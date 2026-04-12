@@ -7,7 +7,9 @@ const DEFAULT_DATA = {
     unit: 'Kg',
     minStock: 10,
     cost: '',
-    stock: 0
+    stock: 0,
+    supplier: '',
+    supplierContact: ''
 };
 
 const IngredientFormModal = ({ show, onHide, onSubmit, initialData, isEditing }) => {
@@ -112,6 +114,28 @@ const IngredientFormModal = ({ show, onHide, onSubmit, initialData, isEditing })
                                 onChange={(e) => setFormData({ ...formData, minStock: e.target.value })}
                             />
                         </div>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label">Nhà cung cấp</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={formData.supplier}
+                            onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
+                            placeholder="Tên nhà cung cấp"
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label">Liên hệ nhà cung cấp</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={formData.supplierContact}
+                            onChange={(e) => setFormData({ ...formData, supplierContact: e.target.value })}
+                            placeholder="SĐT, Email, địa chỉ..."
+                        />
                     </div>
 
                     <div className="d-flex gap-2">

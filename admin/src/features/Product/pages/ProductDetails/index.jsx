@@ -85,17 +85,20 @@ const ProductDetails = () => {
 
         const ingredient = allIngredients.find(i => i._id === selectedIngredientId);
         if (ingredient) {
-            const exists = recipe.find(r => r.ingredientId === selectedIngredientId);
+            const exists = recipe.find(r => {
+                const id = typeof r.ingredientId === 'object' ? r.ingredientId._id : r.ingredientId;
+                return id === selectedIngredientId;
+            });
             if (exists) {
                 toast.warning('Nguyên liệu này đã có trong công thức!');
                 return;
             }
 
+            // Chỉ lưu ingredientId và quantity theo schema của backend
+            // name và unit sẽ được populate khi load từ server
             setRecipe([...recipe, {
                 ingredientId: ingredient._id,
-                name: ingredient.name,
-                quantity: parseFloat(ingredientQty),
-                unit: ingredient.unit
+                quantity: parseFloat(ingredientQty)
             }]);
             setSelectedIngredientId('');
             setIngredientQty('');
@@ -325,14 +328,18 @@ const ProductDetails = () => {
                                         <tbody>
                                             {recipe.length > 0 ? recipe.map((item, idx) => (
                                                 <tr key={idx}>
-                                                    <td className="fw-medium">{item.name}</td>
+                                                    <td className="fw-medium">
+                                                        {item.ingredientId?.name || item.name}
+                                                    </td>
                                                     <td className="text-center fw-bold text-danger">{item.quantity}</td>
-                                                    <td className="text-center text-muted small">{item.unit}</td>
+                                                    <td className="text-center text-muted small">
+                                                        {item.ingredientId?.unit || item.unit}
+                                                    </td>
                                                     <td className="text-end pe-3">
                                                         <button
                                                             type="button"
                                                             className="btn btn-sm btn-outline-danger"
-                                                            onClick={() => removeIngredientFromRecipe(item.ingredientId)}
+                                                            onClick={() => removeIngredientFromRecipe(typeof item.ingredientId === 'object' ? item.ingredientId._id : item.ingredientId)}
                                                             style={{ borderRadius: '4px', padding: '4px 8px' }}
                                                             title="Xóa nguyên liệu"
                                                         >

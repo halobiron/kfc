@@ -79,7 +79,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
         new: true,
         runValidators: true,
         useFindAndModify: false
-    });
+    }).populate('recipe.ingredientId');
 
     if (!product) {
         return next(new ErrorHandler('Product not found', 404));
@@ -91,7 +91,8 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
 
     res.json({
         status: true,
-        message: "success"
+        message: "success",
+        data: product
     })
 });
 
