@@ -33,15 +33,7 @@ const FILTER_MODES = {
         placeholder: '-- Tất cả nguyên liệu --',
         getLabel: (ing) => `${ing.name} (${ing.unit})`,
         getValue: (ing) => ing._id,
-                getFeedback: (ing, ingredients) => `Đang xem: ${ingredients.find(i => i._id === ing)?.name}`
-    },
-    unit: {
-        label: 'Theo đơn vị tính',
-        icon: FiTrendingUp,
-        placeholder: '-- Tất cả đơn vị --',
-        getLabel: (unit) => unit,
-        getValue: (unit) => unit,
-        getFeedback: (unit) => `Đang xem tất cả nguyên liệu tính bằng ${unit}`
+        getFeedback: (ing, ingredients) => `Đang xem: ${ingredients.find(i => i._id === ing)?.name}`
     }
 };
 
@@ -50,7 +42,7 @@ const IngredientStats = () => {
     const navigate = useNavigate();
     const { stats, loading } = useSelector((state) => state.ingredientStats);
     const [dateRange, setDateRange] = useState('month');
-    const [filterMode, setFilterMode] = useState('ingredient');
+    const [filterMode] = useState('ingredient');
     const [selectedValue, setSelectedValue] = useState('');
     const [ingredients, setIngredients] = useState([]);
 
@@ -65,57 +57,37 @@ const IngredientStats = () => {
     useEffect(() => {
         const params = { range: dateRange };
         if (selectedValue) {
-            params[filterMode === 'ingredient' ? 'ingredientId' : 'unit'] = selectedValue;
+            params.ingredientId = selectedValue;
         }
         dispatch(getIngredientUsageStats(params));
-    }, [dispatch, dateRange, filterMode, selectedValue]);
+    }, [dispatch, dateRange, selectedValue]);
 
     const handleModeChange = (mode) => {
-        setFilterMode(mode);
+        // No-op since we only have one mode now, but keeping the signature for safety
         setSelectedValue('');
     };
 
     const barChartData = useMemo(() => ({
-        labels: stats.topIngredients?.map(i => `${i.name} (${i.totalQuantity}${i.unit})`) || [],
+        labels: stats.topIngredients?.map(i => `${i.name} (${Number(i.totalQuantity).toFixed(2)}${i.unit})`) || [],
         datasets: [{
             label: 'Lượng sử dụng',
-            data: stats.topIngredients?.map(i => i.totalQuantity) || [],
+            data: stats.topIngredients?.map(i => Number(i.totalQuantity).toFixed(2)) || [],
             backgroundColor: 'rgba(75, 192, 192, 0.6)',
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1
         }]
     }), [stats.topIngredients]);
 
-    const unitChartData = useMemo(() => ({
-        labels: stats.unitUsage?.map(u => u._id) || [],
-        datasets: [{
-            data: stats.unitUsage?.map(u => u.totalQuantity) || [],
-            backgroundColor: CHART_COLORS
-        }]
-    }), [stats.unitUsage]);
-
     const currentMode = FILTER_MODES[filterMode];
     const Icon = currentMode.icon;
-    const options = filterMode === 'ingredient'
-        ? ingredients
-        : (stats.availableUnits || []);
+    const options = ingredients;
 
     const getStatCardContent = () => {
-        if (filterMode === 'ingredient' && stats.selectedIngredient) {
+        if (stats.selectedIngredient) {
             return (
                 <StatCard
                     label={`Lượng dùng (${stats.selectedIngredient.name})`}
-                    value={`${stats.totalQuantity} ${stats.selectedIngredient.unit}`}
-                    icon={<FiPackage size={24} />}
-                    color="primary"
-                />
-            );
-        }
-        if (filterMode === 'unit' && selectedValue) {
-            return (
-                <StatCard
-                    label={`Tổng lượng (${selectedValue})`}
-                    value={`${stats.totalQuantity} ${selectedValue}`}
+                    value={`${Number(stats.totalQuantity).toFixed(2)} ${stats.selectedIngredient.unit}`}
                     icon={<FiPackage size={24} />}
                     color="primary"
                 />
@@ -123,12 +95,10 @@ const IngredientStats = () => {
         }
         return (
             <div className="card">
-                <div className="card-body text-center text-muted p-0">
-                    <FiPackage size={24} className="mb-1" />
+                <div className="card-body text-center text-muted p-0 py-2">
+                    <FiPackage size={20} className="mb-1" />
                     <p className="mb-0 small">
-                        {filterMode === 'ingredient'
-                            ? 'Chọn nguyên liệu để xem thống kê chi tiết'
-                            : 'Chọn đơn vị tính để xem tổng lượng'}
+                        Chọn nguyên liệu để xem thống kê chi tiết
                     </p>
                 </div>
             </div>
@@ -158,25 +128,13 @@ const IngredientStats = () => {
                 </div>
             </div>
 
-            <div className="card mb-4">
+            <div className="card mb-4 shadow-sm">
                 <div className="card-body">
-                    <div className="d-flex gap-2 mb-3">
-                        {Object.entries(FILTER_MODES).map(([key, mode]) => (
-                            <button
-                                key={key}
-                                className={`btn ${filterMode === key ? 'btn-primary' : 'btn-outline-secondary'}`}
-                                onClick={() => handleModeChange(key)}
-                            >
-                                {mode.label}
-                            </button>
-                        ))}
-                    </div>
-
                     <div className="row g-3">
                         <div className="col-md-10">
-                            <label className="form-label fw-semibold">
-                                <Icon className="me-2" />
-                                Chọn {currentMode.label.toLowerCase()}
+                            <label className="form-label fw-bold">
+                                <Icon className="me-2 text-primary" />
+                                Chọn nguyên liệu
                             </label>
                             <select
                                 className="form-select form-select-lg"
@@ -185,16 +143,11 @@ const IngredientStats = () => {
                             >
                                 <option value="">{currentMode.placeholder}</option>
                                 {options.map((item) => (
-                                    <option key={currentMode.getValue(item)} value={currentMode.getValue(item)}>
-                                        {currentMode.getLabel(item)}
+                                    <option key={item._id} value={item._id}>
+                                        {`${item.name} (${item.unit})`}
                                     </option>
                                 ))}
                             </select>
-                            {selectedValue && (
-                                <small className="text-muted mt-1 d-block">
-                                    {currentMode.getFeedback(selectedValue, ingredients)}
-                                </small>
-                            )}
                         </div>
                         <div className="col-md-2 d-flex align-items-end">
                             <Button
@@ -226,26 +179,22 @@ const IngredientStats = () => {
                     </div>
 
                     <div className="row g-4">
-                        <div className="col-lg-8">
+                        <div className="col-lg-12">
                             <div className="card h-100">
-                                <div className="card-header">
-                                    <h5 className="mb-0">Top nguyên liệu dùng nhiều</h5>
+                                <div className="card-header bg-white">
+                                    <h5 className="mb-0">Top 10 nguyên liệu sử dụng nhiều nhất</h5>
                                 </div>
                                 <div className="card-body">
-                                    <div style={{ height: '300px' }}>
-                                        <Bar data={barChartData} options={{ maintainAspectRatio: false }} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-4">
-                            <div className="card h-100">
-                                <div className="card-header">
-                                    <h5 className="mb-0">Theo đơn vị tính</h5>
-                                </div>
-                                <div className="card-body">
-                                    <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '300px' }}>
-                                        <Doughnut data={unitChartData} />
+                                    <div style={{ height: '400px' }}>
+                                        <Bar 
+                                            data={barChartData} 
+                                            options={{ 
+                                                maintainAspectRatio: false,
+                                                plugins: {
+                                                    legend: { display: false }
+                                                }
+                                            }} 
+                                        />
                                     </div>
                                 </div>
                             </div>

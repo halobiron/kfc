@@ -55,9 +55,15 @@ const ProductDetails = () => {
             category: Yup.string().required('Danh mục là bắt buộc'),
         }),
         onSubmit: async (values) => {
+            // Chuẩn hóa recipe trước khi gửi lên backend
+            const normalizedRecipe = recipe.map(item => ({
+                ingredientId: typeof item.ingredientId === 'object' ? item.ingredientId._id : item.ingredientId,
+                quantity: item.quantity
+            }));
+
             const productData = {
                 ...values,
-                recipe
+                recipe: normalizedRecipe
             };
             await dispatch(updateProduct({ id, data: productData }));
             toast.success('Cập nhật sản phẩm thành công!');
@@ -95,9 +101,13 @@ const ProductDetails = () => {
             }
 
             // Chỉ lưu ingredientId và quantity theo schema của backend
-            // name và unit sẽ được populate khi load từ server
+            // Lưu thêm thông tin để hiển thị ngay lập tức mà không cần reload
             setRecipe([...recipe, {
-                ingredientId: ingredient._id,
+                ingredientId: {
+                    _id: ingredient._id,
+                    name: ingredient.name,
+                    unit: ingredient.unit
+                },
                 quantity: parseFloat(ingredientQty)
             }]);
             setSelectedIngredientId('');
@@ -106,7 +116,10 @@ const ProductDetails = () => {
     };
 
     const removeIngredientFromRecipe = (id) => {
-        setRecipe(recipe.filter(r => r.ingredientId !== id));
+        setRecipe(recipe.filter(r => {
+            const currentId = typeof r.ingredientId === 'object' ? r.ingredientId._id : r.ingredientId;
+            return currentId !== id;
+        }));
     };
 
     if (loading) {
