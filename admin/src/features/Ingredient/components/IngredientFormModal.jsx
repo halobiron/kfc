@@ -38,7 +38,7 @@ const IngredientFormModal = ({ show, onHide, onSubmit, initialData, isEditing })
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label className="form-label">Tên nguyên liệu</label>
+                        <label className="form-label">Tên nguyên liệu <span className="text-danger">*</span></label>
                         <input
                             type="text"
                             className="form-control"
@@ -50,7 +50,7 @@ const IngredientFormModal = ({ show, onHide, onSubmit, initialData, isEditing })
 
                     <div className="row mb-3">
                         <div className="col-md-6">
-                            <label className="form-label">Phân loại</label>
+                            <label className="form-label">Phân loại <span className="text-danger">*</span></label>
                             <select
                                 className="form-select"
                                 value={formData.category}
@@ -67,7 +67,7 @@ const IngredientFormModal = ({ show, onHide, onSubmit, initialData, isEditing })
                             </select>
                         </div>
                         <div className="col-md-6">
-                            <label className="form-label">Đơn vị tính</label>
+                            <label className="form-label">Đơn vị tính <span className="text-danger">*</span></label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -91,7 +91,7 @@ const IngredientFormModal = ({ show, onHide, onSubmit, initialData, isEditing })
                             />
                         </div>
                         <div className="col-md-6">
-                            <label className="form-label">Giá nhập (VND)</label>
+                            <label className="form-label">Giá nhập (VND) <span className="text-danger">*</span></label>
                             <input
                                 type="number"
                                 className="form-control"

@@ -43,22 +43,22 @@ const UserModal = ({ show, onClose, user, roles, onSubmit }) => {
                     <form onSubmit={handleSubmit}>
                         <div className="modal-body">
                             <div className="mb-3">
-                                <label className="form-label">Họ và tên</label>
+                                <label className="form-label">Họ và tên <span className="text-danger">*</span></label>
                                 <input type="text" className="form-control" value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Email</label>
+                                <label className="form-label">Email <span className="text-danger">*</span></label>
                                 <input type="email" className="form-control" value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Số điện thoại</label>
+                                <label className="form-label">Số điện thoại <span className="text-danger">*</span></label>
                                 <input type="tel" className="form-control" value={formData.phone}
                                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })} required />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Vai trò</label>
+                                <label className="form-label">Vai trò <span className="text-danger">*</span></label>
                                 <select className="form-select" value={formData.role}
                                     onChange={(e) => setFormData({ ...formData, role: e.target.value })} required>
                                     {roles?.map(role => (
@@ -67,7 +67,7 @@ const UserModal = ({ show, onClose, user, roles, onSubmit }) => {
                                 </select>
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">{isEditMode ? 'Đổi mật khẩu (để trống nếu không đổi)' : 'Mật khẩu'}</label>
+                                <label className="form-label">{isEditMode ? 'Đổi mật khẩu (để trống nếu không đổi)' : 'Mật khẩu'}{!isEditMode && <span className="text-danger"> *</span>}</label>
                                 <input type="password" className="form-control" value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                     required={!isEditMode} minLength="6" />

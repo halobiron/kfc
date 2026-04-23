@@ -3,6 +3,41 @@ const Role = require('../models/roleSchema');
 const { catchAsyncErrors } = require('../middleware/errors');
 const ErrorHandler = require('../utils/errorHandler');
 const { logAction } = require('../utils/logger');
+const sendEmail = require('../utils/sendEmail');
+const { vipAnnouncementTemplate } = require('../utils/emailTemplates');
+
+// TOGGLE USER VIP STATUS
+exports.toggleUserVip = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.params.id).populate('role');
+    if (!user) {
+        return next(new ErrorHandler('Không tìm thấy người dùng', 404));
+    }
+
+    const wasVip = user.isVip;
+    user.isVip = !user.isVip;
+    await user.save();
+
+    // Gửi email nếu được nâng cấp lên VIP
+    if (user.isVip && !wasVip) {
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: 'Chúc mừng bạn đã trở thành VIP Member của KFC! 👑',
+                message: vipAnnouncementTemplate(user.name, user.vipDiscount || 10)
+            });
+        } catch (error) {
+            console.error('Lỗi gửi email VIP:', error);
+        }
+    }
+
+    await logAction(req.user.id, 'UPDATE', 'User', `${user.isVip ? 'Gán' : 'Thu hồi'} VIP cho tài khoản: ${user.name}`);
+
+    res.status(200).json({
+        status: true,
+        message: user.isVip ? 'Đã gán VIP cho người dùng' : 'Đã thu hồi VIP',
+        data: user
+    });
+});
 
 // UPDATE USER PROFILE
 exports.updateUserProfile = catchAsyncErrors(async (req, res, next) => {
@@ -74,17 +109,33 @@ exports.createUser = catchAsyncErrors(async (req, res, next) => {
 exports.updateUser = catchAsyncErrors(async (req, res, next) => {
     if (req.body.password === '') delete req.body.password;
 
+    const oldUser = await User.findById(req.params.id);
+    if (!oldUser) return next(new ErrorHandler('Không tìm thấy người dùng', 404));
+
     // Nếu có password mới, cần save bằng tay để hash
     if (req.body.password) {
-        const user = await User.findById(req.params.id);
-        user.password = req.body.password;
-        await user.save();
+        oldUser.password = req.body.password;
+        await oldUser.save();
         delete req.body.password;
     }
 
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
         new: true, runValidators: true
     }).populate('role');
+
+    // Gửi email nếu được nâng cấp lên VIP
+    if (req.body.isVip === true && oldUser.isVip === false) {
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: 'Chúc mừng bạn đã trở thành VIP Member của KFC! 👑',
+                message: vipAnnouncementTemplate(user.name, user.vipDiscount || 10)
+            });
+        } catch (error) {
+            console.error('Lỗi gửi email VIP:', error);
+            // Không chặn tiến trình update nếu lỗi gửi mail
+        }
+    }
 
     if (req.user) {
         const roleName = user.role ? user.role.name : 'Khách hàng';
@@ -154,8 +205,22 @@ exports.toggleUserVip = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Không tìm thấy người dùng', 404));
     }
 
+    const wasVip = user.isVip;
     user.isVip = !user.isVip;
     await user.save();
+
+    // Gửi email nếu được nâng cấp lên VIP
+    if (user.isVip && !wasVip) {
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: 'Chúc mừng bạn đã trở thành VIP Member của KFC! 👑',
+                message: vipAnnouncementTemplate(user.name, user.vipDiscount || 10)
+            });
+        } catch (error) {
+            console.error('Lỗi gửi email VIP:', error);
+        }
+    }
 
     await logAction(req.user.id, 'UPDATE', 'User', `${user.isVip ? 'Gán' : 'Thu hồi'} VIP cho tài khoản: ${user.name}`);
 

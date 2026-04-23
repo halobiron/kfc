@@ -34,7 +34,12 @@ const Account = () => {
                             className="profile-avatar-img"
                         />
                         <div>
-                            <h2>{displayName}</h2>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <h2 style={{ margin: 0 }}>{displayName}</h2>
+                                {user?.isVip && (
+                                    <span title="VIP Member" style={{ fontSize: '20px', cursor: 'help', lineHeight: 1, display: 'flex', alignItems: 'center' }}>👑</span>
+                                )}
+                            </div>
                             <a href="#logout" className="link-underline" onClick={(e) => { e.preventDefault(); handleLogout(); }}>
                                 Đăng xuất
                             </a>

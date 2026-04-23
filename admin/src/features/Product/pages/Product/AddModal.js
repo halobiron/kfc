@@ -39,12 +39,12 @@ const AddModal = ({ setShowModal }) => {
         </div>
         <form className="row g-3" onSubmit={handleSubmit}>
           <div className="col-md-6">
-            <label htmlFor="title" className="form-label">Tên món</label>
+            <label htmlFor="title" className="form-label">Tên món <span className="text-danger">*</span></label>
             <input type="text" name='title' onChange={handleChange} onBlur={handleBlur} value={values.title} className="form-control" id="title" placeholder="Nhập tên món ăn..." />
             {touched.title && errors.title && <div className="text-danger small">{errors.title}</div>}
           </div>
           <div className="col-md-6">
-            <label htmlFor="category" className="form-label">Danh mục</label>
+            <label htmlFor="category" className="form-label">Danh mục <span className="text-danger">*</span></label>
             <select name="category" onChange={handleChange} onBlur={handleBlur} value={values.category} className="form-select" id="category">
               {categories && categories.map(cat => (
                 <option key={cat._id} value={cat.slug}>{cat.name}</option>
@@ -53,17 +53,17 @@ const AddModal = ({ setShowModal }) => {
             {touched.category && errors.category && <div className="text-danger small">{errors.category}</div>}
           </div>
           <div className="col-12">
-            <label htmlFor="description" className="form-label">Mô tả</label>
+            <label htmlFor="description" className="form-label">Mô tả <span className="text-danger">*</span></label>
             <input type="text" name='description' onChange={handleChange} onBlur={handleBlur} value={values.description} className="form-control" id="description" placeholder="Mô tả ngắn gọn về món ăn..." />
             {touched.description && errors.description && <div className="text-danger small">{errors.description}</div>}
           </div>
           <div className="col-md-6">
-            <label htmlFor="price" className="form-label">Giá bán (VNĐ)</label>
+            <label htmlFor="price" className="form-label">Giá bán (VNĐ) <span className="text-danger">*</span></label>
             <input type="number" name='price' onChange={handleChange} onBlur={handleBlur} value={values.price} className="form-control" id="price" placeholder="Ví dụ: 50000" />
             {touched.price && errors.price && <div className="text-danger small">{errors.price}</div>}
           </div>
           <div className="col-md-6">
-            <label htmlFor="stock" className="form-label">Số lượng tồn kho</label>
+            <label htmlFor="stock" className="form-label">Số lượng tồn kho <span className="text-danger">*</span></label>
             <input type="number" name='stock' onChange={handleChange} onBlur={handleBlur} value={values.stock} className="form-control" id="stock" placeholder="Nhập số lượng..." />
             {touched.stock && errors.stock && <div className="text-danger small">{errors.stock}</div>}
           </div>

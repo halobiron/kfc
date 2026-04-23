@@ -86,14 +86,14 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
             <div className="modal-overlay-inner modal-overlay-inner-wide p-4">
                 <h4 className="mb-3 text-center">{initialStore ? 'Cập Nhật' : 'Thêm Mới'}</h4>
                 <form className="row g-3" onSubmit={formik.handleSubmit}>
-                    <div className="col-8"><label className="form-label">Tên</label><input className="form-control" name="name" onChange={formik.handleChange} value={values.name} /></div>
-                    <div className="col-4"><label className="form-label">SĐT</label><input className="form-control" name="phone" onChange={formik.handleChange} value={values.phone} /></div>
+                    <div className="col-8"><label className="form-label">Tên <span className="text-danger">*</span></label><input className="form-control" name="name" onChange={formik.handleChange} value={values.name} /></div>
+                    <div className="col-4"><label className="form-label">SĐT <span className="text-danger">*</span></label><input className="form-control" name="phone" onChange={formik.handleChange} value={values.phone} /></div>
                     <div className="col-6">
-                        <label className="form-label">Giờ mở cửa</label>
+                        <label className="form-label">Giờ mở cửa <span className="text-danger">*</span></label>
                         <input type="time" className="form-control" name="openTime" onChange={formik.handleChange} value={values.openTime} />
                     </div>
                     <div className="col-6">
-                        <label className="form-label">Giờ đóng cửa</label>
+                        <label className="form-label">Giờ đóng cửa <span className="text-danger">*</span></label>
                         <input type="time" className="form-control" name="closeTime" onChange={formik.handleChange} value={values.closeTime} />
                     </div>
 
@@ -106,7 +106,7 @@ const AddStoreModal = ({ setShowModal, initialStore }) => {
                         </div>
                     </div>
 
-                    <div className="col-12"><label className="form-label">Địa chỉ</label>
+                    <div className="col-12"><label className="form-label">Địa chỉ <span className="text-danger">*</span></label>
                         <div className="input-group">
                             <input className="form-control" name="address" onChange={formik.handleChange} value={values.address} />
                             <button className="btn btn-dark" type="button" onClick={findCoords}>Tìm vị trí</button>

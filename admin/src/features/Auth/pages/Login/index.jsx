@@ -44,7 +44,7 @@ const Login = () => {
             <main className="form-signin">
                 <form onSubmit={formik.handleSubmit}>
                     <img
-                        src="https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png"
+                        src="https://upload.wikimedia.org/wikipedia/vi/9/92/KFC_logo-image.png?_=20260203130227"
                         alt="KFC Logo"
                         className="login-logo"
                     />

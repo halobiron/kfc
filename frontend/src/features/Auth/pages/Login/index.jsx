@@ -101,9 +101,9 @@ const Login = () => {
                         placeholder="••••••••"
                     />
 
-                    {/* <div className="auth-forgot-password">
+                    <div className="auth-forgot-password">
                         <Link to="/forgot-password" className="auth-link">Bạn quên mật khẩu?</Link>
-                    </div> */}
+                    </div>
 
                     <Button
                         type="submit"

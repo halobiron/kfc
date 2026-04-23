@@ -3,12 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCartTotalQuantity } from '../../features/Cart/cartSlice';
 import logo from '../../assets/images/logos/kfc-logo.png';
-import {BsPersonCircle } from 'react-icons/bs';
+import { BsPersonCircle } from 'react-icons/bs';
 
 import './Header.css';
 
 const Header = () => {
   const cartQuantity = useSelector(selectCartTotalQuantity);
+  const { user } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const [isAnimating, setIsAnimating] = useState(false);
   const previousQuantityRef = useRef(cartQuantity);
@@ -50,8 +51,22 @@ const Header = () => {
               </ul>
 
               <div className="header-actions">
-                <Link to="/account" className="btn user-acc-btn">
+                <Link to="/account" className="btn user-acc-btn" style={{ position: 'relative' }}>
                   <BsPersonCircle />
+                  {user?.isVip && (
+                    <span 
+                      style={{ 
+                        position: 'absolute', 
+                        top: '-5px', 
+                        right: '-5px', 
+                        fontSize: '14px',
+                        textShadow: '0 0 4px rgba(0,0,0,0.2)'
+                      }}
+                      title="VIP Member"
+                    >
+                      👑
+                    </span>
+                  )}
                 </Link>
 
                 <div className="shopping-cart">

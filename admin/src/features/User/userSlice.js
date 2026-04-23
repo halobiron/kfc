@@ -70,10 +70,12 @@ export const toggleUserVip = createAsyncThunk(
     async (id, { rejectWithValue }) => {
         try {
             const response = await userApi.toggleVip(id);
-            const user = response.data.data; // Backend trả về { status, message, data: user }
-            const message = user?.isVip ? 'Đã gán VIP!' : 'Đã thu hồi VIP!';
+            // Kiểm tra cấu trúc response thực tế từ axiosClient
+            const user = response?.data || response; 
+            const isVip = user?.isVip;
+            const message = isVip ? 'Đã gán VIP!' : 'Đã thu hồi VIP!';
             toast.success(message);
-            return user; // Trả về user đã cập nhật
+            return user; 
         } catch (error) {
             const msg = getErrorMessage(error);
             toast.error(msg);
