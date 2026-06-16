@@ -18,11 +18,11 @@ const ProductDetail = () => {
     const [quantity, setQuantity] = useState(1);
     const dispatch = useDispatch();
     const { currentProduct: product, loading } = useSelector((state) => state.products);
-    const { categories } = useSelector((state) => state.categories);
+    // const { categories } = useSelector((state) => state.categories); // Reserved for future category filtering
 
-    useEffect(() => {
-        dispatch(getAllCategories());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(getAllCategories());
+    // }, [dispatch]);
 
     useEffect(() => {
         if (id) {

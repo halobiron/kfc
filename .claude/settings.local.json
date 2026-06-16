@@ -3,7 +3,8 @@
     "allow": [
       "Bash(node -e \":*)",
       "Bash(node -c controllers/statsController.js)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npx eslint:*)"
     ]
   }
 }

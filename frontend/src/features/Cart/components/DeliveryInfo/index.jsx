@@ -61,17 +61,18 @@ const DeliveryInfo = ({
     // Sync from dropdowns to formData
     useEffect(() => {
         if (isCustomEditing) {
-            const pName = provinces.find(p => p.code == selectedProvince)?.name || '';
-            const wName = wards.find(w => w.code == selectedWard)?.name || '';
-            
+            const pName = provinces.find(p => p.code === selectedProvince)?.name || '';
+            const wName = wards.find(w => w.code === selectedWard)?.name || '';
+
             const parts = [street, wName, pName].filter(Boolean);
             const fullAddress = parts.join(', ');
-            
+
             if (fullAddress !== formData.address) {
                 handleInputChange({ target: { name: 'address', value: fullAddress } });
             }
         }
-    }, [selectedProvince, selectedWard, street, isCustomEditing]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedProvince, selectedWard, street, isCustomEditing, formData.address, handleInputChange, provinces, wards]);
 
     const handleSavedAddressSelect = (val) => {
         // Reset manual edits
