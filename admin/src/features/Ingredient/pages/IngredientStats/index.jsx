@@ -6,7 +6,7 @@ import { getIngredientUsageStats } from '../../ingredientStatsSlice';
 import StatCard from '../../../../components/Common/StatCard';
 import Button from '../../../../components/Common/Button';
 import Loading from '../../../../components/Common/Loading';
-import { Bar, Doughnut } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 import ingredientApi from '../../../../api/ingredientApi';
 
@@ -18,13 +18,6 @@ const TIME_RANGES = [
     { value: 'year', label: 'Năm' }
 ];
 
-const CHART_COLORS = [
-    'rgba(255, 99, 132, 0.6)',
-    'rgba(54, 162, 235, 0.6)',
-    'rgba(255, 206, 86, 0.6)',
-    'rgba(75, 192, 192, 0.6)',
-    'rgba(153, 102, 255, 0.6)'
-];
 
 const FILTER_MODES = {
     ingredient: {
@@ -61,11 +54,6 @@ const IngredientStats = () => {
         }
         dispatch(getIngredientUsageStats(params));
     }, [dispatch, dateRange, selectedValue]);
-
-    const handleModeChange = (mode) => {
-        // No-op since we only have one mode now, but keeping the signature for safety
-        setSelectedValue('');
-    };
 
     const barChartData = useMemo(() => ({
         labels: stats.topIngredients?.map(i => `${i.name} (${Number(i.totalQuantity).toFixed(2)}${i.unit})`) || [],
