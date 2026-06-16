@@ -7,7 +7,6 @@ import Button from '../../../../components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../../Cart/cartSlice';
 import { getProductById } from '../../productSlice';
-import { getAllCategories } from '../../categorySlice';
 import { useParams, Link } from 'react-router-dom';
 
 import Card from '../../../../components/Card';
