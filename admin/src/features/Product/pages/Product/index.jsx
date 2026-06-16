@@ -20,6 +20,7 @@ const Product = () => {
 
   const [showModal, setShowModal] = useState(false)
   const [page, setPage] = useState(1);
+  const [filterVip, setFilterVip] = useState('all'); // 'all', 'vip', 'regular'
 
   useEffect(() => {
     dispatch(getAllProducts({ page, limit: 10 }));
@@ -29,7 +30,13 @@ const Product = () => {
   const filteredProducts = products.filter(product => {
     const searchLower = normalizeVietnamese((keyword || '').toLowerCase());
     const title = normalizeVietnamese(product.title?.toLowerCase() || '');
-    return title.includes(searchLower);
+    const matchesSearch = title.includes(searchLower);
+
+    const matchesVip = filterVip === 'all' ||
+                       (filterVip === 'vip' && product.isVip) ||
+                       (filterVip === 'regular' && !product.isVip);
+
+    return matchesSearch && matchesVip;
   });
 
   const totalPages = Math.ceil((productsCount || 0) / (resPerPage || 10));
@@ -54,7 +61,10 @@ const Product = () => {
               }}
             />
           </div>
-          <div className="fw-bold">{product.title}</div>
+          <div className="fw-bold">
+            {product.title}
+            {product.isVip && <span className="badge bg-warning ms-2">VIP</span>}
+          </div>
         </div>
       )
     },
@@ -103,6 +113,37 @@ const Product = () => {
       <div className="page-header d-flex justify-content-between align-items-center">
         <h1 className="page-title">Quản lý Món ăn</h1>
         <AddButton onClick={() => setShowModal(true)} />
+      </div>
+
+      <div className="card mb-3">
+        <div className="card-body py-2">
+          <div className="d-flex align-items-center gap-3">
+            <label className="form-label mb-0 fw-bold">Lọc theo VIP:</label>
+            <div className="btn-group" role="group">
+              <button
+                type="button"
+                className={`btn btn-sm ${filterVip === 'all' ? 'btn-primary' : 'btn-outline-primary'}`}
+                onClick={() => setFilterVip('all')}
+              >
+                Tất cả
+              </button>
+              <button
+                type="button"
+                className={`btn btn-sm ${filterVip === 'vip' ? 'btn-warning' : 'btn-outline-warning'}`}
+                onClick={() => setFilterVip('vip')}
+              >
+                ⭐ VIP
+              </button>
+              <button
+                type="button"
+                className={`btn btn-sm ${filterVip === 'regular' ? 'btn-secondary' : 'btn-outline-secondary'}`}
+                onClick={() => setFilterVip('regular')}
+              >
+                Thường
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="card">

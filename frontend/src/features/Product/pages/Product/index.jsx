@@ -92,7 +92,7 @@ const Product = () => {
                     <ProductLoading />
                 ) : (
                     categories.map(category => {
-                        const categoryProducts = products?.filter(p => p.category === category.slug) || [];
+                        const categoryProducts = products?.filter(p => (p.category?.slug || p.category) === category.slug) || [];
                         if (categoryProducts.length === 0) return null;
 
                         return (

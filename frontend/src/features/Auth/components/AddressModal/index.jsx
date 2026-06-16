@@ -86,8 +86,8 @@ const AddressModal = ({ show, onClose, onSubmit, initialData }) => {
     // Sync from dropdowns to addressForm
     useEffect(() => {
         if (isCustomEditing && !gettingLocation && !isInitializingRef.current) {
-            const pName = provinces.find(p => p.code == selectedProvince)?.name || '';
-            const wName = wards.find(w => w.code == selectedWard)?.name || '';
+            const pName = provinces.find(p => p.code === selectedProvince)?.name || '';
+            const wName = wards.find(w => w.code === selectedWard)?.name || '';
             
             const parts = [street, wName, pName].filter(Boolean);
             const fullAddress = parts.join(', ');

@@ -18,8 +18,13 @@ const ProductCard = ({ product }) => {
             whileHover={{ scale: 1.02, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         >
-            <Card className="kfc-product-card">
-                <img src={product.productImage} className="product-image" alt={product.title} />
+            <Card className={`kfc-product-card ${product.isVip ? 'vip' : ''}`}>
+                <div className="position-relative">
+                    <img src={product.productImage} className="product-image" alt={product.title} />
+                    {product.isVip && (
+                        <span className="position-absolute top-0 end-0 m-2 badge bg-warning">VIP</span>
+                    )}
+                </div>
                 <div className="card-body">
                     <div className="title-price-row">
                         <h5 className="product-title">{product.title}</h5>

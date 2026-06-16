@@ -48,14 +48,14 @@ const ProductDetail = () => {
     }
 
     const price = product.price || 0;
-    const categoryName = categories.find(c => c.slug === product.category)?.name || product.category;
+    const categoryName = product.category?.name || product.category || 'Danh mục';
 
     return (
         <div className="product-detail-page">
             <div className="product-breadcrumb">
                 <Link to="/">Trang chủ</Link> <span className="separator">/</span>
                 <Link to="/products">Thực đơn</Link> <span className="separator">/</span>
-                <Link to={`/products?category=${product.category}`}>
+                <Link to={`/products?category=${product.category?.slug || product.category}`}>
                     {categoryName}
                 </Link> <span className="separator">/</span>
                 <span className="current">{product.title}</span>

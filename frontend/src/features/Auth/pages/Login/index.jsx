@@ -9,7 +9,6 @@ import { loginUser, loginGoogleUser } from '../../authSlice';
 import '../../auth.css'
 import './Login.css'
 import signinImg from '../../../../assets/images/common/auth-bg.jpg'
-import { FcGoogle } from 'react-icons/fc';
 import { useGoogleLogin } from '@react-oauth/google';
 import Button from '../../../../components/Button';
 import FormInput from '../../../../components/FormInput';
@@ -27,20 +26,6 @@ const Login = () => {
             navigate(from, { replace: true });
         }
     }, [isAuthenticated, navigate, from]);
-
-    const handleGoogleLogin = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            const resultAction = await dispatch(loginGoogleUser(tokenResponse.access_token));
-            if (loginGoogleUser.fulfilled.match(resultAction)) {
-                toast.success('Đăng nhập thành công!');
-            } else {
-                toast.error(resultAction.payload);
-            }
-        },
-        onError: (error) => {
-            toast.error(error.error);
-        }
-    });
 
     const { handleBlur, handleSubmit, handleChange, touched, errors, values } = useFormik({
         initialValues: {

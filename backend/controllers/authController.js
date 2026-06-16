@@ -103,30 +103,6 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     await sendToken(user, 200, res);
 });
 
-// LOGOUT
-exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
-    res.cookie('token', null, {
-        expires: new Date(Date.now()),
-        httpOnly: true
-    });
-
-    res.status(200).json({
-        status: true,
-        message: 'Đăng xuất thành công'
-    });
-});
-
-// GET CURRENT USER
-exports.getCurrentUser = catchAsyncErrors(async (req, res, next) => {
-    const user = await User.findById(req.user.id).populate('role');
-    res.status(200).json({
-        status: true,
-        data: user
-    });
-});
-
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
 // GOOGLE LOGIN
 exports.googleLogin = catchAsyncErrors(async (req, res, next) => {
     const { token } = req.body;
@@ -174,7 +150,31 @@ exports.googleLogin = catchAsyncErrors(async (req, res, next) => {
     await sendToken(user, 200, res);
 });
 
-// FORGOT PASSWORD
+// region LOGOUT
+exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
+    res.cookie('token', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    });
+
+    res.status(200).json({
+        status: true,
+        message: 'Đăng xuất thành công'
+    });
+});
+
+// region GET CURRENT USER
+exports.getCurrentUser = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.user.id).populate('role');
+    res.status(200).json({
+        status: true,
+        data: user
+    });
+});
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// region PASSWORD
 exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const { email } = req.body;
 

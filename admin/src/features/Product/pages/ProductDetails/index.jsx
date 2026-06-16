@@ -45,7 +45,8 @@ const ProductDetails = () => {
             price: '',
             stock: '',
             category: '',
-            productImage: ''
+            productImage: '',
+            isVip: false
         },
         validationSchema: Yup.object({
             title: Yup.string().required('Tên món ăn là bắt buộc'),
@@ -78,8 +79,9 @@ const ProductDetails = () => {
                 description: currentProduct.description || '',
                 price: currentProduct.price || '',
                 stock: currentProduct.stock || '',
-                category: currentProduct.category || '',
-                productImage: currentProduct.productImage || currentProduct.image || ''
+                category: currentProduct.category?._id || currentProduct.category || '',
+                productImage: currentProduct.productImage || currentProduct.image || '',
+                isVip: currentProduct.isVip || false
             });
             setPreview(currentProduct.productImage || currentProduct.image || '');
             setRecipe(currentProduct.recipe || []);
@@ -196,7 +198,7 @@ const ProductDetails = () => {
                                         >
                                             <option value="">Chọn danh mục</option>
                                             {categories && categories.map(cat => (
-                                                <option key={cat._id} value={cat.slug}>{cat.name}</option>
+                                                <option key={cat._id} value={cat._id}>{cat.name}</option>
                                             ))}
                                         </select>
                                         {touched.category && errors.category && (
@@ -250,6 +252,22 @@ const ProductDetails = () => {
                                         {touched.stock && errors.stock && (
                                             <div className="invalid-feedback">{errors.stock}</div>
                                         )}
+                                    </div>
+
+                                    <div className="col-12">
+                                        <div className="form-check form-switch mt-4 p-3 bg-light rounded">
+                                            <label className="form-check-label fw-bold" htmlFor="isVip">
+                                                <input
+                                                    className="form-check-input float-end ms-2"
+                                                    type="checkbox"
+                                                    name="isVip"
+                                                    id="isVip"
+                                                    checked={values.isVip}
+                                                    onChange={handleChange}
+                                                />
+                                                <span className="text-warning">⭐ Món ăn VIP</span>
+                                            </label>
+                                        </div>
                                     </div>
 
                                     <div className="col-12">
@@ -401,7 +419,9 @@ const ProductDetails = () => {
                             <h5 className="fw-bold mb-2 Oswald-font text-uppercase">{values.title || 'Tên món ăn'}</h5>
                             <p className="text-muted small mb-3">{values.description || 'Mô tả món ăn'}</p>
                             <div className="d-flex justify-content-between align-items-center mb-3">
-                                <Badge variant="primary">{values.category || 'Danh mục'}</Badge>
+                                <Badge variant="primary">
+                                    {categories?.find(c => c._id === values.category)?.name || values.category || 'Danh mục'}
+                                </Badge>
                                 <span className="fw-bold text-danger fs-5">
                                     {values.price ? formatCurrency(values.price) : '0 đ'}
                                 </span>

@@ -186,7 +186,7 @@ const DeliveryInfo = ({
                             placeholder="Chọn cửa hàng"
                         />
 
-                        {/* <FormInput
+                        <FormInput
                             containerClass="col-12"
                             label="Ghi chú cho tài xế"
                             type="textarea"
@@ -195,7 +195,7 @@ const DeliveryInfo = ({
                             placeholder="Ví dụ: Lấy nhiều tương ớt, không lấy đá, giao lên tận phòng..."
                             value={formData.note}
                             onChange={handleInputChange}
-                        /> */}
+                        />
                     </>
                 ) : (
                     <>
@@ -229,7 +229,7 @@ const DeliveryInfo = ({
                                 <i className="bi bi-info-circle"></i> Vui lòng đến cửa hàng trong vòng 30 phút sau khi đặt
                             </small>
                         </div>
-                        {/* <FormInput
+                        <FormInput
                             containerClass="col-12"
                             label="Ghi chú cho cửa hàng"
                             type="textarea"
@@ -238,7 +238,7 @@ const DeliveryInfo = ({
                             placeholder="Ví dụ: Tôi sẽ đến lấy lúc 18h..."
                             value={formData.note}
                             onChange={handleInputChange}
-                        /> */}
+                        />
                     </>
                 )}
             </div>

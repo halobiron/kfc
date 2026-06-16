@@ -36,6 +36,7 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
     const productsCount = await Product.countDocuments();
     const products = await Product.find({})
         .populate('recipe.ingredientId')
+        .populate('category')
         .skip(skip)
         .limit(resPerPage);
 
@@ -50,7 +51,7 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
 
 exports.getProductById = catchAsyncErrors(async (req, res, next) => {
     const id = req.params.id;
-    const product = await Product.findById(id).populate('recipe.ingredientId');
+    const product = await Product.findById(id).populate('recipe.ingredientId').populate('category');
 
     if (!product) {
         return next(new ErrorHandler('Product not found', 404));
@@ -79,7 +80,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
         new: true,
         runValidators: true,
         useFindAndModify: false
-    }).populate('recipe.ingredientId');
+    }).populate('recipe.ingredientId').populate('category');
 
     if (!product) {
         return next(new ErrorHandler('Product not found', 404));

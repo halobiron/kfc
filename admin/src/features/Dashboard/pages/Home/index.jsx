@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getDashboardStats } from '../../statsSlice'
 import Loading from '../../../../components/Common/Loading';
 import StatCard from '../../../../components/Common/StatCard';
-import { FiShoppingBag, FiDollarSign, FiUsers, FiAlertCircle, FiCalendar } from 'react-icons/fi'
+import { FiShoppingBag, FiDollarSign, FiUsers, FiAlertCircle, FiCalendar, FiStar } from 'react-icons/fi'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -53,20 +53,17 @@ const Home = () => {
     const dates = [...new Set(stats.chart.map(item => item._id.date))].sort();
     const paymentMethods = [...new Set(stats.chart.map(item => item._id.paymentMethod))];
 
-    // Build datasets for each payment method
-    const datasets = paymentMethods.map((method, index) => {
-      const colors = method === 'Tiền mặt'
-        ? { border: 'rgb(25, 135, 84)', bg: 'rgba(25, 135, 84, 0.7)' }
-        : { border: 'rgb(13, 110, 253)', bg: 'rgba(13, 110, 253, 0.7)' };
-
+    // Build datasets for each payment method - 2 shades of gold/yellow
+    const datasets = paymentMethods.map((method) => {
+      const isPayOS = method.toLowerCase().includes('payos');
       return {
         label: method,
         data: dates.map(date => {
           const found = stats.chart.find(item => item._id.date === date && item._id.paymentMethod === method);
           return found ? found.revenue : 0;
         }),
-        backgroundColor: colors.bg,
-        borderColor: colors.border,
+        backgroundColor: isPayOS ? 'rgba(255, 193, 7, 0.8)' : 'rgba(245, 158, 11, 0.6)',
+        borderColor: isPayOS ? 'rgb(255, 193, 7)' : 'rgb(245, 158, 11)',
         borderWidth: 1,
       };
     });
@@ -150,7 +147,7 @@ const Home = () => {
           <div className="alert alert-warning border-0 shadow-sm mb-0 d-flex align-items-center gap-3" role="alert">
             <FiAlertCircle size={24} className="flex-shrink-0" />
             <div>
-              <strong>Cần xử lý ngay:</strong> {loading ? "..." : stats.pendingOrders} đơn hàng chờ xác nhận | {loading ? "..." : stats.lowStockIngredients} nguyên liệu sắp hết
+              <strong>Cần xử lý ngay:</strong> {loading ? "..." : stats.pendingOrders} đơn chờ xác nhận | {loading ? "..." : stats.lowStockIngredients} nguyên liệu sắp hết
               <br />
               <small className="text-muted">Vui lòng kiểm tra để cập nhật kịp thời</small>
             </div>
@@ -162,40 +159,29 @@ const Home = () => {
       <div className="row mb-4 g-3">
         <div className="col-md-6 col-sm-6">
           <StatCard
-            label="Tổng đơn hàng"
-            value={loading ? "..." : stats.orders}
-            trend="+5%" // Placeholder trend
-            icon={<FiShoppingBag size={20} />}
-            color="primary"
+            label="Doanh thu VIP"
+            value={loading ? "..." : formatCurrency(stats.vipRevenue || 0)}
+            icon={<FiStar size={20} />}
+            color="warning"
           />
         </div>
         <div className="col-md-6 col-sm-6">
           <StatCard
-            label="Doanh thu"
-            value={loading ? "..." : formatCurrency(stats.revenue)}
-            trend="+12%" // Placeholder trend
-            icon={<FiDollarSign size={20} />}
-            color="success"
+            label="Số món VIP"
+            value={loading ? "..." : stats.totalVipProducts || 0}
+            icon={<FiShoppingBag size={20} />}
+            color="primary"
           />
         </div>
-        {/* <div className="col-md-4 col-sm-12">
-          <StatCard
-            label="Khách hàng mới"
-            value={loading ? "..." : stats.customers}
-            trend="+2%" // Placeholder trend
-            icon={<FiUsers size={20} />}
-            color="warning"
-          />
-        </div> */}
       </div>
 
-      {/* Chart & Recent Activity Row */}
+      {/* Chart & VIP Products Row */}
       <div className="row g-3">
         {/* Chart Section */}
         <div className="col-lg-7">
           <div className="card h-100">
             <div className="card-header">
-              <h5 className="mb-0">Biểu đồ doanh thu</h5>
+              <h5 className="mb-0">⭐ Doanh thu món VIP</h5>
             </div>
             <div className="card-body p-3">
               <div style={{ height: '300px' }}>
@@ -211,11 +197,11 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Quick Actions & Notifications */}
+        {/* Top Products */}
         <div className="col-lg-5">
           <div className="card h-100">
             <div className="card-header">
-              <h5 className="mb-0">Sản phẩm bán chạy</h5>
+              <h5 className="mb-0">Top món bán chạy</h5>
             </div>
             <div className="card-body p-3">
               {loading ? (
@@ -225,17 +211,20 @@ const Home = () => {
               ) : stats.topProducts && stats.topProducts.length > 0 ? (
                 stats.topProducts.map((product, index) => (
                   <div key={index} className="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">
-                    <div className="flex-shrink-0 bg-light rounded-circle d-flex align-items-center justify-content-center" style={{ width: 32, height: 32 }}>
-                      <span className="fw-bold text-primary">{index + 1}</span>
+                    <div className="flex-shrink-0 bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: 32, height: 32 }}>
+                      <span className="fw-bold">{index + 1}</span>
                     </div>
                     <div className="small flex-grow-1">
-                      <div className="fw-bold text-truncate">{product.name}</div>
+                      <div className="fw-bold text-truncate">
+                        {product.name}
+                        {product.isVip && <span className="badge bg-warning ms-1">VIP</span>}
+                      </div>
                       <div className="text-muted text-truncate">{product.sold} đã bán - {formatCurrency(product.revenue)}</div>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-muted text-center mb-0">Chưa có dữ liệu</p>
+                <p className="text-muted text-center mb-0">Chưa có món nào được bán</p>
               )}
             </div>
           </div>

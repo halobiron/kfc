@@ -14,8 +14,9 @@ const AddModal = ({ setShowModal }) => {
       description: '',
       price: '',
       stock: '',
-      category: categories.length > 0 ? categories[0].slug : '',
-      productImage: ''
+      category: categories.length > 0 ? categories[0]._id : '',
+      productImage: '',
+      isVip: false
     },
     validationSchema: Yup.object({
       title: Yup.string().required('Tên món không được để trống'),
@@ -47,7 +48,7 @@ const AddModal = ({ setShowModal }) => {
             <label htmlFor="category" className="form-label">Danh mục <span className="text-danger">*</span></label>
             <select name="category" onChange={handleChange} onBlur={handleBlur} value={values.category} className="form-select" id="category">
               {categories && categories.map(cat => (
-                <option key={cat._id} value={cat.slug}>{cat.name}</option>
+                <option key={cat._id} value={cat._id}>{cat.name}</option>
               ))}
             </select>
             {touched.category && errors.category && <div className="text-danger small">{errors.category}</div>}
@@ -83,6 +84,21 @@ const AddModal = ({ setShowModal }) => {
               onBlur={handleBlur}
               className="form-control"
               id="image" />
+          </div>
+          <div className="col-12">
+            <div className="form-check form-switch mt-2 p-3 bg-light rounded">
+              <label className="form-check-label fw-bold" htmlFor="isVip">
+                <input
+                  className="form-check-input float-end ms-2"
+                  type="checkbox"
+                  name="isVip"
+                  id="isVip"
+                  checked={values.isVip}
+                  onChange={handleChange}
+                />
+                <span className="text-warning">⭐ Món ăn VIP</span>
+              </label>
+            </div>
           </div>
           <div className="col-12 mt-4">
             <button type="submit" className="btn btn-primary px-4">Lưu sản phẩm</button>

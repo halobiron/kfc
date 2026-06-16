@@ -64,28 +64,8 @@ exports.getDashboardStats = async (req, res, next) => {
         // 4. Average Order Value
         const avgOrderValue = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
 
-        // 5. Chart Data (Revenue over time by payment method)
+        // 5. Chart Data (VIP Revenue over time by payment method)
         const revenueChart = await Order.aggregate([
-            {
-                $match: {
-                    status: 'Đã giao hàng',
-                    createdAt: { $gte: startDate }
-                }
-            },
-            {
-                $group: {
-                    _id: {
-                        date: { $dateToString: { format: groupFormat, date: '$createdAt' } },
-                        paymentMethod: '$paymentMethod'
-                    },
-                    revenue: { $sum: '$totalAmount' }
-                }
-            },
-            { $sort: { '_id.date': 1 } }
-        ]);
-
-        // 6. Top Selling Products
-        const topProducts = await Order.aggregate([
             {
                 $match: {
                     status: 'Đã giao hàng',
@@ -94,16 +74,81 @@ exports.getDashboardStats = async (req, res, next) => {
             },
             { $unwind: '$items' },
             {
+                $lookup: {
+                    from: 'products',
+                    localField: 'items.productId',
+                    foreignField: '_id',
+                    as: 'product'
+                }
+            },
+            { $unwind: '$product' },
+            {
+                $match: {
+                    'product.isVip': true
+                }
+            },
+            {
                 $group: {
-                    _id: '$items.productId',
-                    name: { $first: '$items.name' },
-                    sold: { $sum: '$items.quantity' },
+                    _id: {
+                        date: { $dateToString: { format: groupFormat, date: '$createdAt' } },
+                        paymentMethod: '$paymentMethod'
+                    },
                     revenue: { $sum: { $multiply: ['$items.price', '$items.quantity'] } }
                 }
             },
-            { $sort: { sold: -1 } },
-            { $limit: 5 }
+            { $sort: { '_id.date': 1 } }
         ]);
+
+        // 6. Product Stats
+        const productStats = await Order.aggregate([
+            {
+                $match: {
+                    status: 'Đã giao hàng',
+                    createdAt: { $gte: startDate }
+                }
+            },
+            { $unwind: '$items' },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'items.productId',
+                    foreignField: '_id',
+                    as: 'product'
+                }
+            },
+            { $unwind: '$product' },
+            {
+                $facet: {
+                    // Top 5 sản phẩm bán chạy
+                    topProducts: [
+                        {
+                            $group: {
+                                _id: '$items.productId',
+                                name: { $first: '$items.name' },
+                                sold: { $sum: '$items.quantity' },
+                                revenue: { $sum: { $multiply: ['$items.price', '$items.quantity'] } },
+                                isVip: { $first: '$product.isVip' }
+                            }
+                        },
+                        { $sort: { sold: -1 } },
+                        { $limit: 5 }
+                    ],
+                    // Thống kê doanh thu VIP và Thường
+                    vipStats: [
+                        {
+                            $group: {
+                                _id: '$product.isVip',
+                                revenue: { $sum: { $multiply: ['$items.price', '$items.quantity'] } }
+                            }
+                        }
+                    ]
+                }
+            }
+        ]);
+
+        const topProducts = productStats[0].topProducts;
+        const vipRevenue = productStats[0].vipStats.find(s => s._id === true)?.revenue || 0;
+        const regularRevenue = productStats[0].vipStats.find(s => s._id === false)?.revenue || 0;
 
         // 7. Category Statistics
         const categoryStats = await Order.aggregate([
@@ -159,7 +204,7 @@ exports.getDashboardStats = async (req, res, next) => {
             isActive: true
         });
 
-        // 10. Payment Methods Statistics
+        // 7. Payment Methods Statistics
         const paymentMethods = await Order.aggregate([
             {
                 $match: {
@@ -184,6 +229,9 @@ exports.getDashboardStats = async (req, res, next) => {
             }
         ]);
 
+        // 8. Total VIP Products Count
+        const totalVipProducts = await Product.countDocuments({ isVip: true });
+
         // Calculate trends (comparing to previous period)s
 
         res.status(200).json({
@@ -198,7 +246,10 @@ exports.getDashboardStats = async (req, res, next) => {
                 categoryStats: categoryStats,
                 pendingOrders: pendingOrders,
                 lowStockIngredients: lowStockIngredients,
-                paymentMethods: paymentMethods
+                paymentMethods: paymentMethods,
+                vipRevenue: vipRevenue,
+                regularRevenue: regularRevenue,
+                totalVipProducts: totalVipProducts
             }
         });
 

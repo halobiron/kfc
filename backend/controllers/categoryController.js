@@ -46,7 +46,7 @@ exports.getAllCategories = async (req, res, next) => {
             .limit(resPerPage);
 
         const categoriesWithCount = await Promise.all(categories.map(async (cat) => {
-            const productCount = await Product.countDocuments({ category: cat.slug });
+            const productCount = await Product.countDocuments({ category: cat._id });
             return {
                 ...cat._doc,
                 productCount
@@ -73,7 +73,7 @@ exports.getCategoryById = async (req, res, next) => {
                 message: 'Category not found'
             });
         }
-        const productCount = await Product.countDocuments({ category: category.slug });
+        const productCount = await Product.countDocuments({ category: category._id });
         res.json({
             status: true,
             data: {
@@ -103,13 +103,7 @@ exports.updateCategory = async (req, res, next) => {
 
         const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
-        // If slug changed, update all products belonging to this category
-        if (req.body.slug && oldCategory.slug !== category.slug) {
-            await Product.updateMany(
-                { category: oldCategory.slug },
-                { $set: { category: category.slug } }
-            );
-        }
+        // If slug changed, no need to update products since they reference the category ObjectId now
 
         if (req.user) {
             await logAction(req.user.id, 'UPDATE', 'Category', `Cập nhật danh mục: ${category.name}`);
@@ -135,7 +129,7 @@ exports.deleteCategory = async (req, res, next) => {
         }
 
         // Check if there are any products in this category
-        const productCount = await Product.countDocuments({ category: category.slug });
+        const productCount = await Product.countDocuments({ category: category._id });
         if (productCount > 0) {
             return res.status(400).json({
                 status: false,
