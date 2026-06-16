@@ -5,7 +5,6 @@ import Ingredient from '../features/Ingredient/pages/Ingredient';
 import IngredientStats from '../features/Ingredient/pages/IngredientStats';
 import Order from '../features/Order/pages/Order';
 import Users from '../features/User/pages/Users';
-import Reports from '../features/Dashboard/pages/Reports';
 import OrderDetails from '../features/Order/pages/OrderDetails';
 import Categories from '../features/Category/pages/Categories';
 import Promotions from '../features/Promotion/pages/Promotions';
@@ -14,7 +13,7 @@ import Stores from '../features/Store/pages/Stores';
 import ChangePassword from '../features/Auth/pages/ChangePassword';
 import Roles from '../features/Role/pages/Roles';
 import Logs from '../features/SystemLog/pages/Logs';
-import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBarChart2, FiBox, FiTag, FiPackage, FiMapPin, FiLock, FiClock } from 'react-icons/fi';
+import { FiHome, FiFileText, FiShoppingCart, FiUsers, FiBox, FiTag, FiPackage, FiMapPin, FiLock, FiClock } from 'react-icons/fi';
 
 const baseRoutes = [
     {

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getDashboardStats } from '../../statsSlice'
 import Loading from '../../../../components/Common/Loading';
 import StatCard from '../../../../components/Common/StatCard';
-import { FiShoppingBag, FiDollarSign, FiUsers, FiAlertCircle, FiCalendar, FiStar } from 'react-icons/fi'
+import { FiShoppingBag, FiAlertCircle, FiCalendar, FiStar } from 'react-icons/fi'
 import {
   Chart as ChartJS,
   CategoryScale,
